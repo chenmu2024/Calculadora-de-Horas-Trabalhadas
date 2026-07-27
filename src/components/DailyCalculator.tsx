@@ -115,6 +115,22 @@ export default function DailyCalculator({ onSelectTab }: DailyCalculatorProps) {
 
   return (
     <div className="animate-in fade-in duration-500">
+      <div className="flex flex-wrap items-center justify-between gap-3 bg-blue-50/70 border border-blue-200/90 p-3 rounded-xl mb-5 no-print">
+        <div className="flex items-center gap-2 text-xs font-semibold text-blue-900">
+          <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+          <span>💾 Salvamento automático ativo em tempo real</span>
+          <span className="text-blue-700 font-normal hidden md:inline">(Tudo o que você digita fica salvo no seu navegador)</span>
+        </div>
+        <div className="flex items-center gap-2 text-xs">
+          <button onClick={copyResult} className="bg-white hover:bg-neutral-100 border border-neutral-300 text-neutral-800 px-2.5 py-1.5 rounded-lg transition-colors font-bold flex items-center gap-1 cursor-pointer shadow-2xs">
+            {copied ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5 text-blue-600" />} {copied ? 'Copiado!' : 'Copiar Resultado'}
+          </button>
+          <button onClick={handlePrint} className="bg-blue-600 hover:bg-blue-700 text-white px-2.5 py-1.5 rounded-lg transition-colors font-bold flex items-center gap-1 cursor-pointer shadow-2xs">
+            <Printer className="w-3.5 h-3.5 text-white" /> Imprimir / Salvar PDF
+          </button>
+        </div>
+      </div>
+
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
         <div>
           <h2 className="text-2xl font-bold text-neutral-900">Calculadora de Horas Trabalhadas Diária</h2>
@@ -255,11 +271,12 @@ export default function DailyCalculator({ onSelectTab }: DailyCalculatorProps) {
                 id="daily-hourly-wage"
                 aria-label="Valor da hora trabalhada em reais"
                 type="number"
+                inputMode="decimal"
                 step="0.5"
                 value={hourlyWage}
                 onChange={e => setHourlyWage(e.target.value)}
                 placeholder="Valor/Hora (Ex: 20.00)"
-                className="w-full bg-white border border-neutral-300 rounded-lg p-1.5 pl-8 text-xs font-bold outline-none focus:ring-2 focus:ring-emerald-500"
+                className="w-full bg-white border border-neutral-300 rounded-lg p-1.5 pl-8 text-xs font-bold outline-none focus:ring-2 focus:ring-emerald-500 min-h-[42px]"
               />
             </div>
             <select

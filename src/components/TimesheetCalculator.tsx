@@ -183,6 +183,22 @@ export default function TimesheetCalculator({ onSelectTab }: TimesheetCalculator
 
   return (
     <div className="animate-in fade-in duration-500">
+      <div className="flex flex-wrap items-center justify-between gap-3 bg-blue-50/70 border border-blue-200/90 p-3 rounded-xl mb-5">
+        <div className="flex items-center gap-2 text-xs font-semibold text-blue-900">
+          <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+          <span>💾 Salvamento automático ativo em tempo real</span>
+          <span className="text-blue-700 font-normal hidden md:inline">(Dados mantidos em segurança no seu navegador)</span>
+        </div>
+        <div className="flex items-center gap-2 text-xs">
+          <button onClick={exportCSV} className="bg-white hover:bg-neutral-100 border border-neutral-300 text-neutral-800 px-2.5 py-1.5 rounded-lg transition-colors font-bold flex items-center gap-1 cursor-pointer shadow-2xs">
+            <Download className="w-3.5 h-3.5 text-emerald-600" /> Excel / CSV
+          </button>
+          <button onClick={() => window.print()} className="bg-blue-600 hover:bg-blue-700 text-white px-2.5 py-1.5 rounded-lg transition-colors font-bold flex items-center gap-1 cursor-pointer shadow-2xs">
+            <Printer className="w-3.5 h-3.5 text-white" /> Gerar PDF / Imprimir
+          </button>
+        </div>
+      </div>
+
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
         <div>
           <h2 className="text-2xl font-bold text-neutral-900">Calculadora de Horas Trabalhadas Semanal (CLT 44h)</h2>
@@ -197,14 +213,14 @@ export default function TimesheetCalculator({ onSelectTab }: TimesheetCalculator
           >
             <Sparkles className="w-3.5 h-3.5 text-amber-300" /> Modelos de Escala (1-Clique)
           </button>
-          <button onClick={exportJSONBackup} className="bg-neutral-100 hover:bg-neutral-200 text-neutral-700 px-2.5 py-2 rounded-xl transition-colors font-medium flex items-center gap-1">
+          <button onClick={exportJSONBackup} className="bg-neutral-100 hover:bg-neutral-200 text-neutral-700 px-2.5 py-2 rounded-xl transition-colors font-medium flex items-center gap-1 cursor-pointer">
             <Download className="w-3.5 h-3.5" /> Backup JSON
           </button>
           <label className="bg-neutral-100 hover:bg-neutral-200 text-neutral-700 px-2.5 py-2 rounded-xl transition-colors font-medium flex items-center gap-1 cursor-pointer">
             <Upload className="w-3.5 h-3.5" /> Restaurar
             <input type="file" accept=".json" onChange={importJSONBackup} className="hidden" aria-label="Restaurar backup JSON" />
           </label>
-          <button onClick={clearAll} className="bg-neutral-100 hover:bg-red-50 hover:text-red-600 text-neutral-500 px-2.5 py-2 rounded-xl transition-colors font-medium flex items-center gap-1">
+          <button onClick={clearAll} className="bg-neutral-100 hover:bg-red-50 hover:text-red-600 text-neutral-500 px-2.5 py-2 rounded-xl transition-colors font-medium flex items-center gap-1 cursor-pointer">
             <RotateCcw className="w-3.5 h-3.5" /> Limpar
           </button>
         </div>

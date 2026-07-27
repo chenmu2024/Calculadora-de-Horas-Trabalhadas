@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Moon, Clock, Copy, Check, Download, Printer, HelpCircle, ShieldAlert, Sparkles, Calculator } from 'lucide-react';
+import { Moon, Clock, Copy, Check, Download, Printer, HelpCircle, ShieldAlert, Sparkles, Calculator, AlertCircle } from 'lucide-react';
 import { generateTimesheetCSV } from '../utils/excelGenerator';
 import InternalLinkCTA from './InternalLinkCTA';
 
@@ -557,6 +557,22 @@ Calculado em calculadoradehorastrabalhadas.org`;
             R$ {dsrValue.toFixed(2).replace('.', ',')}
           </span>
           <span className="text-[10px] text-neutral-400 block mt-1">({restDays} dias de descanso)</span>
+        </div>
+      </div>
+
+      {/* CLT Legal Compliance Notice - Hora Noturna Ficta */}
+      <div className="bg-indigo-50/80 border border-indigo-200 p-4 rounded-xl text-xs space-y-2 text-indigo-950">
+        <div className="flex items-center gap-2 font-bold text-indigo-900 text-sm">
+          <AlertCircle className="w-4 h-4 text-indigo-600 shrink-0" />
+          <span>Regra da Hora Noturna Reduzida (CLT - Art. 73, §1º)</span>
+        </div>
+        <p className="text-indigo-800 leading-relaxed">
+          No trabalho urbano (22h às 05h), a hora noturna é computada como <strong>52 minutos e 30 segundos</strong>. 
+          Na prática, multiplicamos suas horas físicas de relógio pelo fator de conversão <strong>1,142857 (60 ÷ 52,5)</strong>.
+        </p>
+        <div className="bg-white/80 p-3 rounded-lg border border-indigo-100 flex flex-wrap items-center justify-between gap-2 font-mono text-[11px] text-indigo-900">
+          <span>🕒 7h no relógio (22h-05h) = <strong>8,00h fictas pagas</strong></span>
+          <span>💰 Adicional Noturno = <strong>mínimo de +20%</strong> sobre a hora diurna</span>
         </div>
       </div>
 
