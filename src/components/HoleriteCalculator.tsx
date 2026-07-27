@@ -229,8 +229,10 @@ Calculado em calculadoradehorastrabalhadas.org`;
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
         <div>
-          <label className="block text-xs font-semibold text-neutral-700 mb-1">Salário Bruto Mensal (R$)</label>
+          <label htmlFor="holerite-gross-salary" className="block text-xs font-semibold text-neutral-700 mb-1">Salário Bruto Mensal (R$)</label>
           <input
+            id="holerite-gross-salary"
+            aria-label="Salário Bruto Mensal em Reais"
             type="number"
             step="0.01"
             value={grossSalary}
@@ -265,8 +267,10 @@ Calculado em calculadoradehorastrabalhadas.org`;
           </div>
         </div>
         <div>
-          <label className="block text-xs font-semibold text-neutral-700 mb-1">Horas Extras (R$)</label>
+          <label htmlFor="holerite-overtime" className="block text-xs font-semibold text-neutral-700 mb-1">Horas Extras (R$)</label>
           <input
+            id="holerite-overtime"
+            aria-label="Horas Extras em Reais"
             type="number"
             step="0.01"
             value={overtimeAmount}
@@ -276,10 +280,12 @@ Calculado em calculadoradehorastrabalhadas.org`;
           />
         </div>
         <div>
-          <label className="block text-xs font-semibold text-neutral-700 mb-1 flex items-center gap-1">
+          <label htmlFor="holerite-night-shift" className="block text-xs font-semibold text-neutral-700 mb-1 flex items-center gap-1">
             <span>Adicional Noturno (R$)</span>
           </label>
           <input
+            id="holerite-night-shift"
+            aria-label="Adicional Noturno em Reais"
             type="number"
             step="0.01"
             value={nightShiftAmount}
@@ -289,8 +295,10 @@ Calculado em calculadoradehorastrabalhadas.org`;
           />
         </div>
         <div>
-          <label className="block text-xs font-semibold text-neutral-700 mb-1">Número de Dependentes (IRRF)</label>
+          <label htmlFor="holerite-dependents" className="block text-xs font-semibold text-neutral-700 mb-1">Número de Dependentes (IRRF)</label>
           <input
+            id="holerite-dependents"
+            aria-label="Número de Dependentes para IRRF"
             type="number"
             value={dependents}
             onChange={(e) => setDependents(e.target.value)}
@@ -299,8 +307,10 @@ Calculado em calculadoradehorastrabalhadas.org`;
           />
         </div>
         <div>
-          <label className="block text-xs font-semibold text-neutral-700 mb-1">Pensão Alimentícia (R$)</label>
+          <label htmlFor="holerite-alimony" className="block text-xs font-semibold text-neutral-700 mb-1">Pensão Alimentícia (R$)</label>
           <input
+            id="holerite-alimony"
+            aria-label="Pensão Alimentícia em Reais"
             type="number"
             step="0.01"
             value={alimonyAmount}
@@ -310,8 +320,10 @@ Calculado em calculadoradehorastrabalhadas.org`;
           />
         </div>
         <div>
-          <label className="block text-xs font-semibold text-neutral-700 mb-1">Plano de Saúde / Odonto (R$)</label>
+          <label htmlFor="holerite-health-plan" className="block text-xs font-semibold text-neutral-700 mb-1">Plano de Saúde / Odonto (R$)</label>
           <input
+            id="holerite-health-plan"
+            aria-label="Plano de Saúde ou Odontológico em Reais"
             type="number"
             step="0.01"
             value={healthPlanAmount}
@@ -321,8 +333,10 @@ Calculado em calculadoradehorastrabalhadas.org`;
           />
         </div>
         <div>
-          <label className="block text-xs font-semibold text-neutral-700 mb-1">Faltas Injustificadas no Mês (Dias)</label>
+          <label htmlFor="holerite-absences" className="block text-xs font-semibold text-neutral-700 mb-1">Faltas Injustificadas no Mês (Dias)</label>
           <input
+            id="holerite-absences"
+            aria-label="Faltas Injustificadas em Dias"
             type="number"
             min="0"
             value={unexcusedAbsences}
@@ -332,8 +346,10 @@ Calculado em calculadoradehorastrabalhadas.org`;
           />
         </div>
         <div>
-          <label className="block text-xs font-semibold text-neutral-700 mb-1">Desconto VR/VA Alimentação (R$)</label>
+          <label htmlFor="holerite-food-voucher" className="block text-xs font-semibold text-neutral-700 mb-1">Desconto VR/VA Alimentação (R$)</label>
           <input
+            id="holerite-food-voucher"
+            aria-label="Desconto Vale Refeição em Reais"
             type="number"
             step="0.01"
             value={foodVoucherAmount}
@@ -343,8 +359,10 @@ Calculado em calculadoradehorastrabalhadas.org`;
           />
         </div>
         <div>
-          <label className="block text-xs font-semibold text-neutral-700 mb-1">Outros Descontos Diversos (R$)</label>
+          <label htmlFor="holerite-other-deductions" className="block text-xs font-semibold text-neutral-700 mb-1">Outros Descontos Diversos (R$)</label>
           <input
+            id="holerite-other-deductions"
+            aria-label="Outros Descontos em Reais"
             type="number"
             step="0.01"
             value={otherDeductions}
@@ -362,6 +380,7 @@ Calculado em calculadoradehorastrabalhadas.org`;
             <input
               type="checkbox"
               id="periculosidade"
+              aria-label="Adicional de Periculosidade"
               checked={hasPericulosidade}
               onChange={(e) => setHasPericulosidade(e.target.checked)}
               className="w-4 h-4 text-blue-600 rounded cursor-pointer"
@@ -372,8 +391,10 @@ Calculado em calculadoradehorastrabalhadas.org`;
           </div>
 
           <div>
-            <label className="block font-medium text-neutral-800 mb-1">Insalubridade (% do Salário Mínimo)</label>
+            <label htmlFor="holerite-insalubridade" className="block font-medium text-neutral-800 mb-1">Insalubridade (% do Salário Mínimo)</label>
             <select
+              id="holerite-insalubridade"
+              aria-label="Grau de Insalubridade"
               value={insalubridadeGrade}
               onChange={(e) => setInsalubridadeGrade(e.target.value as any)}
               className="w-full bg-white border border-neutral-300 rounded-lg p-2 text-xs outline-none cursor-pointer"

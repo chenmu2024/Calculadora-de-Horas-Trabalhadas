@@ -202,7 +202,7 @@ export default function TimesheetCalculator({ onSelectTab }: TimesheetCalculator
           </button>
           <label className="bg-neutral-100 hover:bg-neutral-200 text-neutral-700 px-2.5 py-2 rounded-xl transition-colors font-medium flex items-center gap-1 cursor-pointer">
             <Upload className="w-3.5 h-3.5" /> Restaurar
-            <input type="file" accept=".json" onChange={importJSONBackup} className="hidden" />
+            <input type="file" accept=".json" onChange={importJSONBackup} className="hidden" aria-label="Restaurar backup JSON" />
           </label>
           <button onClick={clearAll} className="bg-neutral-100 hover:bg-red-50 hover:text-red-600 text-neutral-500 px-2.5 py-2 rounded-xl transition-colors font-medium flex items-center gap-1">
             <RotateCcw className="w-3.5 h-3.5" /> Limpar
@@ -238,6 +238,7 @@ export default function TimesheetCalculator({ onSelectTab }: TimesheetCalculator
                 onChange={(e) => setWeeklyTarget(e.target.value)}
                 className="w-14 font-mono font-bold text-xs outline-none text-center"
                 placeholder="44:00"
+                aria-label="Carga horária semanal em horas"
               />
             </div>
           </div>
@@ -301,19 +302,19 @@ export default function TimesheetCalculator({ onSelectTab }: TimesheetCalculator
             <div key={entry.id} className="grid grid-cols-1 sm:grid-cols-12 gap-3 items-center bg-white sm:bg-neutral-50/50 border border-neutral-200 sm:border-neutral-200 p-3.5 sm:p-2 rounded-xl group hover:border-blue-300 transition-colors">
               <div className="col-span-1 sm:col-span-3">
                 <label className="sm:hidden text-xs font-semibold text-neutral-500 mb-1 block">Dia / Data</label>
-                <input type="text" value={entry.date} onChange={e => updateEntry(entry.id, 'date', e.target.value)} placeholder="Ex: Segunda" className="w-full border border-neutral-300 bg-white rounded-lg p-2 text-sm outline-none focus:border-blue-500 transition-shadow" />
+                <input type="text" value={entry.date} onChange={e => updateEntry(entry.id, 'date', e.target.value)} placeholder="Ex: Segunda" aria-label={`Dia da semana para linha ${entry.id}`} className="w-full border border-neutral-300 bg-white rounded-lg p-2 text-sm outline-none focus:border-blue-500 transition-shadow" />
               </div>
               <div className="col-span-1 sm:col-span-2">
                  <label className="sm:hidden text-xs font-semibold text-neutral-500 mb-1 block">Entrada</label>
-                 <input type="time" value={entry.start} onChange={e => updateEntry(entry.id, 'start', e.target.value)} className="w-full border border-neutral-300 bg-white rounded-lg p-2 text-sm outline-none focus:border-blue-500 transition-shadow" />
+                 <input type="time" value={entry.start} onChange={e => updateEntry(entry.id, 'start', e.target.value)} aria-label={`Horário de entrada para ${entry.date || 'linha ' + entry.id}`} className="w-full border border-neutral-300 bg-white rounded-lg p-2 text-sm outline-none focus:border-blue-500 transition-shadow" />
               </div>
               <div className="col-span-1 sm:col-span-2">
                 <label className="sm:hidden text-xs font-semibold text-neutral-500 mb-1 block">Saída</label>
-                <input type="time" value={entry.end} onChange={e => updateEntry(entry.id, 'end', e.target.value)} className="w-full border border-neutral-300 bg-white rounded-lg p-2 text-sm outline-none focus:border-blue-500 transition-shadow" />
+                <input type="time" value={entry.end} onChange={e => updateEntry(entry.id, 'end', e.target.value)} aria-label={`Horário de saída para ${entry.date || 'linha ' + entry.id}`} className="w-full border border-neutral-300 bg-white rounded-lg p-2 text-sm outline-none focus:border-blue-500 transition-shadow" />
               </div>
               <div className="col-span-1 sm:col-span-2">
                 <label className="sm:hidden text-xs font-semibold text-neutral-500 mb-1 block">Intervalo</label>
-                <input type="time" value={entry.breakTime} onChange={e => updateEntry(entry.id, 'breakTime', e.target.value)} className="w-full border border-neutral-300 bg-white rounded-lg p-2 text-sm outline-none focus:border-blue-500 transition-shadow" />
+                <input type="time" value={entry.breakTime} onChange={e => updateEntry(entry.id, 'breakTime', e.target.value)} aria-label={`Duração do intervalo para ${entry.date || 'linha ' + entry.id}`} className="w-full border border-neutral-300 bg-white rounded-lg p-2 text-sm outline-none focus:border-blue-500 transition-shadow" />
                 {needsOneHourBreak && (
                   <span className="text-[10px] text-amber-700 bg-amber-50 border border-amber-200 px-1.5 py-0.5 rounded mt-1 flex items-center gap-1 inline-block" title="Art. 71 CLT: Jornada acima de 6h exige mínimo de 1h de almoço">
                     <AlertCircle className="w-3 h-3 inline text-amber-600" /> Intervalo &lt; 1h

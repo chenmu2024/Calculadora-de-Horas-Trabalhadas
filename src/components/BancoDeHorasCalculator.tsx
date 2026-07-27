@@ -234,11 +234,13 @@ export default function BancoDeHorasCalculator({ onSelectTab }: BancoDeHorasCalc
         <div className="space-y-6">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="bg-neutral-50 p-4 rounded-xl border border-neutral-200">
-              <label className="block text-xs font-semibold text-neutral-700 mb-2">
+              <label htmlFor="banco-expected-hours" className="block text-xs font-semibold text-neutral-700 mb-2">
                 Jornada Esperada (Meta Contratual)
               </label>
               <div className="flex items-center gap-2">
                 <input
+                  id="banco-expected-hours"
+                  aria-label="Horas esperadas na jornada"
                   type="number"
                   value={expectedHours}
                   onChange={(e) => setExpectedHours(e.target.value)}
@@ -247,6 +249,8 @@ export default function BancoDeHorasCalculator({ onSelectTab }: BancoDeHorasCalc
                 />
                 <span className="font-bold text-neutral-400">:</span>
                 <input
+                  id="banco-expected-minutes"
+                  aria-label="Minutos esperados na jornada"
                   type="number"
                   value={expectedMinutes}
                   onChange={(e) => setExpectedMinutes(e.target.value)}
@@ -260,11 +264,13 @@ export default function BancoDeHorasCalculator({ onSelectTab }: BancoDeHorasCalc
             </div>
 
             <div className="bg-neutral-50 p-4 rounded-xl border border-neutral-200">
-              <label className="block text-xs font-semibold text-neutral-700 mb-2">
+              <label htmlFor="banco-actual-hours" className="block text-xs font-semibold text-neutral-700 mb-2">
                 Horas Realmente Trabalhadas
               </label>
               <div className="flex items-center gap-2">
                 <input
+                  id="banco-actual-hours"
+                  aria-label="Horas realmente trabalhadas"
                   type="number"
                   value={actualHours}
                   onChange={(e) => setActualHours(e.target.value)}
@@ -273,6 +279,8 @@ export default function BancoDeHorasCalculator({ onSelectTab }: BancoDeHorasCalc
                 />
                 <span className="font-bold text-neutral-400">:</span>
                 <input
+                  id="banco-actual-minutes"
+                  aria-label="Minutos realmente trabalhados"
                   type="number"
                   value={actualMinutes}
                   onChange={(e) => setActualMinutes(e.target.value)}

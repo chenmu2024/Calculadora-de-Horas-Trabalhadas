@@ -302,12 +302,14 @@ VALOR LÍQUIDO RESCISÓRIO A RECEBER: ${formatBRL(totalLiquido)}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-neutral-50 p-5 rounded-2xl border border-neutral-200">
         {/* Salário Bruto */}
         <div>
-          <label className="block text-xs font-bold text-neutral-800 uppercase tracking-wider mb-1.5">
+          <label htmlFor="rescisao-gross-salary" className="block text-xs font-bold text-neutral-800 uppercase tracking-wider mb-1.5">
             Último Salário Bruto Mensal (R$)
           </label>
           <div className="relative">
             <span className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400 font-bold text-sm">R$</span>
             <input
+              id="rescisao-gross-salary"
+              aria-label="Último Salário Bruto Mensal em Reais"
               type="number"
               step="50"
               value={grossSalary}
@@ -343,10 +345,12 @@ VALOR LÍQUIDO RESCISÓRIO A RECEBER: ${formatBRL(totalLiquido)}
 
         {/* Tipo de Desligamento */}
         <div>
-          <label className="block text-xs font-bold text-neutral-800 uppercase tracking-wider mb-1.5">
+          <label htmlFor="rescisao-tipo-desligamento" className="block text-xs font-bold text-neutral-800 uppercase tracking-wider mb-1.5">
             Tipo de Desligamento / Motivo
           </label>
           <select
+            id="rescisao-tipo-desligamento"
+            aria-label="Tipo de Desligamento ou Motivo"
             value={tipoDesligamento}
             onChange={(e) => setTipoDesligamento(e.target.value as TipoDesligamento)}
             className="w-full px-3 py-2.5 bg-white border border-neutral-300 rounded-xl font-bold text-neutral-900 focus:ring-2 focus:ring-blue-500 focus:outline-none cursor-pointer"
@@ -360,10 +364,12 @@ VALOR LÍQUIDO RESCISÓRIO A RECEBER: ${formatBRL(totalLiquido)}
 
         {/* Anos de Serviço (Tempo de Empresa) */}
         <div>
-          <label className="block text-xs font-bold text-neutral-800 uppercase tracking-wider mb-1.5">
+          <label htmlFor="rescisao-years-worked" className="block text-xs font-bold text-neutral-800 uppercase tracking-wider mb-1.5">
             Anos Completos de Serviço (Tempo de Empresa)
           </label>
           <input
+            id="rescisao-years-worked"
+            aria-label="Anos Completos de Serviço"
             type="number"
             min="0"
             max="40"
@@ -378,10 +384,12 @@ VALOR LÍQUIDO RESCISÓRIO A RECEBER: ${formatBRL(totalLiquido)}
 
         {/* Tipo de Aviso Prévio */}
         <div>
-          <label className="block text-xs font-bold text-neutral-800 uppercase tracking-wider mb-1.5">
+          <label htmlFor="rescisao-tipo-aviso" className="block text-xs font-bold text-neutral-800 uppercase tracking-wider mb-1.5">
             Aviso Prévio
           </label>
           <select
+            id="rescisao-tipo-aviso"
+            aria-label="Tipo de Aviso Prévio"
             value={tipoAviso}
             onChange={(e) => setTipoAviso(e.target.value as TipoAvisoPrevio)}
             className="w-full px-3 py-2.5 bg-white border border-neutral-300 rounded-xl font-bold text-neutral-900 focus:ring-2 focus:ring-blue-500 focus:outline-none cursor-pointer"
@@ -394,10 +402,12 @@ VALOR LÍQUIDO RESCISÓRIO A RECEBER: ${formatBRL(totalLiquido)}
 
         {/* Dias trabalhados no mês do desligamento */}
         <div>
-          <label className="block text-xs font-bold text-neutral-800 uppercase tracking-wider mb-1.5">
+          <label htmlFor="rescisao-worked-days" className="block text-xs font-bold text-neutral-800 uppercase tracking-wider mb-1.5">
             Dias Trabalhados no Último Mês (1 a 30)
           </label>
           <input
+            id="rescisao-worked-days"
+            aria-label="Dias Trabalhados no Último Mês"
             type="number"
             min="0"
             max="30"
@@ -409,10 +419,12 @@ VALOR LÍQUIDO RESCISÓRIO A RECEBER: ${formatBRL(totalLiquido)}
 
         {/* Meses trabalhados para 13º */}
         <div>
-          <label className="block text-xs font-bold text-neutral-800 uppercase tracking-wider mb-1.5">
+          <label htmlFor="rescisao-months-13th" className="block text-xs font-bold text-neutral-800 uppercase tracking-wider mb-1.5">
             Meses para 13º Salário no Ano (1 a 12)
           </label>
           <input
+            id="rescisao-months-13th"
+            aria-label="Meses para Décimo Terceiro Salário"
             type="number"
             min="0"
             max="12"
@@ -427,10 +439,12 @@ VALOR LÍQUIDO RESCISÓRIO A RECEBER: ${formatBRL(totalLiquido)}
 
         {/* Meses para Férias Proporcionais */}
         <div>
-          <label className="block text-xs font-bold text-neutral-800 uppercase tracking-wider mb-1.5">
+          <label htmlFor="rescisao-months-vacation" className="block text-xs font-bold text-neutral-800 uppercase tracking-wider mb-1.5">
             Meses do Período Aquisitivo de Férias (1 a 12)
           </label>
           <input
+            id="rescisao-months-vacation"
+            aria-label="Meses do Período Aquisitivo de Férias"
             type="number"
             min="0"
             max="12"
@@ -442,12 +456,14 @@ VALOR LÍQUIDO RESCISÓRIO A RECEBER: ${formatBRL(totalLiquido)}
 
         {/* Saldo de FGTS para Multa */}
         <div>
-          <label className="block text-xs font-bold text-neutral-800 uppercase tracking-wider mb-1.5">
+          <label htmlFor="rescisao-fgts-balance" className="block text-xs font-bold text-neutral-800 uppercase tracking-wider mb-1.5">
             Saldo Acumulado no Extrato do FGTS (R$)
           </label>
           <div className="relative">
             <span className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400 font-bold text-sm">R$</span>
             <input
+              id="rescisao-fgts-balance"
+              aria-label="Saldo Acumulado no Extrato do FGTS em Reais"
               type="number"
               step="100"
               value={fgtsBalance}
@@ -462,12 +478,14 @@ VALOR LÍQUIDO RESCISÓRIO A RECEBER: ${formatBRL(totalLiquido)}
 
         {/* Média Mensal de Horas Extras / Comissões */}
         <div>
-          <label className="block text-xs font-bold text-neutral-800 uppercase tracking-wider mb-1.5">
+          <label htmlFor="rescisao-variable-avg" className="block text-xs font-bold text-neutral-800 uppercase tracking-wider mb-1.5">
             Média Mensal de Horas Extras / Comissões (R$)
           </label>
           <div className="relative">
             <span className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400 font-bold text-sm">R$</span>
             <input
+              id="rescisao-variable-avg"
+              aria-label="Média Mensal de Horas Extras e Comissões em Reais"
               type="number"
               step="50"
               value={variableAverage}

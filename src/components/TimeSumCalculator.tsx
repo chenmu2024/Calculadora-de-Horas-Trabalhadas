@@ -150,6 +150,7 @@ export default function TimeSumCalculator({ onSelectTab }: TimeSumCalculatorProp
                   onChange={(e) => updateParcel(p.id, 'label', e.target.value)}
                   className="w-full border border-neutral-300 rounded-lg p-2 text-xs outline-none focus:border-blue-500"
                   placeholder="Descrição (ex: Turno 1, Almoço, Horas Extras)"
+                  aria-label={`Descrição da parcela ${p.id}`}
                 />
               </div>
 
@@ -161,6 +162,7 @@ export default function TimeSumCalculator({ onSelectTab }: TimeSumCalculatorProp
                     value={p.time}
                     onChange={(e) => updateParcel(p.id, 'time', e.target.value)}
                     className="w-full bg-transparent font-mono font-bold text-sm text-neutral-800 outline-none"
+                    aria-label={`Tempo da parcela ${p.label || p.id}`}
                   />
                 </div>
               </div>
@@ -245,8 +247,10 @@ export default function TimeSumCalculator({ onSelectTab }: TimeSumCalculatorProp
           <div className="bg-neutral-50 p-5 rounded-2xl border border-neutral-200 space-y-4">
             <h4 className="text-xs font-bold text-neutral-800 uppercase tracking-wider">1. De Minutos para Horas e Decimais</h4>
             <div>
-              <label className="block text-xs font-semibold text-neutral-700 mb-1">Digite os Minutos</label>
+              <label htmlFor="timesum-input-minutes" className="block text-xs font-semibold text-neutral-700 mb-1">Digite os Minutos</label>
               <input
+                id="timesum-input-minutes"
+                aria-label="Minutos totais para converter"
                 type="number"
                 value={inputMinutes}
                 onChange={(e) => setInputMinutes(e.target.value)}
@@ -270,8 +274,10 @@ export default function TimeSumCalculator({ onSelectTab }: TimeSumCalculatorProp
           <div className="bg-neutral-50 p-5 rounded-2xl border border-neutral-200 space-y-4">
             <h4 className="text-xs font-bold text-neutral-800 uppercase tracking-wider">2. De Horas Decimais para Relógio (HH:MM)</h4>
             <div>
-              <label className="block text-xs font-semibold text-neutral-700 mb-1">Digite Horas Decimais (ex: 7,75)</label>
+              <label htmlFor="timesum-input-decimal" className="block text-xs font-semibold text-neutral-700 mb-1">Digite Horas Decimais (ex: 7,75)</label>
               <input
+                id="timesum-input-decimal"
+                aria-label="Horas decimais para converter"
                 type="number"
                 step="0.01"
                 value={inputDecimal}

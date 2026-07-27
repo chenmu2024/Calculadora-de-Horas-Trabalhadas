@@ -252,6 +252,8 @@ export default function DailyCalculator({ onSelectTab }: DailyCalculatorProps) {
             <div className="relative flex-1">
               <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-neutral-400 font-bold text-xs">R$</span>
               <input
+                id="daily-hourly-wage"
+                aria-label="Valor da hora trabalhada em reais"
                 type="number"
                 step="0.5"
                 value={hourlyWage}
@@ -261,6 +263,8 @@ export default function DailyCalculator({ onSelectTab }: DailyCalculatorProps) {
               />
             </div>
             <select
+              id="daily-overtime-percent"
+              aria-label="Percentual de hora extra"
               value={overtimePercent}
               onChange={e => setOvertimePercent(e.target.value)}
               className="bg-white border border-neutral-300 rounded-lg p-1.5 text-xs font-bold outline-none focus:ring-2 focus:ring-emerald-500"
@@ -275,8 +279,10 @@ export default function DailyCalculator({ onSelectTab }: DailyCalculatorProps) {
       {mode === '4points' ? (
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
           <div>
-            <label className="block text-xs font-semibold text-neutral-600 mb-1">Entrada 1 (Manhã)</label>
+            <label htmlFor="daily-in1" className="block text-xs font-semibold text-neutral-600 mb-1">Entrada 1 (Manhã)</label>
             <input
+              id="daily-in1"
+              aria-label="Entrada 1 (Manhã)"
               type="time"
               value={in1}
               onChange={(e) => setIn1(e.target.value)}
@@ -284,8 +290,10 @@ export default function DailyCalculator({ onSelectTab }: DailyCalculatorProps) {
             />
           </div>
           <div>
-            <label className="block text-xs font-semibold text-neutral-600 mb-1">Saída 1 (Almoço)</label>
+            <label htmlFor="daily-out1" className="block text-xs font-semibold text-neutral-600 mb-1">Saída 1 (Almoço)</label>
             <input
+              id="daily-out1"
+              aria-label="Saída 1 (Almoço)"
               type="time"
               value={out1}
               onChange={(e) => setOut1(e.target.value)}
@@ -293,8 +301,10 @@ export default function DailyCalculator({ onSelectTab }: DailyCalculatorProps) {
             />
           </div>
           <div>
-            <label className="block text-xs font-semibold text-neutral-600 mb-1">Entrada 2 (Retorno)</label>
+            <label htmlFor="daily-in2" className="block text-xs font-semibold text-neutral-600 mb-1">Entrada 2 (Retorno)</label>
             <input
+              id="daily-in2"
+              aria-label="Entrada 2 (Retorno)"
               type="time"
               value={in2}
               onChange={(e) => setIn2(e.target.value)}
@@ -302,8 +312,10 @@ export default function DailyCalculator({ onSelectTab }: DailyCalculatorProps) {
             />
           </div>
           <div>
-            <label className="block text-xs font-semibold text-neutral-600 mb-1">Saída 2 (Fim)</label>
+            <label htmlFor="daily-out2" className="block text-xs font-semibold text-neutral-600 mb-1">Saída 2 (Fim)</label>
             <input
+              id="daily-out2"
+              aria-label="Saída 2 (Fim)"
               type="time"
               value={out2}
               onChange={(e) => setOut2(e.target.value)}
@@ -314,8 +326,10 @@ export default function DailyCalculator({ onSelectTab }: DailyCalculatorProps) {
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
           <div>
-            <label className="block text-xs font-semibold text-neutral-600 mb-1">Hora de Entrada</label>
+            <label htmlFor="daily-start-simple" className="block text-xs font-semibold text-neutral-600 mb-1">Hora de Entrada</label>
             <input
+              id="daily-start-simple"
+              aria-label="Hora de Entrada"
               type="time"
               value={startSimple}
               onChange={(e) => setStartSimple(e.target.value)}
@@ -323,8 +337,10 @@ export default function DailyCalculator({ onSelectTab }: DailyCalculatorProps) {
             />
           </div>
           <div>
-            <label className="block text-xs font-semibold text-neutral-600 mb-1">Hora de Saída</label>
+            <label htmlFor="daily-end-simple" className="block text-xs font-semibold text-neutral-600 mb-1">Hora de Saída</label>
             <input
+              id="daily-end-simple"
+              aria-label="Hora de Saída"
               type="time"
               value={endSimple}
               onChange={(e) => setEndSimple(e.target.value)}
@@ -332,8 +348,10 @@ export default function DailyCalculator({ onSelectTab }: DailyCalculatorProps) {
             />
           </div>
           <div>
-            <label className="block text-xs font-semibold text-neutral-600 mb-1">Duração do Intervalo</label>
+            <label htmlFor="daily-break-simple" className="block text-xs font-semibold text-neutral-600 mb-1">Duração do Intervalo</label>
             <input
+              id="daily-break-simple"
+              aria-label="Duração do Intervalo"
               type="time"
               value={breakTimeSimple}
               onChange={(e) => setBreakTimeSimple(e.target.value)}

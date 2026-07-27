@@ -254,10 +254,12 @@ Calculado em calculadoradehorastrabalhadas.org`;
       {/* Form Inputs & Additional Hazard Allowances */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 bg-neutral-50 p-5 rounded-2xl border border-neutral-200">
         <div>
-          <label className="block text-xs font-semibold text-neutral-700 mb-1">Salário Mensal Bruto (R$)</label>
+          <label htmlFor="nighthours-salary" className="block text-xs font-semibold text-neutral-700 mb-1">Salário Mensal Bruto (R$)</label>
           <div className="relative">
             <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-neutral-500 font-bold">R$</span>
             <input
+              id="nighthours-salary"
+              aria-label="Salário Mensal Bruto em Reais"
               type="number"
               value={salary}
               onChange={e => setSalary(e.target.value)}
@@ -268,9 +270,11 @@ Calculado em calculadoradehorastrabalhadas.org`;
         </div>
 
         <div>
-          <label className="block text-xs font-semibold text-neutral-700 mb-1">Jornada Semanal (hs)</label>
+          <label htmlFor="nighthours-weekly-hours" className="block text-xs font-semibold text-neutral-700 mb-1">Jornada Semanal (hs)</label>
           <div className="relative">
             <input
+              id="nighthours-weekly-hours"
+              aria-label="Jornada Semanal em horas"
               type="number"
               value={weeklyHours}
               onChange={e => setWeeklyHours(e.target.value)}
@@ -282,8 +286,10 @@ Calculado em calculadoradehorastrabalhadas.org`;
         </div>
 
         <div>
-          <label className="block text-xs font-semibold text-neutral-700 mb-1">Insalubridade na Base (TST)</label>
+          <label htmlFor="nighthours-insalubridade" className="block text-xs font-semibold text-neutral-700 mb-1">Insalubridade na Base (TST)</label>
           <select
+            id="nighthours-insalubridade"
+            aria-label="Insalubridade na Base"
             value={insalubridadeGrade}
             onChange={e => setInsalubridadeGrade(e.target.value as any)}
             className="w-full border border-neutral-300 bg-white rounded-xl p-2.5 text-xs outline-none focus:ring-2 focus:ring-indigo-500"

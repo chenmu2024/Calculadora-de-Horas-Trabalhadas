@@ -149,8 +149,10 @@ Calculado em calculadoradehorastrabalhadas.org`;
         {calculationType === 'monthly' ? (
           <>
             <div>
-              <label className="block text-xs font-semibold text-neutral-800 mb-1">Salário Mensal Bruto (R$)</label>
+              <label htmlFor="monthly-salary" className="block text-xs font-semibold text-neutral-800 mb-1">Salário Mensal Bruto (R$)</label>
               <input
+                id="monthly-salary"
+                aria-label="Salário Mensal Bruto em Reais"
                 type="number"
                 step="0.01"
                 value={monthlySalary}
@@ -160,8 +162,10 @@ Calculado em calculadoradehorastrabalhadas.org`;
               />
             </div>
             <div>
-              <label className="block text-xs font-semibold text-neutral-800 mb-1">Divisor CLT Contratual</label>
+              <label htmlFor="monthly-divisor" className="block text-xs font-semibold text-neutral-800 mb-1">Divisor CLT Contratual</label>
               <select
+                id="monthly-divisor"
+                aria-label="Divisor CLT Contratual"
                 value={divisorCLT}
                 onChange={(e) => setDivisorCLT(e.target.value)}
                 className="w-full bg-white border border-neutral-300 rounded-lg p-2.5 text-sm font-semibold outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer"
@@ -181,8 +185,10 @@ Calculado em calculadoradehorastrabalhadas.org`;
           </>
         ) : (
           <div className="sm:col-span-3">
-            <label className="block text-xs font-semibold text-neutral-800 mb-1">Valor da Hora Normal (R$)</label>
+            <label htmlFor="monthly-hourly-wage" className="block text-xs font-semibold text-neutral-800 mb-1">Valor da Hora Normal (R$)</label>
             <input
+              id="monthly-hourly-wage"
+              aria-label="Valor da Hora Normal em Reais"
               type="number"
               step="0.01"
               value={hourlyWageInput}
@@ -237,8 +243,10 @@ Calculado em calculadoradehorastrabalhadas.org`;
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <div>
-            <label className="block text-xs font-semibold text-neutral-700 mb-1">Dias Úteis Trabalhados no Mês</label>
+            <label htmlFor="monthly-working-days" className="block text-xs font-semibold text-neutral-700 mb-1">Dias Úteis Trabalhados no Mês</label>
             <input
+              id="monthly-working-days"
+              aria-label="Dias Úteis Trabalhados no Mês"
               type="number"
               value={workingDays}
               onChange={(e) => setWorkingDays(e.target.value)}
@@ -247,8 +255,10 @@ Calculado em calculadoradehorastrabalhadas.org`;
             />
           </div>
           <div>
-            <label className="block text-xs font-semibold text-neutral-700 mb-1">Domingos e Feriados no Mês (DSR)</label>
+            <label htmlFor="monthly-sundays" className="block text-xs font-semibold text-neutral-700 mb-1">Domingos e Feriados no Mês (DSR)</label>
             <input
+              id="monthly-sundays"
+              aria-label="Domingos e Feriados no Mês para DSR"
               type="number"
               value={sundaysAndHolidays}
               onChange={(e) => setSundaysAndHolidays(e.target.value)}
@@ -257,9 +267,11 @@ Calculado em calculadoradehorastrabalhadas.org`;
             />
           </div>
           <div>
-            <label className="block text-xs font-semibold text-neutral-700 mb-1">Jornada Diária (Horas:Minutos)</label>
+            <label htmlFor="monthly-daily-hours" className="block text-xs font-semibold text-neutral-700 mb-1">Jornada Diária (Horas:Minutos)</label>
             <div className="flex gap-2">
               <input
+                id="monthly-daily-hours"
+                aria-label="Horas da jornada diária"
                 type="number"
                 value={dailyHours}
                 onChange={(e) => setDailyHours(e.target.value)}
@@ -268,6 +280,8 @@ Calculado em calculadoradehorastrabalhadas.org`;
               />
               <span className="self-center font-bold text-neutral-400">:</span>
               <input
+                id="monthly-daily-minutes"
+                aria-label="Minutos da jornada diária"
                 type="number"
                 value={dailyMinutes}
                 onChange={(e) => setDailyMinutes(e.target.value)}
@@ -282,8 +296,10 @@ Calculado em calculadoradehorastrabalhadas.org`;
       {/* Overtime 50%, 100% & Night Shift */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
         <div>
-          <label className="block text-xs font-semibold text-neutral-700 mb-1">Horas Extras 50% (Dias Úteis/Sáb)</label>
+          <label htmlFor="monthly-ot50" className="block text-xs font-semibold text-neutral-700 mb-1">Horas Extras 50% (Dias Úteis/Sáb)</label>
           <input
+            id="monthly-ot50"
+            aria-label="Horas Extras 50%"
             type="number"
             step="0.5"
             value={overtime50Hours}
@@ -293,8 +309,10 @@ Calculado em calculadoradehorastrabalhadas.org`;
           />
         </div>
         <div>
-          <label className="block text-xs font-semibold text-neutral-700 mb-1">Horas Extras 100% (Dom/Feriados)</label>
+          <label htmlFor="monthly-ot100" className="block text-xs font-semibold text-neutral-700 mb-1">Horas Extras 100% (Dom/Feriados)</label>
           <input
+            id="monthly-ot100"
+            aria-label="Horas Extras 100%"
             type="number"
             step="0.5"
             value={overtime100Hours}
@@ -304,10 +322,12 @@ Calculado em calculadoradehorastrabalhadas.org`;
           />
         </div>
         <div>
-          <label className="block text-xs font-semibold text-neutral-700 mb-1 flex items-center gap-1">
+          <label htmlFor="monthly-night-shift" className="block text-xs font-semibold text-neutral-700 mb-1 flex items-center gap-1">
             <Moon className="w-3.5 h-3.5 text-indigo-600" /> Horas Noturnas (22h às 05h)
           </label>
           <input
+            id="monthly-night-shift"
+            aria-label="Horas Noturnas 22h às 05h"
             type="number"
             step="0.5"
             value={nightShiftHours}

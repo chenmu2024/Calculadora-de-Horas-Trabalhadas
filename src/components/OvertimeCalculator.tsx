@@ -188,10 +188,12 @@ Calculado em calculadoradehorastrabalhadas.org`;
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
         <div>
-          <label className="block text-xs font-bold text-neutral-700 mb-1">Salário Mensal Bruto (R$)</label>
+          <label htmlFor="ot-salary" className="block text-xs font-bold text-neutral-700 mb-1">Salário Mensal Bruto (R$)</label>
           <div className="relative">
             <span className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-500 font-bold text-xs">R$</span>
             <input 
+              id="ot-salary"
+              aria-label="Salário Mensal Bruto em Reais"
               type="number" 
               value={salary} 
               onChange={e => setSalary(e.target.value)} 
@@ -225,9 +227,11 @@ Calculado em calculadoradehorastrabalhadas.org`;
         </div>
 
         <div>
-          <label className="block text-xs font-bold text-neutral-700 mb-1">Carga Horária Semanal (hs)</label>
+          <label htmlFor="ot-weekly-hours" className="block text-xs font-bold text-neutral-700 mb-1">Carga Horária Semanal (hs)</label>
           <div className="relative">
              <input 
+               id="ot-weekly-hours"
+               aria-label="Carga Horária Semanal em horas"
                type="number" 
                value={weeklyHours} 
                onChange={e => setWeeklyHours(e.target.value)} 
@@ -260,8 +264,10 @@ Calculado em calculadoradehorastrabalhadas.org`;
         </div>
 
         <div>
-          <label className="block text-xs font-bold text-neutral-700 mb-1">Insalubridade na Base (TST)</label>
+          <label htmlFor="ot-insalubridade" className="block text-xs font-bold text-neutral-700 mb-1">Insalubridade na Base (TST)</label>
           <select
+            id="ot-insalubridade"
+            aria-label="Insalubridade na base de cálculo"
             value={insalubridadeGrade}
             onChange={e => setInsalubridadeGrade(e.target.value as any)}
             className="w-full border border-neutral-300 bg-white rounded-xl p-2.5 text-xs outline-none focus:ring-2 focus:ring-blue-500"
@@ -298,11 +304,13 @@ Calculado em calculadoradehorastrabalhadas.org`;
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <div className="bg-white p-3.5 rounded-xl border border-neutral-200">
             <div className="flex justify-between items-center mb-1.5">
-              <label className="text-xs font-bold text-neutral-800">HE 50% (Dias Úteis)</label>
+              <label htmlFor="ot-50-hours" className="text-xs font-bold text-neutral-800">HE 50% (Dias Úteis)</label>
               <span className="text-[10px] bg-blue-100 text-blue-800 font-bold px-2 py-0.5 rounded-full">+50%</span>
             </div>
             <div className="relative">
               <input
+                id="ot-50-hours"
+                aria-label="Horas Extras 50%"
                 type="number"
                 value={ot50Hours}
                 onChange={e => setOt50Hours(e.target.value)}
@@ -318,11 +326,13 @@ Calculado em calculadoradehorastrabalhadas.org`;
 
           <div className="bg-white p-3.5 rounded-xl border border-neutral-200">
             <div className="flex justify-between items-center mb-1.5">
-              <label className="text-xs font-bold text-neutral-800">HE 100% (Dom / Feriados)</label>
+              <label htmlFor="ot-100-hours" className="text-xs font-bold text-neutral-800">HE 100% (Dom / Feriados)</label>
               <span className="text-[10px] bg-purple-100 text-purple-800 font-bold px-2 py-0.5 rounded-full">+100%</span>
             </div>
             <div className="relative">
               <input
+                id="ot-100-hours"
+                aria-label="Horas Extras 100%"
                 type="number"
                 value={ot100Hours}
                 onChange={e => setOt100Hours(e.target.value)}
@@ -339,8 +349,10 @@ Calculado em calculadoradehorastrabalhadas.org`;
           <div className="bg-white p-3.5 rounded-xl border border-neutral-200">
             <div className="flex justify-between items-center mb-1.5">
               <div className="flex items-center gap-1">
-                <label className="text-xs font-bold text-neutral-800">HE Acordo/CCT</label>
+                <label htmlFor="ot-custom-hours" className="text-xs font-bold text-neutral-800">HE Acordo/CCT</label>
                 <input
+                  id="ot-custom-pct"
+                  aria-label="Percentual customizado de hora extra"
                   type="number"
                   value={customOtPct}
                   onChange={e => setCustomOtPct(e.target.value)}
@@ -352,6 +364,8 @@ Calculado em calculadoradehorastrabalhadas.org`;
             </div>
             <div className="relative">
               <input
+                id="ot-custom-hours"
+                aria-label="Horas Extras CCT"
                 type="number"
                 value={otCustomHours}
                 onChange={e => setOtCustomHours(e.target.value)}
@@ -374,6 +388,7 @@ Calculado em calculadoradehorastrabalhadas.org`;
             <input
               type="checkbox"
               id="incDSR"
+              aria-label="Incluir reflexo no DSR"
               checked={includeDSR}
               onChange={(e) => setIncludeDSR(e.target.checked)}
               className="w-4 h-4 text-blue-600 rounded cursor-pointer"
@@ -387,6 +402,8 @@ Calculado em calculadoradehorastrabalhadas.org`;
             <div className="flex items-center gap-2">
               <span className="text-neutral-500">Dias Úteis no Mês:</span>
               <input
+                id="ot-working-days"
+                aria-label="Dias Úteis no Mês para DSR"
                 type="number"
                 value={workingDays}
                 onChange={(e) => setWorkingDays(e.target.value)}
@@ -394,6 +411,8 @@ Calculado em calculadoradehorastrabalhadas.org`;
               />
               <span className="text-neutral-500">Dom/Feriados:</span>
               <input
+                id="ot-sundays-holidays"
+                aria-label="Domingos e Feriados no Mês para DSR"
                 type="number"
                 value={sundaysHolidays}
                 onChange={(e) => setSundaysHolidays(e.target.value)}
