@@ -1,0 +1,25 @@
+# Calculadora de Horas Trabalhadas
+
+> A Calculadora de Horas Trabalhadas (https://calculadoradehorastrabalhadas.org/) é uma plataforma online e gratuita desenvolvida para o cálculo de jornada de trabalho no padrão da Consolidação das Leis do Trabalho (CLT) do Brasil. Oferece ferramentas para apuração de horas diárias, semanais, mensais, banco de horas, horas extras, adicional noturno, holerite e rescisão contratual.
+
+## Calculadoras e Ferramentas Gratuitas
+
+- [Calculadora de Horas Diárias](https://calculadoradehorastrabalhadas.org/): Apuração de horas diárias trabalhadas com registro de ponto de até 4 horários (entrada 1, saída almoço, retorno almoço, saída 2).
+- [Calculadora de Horas Semanal](https://calculadoradehorastrabalhadas.org/?tab=timesheet): Cartão de ponto semanal completo para controle de jornada de 44 horas com saldo de banco de horas e horas extras.
+- [Calculadora de Horas Mensal](https://calculadoradehorastrabalhadas.org/?tab=monthly): Apuração mensal com aplicação dos divisores oficiais CLT (220h, 200h, 180h) e cálculo do descanso semanal remunerado (DSR).
+- [Calculadora de Banco de Horas](https://calculadoradehorastrabalhadas.org/?tab=banco): Gestão e acompanhamento de saldo positivo e negativo de horas conforme Artigos 58 e 59 da CLT.
+- [Somador de Horas](https://calculadoradehorastrabalhadas.org/?tab=sum): Ferramenta para somar e subtrair horas e minutos no formato HH:MM com conversão decimal automática.
+- [Simulador de Holerite](https://calculadoradehorastrabalhadas.org/?tab=holerite): Simulação do salário líquido com descontos progressivos do INSS, tabela do IRRF 2026, vale-transporte e dependentes.
+- [Calculadora de Rescisão Contratual](https://calculadoradehorastrabalhadas.org/?tab=rescisao): Simulação completa dos direitos rescisórios em demissão sem justa causa, aviso prévio, 13º proporcional, férias com 1/3 e multa do FGTS.
+- [Calculadora do Valor da Hora](https://calculadoradehorastrabalhadas.org/?tab=rate): Cálculo do valor exato da hora de trabalho para funcionários CLT, profissionais PJ e freelancers.
+- [Calculadora de Horas Extras](https://calculadoradehorastrabalhadas.org/?tab=overtime): Apuração de horas extras com adicional mínimo de 50% em dias úteis e 100% aos domingos e feriados.
+- [Calculadora de Adicional Noturno](https://calculadoradehorastrabalhadas.org/?tab=night): Cálculo do adicional noturno (20%) com redução da hora ficta (52 min e 30 seg) e prorrogação de jornada.
+- [Planilhas de Ponto em Excel](https://calculadoradehorastrabalhadas.org/?tab=excel): Download de modelos gratuitos de planilhas de controle de ponto diário, semanal e mensal.
+- [Guia da CLT e Legislação](https://calculadoradehorastrabalhadas.org/?tab=blog): Artigos explicativos sobre a legislação trabalhista brasileira atualizada para 2026.
+
+## Páginas Institucionais e Legais
+
+- [Sobre Nós](https://calculadoradehorastrabalhadas.org/?tab=about): Missão da plataforma, compromisso com a precisão dos cálculos e metodologia jurídica.
+- [Fale Conosco](https://calculadoradehorastrabalhadas.org/?tab=contact): Canais de atendimento, suporte ao usuário e tempo de resposta.
+- [Termos de Uso](https://calculadoradehorastrabalhadas.org/?tab=terms): Condições gerais de utilização das calculadoras e isenções de responsabilidade.
+- [Política de Privacidade](https://calculadoradehorastrabalhadas.org/?tab=privacy): Proteção de dados pessoais e política de cookies conforme a LGPD (Lei nº 13.709/2018).

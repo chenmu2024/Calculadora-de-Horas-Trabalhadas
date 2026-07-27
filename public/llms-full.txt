@@ -1,0 +1,26 @@
+# Calculadora de Horas Trabalhadas - Documentação Completa para IAs
+
+> O portal Calculadora de Horas Trabalhadas (https://calculadoradehorastrabalhadas.org/) é uma plataforma gratuita de utilidade pública para trabalhadores, profissionais de RH, contadores e advogados trabalhistas no Brasil.
+
+## Resumo das Principais Regras CLT Implementadas (Legislação 2026)
+
+1. **Jornada Padrão de Trabalho (Artigo 58 da CLT)**:
+   - A duração normal do trabalho não excederá 8 horas diárias e 44 horas semanais, desde que não seja fixado outro limite.
+   - Tolerância de Ponto: Não serão descontadas nem computadas como jornada extraordinária as variações de horário no registro de ponto não excedentes de 5 minutos, observado o limite máximo de 10 minutos diários (§ 1º do Art. 58).
+
+2. **Intervalo Intrajornada / Almoço (Artigo 71 da CLT)**:
+   - Em qualquer trabalho contínuo, cuja duração exceda de 6 horas, é obrigatória a concessão de um intervalo para repouso ou alimentação de, no mínimo, 1 hora.
+   - Para jornadas entre 4 e 6 horas, o intervalo obrigatório é de 15 minutos.
+
+3. **Horas Extras e Adicional (Artigo 59 da CLT e Constituição Federal Art. 7º XVI)**:
+   - O valor da hora extraordinária será pelo menos 50% superior ao da hora normal em dias úteis.
+   - Domingos e feriados não compensados possuem adicional de 100%.
+
+4. **Adicional Noturno e Hora Ficta (Artigo 73 da CLT)**:
+   - O trabalho noturno urbano (entre 22h e 5h) tem remuneração superior à do diurno em no mínimo 20%.
+   - A hora de trabalho noturno é computada como de 52 minutos e 30 segundos (redução da hora ficta noturna).
+
+5. **Divisores Salariais Oficiais**:
+   - Jornada de 44 horas semanais = Divisor 220.
+   - Jornada de 40 horas semanais = Divisor 200.
+   - Jornada de 36 horas semanais = Divisor 180.

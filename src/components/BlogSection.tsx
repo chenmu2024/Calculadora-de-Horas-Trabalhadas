@@ -60,8 +60,11 @@ export default function BlogSection({ onSelectCalculator }: { onSelectCalculator
             <img 
               src="https://images.unsplash.com/photo-1501139083538-0139583c060f?auto=format&fit=crop&q=80&w=1200" 
               alt="Relógio de ponto e anotações para cálculo de horas trabalhadas diárias" 
+              width={1200}
+              height={675}
               className="w-full h-64 object-cover hover:scale-105 transition-transform duration-700"
               loading="lazy"
+              decoding="async"
             />
             <figcaption className="text-center text-xs text-neutral-500 mt-2 pb-2">Controle preciso da jornada de trabalho e cálculo de horas diárias pela CLT.</figcaption>
           </figure>
@@ -230,8 +233,11 @@ export default function BlogSection({ onSelectCalculator }: { onSelectCalculator
             <img 
               src="https://images.unsplash.com/photo-1554224154-22dec7ec8818?auto=format&fit=crop&q=80&w=1200" 
               alt="Calculadora e planejamento semanal para escala de 44 horas de segunda a sexta" 
+              width={1200}
+              height={675}
               className="w-full h-64 object-cover hover:scale-105 transition-transform duration-700"
               loading="lazy"
+              decoding="async"
             />
             <figcaption className="text-center text-xs text-neutral-500 mt-2 pb-2">Planejamento de escalas de 44 horas semanais e compensação de sábados.</figcaption>
           </figure>
@@ -372,8 +378,11 @@ export default function BlogSection({ onSelectCalculator }: { onSelectCalculator
             <img 
               src="https://images.unsplash.com/photo-1579621970588-a3f5ce599ac9?auto=format&fit=crop&q=80&w=1200" 
               alt="Cálculo do valor da hora salarial com base no divisor 220 da CLT" 
+              width={1200}
+              height={675}
               className="w-full h-64 object-cover hover:scale-105 transition-transform duration-700"
               loading="lazy"
+              decoding="async"
             />
             <figcaption className="text-center text-xs text-neutral-500 mt-2 pb-2">Entenda como utilizar a tabela oficial de divisores CLT (220, 200, 180).</figcaption>
           </figure>
@@ -536,8 +545,11 @@ export default function BlogSection({ onSelectCalculator }: { onSelectCalculator
             <img 
               src="https://images.unsplash.com/photo-1478760329108-5c3ed9d495a0?auto=format&fit=crop&q=80&w=1200" 
               alt="Cálculo de hora extra noturna com redução da hora ficta" 
+              width={1200}
+              height={675}
               className="w-full h-64 object-cover hover:scale-105 transition-transform duration-700"
               loading="lazy"
+              decoding="async"
             />
             <figcaption className="text-center text-xs text-neutral-500 mt-2 pb-2">O trabalho noturno exige compensação financeira pelo desgaste e cálculo da hora reduzida.</figcaption>
           </figure>
