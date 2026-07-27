@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+
+User-agent: Mediapartners-Google
+Allow: /
+
+Sitemap: https://calculadoradehorastrabalhadas.org/sitemap.xml
+

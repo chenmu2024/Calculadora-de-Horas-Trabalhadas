@@ -1,0 +1,6 @@
+{
+  "name": "Calculadora de Horas Trabalhadas",
+  "description": "Ferramenta online grátis para calcular horas trabalhadas, horas extras e valor da hora de trabalho conforme a CLT.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

@@ -1,0 +1,47 @@
+{
+  "id": "/",
+  "short_name": "Horas CLT",
+  "name": "Calculadora de Horas Trabalhadas CLT",
+  "description": "Calculadora de horas trabalhadas online grátis. Calcule cartão de ponto, horas extras, holerite e adicional noturno no padrão CLT.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#f8fafc",
+  "theme_color": "#2563eb",
+  "lang": "pt-BR",
+  "categories": ["business", "finance", "productivity", "utilities"],
+  "icons": [
+    {
+      "src": "favicon.ico",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/x-icon"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Calculadora Diária de Ponto",
+      "short_name": "Ponto Diário",
+      "description": "Calcular ponto diário e intervalo de almoço",
+      "url": "/?tab=daily"
+    },
+    {
+      "name": "Cartão de Ponto Semanal",
+      "short_name": "Ponto Semanal",
+      "description": "Calcular cartão de ponto semanal 44h",
+      "url": "/?tab=timesheet"
+    },
+    {
+      "name": "Simulador de Holerite",
+      "short_name": "Holerite",
+      "description": "Simular salário líquido e descontos CLT",
+      "url": "/?tab=holerite"
+    },
+    {
+      "name": "Banco de Horas",
+      "short_name": "Banco Horas",
+      "description": "Apurar saldo positivo e negativo de horas",
+      "url": "/?tab=banco"
+    }
+  ]
+}
