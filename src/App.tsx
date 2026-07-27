@@ -27,6 +27,7 @@ import QuickConverterModal from './components/QuickConverterModal';
 import { HolidayCalendarModal } from './components/HolidayCalendarModal';
 import { LegalFAQModal } from './components/LegalFAQModal';
 import { FileSpreadsheet, Clock, Sparkles, CheckCircle, Calculator, ArrowRightLeft, Calendar, BookOpen, Scale } from 'lucide-react';
+import { getTabFromLocation, getHrefForTab, TAB_ROUTES } from './utils/routes';
 
 const PAGE_H1_TITLES: Record<string, string> = {
   daily: 'Calculadora de Horas Trabalhadas Diária',
@@ -48,10 +49,7 @@ const PAGE_H1_TITLES: Record<string, string> = {
 };
 
 export default function App() {
-  const [activeTab, setActiveTabState] = useState(() => {
-    const params = new URLSearchParams(window.location.search);
-    return params.get('tab') || 'daily';
-  });
+  const [activeTab, setActiveTabState] = useState(() => getTabFromLocation());
 
   const [isQuickConverterOpen, setIsQuickConverterOpen] = useState(false);
   const [isHolidayCalendarOpen, setIsHolidayCalendarOpen] = useState(false);
@@ -59,20 +57,21 @@ export default function App() {
 
   const setActiveTab = (tab: string) => {
     setActiveTabState(tab);
-    const url = new URL(window.location.href);
-    if (tab === 'daily') {
-      url.searchParams.delete('tab');
-    } else {
-      url.searchParams.set('tab', tab);
-    }
-    window.history.pushState({}, '', url.toString());
+    const targetPath = TAB_ROUTES[tab] || '/';
+    window.history.pushState({}, '', targetPath);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   useEffect(() => {
+    // Clean up query param ?tab= if present on initial load by replacing history state
+    if (typeof window !== 'undefined' && window.location.search.includes('tab=')) {
+      const currentTab = getTabFromLocation();
+      const cleanPath = TAB_ROUTES[currentTab] || '/';
+      window.history.replaceState({}, '', cleanPath);
+    }
+
     const handlePopState = () => {
-      const params = new URLSearchParams(window.location.search);
-      setActiveTabState(params.get('tab') || 'daily');
+      setActiveTabState(getTabFromLocation());
     };
     window.addEventListener('popstate', handlePopState);
     return () => window.removeEventListener('popstate', handlePopState);
@@ -124,7 +123,7 @@ export default function App() {
               Horas Diárias
             </a>
             <a
-              href="/?tab=timesheet"
+              href={getHrefForTab('timesheet')}
               onClick={(e) => { e.preventDefault(); setActiveTab('timesheet'); }}
               title="Calculadora Semanal 44h CLT"
               className={`px-3 py-1.5 rounded-full border transition-all ${
@@ -136,7 +135,7 @@ export default function App() {
               Semanal 44h
             </a>
             <a
-              href="/?tab=monthly"
+              href={getHrefForTab('monthly')}
               onClick={(e) => { e.preventDefault(); setActiveTab('monthly'); }}
               title="Calculadora Mensal de Horas Trabalhadas"
               className={`px-3 py-1.5 rounded-full border transition-all cursor-pointer ${
@@ -148,7 +147,7 @@ export default function App() {
               Cálculo Mensal
             </a>
             <a
-              href="/?tab=banco"
+              href={getHrefForTab('banco')}
               onClick={(e) => { e.preventDefault(); setActiveTab('banco'); }}
               title="Calculadora de Banco de Horas"
               className={`px-3 py-1.5 rounded-full border transition-all cursor-pointer ${
@@ -160,7 +159,7 @@ export default function App() {
               Banco de Horas
             </a>
             <a
-              href="/?tab=sum"
+              href={getHrefForTab('sum')}
               onClick={(e) => { e.preventDefault(); setActiveTab('sum'); }}
               title="Somador de Horas Online"
               className={`px-3 py-1.5 rounded-full border transition-all cursor-pointer ${
@@ -172,7 +171,7 @@ export default function App() {
               Somador de Horas
             </a>
             <a
-              href="/?tab=holerite"
+              href={getHrefForTab('holerite')}
               onClick={(e) => { e.preventDefault(); setActiveTab('holerite'); }}
               title="Simulador de Holerite e Salário Líquido"
               className={`px-3 py-1.5 rounded-full border transition-all cursor-pointer ${
@@ -184,7 +183,7 @@ export default function App() {
               Holerite
             </a>
             <a
-              href="/?tab=rescisao"
+              href={getHrefForTab('rescisao')}
               onClick={(e) => { e.preventDefault(); setActiveTab('rescisao'); }}
               title="Calculadora de Rescisão Contratual CLT"
               className={`px-3 py-1.5 rounded-full border transition-all cursor-pointer ${
@@ -196,7 +195,7 @@ export default function App() {
               Rescisão CLT
             </a>
             <a
-              href="/?tab=rate"
+              href={getHrefForTab('rate')}
               onClick={(e) => { e.preventDefault(); setActiveTab('rate'); }}
               title="Calculadora de Valor da Hora Trabalhada"
               className={`px-3 py-1.5 rounded-full border transition-all ${
@@ -208,7 +207,7 @@ export default function App() {
               Valor Hora
             </a>
             <a
-              href="/?tab=overtime"
+              href={getHrefForTab('overtime')}
               onClick={(e) => { e.preventDefault(); setActiveTab('overtime'); }}
               title="Calculadora de Horas Extras 50% e 100%"
               className={`px-3 py-1.5 rounded-full border transition-all ${
@@ -220,7 +219,7 @@ export default function App() {
               Hora Extra
             </a>
             <a
-              href="/?tab=night"
+              href={getHrefForTab('night')}
               onClick={(e) => { e.preventDefault(); setActiveTab('night'); }}
               title="Calculadora de Adicional Noturno"
               className={`px-3 py-1.5 rounded-full border transition-all ${

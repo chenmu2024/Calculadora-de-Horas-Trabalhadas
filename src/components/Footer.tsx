@@ -1,4 +1,5 @@
 import { Calculator, Shield, FileSpreadsheet, Heart } from 'lucide-react';
+import { getHrefForTab } from '../utils/routes';
 
 interface FooterProps {
   setActiveTab: (tab: string) => void;
@@ -30,32 +31,32 @@ export default function Footer({ setActiveTab }: FooterProps) {
           <h4 className="text-white font-bold mb-3 text-sm">Calculadoras</h4>
           <ul className="space-y-2">
             <li>
-              <a href="/" onClick={(e) => { e.preventDefault(); handleNav('daily'); }} className="hover:text-white transition-colors" title="Calculadora de Horas Trabalhadas Diária">
+              <a href={getHrefForTab('daily')} onClick={(e) => { e.preventDefault(); handleNav('daily'); }} className="hover:text-white transition-colors" title="Calculadora de Horas Trabalhadas Diária">
                 Calculadora Diária (Intervalo)
               </a>
             </li>
             <li>
-              <a href="/?tab=timesheet" onClick={(e) => { e.preventDefault(); handleNav('timesheet'); }} className="hover:text-white transition-colors" title="Calculadora de Horas Semanal 44h CLT">
+              <a href={getHrefForTab('timesheet')} onClick={(e) => { e.preventDefault(); handleNav('timesheet'); }} className="hover:text-white transition-colors" title="Calculadora de Horas Semanal 44h CLT">
                 Calculadora Semanal (44h CLT)
               </a>
             </li>
             <li>
-              <a href="/?tab=monthly" onClick={(e) => { e.preventDefault(); handleNav('monthly'); }} className="hover:text-white transition-colors" title="Calculadora Mensal de Horas Trabalhadas">
+              <a href={getHrefForTab('monthly')} onClick={(e) => { e.preventDefault(); handleNav('monthly'); }} className="hover:text-white transition-colors" title="Calculadora Mensal de Horas Trabalhadas">
                 Calculadora Mensal
               </a>
             </li>
             <li>
-              <a href="/?tab=rate" onClick={(e) => { e.preventDefault(); handleNav('rate'); }} className="hover:text-white transition-colors" title="Calculadora de Valor da Hora Trabalhada">
+              <a href={getHrefForTab('rate')} onClick={(e) => { e.preventDefault(); handleNav('rate'); }} className="hover:text-white transition-colors" title="Calculadora de Valor da Hora Trabalhada">
                 Calculadora de Valor Hora
               </a>
             </li>
             <li>
-              <a href="/?tab=overtime" onClick={(e) => { e.preventDefault(); handleNav('overtime'); }} className="hover:text-white transition-colors" title="Calculadora de Horas Extras 50% e 100%">
+              <a href={getHrefForTab('overtime')} onClick={(e) => { e.preventDefault(); handleNav('overtime'); }} className="hover:text-white transition-colors" title="Calculadora de Horas Extras 50% e 100%">
                 Calculadora de Horas Extras
               </a>
             </li>
             <li>
-              <a href="/?tab=night" onClick={(e) => { e.preventDefault(); handleNav('night'); }} className="hover:text-white transition-colors" title="Calculadora de Adicional Noturno">
+              <a href={getHrefForTab('night')} onClick={(e) => { e.preventDefault(); handleNav('night'); }} className="hover:text-white transition-colors" title="Calculadora de Adicional Noturno">
                 Calculadora de Adicional Noturno
               </a>
             </li>
@@ -67,27 +68,27 @@ export default function Footer({ setActiveTab }: FooterProps) {
           <h4 className="text-white font-bold mb-3 text-sm">Recursos e Guias</h4>
           <ul className="space-y-2">
             <li>
-              <a href="/?tab=excel" onClick={(e) => { e.preventDefault(); handleNav('excel'); }} className="hover:text-white transition-colors text-emerald-400 font-semibold flex items-center gap-1" title="Baixar Planilha de Ponto em Excel Grátis">
+              <a href={getHrefForTab('excel')} onClick={(e) => { e.preventDefault(); handleNav('excel'); }} className="hover:text-white transition-colors text-emerald-400 font-semibold flex items-center gap-1" title="Baixar Planilha de Ponto em Excel Grátis">
                 <FileSpreadsheet className="w-3.5 h-3.5" /> Planilha Excel Grátis
               </a>
             </li>
             <li>
-              <a href="/?tab=blog" onClick={(e) => { e.preventDefault(); handleNav('blog'); }} className="hover:text-white transition-colors" title="Guia Como calcular hora de trabalho">
+              <a href={getHrefForTab('blog')} onClick={(e) => { e.preventDefault(); handleNav('blog'); }} className="hover:text-white transition-colors" title="Guia Como calcular hora de trabalho">
                 Como calcular hora de trabalho
               </a>
             </li>
             <li>
-              <a href="/?tab=blog" onClick={(e) => { e.preventDefault(); handleNav('blog'); }} className="hover:text-white transition-colors" title="Guia Como calcular 44 horas de 2ª a 6ª">
+              <a href={getHrefForTab('blog')} onClick={(e) => { e.preventDefault(); handleNav('blog'); }} className="hover:text-white transition-colors" title="Guia Como calcular 44 horas de 2ª a 6ª">
                 Como calcular 44 horas de 2ª a 6ª
               </a>
             </li>
             <li>
-              <a href="/?tab=blog" onClick={(e) => { e.preventDefault(); handleNav('blog'); }} className="hover:text-white transition-colors" title="Guia Divisor de horas CLT 220">
+              <a href={getHrefForTab('blog')} onClick={(e) => { e.preventDefault(); handleNav('blog'); }} className="hover:text-white transition-colors" title="Guia Divisor de horas CLT 220">
                 Divisor de horas CLT (220)
               </a>
             </li>
             <li>
-              <a href="/?tab=blog" onClick={(e) => { e.preventDefault(); handleNav('blog'); }} className="hover:text-white transition-colors" title="Guia Cálculo de hora extra 50% e 100%">
+              <a href={getHrefForTab('blog')} onClick={(e) => { e.preventDefault(); handleNav('blog'); }} className="hover:text-white transition-colors" title="Guia Cálculo de hora extra 50% e 100%">
                 Cálculo de hora extra 50% e 100%
               </a>
             </li>
@@ -101,22 +102,22 @@ export default function Footer({ setActiveTab }: FooterProps) {
           </h4>
           <ul className="space-y-2">
             <li>
-              <a href="/?tab=about" onClick={(e) => { e.preventDefault(); handleNav('about'); }} className="hover:text-white transition-colors" title="Sobre Nós - Conheça nossa missão">
+              <a href={getHrefForTab('about')} onClick={(e) => { e.preventDefault(); handleNav('about'); }} className="hover:text-white transition-colors" title="Sobre Nós - Conheça nossa missão">
                 Sobre Nós
               </a>
             </li>
             <li>
-              <a href="/?tab=contact" onClick={(e) => { e.preventDefault(); handleNav('contact'); }} className="hover:text-white transition-colors" title="Fale Conosco - Atendimento">
+              <a href={getHrefForTab('contact')} onClick={(e) => { e.preventDefault(); handleNav('contact'); }} className="hover:text-white transition-colors" title="Fale Conosco - Atendimento">
                 Contato
               </a>
             </li>
             <li>
-              <a href="/?tab=terms" onClick={(e) => { e.preventDefault(); handleNav('terms'); }} className="hover:text-white transition-colors" title="Termos de Uso e Condições de Serviço">
+              <a href={getHrefForTab('terms')} onClick={(e) => { e.preventDefault(); handleNav('terms'); }} className="hover:text-white transition-colors" title="Termos de Uso e Condições de Serviço">
                 Termos de Uso
               </a>
             </li>
             <li>
-              <a href="/?tab=privacy" onClick={(e) => { e.preventDefault(); handleNav('privacy'); }} className="hover:text-white transition-colors" title="Política de Privacidade e LGPD">
+              <a href={getHrefForTab('privacy')} onClick={(e) => { e.preventDefault(); handleNav('privacy'); }} className="hover:text-white transition-colors" title="Política de Privacidade e LGPD">
                 Política de Privacidade
               </a>
             </li>

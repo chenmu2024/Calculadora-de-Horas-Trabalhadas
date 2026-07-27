@@ -13,77 +13,77 @@ const PAGE_META: Record<string, { title: string; description: string; canonical:
   timesheet: {
     title: 'Cartão de Ponto Semanal e Apuração de Horas CLT',
     description: 'Calcule o cartão de ponto da semana completa. Apuração automática de horas normais, banco de horas e saldo de horas extras para escala de 44h.',
-    canonical: 'https://calculadoradehorastrabalhadas.org/?tab=timesheet'
+    canonical: 'https://calculadoradehorastrabalhadas.org/calculadora-semanal'
   },
   monthly: {
     title: 'Calculadora de Horas Trabalhadas Mensal - CLT',
     description: 'Calcule o total de horas trabalhadas no mês inteiro. Simulação completa com divisor 220, saldo de horas e total a receber.',
-    canonical: 'https://calculadoradehorastrabalhadas.org/?tab=monthly'
+    canonical: 'https://calculadoradehorastrabalhadas.org/calculadora-mensal'
   },
   banco: {
     title: 'Calculadora de Banco de Horas e Saldo - CLT',
     description: 'Calcule o saldo do seu banco de horas. Descubra se você tem horas a compensar ou a receber como hora extra conforme a convenção CLT.',
-    canonical: 'https://calculadoradehorastrabalhadas.org/?tab=banco'
+    canonical: 'https://calculadoradehorastrabalhadas.org/banco-de-horas'
   },
   sum: {
     title: 'Somador de Horas Online Grátis - Somar Minutos',
     description: 'Ferramenta rápida para somar e subtrair horas e minutos. Ideal para conferir cartões de ponto, atestados e relatórios de ponto.',
-    canonical: 'https://calculadoradehorastrabalhadas.org/?tab=sum'
+    canonical: 'https://calculadoradehorastrabalhadas.org/somador-de-horas'
   },
   holerite: {
     title: 'Simulador de Holerite e Salário Líquido CLT',
     description: 'Simule o seu holerite completo com cálculo de salário líquido, descontos de INSS, IRRF, vale transporte e horas extras com adicionais.',
-    canonical: 'https://calculadoradehorastrabalhadas.org/?tab=holerite'
+    canonical: 'https://calculadoradehorastrabalhadas.org/simulador-de-holerite'
   },
   rescisao: {
     title: 'Calculadora de Rescisão Contratual CLT 2026',
     description: 'Simule o cálculo exato de rescisão de trabalho: aviso prévio, saldo de salário, 13º proporcional, férias com 1/3 e multa do FGTS no padrão CLT.',
-    canonical: 'https://calculadoradehorastrabalhadas.org/?tab=rescisao'
+    canonical: 'https://calculadoradehorastrabalhadas.org/calculadora-de-rescisao'
   },
   rate: {
     title: 'Calculadora de Valor da Hora Trabalhada - CLT',
     description: 'Descubra exatamente quanto vale a sua hora de trabalho. Cálculo do valor da hora com base no salário bruto e divisor oficial CLT.',
-    canonical: 'https://calculadoradehorastrabalhadas.org/?tab=rate'
+    canonical: 'https://calculadoradehorastrabalhadas.org/valor-da-hora'
   },
   overtime: {
     title: 'Calculadora de Horas Extras 50% e 100% - CLT',
     description: 'Calcule o valor exato das suas horas extras com adicional de 50% em dias úteis e 100% aos domingos e feriados.',
-    canonical: 'https://calculadoradehorastrabalhadas.org/?tab=overtime'
+    canonical: 'https://calculadoradehorastrabalhadas.org/horas-extras'
   },
   night: {
     title: 'Calculadora de Adicional Noturno e Hora Ficta',
     description: 'Calcule o valor do adicional noturno de 20% e a redução da hora ficta (52min30s) para jornadas noturnas na CLT.',
-    canonical: 'https://calculadoradehorastrabalhadas.org/?tab=night'
+    canonical: 'https://calculadoradehorastrabalhadas.org/adicional-noturno'
   },
   excel: {
     title: 'Planilha de Controle de Ponto Excel Grátis',
     description: 'Modelos de planilhas prontas para controle de ponto diário, semanal e mensal em Excel com fórmulas automáticas de saldo e horas extras.',
-    canonical: 'https://calculadoradehorastrabalhadas.org/?tab=excel'
+    canonical: 'https://calculadoradehorastrabalhadas.org/planilha-excel-ponto'
   },
   blog: {
     title: 'Guia Completo da CLT e Horas Trabalhadas 2026',
     description: 'Aprenda tudo sobre regras de ponto, tolerância de 10 minutos, intervalo intrajornada, adicional noturno e divisor 220 da CLT.',
-    canonical: 'https://calculadoradehorastrabalhadas.org/?tab=blog'
+    canonical: 'https://calculadoradehorastrabalhadas.org/guia-clt'
   },
   about: {
     title: 'Sobre Nós - Calculadora de Horas Trabalhadas',
     description: 'Conheça nossa missão, transparência, precisão dos cálculos e compromisso com os direitos trabalhistas no Brasil.',
-    canonical: 'https://calculadoradehorastrabalhadas.org/?tab=about'
+    canonical: 'https://calculadoradehorastrabalhadas.org/sobre'
   },
   contact: {
     title: 'Fale Conosco - Atendimento e Suporte CLT',
     description: 'Entre em contato com nossa equipe para dúvidas sobre cálculos, report de divergências ou parcerias comerciais.',
-    canonical: 'https://calculadoradehorastrabalhadas.org/?tab=contact'
+    canonical: 'https://calculadoradehorastrabalhadas.org/contato'
   },
   terms: {
     title: 'Termos de Uso e Condições de Serviço - CLT',
     description: 'Aviso legal e termos de utilização das ferramentas de cálculo de horas trabalhadas do portal calculadoradehorastrabalhadas.org.',
-    canonical: 'https://calculadoradehorastrabalhadas.org/?tab=terms'
+    canonical: 'https://calculadoradehorastrabalhadas.org/termos'
   },
   privacy: {
     title: 'Política de Privacidade e Conformidade LGPD',
     description: 'Entenda como garantimos a total privacidade dos seus dados. Processamento 100% no seu navegador sem armazenamento em servidores.',
-    canonical: 'https://calculadoradehorastrabalhadas.org/?tab=privacy'
+    canonical: 'https://calculadoradehorastrabalhadas.org/privacidade'
   }
 };
 
@@ -321,7 +321,7 @@ export default function SEOHead({ activeTab }: SEOHeadProps) {
             "@type": "SearchAction",
             "target": {
               "@type": "EntryPoint",
-              "urlTemplate": "https://calculadoradehorastrabalhadas.org/?tab=blog&q={search_term_string}"
+              "urlTemplate": "https://calculadoradehorastrabalhadas.org/guia-clt?q={search_term_string}"
             },
             "query-input": "required name=search_term_string"
           },
@@ -375,7 +375,7 @@ export default function SEOHead({ activeTab }: SEOHeadProps) {
           "url": "https://calculadoradehorastrabalhadas.org/",
           "logo": "https://calculadoradehorastrabalhadas.org/favicon.ico",
           "knowsAbout": ["Legislação Trabalhista CLT", "Cálculo de Horas Extras", "Holerite e Folha de Pagamento", "Rescisão de Contrato de Trabalho", "Súmulas TST e Reforma Trabalhista"],
-          "publishingPrinciples": "https://calculadoradehorastrabalhadas.org/?tab=about"
+          "publishingPrinciples": "https://calculadoradehorastrabalhadas.org/sobre"
         },
         {
           "@type": "Person",

@@ -1,5 +1,6 @@
 import { MouseEvent, useState } from 'react';
 import EATBadge from './EATBadge';
+import { getHrefForTab } from '../utils/routes';
 import { 
   BookOpen, 
   Clock, 
@@ -540,7 +541,7 @@ export default function SEOContent({ onSelectTab }: SEOContentProps) {
           <span>Como calcular 44 horas de trabalho de segunda a sexta-feira?</span>
         </h3>
         <p className="text-neutral-600 text-sm leading-relaxed">
-          Muitas empresas adotam o sistema de compensação de sábado, no qual as 44 horas semanais são cumpridas integralmente entre segunda e sexta-feira. Dividindo 44 horas por 5 dias, obtém-se <strong>8 horas e 48 minutos (8h48min)</strong> por dia de trabalho. Preencha facilmente esse cartão na nossa <a href="/?tab=timesheet" onClick={(e) => handleTabClick(e, 'timesheet')} className="text-blue-700 font-bold hover:underline">Calculadora de Ponto Semanal 44h</a>.
+          Muitas empresas adotam o sistema de compensação de sábado, no qual as 44 horas semanais são cumpridas integralmente entre segunda e sexta-feira. Dividindo 44 horas por 5 dias, obtém-se <strong>8 horas e 48 minutos (8h48min)</strong> por dia de trabalho. Preencha facilmente esse cartão na nossa <a href={getHrefForTab('timesheet')} onClick={(e) => handleTabClick(e, 'timesheet')} className="text-blue-700 font-bold hover:underline">Calculadora de Ponto Semanal 44h</a>.
         </p>
       </section>
 
@@ -556,7 +557,7 @@ export default function SEOContent({ onSelectTab }: SEOContentProps) {
         <ul className="list-disc pl-5 text-neutral-600 text-sm space-y-2">
           <li><strong>Acordo Individual Direto:</strong> Deve ser quitado/compensado em até <strong>6 meses</strong>.</li>
           <li><strong>Acordo Coletivo de Trabalho (CCT):</strong> O prazo estende-se por até <strong>1 ano</strong>.</li>
-          <li><strong>Rescisão do Contrato:</strong> O saldo credor pendente deve ser totalmente pago como hora extra no holerite de rescisão. Acompanhe suas horas na <a href="/?tab=banco" onClick={(e) => handleTabClick(e, 'banco')} className="text-blue-700 font-bold hover:underline">Calculadora de Saldo do Banco de Horas</a>.</li>
+          <li><strong>Rescisão do Contrato:</strong> O saldo credor pendente deve ser totalmente pago como hora extra no holerite de rescisão. Acompanhe suas horas na <a href={getHrefForTab('banco')} onClick={(e) => handleTabClick(e, 'banco')} className="text-blue-700 font-bold hover:underline">Calculadora de Saldo do Banco de Horas</a>.</li>
         </ul>
       </section>
 
@@ -589,7 +590,7 @@ export default function SEOContent({ onSelectTab }: SEOContentProps) {
         </h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
           <a
-            href="/?tab=monthly"
+            href={getHrefForTab('monthly')}
             onClick={(e) => handleTabClick(e, 'monthly')}
             className="p-3.5 border border-neutral-200 rounded-xl bg-neutral-50 hover:bg-neutral-100 font-bold text-neutral-800 flex items-center justify-between group transition-colors"
           >
@@ -597,7 +598,7 @@ export default function SEOContent({ onSelectTab }: SEOContentProps) {
             <span className="text-blue-600 font-bold group-hover:translate-x-0.5 transition-transform">Acessar →</span>
           </a>
           <a
-            href="/?tab=overtime"
+            href={getHrefForTab('overtime')}
             onClick={(e) => handleTabClick(e, 'overtime')}
             className="p-3.5 border border-neutral-200 rounded-xl bg-neutral-50 hover:bg-neutral-100 font-bold text-neutral-800 flex items-center justify-between group transition-colors"
           >
@@ -605,7 +606,7 @@ export default function SEOContent({ onSelectTab }: SEOContentProps) {
             <span className="text-blue-600 font-bold group-hover:translate-x-0.5 transition-transform">Acessar →</span>
           </a>
           <a
-            href="/?tab=holerite"
+            href={getHrefForTab('holerite')}
             onClick={(e) => handleTabClick(e, 'holerite')}
             className="p-3.5 border border-neutral-200 rounded-xl bg-neutral-50 hover:bg-neutral-100 font-bold text-neutral-800 flex items-center justify-between group transition-colors"
           >
@@ -613,7 +614,7 @@ export default function SEOContent({ onSelectTab }: SEOContentProps) {
             <span className="text-blue-600 font-bold group-hover:translate-x-0.5 transition-transform">Acessar →</span>
           </a>
           <a
-            href="/?tab=rescisao"
+            href={getHrefForTab('rescisao')}
             onClick={(e) => handleTabClick(e, 'rescisao')}
             className="p-3.5 border border-neutral-200 rounded-xl bg-neutral-50 hover:bg-neutral-100 font-bold text-neutral-800 flex items-center justify-between group transition-colors"
           >
@@ -621,7 +622,7 @@ export default function SEOContent({ onSelectTab }: SEOContentProps) {
             <span className="text-blue-600 font-bold group-hover:translate-x-0.5 transition-transform">Acessar →</span>
           </a>
           <a
-            href="/?tab=excel"
+            href={getHrefForTab('excel')}
             onClick={(e) => handleTabClick(e, 'excel')}
             className="p-3.5 border border-neutral-200 rounded-xl bg-neutral-50 hover:bg-neutral-100 font-bold text-neutral-800 flex items-center justify-between group transition-colors"
           >

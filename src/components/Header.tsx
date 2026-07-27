@@ -1,5 +1,6 @@
 import { Calculator, Clock, Calendar, DollarSign, Moon, BookOpen, FileSpreadsheet, Menu, X, Scale, ArrowRightLeft, FileText, Users, Mail, Share2, Check, Briefcase } from 'lucide-react';
 import { useState } from 'react';
+import { getHrefForTab } from '../utils/routes';
 
 interface HeaderProps {
   activeTab: string;
@@ -81,7 +82,7 @@ export default function Header({ activeTab, setActiveTab }: HeaderProps) {
           {navItems.map((item) => {
             const Icon = item.icon;
             const isActive = activeTab === item.id;
-            const href = item.id === 'daily' ? '/' : `/?tab=${item.id}`;
+            const href = getHrefForTab(item.id);
             return (
               <a
                 key={item.id}
@@ -140,7 +141,7 @@ export default function Header({ activeTab, setActiveTab }: HeaderProps) {
           {navItems.map((item) => {
             const Icon = item.icon;
             const isActive = activeTab === item.id;
-            const href = item.id === 'daily' ? '/' : `/?tab=${item.id}`;
+            const href = getHrefForTab(item.id);
             return (
               <a
                 key={item.id}
