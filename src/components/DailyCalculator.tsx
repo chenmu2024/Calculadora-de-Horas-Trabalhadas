@@ -117,7 +117,7 @@ export default function DailyCalculator({ onSelectTab }: DailyCalculatorProps) {
     <div className="animate-in fade-in duration-500">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
         <div>
-          <h1 className="text-2xl font-bold text-neutral-900">Calculadora de Horas Trabalhadas Diária</h1>
+          <h2 className="text-2xl font-bold text-neutral-900">Calculadora de Horas Trabalhadas Diária</h2>
           <p className="text-neutral-600 text-sm mt-1">
             Calcule o total de horas trabalhadas no dia com batida de ponto e intervalo de almoço.
           </p>

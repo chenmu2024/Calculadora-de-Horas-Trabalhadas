@@ -110,7 +110,7 @@ export default function TimeSumCalculator({ onSelectTab }: TimeSumCalculatorProp
       <div>
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
           <div>
-            <h1 className="text-2xl font-bold text-neutral-900">Somador e Subtraidor de Horas</h1>
+            <h2 className="text-2xl font-bold text-neutral-900">Somador e Subtraidor de Horas</h2>
             <p className="text-neutral-600 text-sm mt-1">
               Adicione ou subtraia múltiplos intervalos de tempo (HH:MM) para calcular o total em horas relógio e decimais.
             </p>

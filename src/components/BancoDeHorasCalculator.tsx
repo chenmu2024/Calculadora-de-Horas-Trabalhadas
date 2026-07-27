@@ -194,7 +194,7 @@ export default function BancoDeHorasCalculator({ onSelectTab }: BancoDeHorasCalc
     <div className="animate-in fade-in duration-500">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
         <div>
-          <h1 className="text-2xl font-bold text-neutral-900">Calculadora de Banco de Horas (Saldo Positivo / Negativo)</h1>
+          <h2 className="text-2xl font-bold text-neutral-900">Calculadora de Banco de Horas (Saldo Positivo / Negativo)</h2>
           <p className="text-neutral-600 text-sm mt-1">
             Controle o saldo de horas acumulado, folgas compensatórias e tolerância do ponto conforme o Art. 58 e 59 da CLT.
           </p>

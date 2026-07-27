@@ -28,6 +28,25 @@ import { HolidayCalendarModal } from './components/HolidayCalendarModal';
 import { LegalFAQModal } from './components/LegalFAQModal';
 import { FileSpreadsheet, Clock, Sparkles, CheckCircle, Calculator, ArrowRightLeft, Calendar, BookOpen, Scale } from 'lucide-react';
 
+const PAGE_H1_TITLES: Record<string, string> = {
+  daily: 'Calculadora de Horas Trabalhadas Diária',
+  timesheet: 'Calculadora de Horas Trabalhadas Semanal (CLT 44h)',
+  monthly: 'Calculadora de Horas Trabalhadas Mensal',
+  banco: 'Calculadora de Banco de Horas (Saldo Positivo e Negativo)',
+  sum: 'Somador e Subtraidor de Horas Online',
+  holerite: 'Simulador de Holerite e Salário Líquido (CLT)',
+  rescisao: 'Calculadora de Rescisão Contratual (CLT 2026)',
+  rate: 'Calculadora de Valor da Hora de Trabalho',
+  overtime: 'Calculadora de Horas Extras e DSR (50% e 100%)',
+  night: 'Calculadora de Adicional Noturno e Hora Ficta',
+  excel: 'Planilhas de Controle de Ponto em Excel',
+  blog: 'Guia Completo da CLT e Horas Trabalhadas',
+  about: 'Sobre Nós - Transparência e Precisão no Cálculo CLT',
+  contact: 'Fale Conosco - Atendimento e Suporte',
+  terms: 'Termos de Uso e Condições de Serviço',
+  privacy: 'Política de Privacidade e Conformidade LGPD',
+};
+
 export default function App() {
   const [activeTab, setActiveTabState] = useState(() => {
     const params = new URLSearchParams(window.location.search);
@@ -84,7 +103,7 @@ export default function App() {
       <section className="bg-white border-b border-neutral-200 py-8 px-4">
         <div className="max-w-4xl mx-auto text-center space-y-3">
           <h1 className="text-2xl sm:text-4xl font-extrabold text-neutral-900 tracking-tight leading-tight">
-            Calculadora de Horas Trabalhadas
+            {PAGE_H1_TITLES[activeTab] || 'Calculadora de Horas Trabalhadas'}
           </h1>
           <p className="text-neutral-600 text-xs sm:text-base max-w-2xl mx-auto leading-relaxed">
             Ferramenta gratuita para calcular <strong>horas trabalhadas no dia, na semana e no mês</strong>, intervalo de almoço, valor da hora, horas extras (50% e 100%) e adicional noturno no padrão CLT.

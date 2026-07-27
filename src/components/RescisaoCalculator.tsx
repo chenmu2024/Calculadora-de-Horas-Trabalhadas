@@ -253,10 +253,10 @@ VALOR LÍQUIDO RESCISÓRIO A RECEBER: ${formatBRL(totalLiquido)}
             </span>
             <span className="text-xs text-neutral-500 font-medium">Tabela Previdenciária 2026</span>
           </div>
-          <h1 className="text-xl sm:text-2xl font-extrabold text-neutral-900 flex items-center gap-2">
+          <h2 className="text-xl sm:text-2xl font-extrabold text-neutral-900 flex items-center gap-2">
             <Briefcase className="w-6 h-6 text-blue-600" />
             Calculadora de Rescisão Contratual CLT
-          </h1>
+          </h2>
           <p className="text-xs sm:text-sm text-neutral-600 mt-1">
             Simule o valor exato a receber na demissão com cálculo de aviso prévio, saldo de salário, 13º, férias com 1/3 e multa do FGTS.
           </p>

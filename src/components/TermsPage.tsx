@@ -24,9 +24,9 @@ export default function TermsPage() {
             <FileText className="w-3.5 h-3.5 text-amber-300" />
             <span>Documento Jurídico Oficial</span>
           </div>
-          <h1 className="text-2xl sm:text-4xl font-extrabold tracking-tight">
+          <h2 className="text-2xl sm:text-4xl font-extrabold tracking-tight">
             Termos de Uso e Condições de Serviço
-          </h1>
+          </h2>
           <p className="text-neutral-300 text-xs sm:text-sm leading-relaxed">
             Plataforma <strong>calculadoradehorastrabalhadas.org</strong> — Última atualização: {lastUpdated}
           </p>

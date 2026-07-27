@@ -200,7 +200,7 @@ Calculado em calculadoradehorastrabalhadas.org`;
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-neutral-900">Calculadora de Adicional Noturno</h1>
+          <h2 className="text-2xl font-bold text-neutral-900">Calculadora de Adicional Noturno</h2>
           <p className="text-neutral-600 text-sm mt-1">
             Calcule o adicional noturno com hora ficta reduzida (52min 30seg), prorrogação de jornada (Súmula 60 TST) e reflexo no DSR.
           </p>

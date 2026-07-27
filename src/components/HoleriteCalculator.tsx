@@ -205,7 +205,7 @@ Calculado em calculadoradehorastrabalhadas.org`;
     <div className="animate-in fade-in duration-500">
       <div className="mb-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-neutral-900">Simulador de Holerite e Salário Líquido (CLT)</h1>
+          <h2 className="text-2xl font-bold text-neutral-900">Simulador de Holerite e Salário Líquido (CLT)</h2>
           <p className="text-neutral-600 text-sm mt-1">
             Calcule seu salário líquido oficial com os descontos atualizados de INSS, IRRF, dependentes, periculosidade e VT.
           </p>

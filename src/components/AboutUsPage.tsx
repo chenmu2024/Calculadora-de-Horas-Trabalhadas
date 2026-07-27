@@ -20,9 +20,9 @@ export default function AboutUsPage({ onSelectCalculator }: AboutUsPageProps) {
             <Sparkles className="w-3.5 h-3.5 text-amber-300" />
             <span>Sobre a Nossa Plataforma</span>
           </div>
-          <h1 className="text-2xl sm:text-4xl font-extrabold tracking-tight leading-tight">
+          <h2 className="text-2xl sm:text-4xl font-extrabold tracking-tight leading-tight">
             Transparência e Precisão no Cálculo de Horas Trabalhadas
-          </h1>
+          </h2>
           <p className="text-blue-100 text-xs sm:text-sm leading-relaxed">
             O <strong>calculadoradehorastrabalhadas.org</strong> nasceu com uma missão clara: descomplicar a apuração da jornada de trabalho para milhões de trabalhadores, profissionais de Recursos Humanos, contadores e advogados em todo o Brasil.
           </p>

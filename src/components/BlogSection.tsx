@@ -739,9 +739,9 @@ export default function BlogSection({ onSelectCalculator }: { onSelectCalculator
           </div>
 
           <div className="space-y-3">
-            <h1 className="text-2xl sm:text-3xl font-black text-neutral-900 leading-tight">
+            <h2 className="text-2xl sm:text-3xl font-black text-neutral-900 leading-tight">
               {activeArticle.title}
-            </h1>
+            </h2>
             <div className="flex flex-wrap items-center gap-4 text-xs text-neutral-500 border-b border-neutral-200 pb-4">
               <span className="flex items-center gap-1 text-neutral-700 font-medium">
                 <UserCheck className="w-3.5 h-3.5 text-blue-600" /> {activeArticle.author}

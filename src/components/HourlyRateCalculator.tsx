@@ -170,7 +170,7 @@ Calculado em calculadoradehorastrabalhadas.org`;
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-neutral-900">Calculadora de Valor da Hora de Trabalho</h1>
+          <h2 className="text-2xl font-bold text-neutral-900">Calculadora de Valor da Hora de Trabalho</h2>
           <p className="text-neutral-600 text-sm mt-1">
             Descubra o valor exato da sua hora de trabalho CLT (com adicionais) ou calcule quanto cobrar por hora como PJ/Freelancer.
           </p>

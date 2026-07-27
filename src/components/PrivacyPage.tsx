@@ -24,9 +24,9 @@ export default function PrivacyPage() {
             <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
             <span>Conformidade com a LGPD (Lei nº 13.709/2018)</span>
           </div>
-          <h1 className="text-2xl sm:text-4xl font-extrabold tracking-tight">
+          <h2 className="text-2xl sm:text-4xl font-extrabold tracking-tight">
             Política de Privacidade
-          </h1>
+          </h2>
           <p className="text-blue-100 text-xs sm:text-sm leading-relaxed">
             Plataforma <strong>calculadoradehorastrabalhadas.org</strong> — Última atualização: {lastUpdated}
           </p>

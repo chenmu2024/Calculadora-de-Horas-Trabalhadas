@@ -185,7 +185,7 @@ export default function TimesheetCalculator({ onSelectTab }: TimesheetCalculator
     <div className="animate-in fade-in duration-500">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
         <div>
-          <h1 className="text-2xl font-bold text-neutral-900">Calculadora de Horas Trabalhadas Semanal (CLT 44h)</h1>
+          <h2 className="text-2xl font-bold text-neutral-900">Calculadora de Horas Trabalhadas Semanal (CLT 44h)</h2>
           <p className="text-neutral-600 text-sm mt-1">Preencha sua folha de ponto semanal, compare com a carga horária e baixe o relatório.</p>
         </div>
 

@@ -39,9 +39,9 @@ export default function ContactPage({ onSelectCalculator }: ContactPageProps) {
             <Mail className="w-3.5 h-3.5 text-amber-300" />
             <span>Fale Conosco</span>
           </div>
-          <h1 className="text-2xl sm:text-4xl font-extrabold tracking-tight">
+          <h2 className="text-2xl sm:text-4xl font-extrabold tracking-tight">
             Entre em Contato Conosco
-          </h1>
+          </h2>
           <p className="text-blue-100 text-xs sm:text-sm leading-relaxed">
             Tem alguma dúvida sobre os cálculos, sugestão de melhoria, report de erro ou proposta comercial? Nossa equipe está pronta para responder seu contato.
           </p>

@@ -117,7 +117,7 @@ Calculado em calculadoradehorastrabalhadas.org`;
     <div className="animate-in fade-in duration-500">
       <div className="mb-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-neutral-900">Calculadora de Horas Trabalhadas Mensal</h1>
+          <h2 className="text-2xl font-bold text-neutral-900">Calculadora de Horas Trabalhadas Mensal</h2>
           <p className="text-neutral-600 text-sm mt-1">
             Simule a jornada mensal, valor da hora (divisor 220h/200h CLT), DSR e reflexo de horas extras 50%, 100% e adicional noturno.
           </p>
