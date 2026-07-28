@@ -22,12 +22,15 @@ import AboutUsPage from './components/AboutUsPage';
 import ContactPage from './components/ContactPage';
 import TermsPage from './components/TermsPage';
 import PrivacyPage from './components/PrivacyPage';
+import NotFound from './components/NotFound';
 import CookieBanner from './components/CookieBanner';
 import QuickConverterModal from './components/QuickConverterModal';
 import { HolidayCalendarModal } from './components/HolidayCalendarModal';
 import { LegalFAQModal } from './components/LegalFAQModal';
-import { FileSpreadsheet, Clock, Sparkles, CheckCircle, Calculator, ArrowRightLeft, Calendar, BookOpen, Scale } from 'lucide-react';
+import { FileSpreadsheet, Clock, Sparkles, CheckCircle, Calculator, ArrowRightLeft, Calendar, BookOpen, Scale, WifiOff, Moon, Sun } from 'lucide-react';
 import { getTabFromLocation, getHrefForTab, TAB_ROUTES } from './utils/routes';
+import { useOfflineStatus } from './hooks/useOfflineStatus';
+import { useDarkMode } from './hooks/useDarkMode';
 
 const PAGE_H1_TITLES: Record<string, string> = {
   daily: 'Calculadora de Horas Trabalhadas Diária',
@@ -50,6 +53,8 @@ const PAGE_H1_TITLES: Record<string, string> = {
 
 export default function App() {
   const [activeTab, setActiveTabState] = useState(() => getTabFromLocation());
+  const isOffline = useOfflineStatus();
+  const { isDark, toggle: toggleDark } = useDarkMode();
 
   const [isQuickConverterOpen, setIsQuickConverterOpen] = useState(false);
   const [isHolidayCalendarOpen, setIsHolidayCalendarOpen] = useState(false);
@@ -80,8 +85,16 @@ export default function App() {
   const isStandalonePage = ['about', 'contact', 'terms', 'privacy'].includes(activeTab);
 
   return (
-    <div className="min-h-screen bg-neutral-50 text-neutral-900 font-sans selection:bg-blue-200 flex flex-col">
+    <div className="min-h-screen bg-neutral-50 dark:bg-neutral-900 text-neutral-900 dark:text-neutral-100 font-sans selection:bg-blue-200 flex flex-col transition-colors duration-200">
       <SEOHead activeTab={activeTab} />
+
+      {/* Offline Banner */}
+      {isOffline && (
+        <div className="bg-amber-100 dark:bg-amber-900/60 border-b border-amber-200 dark:border-amber-800 text-amber-900 dark:text-amber-100 px-4 py-2 text-center text-sm font-medium flex items-center justify-center gap-2 z-50">
+          <WifiOff className="w-4 h-4" />
+          <span>Você está no modo offline. As calculadoras continuam funcionando localmente.</span>
+        </div>
+      )}
 
       {/* Top Banner Bar */}
       <div className="bg-gradient-to-r from-blue-700 via-blue-600 to-indigo-700 text-white text-xs py-2 px-4 text-center font-medium shadow-sm flex items-center justify-center gap-2">
@@ -96,10 +109,10 @@ export default function App() {
       </div>
 
       {/* Header */}
-      <Header activeTab={activeTab} setActiveTab={setActiveTab} />
+      <Header activeTab={activeTab} setActiveTab={setActiveTab} isDark={isDark} toggleDark={toggleDark} />
 
       {/* Hero Headline Section */}
-      <section className="bg-white border-b border-neutral-200 py-8 px-4">
+      <section className="bg-white dark:bg-neutral-900 border-b border-neutral-200 dark:border-neutral-800 py-8 px-4 transition-colors">
         <div className="max-w-4xl mx-auto text-center space-y-3">
           <h1 className="text-2xl sm:text-4xl font-extrabold text-neutral-900 tracking-tight leading-tight">
             {PAGE_H1_TITLES[activeTab] || 'Calculadora de Horas Trabalhadas'}
@@ -269,20 +282,24 @@ export default function App() {
             <div className="lg:col-span-8 space-y-8">
               
               {/* Main Calculator Container Card */}
-              <div id="main-calculator" className="bg-white rounded-2xl shadow-sm border border-neutral-200 p-6 sm:p-8">
-                {activeTab === 'daily' && <DailyCalculator onSelectTab={setActiveTab} />}
-                {activeTab === 'timesheet' && <TimesheetCalculator onSelectTab={setActiveTab} />}
-                {activeTab === 'monthly' && <MonthlyCalculator onSelectTab={setActiveTab} />}
-                {activeTab === 'banco' && <BancoDeHorasCalculator onSelectTab={setActiveTab} />}
-                {activeTab === 'sum' && <TimeSumCalculator onSelectTab={setActiveTab} />}
-                {activeTab === 'holerite' && <HoleriteCalculator onSelectTab={setActiveTab} />}
-                {activeTab === 'rescisao' && <RescisaoCalculator onSelectTab={setActiveTab} />}
-                {activeTab === 'rate' && <HourlyRateCalculator onSelectTab={setActiveTab} />}
-                {activeTab === 'overtime' && <OvertimeCalculator onSelectTab={setActiveTab} />}
-                {activeTab === 'night' && <NightHoursCalculator onSelectTab={setActiveTab} />}
-                {activeTab === 'excel' && <ExcelDownloadSection />}
-                {activeTab === 'blog' && <BlogSection onSelectCalculator={setActiveTab} />}
-              </div>
+              {activeTab === 'not-found' ? (
+                <NotFound onNavigateHome={() => setActiveTab('daily')} />
+              ) : (
+                <div id="main-calculator" className="bg-white dark:bg-neutral-900 rounded-2xl shadow-sm border border-neutral-200 dark:border-neutral-800 p-6 sm:p-8 transition-colors">
+                  {activeTab === 'daily' && <DailyCalculator onSelectTab={setActiveTab} />}
+                  {activeTab === 'timesheet' && <TimesheetCalculator onSelectTab={setActiveTab} />}
+                  {activeTab === 'monthly' && <MonthlyCalculator onSelectTab={setActiveTab} />}
+                  {activeTab === 'banco' && <BancoDeHorasCalculator onSelectTab={setActiveTab} />}
+                  {activeTab === 'sum' && <TimeSumCalculator onSelectTab={setActiveTab} />}
+                  {activeTab === 'holerite' && <HoleriteCalculator onSelectTab={setActiveTab} />}
+                  {activeTab === 'rescisao' && <RescisaoCalculator onSelectTab={setActiveTab} />}
+                  {activeTab === 'rate' && <HourlyRateCalculator onSelectTab={setActiveTab} />}
+                  {activeTab === 'overtime' && <OvertimeCalculator onSelectTab={setActiveTab} />}
+                  {activeTab === 'night' && <NightHoursCalculator onSelectTab={setActiveTab} />}
+                  {activeTab === 'excel' && <ExcelDownloadSection />}
+                  {activeTab === 'blog' && <BlogSection onSelectCalculator={setActiveTab} />}
+                </div>
+              )}
 
               {/* SEO Structured Content */}
               <SEOContent onSelectTab={setActiveTab} />

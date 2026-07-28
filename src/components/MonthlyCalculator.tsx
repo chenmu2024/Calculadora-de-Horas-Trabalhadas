@@ -153,7 +153,7 @@ Calculado em calculadoradehorastrabalhadas.org`;
               <input
                 id="monthly-salary"
                 aria-label="Salário Mensal Bruto em Reais"
-                type="number"
+                type="number" inputMode="decimal"
                 step="0.01"
                 value={monthlySalary}
                 onChange={(e) => setMonthlySalary(e.target.value)}
@@ -189,7 +189,7 @@ Calculado em calculadoradehorastrabalhadas.org`;
             <input
               id="monthly-hourly-wage"
               aria-label="Valor da Hora Normal em Reais"
-              type="number"
+              type="number" inputMode="decimal"
               step="0.01"
               value={hourlyWageInput}
               onChange={(e) => setHourlyWageInput(e.target.value)}
@@ -247,7 +247,7 @@ Calculado em calculadoradehorastrabalhadas.org`;
             <input
               id="monthly-working-days"
               aria-label="Dias Úteis Trabalhados no Mês"
-              type="number"
+              type="number" inputMode="decimal"
               value={workingDays}
               onChange={(e) => setWorkingDays(e.target.value)}
               className="w-full border border-neutral-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 outline-none font-bold"
@@ -259,7 +259,7 @@ Calculado em calculadoradehorastrabalhadas.org`;
             <input
               id="monthly-sundays"
               aria-label="Domingos e Feriados no Mês para DSR"
-              type="number"
+              type="number" inputMode="decimal"
               value={sundaysAndHolidays}
               onChange={(e) => setSundaysAndHolidays(e.target.value)}
               className="w-full border border-neutral-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 outline-none font-bold"
@@ -272,7 +272,7 @@ Calculado em calculadoradehorastrabalhadas.org`;
               <input
                 id="monthly-daily-hours"
                 aria-label="Horas da jornada diária"
-                type="number"
+                type="number" inputMode="decimal"
                 value={dailyHours}
                 onChange={(e) => setDailyHours(e.target.value)}
                 className="w-1/2 border border-neutral-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 outline-none font-bold"
@@ -282,7 +282,7 @@ Calculado em calculadoradehorastrabalhadas.org`;
               <input
                 id="monthly-daily-minutes"
                 aria-label="Minutos da jornada diária"
-                type="number"
+                type="number" inputMode="decimal"
                 value={dailyMinutes}
                 onChange={(e) => setDailyMinutes(e.target.value)}
                 className="w-1/2 border border-neutral-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 outline-none font-bold"
@@ -300,7 +300,7 @@ Calculado em calculadoradehorastrabalhadas.org`;
           <input
             id="monthly-ot50"
             aria-label="Horas Extras 50%"
-            type="number"
+            type="number" inputMode="decimal"
             step="0.5"
             value={overtime50Hours}
             onChange={(e) => setOvertime50Hours(e.target.value)}
@@ -313,7 +313,7 @@ Calculado em calculadoradehorastrabalhadas.org`;
           <input
             id="monthly-ot100"
             aria-label="Horas Extras 100%"
-            type="number"
+            type="number" inputMode="decimal"
             step="0.5"
             value={overtime100Hours}
             onChange={(e) => setOvertime100Hours(e.target.value)}
@@ -328,7 +328,7 @@ Calculado em calculadoradehorastrabalhadas.org`;
           <input
             id="monthly-night-shift"
             aria-label="Horas Noturnas 22h às 05h"
-            type="number"
+            type="number" inputMode="decimal"
             step="0.5"
             value={nightShiftHours}
             onChange={(e) => setNightShiftHours(e.target.value)}

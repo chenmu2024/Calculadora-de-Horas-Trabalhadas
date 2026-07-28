@@ -7,91 +7,91 @@
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://calculadoradehorastrabalhadas.org/?tab=timesheet</loc>
+    <loc>https://calculadoradehorastrabalhadas.org/calculadora-semanal</loc>
     <lastmod>2026-07-25</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://calculadoradehorastrabalhadas.org/?tab=monthly</loc>
+    <loc>https://calculadoradehorastrabalhadas.org/calculadora-mensal</loc>
     <lastmod>2026-07-25</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://calculadoradehorastrabalhadas.org/?tab=banco</loc>
+    <loc>https://calculadoradehorastrabalhadas.org/banco-de-horas</loc>
     <lastmod>2026-07-25</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://calculadoradehorastrabalhadas.org/?tab=sum</loc>
+    <loc>https://calculadoradehorastrabalhadas.org/somador-de-horas</loc>
     <lastmod>2026-07-25</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calculadoradehorastrabalhadas.org/?tab=holerite</loc>
+    <loc>https://calculadoradehorastrabalhadas.org/simulador-de-holerite</loc>
     <lastmod>2026-07-25</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://calculadoradehorastrabalhadas.org/?tab=rate</loc>
+    <loc>https://calculadoradehorastrabalhadas.org/valor-da-hora</loc>
     <lastmod>2026-07-25</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calculadoradehorastrabalhadas.org/?tab=overtime</loc>
+    <loc>https://calculadoradehorastrabalhadas.org/horas-extras</loc>
     <lastmod>2026-07-25</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://calculadoradehorastrabalhadas.org/?tab=night</loc>
+    <loc>https://calculadoradehorastrabalhadas.org/adicional-noturno</loc>
     <lastmod>2026-07-26</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calculadoradehorastrabalhadas.org/?tab=rescisao</loc>
+    <loc>https://calculadoradehorastrabalhadas.org/calculadora-de-rescisao</loc>
     <lastmod>2026-07-26</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://calculadoradehorastrabalhadas.org/?tab=excel</loc>
+    <loc>https://calculadoradehorastrabalhadas.org/planilha-excel-ponto</loc>
     <lastmod>2026-07-25</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calculadoradehorastrabalhadas.org/?tab=blog</loc>
+    <loc>https://calculadoradehorastrabalhadas.org/guia-clt</loc>
     <lastmod>2026-07-25</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calculadoradehorastrabalhadas.org/?tab=about</loc>
+    <loc>https://calculadoradehorastrabalhadas.org/sobre</loc>
     <lastmod>2026-07-25</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://calculadoradehorastrabalhadas.org/?tab=contact</loc>
+    <loc>https://calculadoradehorastrabalhadas.org/contato</loc>
     <lastmod>2026-07-25</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://calculadoradehorastrabalhadas.org/?tab=terms</loc>
+    <loc>https://calculadoradehorastrabalhadas.org/termos</loc>
     <lastmod>2026-07-25</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
   </url>
   <url>
-    <loc>https://calculadoradehorastrabalhadas.org/?tab=privacy</loc>
+    <loc>https://calculadoradehorastrabalhadas.org/privacidade</loc>
     <lastmod>2026-07-25</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>

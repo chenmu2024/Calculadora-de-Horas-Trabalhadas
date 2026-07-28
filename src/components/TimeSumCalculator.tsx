@@ -251,7 +251,7 @@ export default function TimeSumCalculator({ onSelectTab }: TimeSumCalculatorProp
               <input
                 id="timesum-input-minutes"
                 aria-label="Minutos totais para converter"
-                type="number"
+                type="number" inputMode="decimal"
                 value={inputMinutes}
                 onChange={(e) => setInputMinutes(e.target.value)}
                 className="w-full border border-neutral-300 bg-white rounded-xl p-2.5 text-sm font-mono font-bold outline-none focus:ring-2 focus:ring-blue-500"
@@ -278,7 +278,7 @@ export default function TimeSumCalculator({ onSelectTab }: TimeSumCalculatorProp
               <input
                 id="timesum-input-decimal"
                 aria-label="Horas decimais para converter"
-                type="number"
+                type="number" inputMode="decimal"
                 step="0.01"
                 value={inputDecimal}
                 onChange={(e) => setInputDecimal(e.target.value)}

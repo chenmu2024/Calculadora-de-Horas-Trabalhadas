@@ -260,7 +260,7 @@ Calculado em calculadoradehorastrabalhadas.org`;
             <input
               id="nighthours-salary"
               aria-label="Salário Mensal Bruto em Reais"
-              type="number"
+              type="number" inputMode="decimal"
               value={salary}
               onChange={e => setSalary(e.target.value)}
               className="w-full border border-neutral-300 bg-white rounded-xl p-2.5 pl-10 text-sm font-mono font-bold outline-none focus:ring-2 focus:ring-indigo-500"
@@ -275,7 +275,7 @@ Calculado em calculadoradehorastrabalhadas.org`;
             <input
               id="nighthours-weekly-hours"
               aria-label="Jornada Semanal em horas"
-              type="number"
+              type="number" inputMode="decimal"
               value={weeklyHours}
               onChange={e => setWeeklyHours(e.target.value)}
               className="w-full border border-neutral-300 bg-white rounded-xl p-2.5 pr-10 text-sm font-mono font-bold outline-none focus:ring-2 focus:ring-indigo-500"
@@ -358,7 +358,7 @@ Calculado em calculadoradehorastrabalhadas.org`;
             <div>
               <label className="block text-[11px] font-bold text-indigo-900 mb-1">Dias no Mês</label>
               <input
-                type="number"
+                type="number" inputMode="decimal"
                 value={shiftDays}
                 onChange={e => setShiftDays(e.target.value)}
                 className="w-full bg-white border border-indigo-300 rounded-lg p-2 text-xs font-bold text-center"
@@ -380,7 +380,7 @@ Calculado em calculadoradehorastrabalhadas.org`;
             <label className="block text-xs font-bold text-neutral-700 mb-1">Horas Noturnas Normais no Mês (Relógio)</label>
             <div className="relative">
               <input
-                type="number"
+                type="number" inputMode="decimal"
                 value={nightClockHours}
                 onChange={e => setNightClockHours(e.target.value)}
                 className="w-full border border-neutral-300 bg-white rounded-xl p-2.5 pr-10 text-sm font-mono font-bold outline-none focus:ring-2 focus:ring-indigo-500"
@@ -395,7 +395,7 @@ Calculado em calculadoradehorastrabalhadas.org`;
             <div className="flex gap-2">
               <div className="relative flex-1">
                 <input
-                  type="number"
+                  type="number" inputMode="decimal"
                   value={nightOvertimeHours}
                   onChange={e => setNightOvertimeHours(e.target.value)}
                   className="w-full border border-neutral-300 bg-white rounded-xl p-2.5 pr-10 text-sm font-mono font-bold outline-none focus:ring-2 focus:ring-indigo-500"
@@ -423,7 +423,7 @@ Calculado em calculadoradehorastrabalhadas.org`;
         <div className="bg-amber-50 border border-amber-200 p-4 rounded-xl flex items-center gap-4 text-xs">
           <label className="font-bold text-amber-900 whitespace-nowrap">Porcentagem do Adicional Noturno CCT (%):</label>
           <input
-            type="number"
+            type="number" inputMode="decimal"
             value={customRate}
             onChange={e => setCustomRate(e.target.value)}
             className="w-24 border border-amber-300 bg-white rounded-lg p-2 text-sm font-bold text-center outline-none"
@@ -456,7 +456,7 @@ Calculado em calculadoradehorastrabalhadas.org`;
             <div className="pt-2 border-t border-neutral-100">
               <label className="block text-xs font-semibold text-neutral-700 mb-1">Horas Prorrogadas no Mês (após 05h)</label>
               <input
-                type="number"
+                type="number" inputMode="decimal"
                 value={extensionHours}
                 onChange={e => setExtensionHours(e.target.value)}
                 className="w-full border border-neutral-300 bg-neutral-50 rounded-lg p-2 text-xs font-mono font-bold outline-none"
@@ -489,7 +489,7 @@ Calculado em calculadoradehorastrabalhadas.org`;
               <div>
                 <label className="block text-[11px] font-semibold text-neutral-700 mb-1">Dias Úteis Mês</label>
                 <input
-                  type="number"
+                  type="number" inputMode="decimal"
                   value={workingDaysMonth}
                   onChange={e => setWorkingDaysMonth(e.target.value)}
                   className="w-full border border-neutral-300 bg-neutral-50 rounded-lg p-2 text-xs font-mono font-bold outline-none"
@@ -499,7 +499,7 @@ Calculado em calculadoradehorastrabalhadas.org`;
               <div>
                 <label className="block text-[11px] font-semibold text-neutral-700 mb-1">Dom / Feriados</label>
                 <input
-                  type="number"
+                  type="number" inputMode="decimal"
                   value={sundaysHolidaysMonth}
                   onChange={e => setSundaysHolidaysMonth(e.target.value)}
                   className="w-full border border-neutral-300 bg-neutral-50 rounded-lg p-2 text-xs font-mono font-bold outline-none"

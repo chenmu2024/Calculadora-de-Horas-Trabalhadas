@@ -241,7 +241,7 @@ export default function BancoDeHorasCalculator({ onSelectTab }: BancoDeHorasCalc
                 <input
                   id="banco-expected-hours"
                   aria-label="Horas esperadas na jornada"
-                  type="number"
+                  type="number" inputMode="decimal"
                   value={expectedHours}
                   onChange={(e) => setExpectedHours(e.target.value)}
                   className="w-1/2 border border-neutral-300 bg-white rounded-lg p-2.5 text-sm outline-none focus:ring-2 focus:ring-blue-500"
@@ -251,7 +251,7 @@ export default function BancoDeHorasCalculator({ onSelectTab }: BancoDeHorasCalc
                 <input
                   id="banco-expected-minutes"
                   aria-label="Minutos esperados na jornada"
-                  type="number"
+                  type="number" inputMode="decimal"
                   value={expectedMinutes}
                   onChange={(e) => setExpectedMinutes(e.target.value)}
                   className="w-1/2 border border-neutral-300 bg-white rounded-lg p-2.5 text-sm outline-none focus:ring-2 focus:ring-blue-500"
@@ -271,7 +271,7 @@ export default function BancoDeHorasCalculator({ onSelectTab }: BancoDeHorasCalc
                 <input
                   id="banco-actual-hours"
                   aria-label="Horas realmente trabalhadas"
-                  type="number"
+                  type="number" inputMode="decimal"
                   value={actualHours}
                   onChange={(e) => setActualHours(e.target.value)}
                   className="w-1/2 border border-neutral-300 bg-white rounded-lg p-2.5 text-sm outline-none focus:ring-2 focus:ring-blue-500"
@@ -281,7 +281,7 @@ export default function BancoDeHorasCalculator({ onSelectTab }: BancoDeHorasCalc
                 <input
                   id="banco-actual-minutes"
                   aria-label="Minutos realmente trabalhados"
-                  type="number"
+                  type="number" inputMode="decimal"
                   value={actualMinutes}
                   onChange={(e) => setActualMinutes(e.target.value)}
                   className="w-1/2 border border-neutral-300 bg-white rounded-lg p-2.5 text-sm outline-none focus:ring-2 focus:ring-blue-500"
@@ -376,7 +376,7 @@ export default function BancoDeHorasCalculator({ onSelectTab }: BancoDeHorasCalc
 
               <div className="flex items-center gap-1 bg-white border border-neutral-300 rounded-lg p-1.5">
                 <input
-                  type="number"
+                  type="number" inputMode="decimal"
                   value={initialBalanceHours}
                   onChange={(e) => setInitialBalanceHours(e.target.value)}
                   className="w-12 font-mono font-bold text-sm text-center outline-none"
@@ -384,7 +384,7 @@ export default function BancoDeHorasCalculator({ onSelectTab }: BancoDeHorasCalc
                 />
                 <span className="font-bold text-neutral-400">:</span>
                 <input
-                  type="number"
+                  type="number" inputMode="decimal"
                   value={initialBalanceMinutes}
                   onChange={(e) => setInitialBalanceMinutes(e.target.value)}
                   className="w-12 font-mono font-bold text-sm text-center outline-none"
@@ -550,7 +550,7 @@ export default function BancoDeHorasCalculator({ onSelectTab }: BancoDeHorasCalc
         <div>
           <label className="block text-xs font-semibold text-neutral-700 mb-1">Valor da Hora Normal (R$)</label>
           <input
-            type="number"
+            type="number" inputMode="decimal"
             step="0.01"
             value={hourlyWage}
             onChange={(e) => setHourlyWage(e.target.value)}

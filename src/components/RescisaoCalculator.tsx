@@ -310,7 +310,7 @@ VALOR LÍQUIDO RESCISÓRIO A RECEBER: ${formatBRL(totalLiquido)}
             <input
               id="rescisao-gross-salary"
               aria-label="Último Salário Bruto Mensal em Reais"
-              type="number"
+              type="number" inputMode="decimal"
               step="50"
               value={grossSalary}
               onChange={(e) => setGrossSalary(e.target.value)}
@@ -370,7 +370,7 @@ VALOR LÍQUIDO RESCISÓRIO A RECEBER: ${formatBRL(totalLiquido)}
           <input
             id="rescisao-years-worked"
             aria-label="Anos Completos de Serviço"
-            type="number"
+            type="number" inputMode="decimal"
             min="0"
             max="40"
             value={yearsWorked}
@@ -408,7 +408,7 @@ VALOR LÍQUIDO RESCISÓRIO A RECEBER: ${formatBRL(totalLiquido)}
           <input
             id="rescisao-worked-days"
             aria-label="Dias Trabalhados no Último Mês"
-            type="number"
+            type="number" inputMode="decimal"
             min="0"
             max="30"
             value={workedDaysMonth}
@@ -425,7 +425,7 @@ VALOR LÍQUIDO RESCISÓRIO A RECEBER: ${formatBRL(totalLiquido)}
           <input
             id="rescisao-months-13th"
             aria-label="Meses para Décimo Terceiro Salário"
-            type="number"
+            type="number" inputMode="decimal"
             min="0"
             max="12"
             value={months13th}
@@ -445,7 +445,7 @@ VALOR LÍQUIDO RESCISÓRIO A RECEBER: ${formatBRL(totalLiquido)}
           <input
             id="rescisao-months-vacation"
             aria-label="Meses do Período Aquisitivo de Férias"
-            type="number"
+            type="number" inputMode="decimal"
             min="0"
             max="12"
             value={monthsVacation}
@@ -464,7 +464,7 @@ VALOR LÍQUIDO RESCISÓRIO A RECEBER: ${formatBRL(totalLiquido)}
             <input
               id="rescisao-fgts-balance"
               aria-label="Saldo Acumulado no Extrato do FGTS em Reais"
-              type="number"
+              type="number" inputMode="decimal"
               step="100"
               value={fgtsBalance}
               onChange={(e) => setFgtsBalance(e.target.value)}
@@ -486,7 +486,7 @@ VALOR LÍQUIDO RESCISÓRIO A RECEBER: ${formatBRL(totalLiquido)}
             <input
               id="rescisao-variable-avg"
               aria-label="Média Mensal de Horas Extras e Comissões em Reais"
-              type="number"
+              type="number" inputMode="decimal"
               step="50"
               value={variableAverage}
               onChange={(e) => setVariableAverage(e.target.value)}
@@ -505,7 +505,7 @@ VALOR LÍQUIDO RESCISÓRIO A RECEBER: ${formatBRL(totalLiquido)}
             Número de Dependentes (para Dedução IRRF)
           </label>
           <input
-            type="number"
+            type="number" inputMode="decimal"
             min="0"
             max="10"
             value={dependents}

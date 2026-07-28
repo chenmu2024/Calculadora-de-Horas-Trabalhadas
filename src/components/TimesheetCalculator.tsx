@@ -322,15 +322,15 @@ export default function TimesheetCalculator({ onSelectTab }: TimesheetCalculator
               </div>
               <div className="col-span-1 sm:col-span-2">
                  <label className="sm:hidden text-xs font-semibold text-neutral-500 mb-1 block">Entrada</label>
-                 <input type="time" value={entry.start} onChange={e => updateEntry(entry.id, 'start', e.target.value)} aria-label={`Horário de entrada para ${entry.date || 'linha ' + entry.id}`} className="w-full border border-neutral-300 bg-white rounded-lg p-2 text-sm outline-none focus:border-blue-500 transition-shadow" />
+                 <input type="time" inputMode="decimal" value={entry.start} onChange={e => updateEntry(entry.id, 'start', e.target.value)} aria-label={`Horário de entrada para ${entry.date || 'linha ' + entry.id}`} className="w-full border border-neutral-300 bg-white rounded-lg p-2 text-sm outline-none focus:border-blue-500 transition-shadow" />
               </div>
               <div className="col-span-1 sm:col-span-2">
                 <label className="sm:hidden text-xs font-semibold text-neutral-500 mb-1 block">Saída</label>
-                <input type="time" value={entry.end} onChange={e => updateEntry(entry.id, 'end', e.target.value)} aria-label={`Horário de saída para ${entry.date || 'linha ' + entry.id}`} className="w-full border border-neutral-300 bg-white rounded-lg p-2 text-sm outline-none focus:border-blue-500 transition-shadow" />
+                <input type="time" inputMode="decimal" value={entry.end} onChange={e => updateEntry(entry.id, 'end', e.target.value)} aria-label={`Horário de saída para ${entry.date || 'linha ' + entry.id}`} className="w-full border border-neutral-300 bg-white rounded-lg p-2 text-sm outline-none focus:border-blue-500 transition-shadow" />
               </div>
               <div className="col-span-1 sm:col-span-2">
                 <label className="sm:hidden text-xs font-semibold text-neutral-500 mb-1 block">Intervalo</label>
-                <input type="time" value={entry.breakTime} onChange={e => updateEntry(entry.id, 'breakTime', e.target.value)} aria-label={`Duração do intervalo para ${entry.date || 'linha ' + entry.id}`} className="w-full border border-neutral-300 bg-white rounded-lg p-2 text-sm outline-none focus:border-blue-500 transition-shadow" />
+                <input type="time" inputMode="decimal" value={entry.breakTime} onChange={e => updateEntry(entry.id, 'breakTime', e.target.value)} aria-label={`Duração do intervalo para ${entry.date || 'linha ' + entry.id}`} className="w-full border border-neutral-300 bg-white rounded-lg p-2 text-sm outline-none focus:border-blue-500 transition-shadow" />
                 {needsOneHourBreak && (
                   <span className="text-[10px] text-amber-700 bg-amber-50 border border-amber-200 px-1.5 py-0.5 rounded mt-1 flex items-center gap-1 inline-block" title="Art. 71 CLT: Jornada acima de 6h exige mínimo de 1h de almoço">
                     <AlertCircle className="w-3 h-3 inline text-amber-600" /> Intervalo &lt; 1h

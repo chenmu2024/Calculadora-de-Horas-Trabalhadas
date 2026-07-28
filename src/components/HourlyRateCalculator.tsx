@@ -256,7 +256,7 @@ Calculado em calculadoradehorastrabalhadas.org`;
                 <input
                   id="hourlyrate-salary"
                   aria-label="Salário Mensal Bruto em Reais"
-                  type="number"
+                  type="number" inputMode="decimal"
                   value={salary}
                   onChange={e => setSalary(e.target.value)}
                   className="w-full border border-neutral-300 bg-white rounded-xl p-2.5 pl-10 text-sm font-mono font-bold outline-none focus:ring-2 focus:ring-blue-500"
@@ -271,7 +271,7 @@ Calculado em calculadoradehorastrabalhadas.org`;
                 <input
                   id="hourlyrate-weekly-hours"
                   aria-label="Carga Horária Semanal em horas"
-                  type="number"
+                  type="number" inputMode="decimal"
                   value={weeklyHours}
                   onChange={e => { setWeeklyHours(e.target.value); setUseCustomDivisor(false); }}
                   className="w-full border border-neutral-300 bg-white rounded-xl p-2.5 pr-10 text-sm font-mono font-bold outline-none focus:ring-2 focus:ring-blue-500"
@@ -340,7 +340,7 @@ Calculado em calculadoradehorastrabalhadas.org`;
               <div className="flex items-center gap-2 text-xs bg-white border border-neutral-200 px-3 py-1.5 rounded-xl">
                 <span className="font-semibold text-neutral-700">Porcentagem Personalizada CCT:</span>
                 <input
-                  type="number"
+                  type="number" inputMode="decimal"
                   value={customOvertimePct}
                   onChange={e => setCustomOvertimePct(e.target.value)}
                   className="w-12 border border-neutral-300 rounded px-1.5 py-0.5 text-center font-bold text-blue-900"
@@ -427,7 +427,7 @@ Calculado em calculadoradehorastrabalhadas.org`;
             <div>
               <label className="block text-xs font-semibold text-neutral-700 mb-1">Meta de Renda Líquida Mensal (R$)</label>
               <input
-                type="number"
+                type="number" inputMode="decimal"
                 value={desiredIncome}
                 onChange={e => setDesiredIncome(e.target.value)}
                 className="w-full border border-neutral-300 bg-white rounded-xl p-2.5 text-sm font-mono font-bold outline-none focus:ring-2 focus:ring-purple-500"
@@ -439,7 +439,7 @@ Calculado em calculadoradehorastrabalhadas.org`;
             <div>
               <label className="block text-xs font-semibold text-neutral-700 mb-1">Custos Fixos Mensais (R$)</label>
               <input
-                type="number"
+                type="number" inputMode="decimal"
                 value={monthlyExpenses}
                 onChange={e => setMonthlyExpenses(e.target.value)}
                 className="w-full border border-neutral-300 bg-white rounded-xl p-2.5 text-sm font-mono font-bold outline-none focus:ring-2 focus:ring-purple-500"
@@ -451,7 +451,7 @@ Calculado em calculadoradehorastrabalhadas.org`;
             <div>
               <label className="block text-xs font-semibold text-neutral-700 mb-1">Horas Faturáveis por Semana (hs)</label>
               <input
-                type="number"
+                type="number" inputMode="decimal"
                 value={billableHoursPerWeek}
                 onChange={e => setBillableHoursPerWeek(e.target.value)}
                 className="w-full border border-neutral-300 bg-white rounded-xl p-2.5 text-sm font-mono font-bold outline-none focus:ring-2 focus:ring-purple-500"
@@ -463,7 +463,7 @@ Calculado em calculadoradehorastrabalhadas.org`;
             <div>
               <label className="block text-xs font-semibold text-neutral-700 mb-1">Alíquota de Imposto MEI / Simples (%)</label>
               <input
-                type="number"
+                type="number" inputMode="decimal"
                 value={taxRate}
                 onChange={e => setTaxRate(e.target.value)}
                 className="w-full border border-neutral-300 bg-white rounded-xl p-2.5 text-sm font-mono font-bold outline-none focus:ring-2 focus:ring-purple-500"
@@ -525,7 +525,7 @@ Calculado em calculadoradehorastrabalhadas.org`;
                 <label className="block text-xs font-semibold text-neutral-300 mb-1">Estimativa de Horas do Projeto</label>
                 <div className="relative">
                   <input
-                    type="number"
+                    type="number" inputMode="decimal"
                     value={estimatedProjectHours}
                     onChange={e => setEstimatedProjectHours(e.target.value)}
                     className="w-full bg-neutral-800 border border-neutral-700 rounded-xl p-2.5 text-sm font-mono font-bold text-white outline-none focus:ring-2 focus:ring-purple-500"
@@ -573,7 +573,7 @@ Calculado via calculadoradehorastrabalhadas.org`;
             <div>
               <label className="block text-xs font-semibold text-neutral-800 mb-1">Salário Bruto CLT Atual/Proposto (R$)</label>
               <input
-                type="number"
+                type="number" inputMode="decimal"
                 value={compareCltSalary}
                 onChange={e => setCompareCltSalary(e.target.value)}
                 className="w-full border border-neutral-300 bg-white rounded-xl p-2.5 text-sm font-mono font-bold outline-none focus:ring-2 focus:ring-amber-500"
@@ -584,7 +584,7 @@ Calculado via calculadoradehorastrabalhadas.org`;
             <div>
               <label className="block text-xs font-semibold text-neutral-800 mb-1">Benefícios Mensais CLT (VR, Plano, VT) (R$)</label>
               <input
-                type="number"
+                type="number" inputMode="decimal"
                 value={compareCltBenefits}
                 onChange={e => setCompareCltBenefits(e.target.value)}
                 className="w-full border border-neutral-300 bg-white rounded-xl p-2.5 text-sm font-mono font-bold outline-none focus:ring-2 focus:ring-amber-500"
@@ -595,7 +595,7 @@ Calculado via calculadoradehorastrabalhadas.org`;
             <div>
               <label className="block text-xs font-semibold text-neutral-800 mb-1">Imposto PJ Estimado (% Simples / MEI)</label>
               <input
-                type="number"
+                type="number" inputMode="decimal"
                 value={comparePjTaxPct}
                 onChange={e => setComparePjTaxPct(e.target.value)}
                 className="w-full border border-neutral-300 bg-white rounded-xl p-2.5 text-sm font-mono font-bold outline-none focus:ring-2 focus:ring-amber-500"
@@ -606,7 +606,7 @@ Calculado via calculadoradehorastrabalhadas.org`;
             <div>
               <label className="block text-xs font-semibold text-neutral-800 mb-1">Custo de Contabilidade/MEI Mensal (R$)</label>
               <input
-                type="number"
+                type="number" inputMode="decimal"
                 value={comparePjAccounting}
                 onChange={e => setComparePjAccounting(e.target.value)}
                 className="w-full border border-neutral-300 bg-white rounded-xl p-2.5 text-sm font-mono font-bold outline-none focus:ring-2 focus:ring-amber-500"

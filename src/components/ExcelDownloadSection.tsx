@@ -216,7 +216,7 @@ export default function ExcelDownloadSection() {
             <div>
               <label className="block text-[11px] font-semibold text-neutral-600 mb-1">Valor da Hora (R$)</label>
               <input
-                type="number"
+                type="number" inputMode="decimal"
                 step="5"
                 value={customHourlyRate}
                 onChange={e => setCustomHourlyRate(e.target.value)}

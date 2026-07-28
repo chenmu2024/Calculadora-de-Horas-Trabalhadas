@@ -1,13 +1,15 @@
-import { Calculator, Clock, Calendar, DollarSign, Moon, BookOpen, FileSpreadsheet, Menu, X, Scale, ArrowRightLeft, FileText, Users, Mail, Share2, Check, Briefcase } from 'lucide-react';
+import { Calculator, Clock, Calendar, DollarSign, Moon, Sun, BookOpen, FileSpreadsheet, Menu, X, Scale, ArrowRightLeft, FileText, Users, Mail, Share2, Check, Briefcase } from 'lucide-react';
 import { useState } from 'react';
 import { getHrefForTab } from '../utils/routes';
 
 interface HeaderProps {
   activeTab: string;
   setActiveTab: (tab: string) => void;
+  isDark?: boolean;
+  toggleDark?: () => void;
 }
 
-export default function Header({ activeTab, setActiveTab }: HeaderProps) {
+export default function Header({ activeTab, setActiveTab, isDark, toggleDark }: HeaderProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [copiedShare, setCopiedShare] = useState(false);
 
@@ -52,7 +54,7 @@ export default function Header({ activeTab, setActiveTab }: HeaderProps) {
   };
 
   return (
-    <header className="bg-white border-b border-neutral-200 sticky top-0 z-50 shadow-sm">
+    <header className="bg-white dark:bg-neutral-900 border-b border-neutral-200 dark:border-neutral-800 sticky top-0 z-50 shadow-sm transition-colors">
       <div className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
         {/* Logo Brand */}
         <a
@@ -68,17 +70,17 @@ export default function Header({ activeTab, setActiveTab }: HeaderProps) {
             <Calculator className="w-5 h-5" />
           </div>
           <div>
-            <span className="font-extrabold text-neutral-900 text-base tracking-tight block leading-none">
+            <span className="font-extrabold text-neutral-900 dark:text-white text-base tracking-tight block leading-none">
               Calculadora de Horas
             </span>
-            <span className="text-[10px] text-blue-600 font-semibold tracking-wider uppercase block mt-0.5">
+            <span className="text-[10px] text-blue-600 dark:text-blue-400 font-semibold tracking-wider uppercase block mt-0.5">
               calculadoradehorastrabalhadas.org
             </span>
           </div>
         </a>
 
         {/* Desktop Nav */}
-        <nav className="hidden lg:flex items-center gap-1 text-xs font-semibold text-neutral-600">
+        <nav className="hidden lg:flex items-center gap-1 text-xs font-semibold text-neutral-600 dark:text-neutral-300">
           {navItems.map((item) => {
             const Icon = item.icon;
             const isActive = activeTab === item.id;
@@ -94,11 +96,11 @@ export default function Header({ activeTab, setActiveTab }: HeaderProps) {
                 title={`Calculadora ${item.label}`}
                 className={`flex items-center gap-1.5 px-3 py-2 rounded-lg transition-all ${
                   isActive
-                    ? 'bg-blue-50 text-blue-700 font-bold'
-                    : 'hover:bg-neutral-100 hover:text-neutral-900'
+                    ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 font-bold'
+                    : 'hover:bg-neutral-100 dark:hover:bg-neutral-800 hover:text-neutral-900 dark:hover:text-white'
                 }`}
               >
-                <Icon className={`w-3.5 h-3.5 ${isActive ? 'text-blue-600' : 'text-neutral-400'}`} />
+                <Icon className={`w-3.5 h-3.5 ${isActive ? 'text-blue-600 dark:text-blue-400' : 'text-neutral-400 dark:text-neutral-500'}`} />
                 {item.label}
               </a>
             );
@@ -108,9 +110,17 @@ export default function Header({ activeTab, setActiveTab }: HeaderProps) {
         {/* Share & Mobile Hamburger Toggle */}
         <div className="flex items-center gap-2">
           <button
+            onClick={toggleDark}
+            title={isDark ? "Alternar para Modo Claro" : "Alternar para Modo Escuro"}
+            className="flex items-center justify-center w-8 h-8 text-neutral-600 dark:text-neutral-300 hover:text-blue-600 dark:hover:text-blue-400 bg-neutral-100 dark:bg-neutral-800 hover:bg-neutral-200 dark:hover:bg-neutral-700 rounded-lg transition-colors cursor-pointer no-print"
+          >
+            {isDark ? <Sun className="w-4 h-4 text-amber-500" /> : <Moon className="w-4 h-4" />}
+          </button>
+
+          <button
             onClick={handleShare}
             title="Compartilhar Link da Calculadora"
-            className="flex items-center gap-1 text-xs font-semibold text-neutral-700 hover:text-blue-600 bg-neutral-100 hover:bg-neutral-200 px-3 py-2 rounded-xl transition-colors cursor-pointer no-print"
+            className="flex items-center gap-1 text-xs font-semibold text-neutral-700 dark:text-neutral-200 hover:text-blue-600 dark:hover:text-blue-400 bg-neutral-100 dark:bg-neutral-800 hover:bg-neutral-200 dark:hover:bg-neutral-700 px-3 py-2 rounded-xl transition-colors cursor-pointer no-print"
           >
             {copiedShare ? (
               <>

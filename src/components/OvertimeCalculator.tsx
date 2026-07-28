@@ -194,7 +194,7 @@ Calculado em calculadoradehorastrabalhadas.org`;
             <input 
               id="ot-salary"
               aria-label="Salário Mensal Bruto em Reais"
-              type="number" 
+              type="number" inputMode="decimal" 
               value={salary} 
               onChange={e => setSalary(e.target.value)} 
               className="w-full border border-neutral-300 rounded-xl p-2.5 pl-9 focus:ring-2 focus:ring-blue-500 outline-none font-bold text-sm" 
@@ -232,7 +232,7 @@ Calculado em calculadoradehorastrabalhadas.org`;
              <input 
                id="ot-weekly-hours"
                aria-label="Carga Horária Semanal em horas"
-               type="number" 
+               type="number" inputMode="decimal" 
                value={weeklyHours} 
                onChange={e => setWeeklyHours(e.target.value)} 
                className="w-full border border-neutral-300 rounded-xl p-2.5 pr-8 focus:ring-2 focus:ring-blue-500 outline-none font-bold text-sm" 
@@ -311,7 +311,7 @@ Calculado em calculadoradehorastrabalhadas.org`;
               <input
                 id="ot-50-hours"
                 aria-label="Horas Extras 50%"
-                type="number"
+                type="number" inputMode="decimal"
                 value={ot50Hours}
                 onChange={e => setOt50Hours(e.target.value)}
                 className="w-full border border-neutral-300 rounded-lg p-2 font-bold text-sm outline-none focus:ring-2 focus:ring-blue-500"
@@ -333,7 +333,7 @@ Calculado em calculadoradehorastrabalhadas.org`;
               <input
                 id="ot-100-hours"
                 aria-label="Horas Extras 100%"
-                type="number"
+                type="number" inputMode="decimal"
                 value={ot100Hours}
                 onChange={e => setOt100Hours(e.target.value)}
                 className="w-full border border-neutral-300 rounded-lg p-2 font-bold text-sm outline-none focus:ring-2 focus:ring-blue-500"
@@ -353,7 +353,7 @@ Calculado em calculadoradehorastrabalhadas.org`;
                 <input
                   id="ot-custom-pct"
                   aria-label="Percentual customizado de hora extra"
-                  type="number"
+                  type="number" inputMode="decimal"
                   value={customOtPct}
                   onChange={e => setCustomOtPct(e.target.value)}
                   className="w-10 border border-neutral-300 rounded px-1 py-0.5 text-center text-xs font-bold"
@@ -366,7 +366,7 @@ Calculado em calculadoradehorastrabalhadas.org`;
               <input
                 id="ot-custom-hours"
                 aria-label="Horas Extras CCT"
-                type="number"
+                type="number" inputMode="decimal"
                 value={otCustomHours}
                 onChange={e => setOtCustomHours(e.target.value)}
                 className="w-full border border-neutral-300 rounded-lg p-2 font-bold text-sm outline-none focus:ring-2 focus:ring-blue-500"
@@ -404,7 +404,7 @@ Calculado em calculadoradehorastrabalhadas.org`;
               <input
                 id="ot-working-days"
                 aria-label="Dias Úteis no Mês para DSR"
-                type="number"
+                type="number" inputMode="decimal"
                 value={workingDays}
                 onChange={(e) => setWorkingDays(e.target.value)}
                 className="w-14 bg-white border border-neutral-300 rounded p-1 text-center font-bold"
@@ -413,7 +413,7 @@ Calculado em calculadoradehorastrabalhadas.org`;
               <input
                 id="ot-sundays-holidays"
                 aria-label="Domingos e Feriados no Mês para DSR"
-                type="number"
+                type="number" inputMode="decimal"
                 value={sundaysHolidays}
                 onChange={(e) => setSundaysHolidays(e.target.value)}
                 className="w-14 bg-white border border-neutral-300 rounded p-1 text-center font-bold"

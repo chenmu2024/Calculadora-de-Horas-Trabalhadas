@@ -233,7 +233,7 @@ Calculado em calculadoradehorastrabalhadas.org`;
           <input
             id="holerite-gross-salary"
             aria-label="Salário Bruto Mensal em Reais"
-            type="number"
+            type="number" inputMode="decimal"
             step="0.01"
             value={grossSalary}
             onChange={(e) => setGrossSalary(e.target.value)}
@@ -271,7 +271,7 @@ Calculado em calculadoradehorastrabalhadas.org`;
           <input
             id="holerite-overtime"
             aria-label="Horas Extras em Reais"
-            type="number"
+            type="number" inputMode="decimal"
             step="0.01"
             value={overtimeAmount}
             onChange={(e) => setOvertimeAmount(e.target.value)}
@@ -286,7 +286,7 @@ Calculado em calculadoradehorastrabalhadas.org`;
           <input
             id="holerite-night-shift"
             aria-label="Adicional Noturno em Reais"
-            type="number"
+            type="number" inputMode="decimal"
             step="0.01"
             value={nightShiftAmount}
             onChange={(e) => setNightShiftAmount(e.target.value)}
@@ -299,7 +299,7 @@ Calculado em calculadoradehorastrabalhadas.org`;
           <input
             id="holerite-dependents"
             aria-label="Número de Dependentes para IRRF"
-            type="number"
+            type="number" inputMode="decimal"
             value={dependents}
             onChange={(e) => setDependents(e.target.value)}
             className="w-full border border-neutral-300 rounded-lg p-2.5 text-sm outline-none focus:ring-2 focus:ring-blue-500"
@@ -311,7 +311,7 @@ Calculado em calculadoradehorastrabalhadas.org`;
           <input
             id="holerite-alimony"
             aria-label="Pensão Alimentícia em Reais"
-            type="number"
+            type="number" inputMode="decimal"
             step="0.01"
             value={alimonyAmount}
             onChange={(e) => setAlimonyAmount(e.target.value)}
@@ -324,7 +324,7 @@ Calculado em calculadoradehorastrabalhadas.org`;
           <input
             id="holerite-health-plan"
             aria-label="Plano de Saúde ou Odontológico em Reais"
-            type="number"
+            type="number" inputMode="decimal"
             step="0.01"
             value={healthPlanAmount}
             onChange={(e) => setHealthPlanAmount(e.target.value)}
@@ -337,7 +337,7 @@ Calculado em calculadoradehorastrabalhadas.org`;
           <input
             id="holerite-absences"
             aria-label="Faltas Injustificadas em Dias"
-            type="number"
+            type="number" inputMode="decimal"
             min="0"
             value={unexcusedAbsences}
             onChange={(e) => setUnexcusedAbsences(e.target.value)}
@@ -350,7 +350,7 @@ Calculado em calculadoradehorastrabalhadas.org`;
           <input
             id="holerite-food-voucher"
             aria-label="Desconto Vale Refeição em Reais"
-            type="number"
+            type="number" inputMode="decimal"
             step="0.01"
             value={foodVoucherAmount}
             onChange={(e) => setFoodVoucherAmount(e.target.value)}
@@ -363,7 +363,7 @@ Calculado em calculadoradehorastrabalhadas.org`;
           <input
             id="holerite-other-deductions"
             aria-label="Outros Descontos em Reais"
-            type="number"
+            type="number" inputMode="decimal"
             step="0.01"
             value={otherDeductions}
             onChange={(e) => setOtherDeductions(e.target.value)}
@@ -439,14 +439,14 @@ Calculado em calculadoradehorastrabalhadas.org`;
             <div className="flex items-center gap-2">
               <span className="text-neutral-500">Dias Úteis:</span>
               <input
-                type="number"
+                type="number" inputMode="decimal"
                 value={workingDays}
                 onChange={(e) => setWorkingDays(e.target.value)}
                 className="w-14 bg-white border border-neutral-300 rounded p-1 text-center font-bold"
               />
               <span className="text-neutral-500">Dom/Feriados:</span>
               <input
-                type="number"
+                type="number" inputMode="decimal"
                 value={sundaysHolidays}
                 onChange={(e) => setSundaysHolidays(e.target.value)}
                 className="w-14 bg-white border border-neutral-300 rounded p-1 text-center font-bold"
@@ -537,7 +537,7 @@ Calculado em calculadoradehorastrabalhadas.org`;
             <div className="flex items-center gap-2 bg-white/80 p-2 rounded-xl border border-blue-200 w-fit text-xs">
               <span className="font-semibold text-neutral-700">Porcentagem Personalizada:</span>
               <input
-                type="number"
+                type="number" inputMode="decimal"
                 step="0.5"
                 value={customRaisePct}
                 onChange={(e) => setCustomRaisePct(e.target.value)}

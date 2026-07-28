@@ -68,7 +68,7 @@ export function getTabFromLocation(): string {
     return PATH_TO_TAB[pathname];
   }
 
-  return 'daily';
+  return 'not-found';
 }
 
 export function getHrefForTab(tab: string): string {

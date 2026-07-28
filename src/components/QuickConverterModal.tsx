@@ -136,7 +136,7 @@ export default function QuickConverterModal({ isOpen, onClose }: QuickConverterM
                 Digite em Decimal (ex: 7.75 ou 8.8):
               </label>
               <input
-                type="number"
+                type="number" inputMode="decimal"
                 step="0.01"
                 value={decimalInput}
                 onChange={(e) => setDecimalInput(e.target.value)}
@@ -173,7 +173,7 @@ export default function QuickConverterModal({ isOpen, onClose }: QuickConverterM
                   Salário Bruto (R$):
                 </label>
                 <input
-                  type="number"
+                  type="number" inputMode="decimal"
                   value={salaryInput}
                   onChange={(e) => setSalaryInput(e.target.value)}
                   className="w-full border border-neutral-300 rounded-xl p-2.5 font-mono text-sm font-bold text-neutral-800 bg-white"
