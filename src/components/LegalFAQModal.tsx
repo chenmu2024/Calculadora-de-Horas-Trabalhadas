@@ -57,21 +57,21 @@ O valor retido é a soma das alíquotas aplicadas em cada faixa do salário do e
 
   return (
     <div className="fixed inset-0 bg-neutral-900/60 backdrop-blur-xs flex items-center justify-center p-4 z-50 animate-fade-in no-print">
-      <div className="bg-white rounded-2xl max-w-2xl w-full p-6 shadow-2xl border border-neutral-100 space-y-5 relative max-h-[90vh] overflow-y-auto">
+      <div className="bg-white dark:bg-neutral-900 rounded-2xl max-w-2xl w-full p-6 shadow-2xl border border-neutral-100 dark:border-neutral-800 space-y-5 relative max-h-[90vh] overflow-y-auto transition-colors">
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 text-neutral-400 hover:text-neutral-700 p-1.5 rounded-full hover:bg-neutral-100 transition-colors cursor-pointer"
+          className="absolute top-4 right-4 text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-200 p-1.5 rounded-full hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors cursor-pointer"
         >
           <X className="w-5 h-5" />
         </button>
 
         <div className="flex items-center gap-3">
-          <div className="p-2.5 bg-indigo-50 text-indigo-600 rounded-xl">
+          <div className="p-2.5 bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 rounded-xl">
             <Scale className="w-6 h-6" />
           </div>
           <div>
-            <h2 className="text-lg font-bold text-neutral-900">Guia Legislação Trabalhista & Direitos CLT 2026</h2>
-            <p className="text-xs text-neutral-500">Esclarecimentos judiciais baseados na CLT e Súmulas do TST</p>
+            <h2 className="text-lg font-bold text-neutral-900 dark:text-white">Guia Legislação Trabalhista & Direitos CLT 2026</h2>
+            <p className="text-xs text-neutral-500 dark:text-neutral-400">Esclarecimentos judiciais baseados na CLT e Súmulas do TST</p>
           </div>
         </div>
 
@@ -82,25 +82,25 @@ O valor retido é a soma das alíquotas aplicadas em cada faixa do salário do e
             return (
               <div
                 key={index}
-                className="border border-neutral-200 rounded-xl overflow-hidden transition-all"
+                className="border border-neutral-200 dark:border-neutral-800 rounded-xl overflow-hidden transition-all"
               >
                 <button
                   onClick={() => setOpenIndex(isOpen ? null : index)}
-                  className="w-full text-left p-4 bg-neutral-50 hover:bg-neutral-100/80 flex items-center justify-between gap-3 cursor-pointer transition-colors"
+                  className="w-full text-left p-4 bg-neutral-50 dark:bg-neutral-800/60 hover:bg-neutral-100/80 dark:hover:bg-neutral-800 flex items-center justify-between gap-3 cursor-pointer transition-colors"
                 >
                   <div>
-                    <h3 className="text-xs sm:text-sm font-bold text-neutral-900">{faq.title}</h3>
-                    <span className="text-[11px] text-indigo-600 font-medium">{faq.legalRef}</span>
+                    <h3 className="text-xs sm:text-sm font-bold text-neutral-900 dark:text-white">{faq.title}</h3>
+                    <span className="text-[11px] text-indigo-600 dark:text-indigo-400 font-medium">{faq.legalRef}</span>
                   </div>
                   {isOpen ? (
-                    <ChevronUp className="w-4 h-4 text-neutral-500 shrink-0" />
+                    <ChevronUp className="w-4 h-4 text-neutral-500 dark:text-neutral-400 shrink-0" />
                   ) : (
-                    <ChevronDown className="w-4 h-4 text-neutral-500 shrink-0" />
+                    <ChevronDown className="w-4 h-4 text-neutral-500 dark:text-neutral-400 shrink-0" />
                   )}
                 </button>
 
                 {isOpen && (
-                  <div className="p-4 bg-white border-t border-neutral-200 text-xs text-neutral-700 leading-relaxed space-y-2 font-sans">
+                  <div className="p-4 bg-white dark:bg-neutral-900 border-t border-neutral-200 dark:border-neutral-800 text-xs text-neutral-700 dark:text-neutral-300 leading-relaxed space-y-2 font-sans">
                     {faq.content.split('\n').map((paragraph, pIdx) => (
                       <p key={pIdx}>{paragraph}</p>
                     ))}
@@ -111,14 +111,14 @@ O valor retido é a soma das alíquotas aplicadas em cada faixa do salário do e
           })}
         </div>
 
-        <div className="pt-3 border-t border-neutral-100 flex items-center justify-between">
-          <div className="flex items-center gap-1.5 text-[11px] text-neutral-500">
-            <ShieldCheck className="w-4 h-4 text-emerald-600" />
+        <div className="pt-3 border-t border-neutral-100 dark:border-neutral-800 flex items-center justify-between">
+          <div className="flex items-center gap-1.5 text-[11px] text-neutral-500 dark:text-neutral-400">
+            <ShieldCheck className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
             <span>Atualizado conforme Tabela MTE / Portarias 2026</span>
           </div>
           <button
             onClick={onClose}
-            className="px-4 py-2 bg-neutral-900 hover:bg-neutral-800 text-white font-bold text-xs rounded-xl transition-colors cursor-pointer"
+            className="px-4 py-2 bg-neutral-900 dark:bg-blue-600 hover:bg-neutral-800 dark:hover:bg-blue-700 text-white font-bold text-xs rounded-xl transition-colors cursor-pointer"
           >
             Fechar Guia
           </button>
