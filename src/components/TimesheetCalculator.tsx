@@ -183,15 +183,15 @@ export default function TimesheetCalculator({ onSelectTab }: TimesheetCalculator
 
   return (
     <div className="animate-in fade-in duration-500">
-      <div className="flex flex-wrap items-center justify-between gap-3 bg-blue-50/70 border border-blue-200/90 p-3 rounded-xl mb-5">
-        <div className="flex items-center gap-2 text-xs font-semibold text-blue-900">
+      <div className="flex flex-wrap items-center justify-between gap-3 bg-blue-50/70 dark:bg-blue-950/40 border border-blue-200/90 dark:border-blue-800/60 p-3 rounded-xl mb-5">
+        <div className="flex items-center gap-2 text-xs font-semibold text-blue-900 dark:text-blue-200">
           <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
           <span>💾 Salvamento automático ativo em tempo real</span>
-          <span className="text-blue-700 font-normal hidden md:inline">(Dados mantidos em segurança no seu navegador)</span>
+          <span className="text-blue-700 dark:text-blue-300 font-normal hidden md:inline">(Dados mantidos em segurança no seu navegador)</span>
         </div>
         <div className="flex items-center gap-2 text-xs">
-          <button onClick={exportCSV} className="bg-white hover:bg-neutral-100 border border-neutral-300 text-neutral-800 px-2.5 py-1.5 rounded-lg transition-colors font-bold flex items-center gap-1 cursor-pointer shadow-2xs">
-            <Download className="w-3.5 h-3.5 text-emerald-600" /> Excel / CSV
+          <button onClick={exportCSV} className="bg-white dark:bg-neutral-800 hover:bg-neutral-100 dark:hover:bg-neutral-700 border border-neutral-300 dark:border-neutral-700 text-neutral-800 dark:text-neutral-200 px-2.5 py-1.5 rounded-lg transition-colors font-bold flex items-center gap-1 cursor-pointer shadow-2xs">
+            <Download className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" /> Excel / CSV
           </button>
           <button onClick={() => window.print()} className="bg-blue-600 hover:bg-blue-700 text-white px-2.5 py-1.5 rounded-lg transition-colors font-bold flex items-center gap-1 cursor-pointer shadow-2xs">
             <Printer className="w-3.5 h-3.5 text-white" /> Gerar PDF / Imprimir
@@ -201,8 +201,8 @@ export default function TimesheetCalculator({ onSelectTab }: TimesheetCalculator
 
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
         <div>
-          <h2 className="text-2xl font-bold text-neutral-900">Calculadora de Horas Trabalhadas Semanal (CLT 44h)</h2>
-          <p className="text-neutral-600 text-sm mt-1">Preencha sua folha de ponto semanal, compare com a carga horária e baixe o relatório.</p>
+          <h2 className="text-2xl font-bold text-neutral-900 dark:text-white">Calculadora de Horas Trabalhadas Semanal (CLT 44h)</h2>
+          <p className="text-neutral-600 dark:text-neutral-400 text-sm mt-1">Preencha sua folha de ponto semanal, compare com a carga horária e baixe o relatório.</p>
         </div>
 
         {/* Quick presets and templates */}
@@ -213,24 +213,24 @@ export default function TimesheetCalculator({ onSelectTab }: TimesheetCalculator
           >
             <Sparkles className="w-3.5 h-3.5 text-amber-300" /> Modelos de Escala (1-Clique)
           </button>
-          <button onClick={exportJSONBackup} className="bg-neutral-100 hover:bg-neutral-200 text-neutral-700 px-2.5 py-2 rounded-xl transition-colors font-medium flex items-center gap-1 cursor-pointer">
+          <button onClick={exportJSONBackup} className="bg-neutral-100 dark:bg-neutral-800 hover:bg-neutral-200 dark:hover:bg-neutral-700 text-neutral-700 dark:text-neutral-200 px-2.5 py-2 rounded-xl transition-colors font-medium flex items-center gap-1 cursor-pointer">
             <Download className="w-3.5 h-3.5" /> Backup JSON
           </button>
-          <label className="bg-neutral-100 hover:bg-neutral-200 text-neutral-700 px-2.5 py-2 rounded-xl transition-colors font-medium flex items-center gap-1 cursor-pointer">
+          <label className="bg-neutral-100 dark:bg-neutral-800 hover:bg-neutral-200 dark:hover:bg-neutral-700 text-neutral-700 dark:text-neutral-200 px-2.5 py-2 rounded-xl transition-colors font-medium flex items-center gap-1 cursor-pointer">
             <Upload className="w-3.5 h-3.5" /> Restaurar
             <input type="file" accept=".json" onChange={importJSONBackup} className="hidden" aria-label="Restaurar backup JSON" />
           </label>
-          <button onClick={clearAll} className="bg-neutral-100 hover:bg-red-50 hover:text-red-600 text-neutral-500 px-2.5 py-2 rounded-xl transition-colors font-medium flex items-center gap-1 cursor-pointer">
+          <button onClick={clearAll} className="bg-neutral-100 dark:bg-neutral-800 hover:bg-red-50 dark:hover:bg-red-950/40 hover:text-red-600 dark:hover:text-red-400 text-neutral-500 dark:text-neutral-400 px-2.5 py-2 rounded-xl transition-colors font-medium flex items-center gap-1 cursor-pointer">
             <RotateCcw className="w-3.5 h-3.5" /> Limpar
           </button>
         </div>
       </div>
 
       {/* Target Selector & Quick Presets Bar */}
-      <div className="mb-4 bg-neutral-50 p-3.5 rounded-xl border border-neutral-200 space-y-3 text-xs sm:text-sm">
+      <div className="mb-4 bg-neutral-50 dark:bg-neutral-800/50 p-3.5 rounded-xl border border-neutral-200 dark:border-neutral-700 space-y-3 text-xs sm:text-sm">
         <div className="flex flex-wrap items-center justify-between gap-3">
-          <span className="font-medium text-neutral-700 flex items-center gap-1.5">
-            <Clock className="w-4 h-4 text-blue-600" /> Carga Horária Semanal Contratual:
+          <span className="font-medium text-neutral-700 dark:text-neutral-300 flex items-center gap-1.5">
+            <Clock className="w-4 h-4 text-blue-600 dark:text-blue-400" /> Carga Horária Semanal Contratual:
           </span>
           <div className="flex items-center gap-2">
             {['44:00', '40:00', '36:00'].map((target) => (
@@ -240,19 +240,19 @@ export default function TimesheetCalculator({ onSelectTab }: TimesheetCalculator
                 className={`px-3 py-1 rounded-lg border text-xs font-semibold transition-all cursor-pointer ${
                   weeklyTarget === target
                     ? 'bg-blue-600 border-blue-600 text-white shadow-xs'
-                    : 'bg-white border-neutral-300 text-neutral-700 hover:bg-neutral-100'
+                    : 'bg-white dark:bg-neutral-800 border-neutral-300 dark:border-neutral-700 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-700'
                 }`}
               >
                 {target.replace(':00', ' Horas')}
               </button>
             ))}
-            <div className="flex items-center gap-1 bg-white border border-neutral-300 px-2 py-1 rounded-lg">
-              <span className="text-xs text-neutral-500">Outro:</span>
+            <div className="flex items-center gap-1 bg-white dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-700 px-2 py-1 rounded-lg">
+              <span className="text-xs text-neutral-500 dark:text-neutral-400">Outro:</span>
               <input
                 type="text"
                 value={weeklyTarget}
                 onChange={(e) => setWeeklyTarget(e.target.value)}
-                className="w-14 font-mono font-bold text-xs outline-none text-center"
+                className="w-14 font-mono font-bold text-xs outline-none text-center bg-transparent text-neutral-900 dark:text-white"
                 placeholder="44:00"
                 aria-label="Carga horária semanal em horas"
               />
@@ -261,27 +261,27 @@ export default function TimesheetCalculator({ onSelectTab }: TimesheetCalculator
         </div>
 
         {/* Quick Fill Presets */}
-        <div className="pt-2 border-t border-neutral-200/80 flex flex-wrap items-center gap-2 text-xs">
-          <span className="text-neutral-500 font-medium flex items-center gap-1">
+        <div className="pt-2 border-t border-neutral-200/80 dark:border-neutral-700/80 flex flex-wrap items-center gap-2 text-xs">
+          <span className="text-neutral-500 dark:text-neutral-400 font-medium flex items-center gap-1">
             <Sparkles className="w-3.5 h-3.5 text-amber-500" /> Preenchimento Rápido:
           </span>
           <button
             onClick={loadPreset44hWeekdays}
-            className="bg-white hover:bg-blue-50 hover:border-blue-300 border border-neutral-200 text-neutral-700 px-2.5 py-1 rounded-lg transition-colors font-semibold flex items-center gap-1 cursor-pointer"
+            className="bg-white dark:bg-neutral-800 hover:bg-blue-50 dark:hover:bg-blue-950/40 hover:border-blue-300 dark:hover:border-blue-700 border border-neutral-200 dark:border-neutral-700 text-neutral-700 dark:text-neutral-300 px-2.5 py-1 rounded-lg transition-colors font-semibold flex items-center gap-1 cursor-pointer"
             title="8h48m por dia de segunda a sexta (44h)"
           >
             ⚡ 44h Seg-Sex (8h48m)
           </button>
           <button
             onClick={loadPreset44hWithSaturday}
-            className="bg-white hover:bg-blue-50 hover:border-blue-300 border border-neutral-200 text-neutral-700 px-2.5 py-1 rounded-lg transition-colors font-semibold flex items-center gap-1 cursor-pointer"
+            className="bg-white dark:bg-neutral-800 hover:bg-blue-50 dark:hover:bg-blue-950/40 hover:border-blue-300 dark:hover:border-blue-700 border border-neutral-200 dark:border-neutral-700 text-neutral-700 dark:text-neutral-300 px-2.5 py-1 rounded-lg transition-colors font-semibold flex items-center gap-1 cursor-pointer"
             title="8h de segunda a sexta + 4h no sábado (44h)"
           >
             ⚡ 44h Seg-Sáb (8h + 4h)
           </button>
           <button
             onClick={loadPreset40hWeekdays}
-            className="bg-white hover:bg-blue-50 hover:border-blue-300 border border-neutral-200 text-neutral-700 px-2.5 py-1 rounded-lg transition-colors font-semibold flex items-center gap-1 cursor-pointer"
+            className="bg-white dark:bg-neutral-800 hover:bg-blue-50 dark:hover:bg-blue-950/40 hover:border-blue-300 dark:hover:border-blue-700 border border-neutral-200 dark:border-neutral-700 text-neutral-700 dark:text-neutral-300 px-2.5 py-1 rounded-lg transition-colors font-semibold flex items-center gap-1 cursor-pointer"
             title="8h por dia de segunda a sexta (40h)"
           >
             ⚡ 40h Seg-Sex (8h)
@@ -315,34 +315,34 @@ export default function TimesheetCalculator({ onSelectTab }: TimesheetCalculator
           const needsOneHourBreak = grossMin > 360 && breakMin < 60;
 
           return (
-            <div key={entry.id} className="grid grid-cols-1 sm:grid-cols-12 gap-3 items-center bg-white sm:bg-neutral-50/50 border border-neutral-200 sm:border-neutral-200 p-3.5 sm:p-2 rounded-xl group hover:border-blue-300 transition-colors">
+            <div key={entry.id} className="grid grid-cols-1 sm:grid-cols-12 gap-3 items-center bg-white dark:bg-neutral-800/80 sm:bg-neutral-50/50 dark:sm:bg-neutral-800/40 border border-neutral-200 dark:border-neutral-700 p-3.5 sm:p-2 rounded-xl group hover:border-blue-300 dark:hover:border-blue-600 transition-colors">
               <div className="col-span-1 sm:col-span-3">
-                <label className="sm:hidden text-xs font-semibold text-neutral-500 mb-1 block">Dia / Data</label>
-                <input type="text" value={entry.date} onChange={e => updateEntry(entry.id, 'date', e.target.value)} placeholder="Ex: Segunda" aria-label={`Dia da semana para linha ${entry.id}`} className="w-full border border-neutral-300 bg-white rounded-lg p-2 text-sm outline-none focus:border-blue-500 transition-shadow" />
+                <label className="sm:hidden text-xs font-semibold text-neutral-500 dark:text-neutral-400 mb-1 block">Dia / Data</label>
+                <input type="text" value={entry.date} onChange={e => updateEntry(entry.id, 'date', e.target.value)} placeholder="Ex: Segunda" aria-label={`Dia da semana para linha ${entry.id}`} className="w-full border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white rounded-lg p-2 text-sm outline-none focus:border-blue-500 transition-shadow" />
               </div>
               <div className="col-span-1 sm:col-span-2">
-                 <label className="sm:hidden text-xs font-semibold text-neutral-500 mb-1 block">Entrada</label>
-                 <input type="time" inputMode="decimal" value={entry.start} onChange={e => updateEntry(entry.id, 'start', e.target.value)} aria-label={`Horário de entrada para ${entry.date || 'linha ' + entry.id}`} className="w-full border border-neutral-300 bg-white rounded-lg p-2 text-sm outline-none focus:border-blue-500 transition-shadow" />
+                 <label className="sm:hidden text-xs font-semibold text-neutral-500 dark:text-neutral-400 mb-1 block">Entrada</label>
+                 <input type="time" inputMode="decimal" value={entry.start} onChange={e => updateEntry(entry.id, 'start', e.target.value)} aria-label={`Horário de entrada para ${entry.date || 'linha ' + entry.id}`} className="w-full border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white rounded-lg p-2 text-sm outline-none focus:border-blue-500 transition-shadow" />
               </div>
               <div className="col-span-1 sm:col-span-2">
-                <label className="sm:hidden text-xs font-semibold text-neutral-500 mb-1 block">Saída</label>
-                <input type="time" inputMode="decimal" value={entry.end} onChange={e => updateEntry(entry.id, 'end', e.target.value)} aria-label={`Horário de saída para ${entry.date || 'linha ' + entry.id}`} className="w-full border border-neutral-300 bg-white rounded-lg p-2 text-sm outline-none focus:border-blue-500 transition-shadow" />
+                <label className="sm:hidden text-xs font-semibold text-neutral-500 dark:text-neutral-400 mb-1 block">Saída</label>
+                <input type="time" inputMode="decimal" value={entry.end} onChange={e => updateEntry(entry.id, 'end', e.target.value)} aria-label={`Horário de saída para ${entry.date || 'linha ' + entry.id}`} className="w-full border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white rounded-lg p-2 text-sm outline-none focus:border-blue-500 transition-shadow" />
               </div>
               <div className="col-span-1 sm:col-span-2">
-                <label className="sm:hidden text-xs font-semibold text-neutral-500 mb-1 block">Intervalo</label>
-                <input type="time" inputMode="decimal" value={entry.breakTime} onChange={e => updateEntry(entry.id, 'breakTime', e.target.value)} aria-label={`Duração do intervalo para ${entry.date || 'linha ' + entry.id}`} className="w-full border border-neutral-300 bg-white rounded-lg p-2 text-sm outline-none focus:border-blue-500 transition-shadow" />
+                <label className="sm:hidden text-xs font-semibold text-neutral-500 dark:text-neutral-400 mb-1 block">Intervalo</label>
+                <input type="time" inputMode="decimal" value={entry.breakTime} onChange={e => updateEntry(entry.id, 'breakTime', e.target.value)} aria-label={`Duração do intervalo para ${entry.date || 'linha ' + entry.id}`} className="w-full border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white rounded-lg p-2 text-sm outline-none focus:border-blue-500 transition-shadow" />
                 {needsOneHourBreak && (
-                  <span className="text-[10px] text-amber-700 bg-amber-50 border border-amber-200 px-1.5 py-0.5 rounded mt-1 flex items-center gap-1 inline-block" title="Art. 71 CLT: Jornada acima de 6h exige mínimo de 1h de almoço">
-                    <AlertCircle className="w-3 h-3 inline text-amber-600" /> Intervalo &lt; 1h
+                  <span className="text-[10px] text-amber-700 dark:text-amber-300 bg-amber-50 dark:bg-amber-950/60 border border-amber-200 dark:border-amber-800/80 px-1.5 py-0.5 rounded mt-1 flex items-center gap-1 inline-block" title="Art. 71 CLT: Jornada acima de 6h exige mínimo de 1h de almoço">
+                    <AlertCircle className="w-3 h-3 inline text-amber-600 dark:text-amber-400" /> Intervalo &lt; 1h
                   </span>
                 )}
               </div>
-              <div className="col-span-1 sm:col-span-2 sm:text-right font-mono font-bold text-neutral-800 text-sm">
-                <span className="sm:hidden text-xs text-neutral-500 mr-2 font-normal">Total:</span>
+              <div className="col-span-1 sm:col-span-2 sm:text-right font-mono font-bold text-neutral-800 dark:text-neutral-100 text-sm">
+                <span className="sm:hidden text-xs text-neutral-500 dark:text-neutral-400 mr-2 font-normal">Total:</span>
                 {minutesToTime(min)}
               </div>
               <div className="col-span-1 flex sm:justify-end mt-2 sm:mt-0">
-                <button onClick={() => removeEntry(entry.id)} className="p-2 text-neutral-400 hover:text-red-500 transition-colors w-full sm:w-auto flex items-center justify-center rounded-lg hover:bg-neutral-100" title="Remover dia">
+                <button onClick={() => removeEntry(entry.id)} className="p-2 text-neutral-400 hover:text-red-500 transition-colors w-full sm:w-auto flex items-center justify-center rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-700" title="Remover dia">
                   <Trash2 className="w-4 h-4" />
                   <span className="sm:hidden text-xs ml-2">Excluir dia</span>
                 </button>
@@ -353,26 +353,26 @@ export default function TimesheetCalculator({ onSelectTab }: TimesheetCalculator
       </div>
 
       <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-8">
-        <button onClick={addEntry} className="w-full sm:w-auto flex items-center justify-center gap-2 text-sm font-semibold text-blue-600 bg-blue-50 hover:bg-blue-100 px-4 py-2.5 rounded-xl transition-colors cursor-pointer">
+        <button onClick={addEntry} className="w-full sm:w-auto flex items-center justify-center gap-2 text-sm font-semibold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/40 hover:bg-blue-100 dark:hover:bg-blue-900/60 px-4 py-2.5 rounded-xl transition-colors cursor-pointer">
           <Plus className="w-4 h-4" /> Adicionar mais um dia
         </button>
 
         <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto">
-          <button onClick={exportCSV} className="flex-1 sm:flex-initial flex items-center justify-center gap-1.5 text-xs font-semibold text-neutral-700 bg-neutral-100 hover:bg-neutral-200 px-3 py-2.5 rounded-xl transition-colors cursor-pointer">
-            <Download className="w-3.5 h-3.5 text-emerald-600" /> Exportar Excel (.csv)
+          <button onClick={exportCSV} className="flex-1 sm:flex-initial flex items-center justify-center gap-1.5 text-xs font-semibold text-neutral-700 dark:text-neutral-200 bg-neutral-100 dark:bg-neutral-800 hover:bg-neutral-200 dark:hover:bg-neutral-700 px-3 py-2.5 rounded-xl transition-colors cursor-pointer">
+            <Download className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" /> Exportar Excel (.csv)
           </button>
-          <button onClick={copySummary} className="flex-1 sm:flex-initial flex items-center justify-center gap-1.5 text-xs font-semibold text-neutral-700 bg-neutral-100 hover:bg-neutral-200 px-3 py-2.5 rounded-xl transition-colors cursor-pointer">
-            {copied ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5 text-blue-600" />} Copiar Resumo
+          <button onClick={copySummary} className="flex-1 sm:flex-initial flex items-center justify-center gap-1.5 text-xs font-semibold text-neutral-700 dark:text-neutral-200 bg-neutral-100 dark:bg-neutral-800 hover:bg-neutral-200 dark:hover:bg-neutral-700 px-3 py-2.5 rounded-xl transition-colors cursor-pointer">
+            {copied ? <Check className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" /> : <Copy className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />} Copiar Resumo
           </button>
-          <button onClick={printReport} className="flex-1 sm:flex-initial flex items-center justify-center gap-1.5 text-xs font-semibold text-neutral-700 bg-neutral-100 hover:bg-neutral-200 px-3 py-2.5 rounded-xl transition-colors cursor-pointer">
-            <Printer className="w-3.5 h-3.5 text-neutral-600" /> Imprimir
+          <button onClick={printReport} className="flex-1 sm:flex-initial flex items-center justify-center gap-1.5 text-xs font-semibold text-neutral-700 dark:text-neutral-200 bg-neutral-100 dark:bg-neutral-800 hover:bg-neutral-200 dark:hover:bg-neutral-700 px-3 py-2.5 rounded-xl transition-colors cursor-pointer">
+            <Printer className="w-3.5 h-3.5 text-neutral-600 dark:text-neutral-300" /> Imprimir
           </button>
         </div>
       </div>
 
       {/* Summary Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div className="bg-neutral-900 text-white rounded-2xl p-5 flex items-center justify-between shadow-xs">
+        <div className="bg-neutral-900 dark:bg-neutral-900 text-white border border-neutral-800 rounded-2xl p-5 flex items-center justify-between shadow-xs">
           <div>
             <p className="text-xs text-neutral-400 mb-1 uppercase tracking-wider font-semibold">Total Trabalhado</p>
             <div className="text-3xl font-extrabold font-mono tracking-tight text-blue-400">{minutesToTime(totalMinutes)} h</div>
@@ -382,22 +382,22 @@ export default function TimesheetCalculator({ onSelectTab }: TimesheetCalculator
           </div>
         </div>
 
-        <div className="bg-white border border-neutral-200 rounded-2xl p-5 flex items-center justify-between shadow-xs">
+        <div className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-2xl p-5 flex items-center justify-between shadow-xs">
           <div>
-            <p className="text-xs text-neutral-500 mb-1 uppercase tracking-wider font-semibold">Carga Contratual</p>
-            <div className="text-3xl font-extrabold font-mono tracking-tight text-neutral-800">{weeklyTarget} h</div>
+            <p className="text-xs text-neutral-500 dark:text-neutral-400 mb-1 uppercase tracking-wider font-semibold">Carga Contratual</p>
+            <div className="text-3xl font-extrabold font-mono tracking-tight text-neutral-800 dark:text-white">{weeklyTarget} h</div>
           </div>
-          <div className="w-10 h-10 bg-neutral-100 rounded-full flex items-center justify-center">
-            <Clock className="w-5 h-5 text-neutral-600" />
+          <div className="w-10 h-10 bg-neutral-100 dark:bg-neutral-800 rounded-full flex items-center justify-center">
+            <Clock className="w-5 h-5 text-neutral-600 dark:text-neutral-300" />
           </div>
         </div>
 
         <div className={`rounded-2xl p-5 border flex items-center justify-between shadow-xs ${
           isOvertime
-            ? 'bg-emerald-50 border-emerald-200 text-emerald-900'
+            ? 'bg-emerald-50 dark:bg-emerald-950/40 border-emerald-200 dark:border-emerald-800/60 text-emerald-900 dark:text-emerald-200'
             : isDeficit
-            ? 'bg-amber-50 border-amber-200 text-amber-900'
-            : 'bg-blue-50 border-blue-200 text-blue-900'
+            ? 'bg-amber-50 dark:bg-amber-950/40 border-amber-200 dark:border-amber-800/60 text-amber-900 dark:text-amber-200'
+            : 'bg-blue-50 dark:bg-blue-950/40 border-blue-200 dark:border-blue-800/60 text-blue-900 dark:text-blue-200'
         }`}>
           <div>
             <p className="text-xs font-semibold uppercase tracking-wider mb-1 opacity-80">

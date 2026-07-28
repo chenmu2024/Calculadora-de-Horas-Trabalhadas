@@ -130,7 +130,7 @@ export default function App() {
               className={`px-3 py-1.5 rounded-full border transition-all ${
                 activeTab === 'daily'
                   ? 'bg-blue-600 border-blue-600 text-white font-bold shadow-sm'
-                  : 'bg-neutral-50 border-neutral-200 text-neutral-700 hover:bg-neutral-100'
+                  : 'bg-neutral-50 dark:bg-neutral-800 border-neutral-200 dark:border-neutral-700 text-neutral-700 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-700'
               }`}
             >
               Horas Diárias
@@ -142,7 +142,7 @@ export default function App() {
               className={`px-3 py-1.5 rounded-full border transition-all ${
                 activeTab === 'timesheet'
                   ? 'bg-blue-600 border-blue-600 text-white font-bold shadow-sm'
-                  : 'bg-neutral-50 border-neutral-200 text-neutral-700 hover:bg-neutral-100'
+                  : 'bg-neutral-50 dark:bg-neutral-800 border-neutral-200 dark:border-neutral-700 text-neutral-700 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-700'
               }`}
             >
               Semanal 44h
@@ -154,7 +154,7 @@ export default function App() {
               className={`px-3 py-1.5 rounded-full border transition-all cursor-pointer ${
                 activeTab === 'monthly'
                   ? 'bg-blue-600 border-blue-600 text-white font-bold shadow-sm'
-                  : 'bg-neutral-50 border-neutral-200 text-neutral-700 hover:bg-neutral-100'
+                  : 'bg-neutral-50 dark:bg-neutral-800 border-neutral-200 dark:border-neutral-700 text-neutral-700 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-700'
               }`}
             >
               Cálculo Mensal
@@ -166,7 +166,7 @@ export default function App() {
               className={`px-3 py-1.5 rounded-full border transition-all cursor-pointer ${
                 activeTab === 'banco'
                   ? 'bg-blue-600 border-blue-600 text-white font-bold shadow-sm'
-                  : 'bg-neutral-50 border-neutral-200 text-neutral-700 hover:bg-neutral-100'
+                  : 'bg-neutral-50 dark:bg-neutral-800 border-neutral-200 dark:border-neutral-700 text-neutral-700 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-700'
               }`}
             >
               Banco de Horas
@@ -178,7 +178,7 @@ export default function App() {
               className={`px-3 py-1.5 rounded-full border transition-all cursor-pointer ${
                 activeTab === 'sum'
                   ? 'bg-blue-600 border-blue-600 text-white font-bold shadow-sm'
-                  : 'bg-neutral-50 border-neutral-200 text-neutral-700 hover:bg-neutral-100'
+                  : 'bg-neutral-50 dark:bg-neutral-800 border-neutral-200 dark:border-neutral-700 text-neutral-700 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-700'
               }`}
             >
               Somador de Horas
@@ -190,7 +190,7 @@ export default function App() {
               className={`px-3 py-1.5 rounded-full border transition-all cursor-pointer ${
                 activeTab === 'holerite'
                   ? 'bg-blue-600 border-blue-600 text-white font-bold shadow-sm'
-                  : 'bg-neutral-50 border-neutral-200 text-neutral-700 hover:bg-neutral-100'
+                  : 'bg-neutral-50 dark:bg-neutral-800 border-neutral-200 dark:border-neutral-700 text-neutral-700 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-700'
               }`}
             >
               Holerite
@@ -202,7 +202,7 @@ export default function App() {
               className={`px-3 py-1.5 rounded-full border transition-all cursor-pointer ${
                 activeTab === 'rescisao'
                   ? 'bg-blue-600 border-blue-600 text-white font-bold shadow-sm'
-                  : 'bg-neutral-50 border-neutral-200 text-neutral-700 hover:bg-neutral-100'
+                  : 'bg-neutral-50 dark:bg-neutral-800 border-neutral-200 dark:border-neutral-700 text-neutral-700 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-700'
               }`}
             >
               Rescisão CLT
@@ -214,7 +214,7 @@ export default function App() {
               className={`px-3 py-1.5 rounded-full border transition-all ${
                 activeTab === 'rate'
                   ? 'bg-blue-600 border-blue-600 text-white font-bold shadow-sm'
-                  : 'bg-neutral-50 border-neutral-200 text-neutral-700 hover:bg-neutral-100'
+                  : 'bg-neutral-50 dark:bg-neutral-800 border-neutral-200 dark:border-neutral-700 text-neutral-700 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-700'
               }`}
             >
               Valor Hora
@@ -226,7 +226,7 @@ export default function App() {
               className={`px-3 py-1.5 rounded-full border transition-all ${
                 activeTab === 'overtime'
                   ? 'bg-blue-600 border-blue-600 text-white font-bold shadow-sm'
-                  : 'bg-neutral-50 border-neutral-200 text-neutral-700 hover:bg-neutral-100'
+                  : 'bg-neutral-50 dark:bg-neutral-800 border-neutral-200 dark:border-neutral-700 text-neutral-700 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-700'
               }`}
             >
               Hora Extra
@@ -238,28 +238,28 @@ export default function App() {
               className={`px-3 py-1.5 rounded-full border transition-all ${
                 activeTab === 'night'
                   ? 'bg-blue-600 border-blue-600 text-white font-bold shadow-sm'
-                  : 'bg-neutral-50 border-neutral-200 text-neutral-700 hover:bg-neutral-100'
+                  : 'bg-neutral-50 dark:bg-neutral-800 border-neutral-200 dark:border-neutral-700 text-neutral-700 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-700'
               }`}
             >
               Adicional Noturno
             </a>
             <button
               onClick={() => setIsQuickConverterOpen(true)}
-              className="px-3 py-1.5 rounded-full border border-amber-300 bg-amber-50 hover:bg-amber-100 text-amber-900 font-bold transition-all flex items-center gap-1 cursor-pointer shadow-xs"
+              className="px-3 py-1.5 rounded-full border border-amber-300 dark:border-amber-700/60 bg-amber-50 dark:bg-amber-950/40 hover:bg-amber-100 dark:hover:bg-amber-900/60 text-amber-900 dark:text-amber-200 font-bold transition-all flex items-center gap-1 cursor-pointer shadow-xs"
             >
-              <ArrowRightLeft className="w-3.5 h-3.5 text-amber-600" /> Conversor ⇄
+              <ArrowRightLeft className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" /> Conversor ⇄
             </button>
             <button
               onClick={() => setIsHolidayCalendarOpen(true)}
-              className="px-3 py-1.5 rounded-full border border-blue-200 bg-blue-50 hover:bg-blue-100 text-blue-900 font-bold transition-all flex items-center gap-1 cursor-pointer shadow-xs"
+              className="px-3 py-1.5 rounded-full border border-blue-200 dark:border-blue-800/60 bg-blue-50 dark:bg-blue-950/40 hover:bg-blue-100 dark:hover:bg-blue-900/60 text-blue-900 dark:text-blue-200 font-bold transition-all flex items-center gap-1 cursor-pointer shadow-xs"
             >
-              <Calendar className="w-3.5 h-3.5 text-blue-600" /> Dias Úteis 2026
+              <Calendar className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" /> Dias Úteis 2026
             </button>
             <button
               onClick={() => setIsLegalFAQOpen(true)}
-              className="px-3 py-1.5 rounded-full border border-indigo-200 bg-indigo-50 hover:bg-indigo-100 text-indigo-900 font-bold transition-all flex items-center gap-1 cursor-pointer shadow-xs"
+              className="px-3 py-1.5 rounded-full border border-indigo-200 dark:border-indigo-800/60 bg-indigo-50 dark:bg-indigo-950/40 hover:bg-indigo-100 dark:hover:bg-indigo-900/60 text-indigo-900 dark:text-indigo-200 font-bold transition-all flex items-center gap-1 cursor-pointer shadow-xs"
             >
-              <Scale className="w-3.5 h-3.5 text-indigo-600" /> Guia CLT 2026
+              <Scale className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" /> Guia CLT 2026
             </button>
           </div>
         </div>
@@ -337,12 +337,12 @@ export default function App() {
               </div>
 
               {/* Sidebar Info Card: Regras Rápidas CLT */}
-              <div className="bg-white rounded-2xl p-6 border border-neutral-200 shadow-sm space-y-4">
-                <div className="flex items-center gap-2 text-neutral-900 font-bold border-b border-neutral-100 pb-3">
-                  <Clock className="w-5 h-5 text-blue-600" />
+              <div className="bg-white dark:bg-neutral-900 rounded-2xl p-6 border border-neutral-200 dark:border-neutral-800 shadow-sm space-y-4 transition-colors">
+                <div className="flex items-center gap-2 text-neutral-900 dark:text-white font-bold border-b border-neutral-100 dark:border-neutral-800 pb-3">
+                  <Clock className="w-5 h-5 text-blue-600 dark:text-blue-400" />
                   <h3 className="text-sm">Resumo da Legislação CLT</h3>
                 </div>
-                <ul className="text-xs text-neutral-600 space-y-3">
+                <ul className="text-xs text-neutral-600 dark:text-neutral-300 space-y-3">
                   <li className="flex items-start gap-2">
                     <CheckCircle className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" />
                     <span><strong>Jornada Limite:</strong> Máximo de 8 horas por dia e 44 horas semanais.</span>
@@ -367,11 +367,11 @@ export default function App() {
               </div>
 
               {/* AdSense Placement Space Placeholder */}
-              <div className="bg-neutral-100/70 border border-dashed border-neutral-300 rounded-2xl p-6 text-center text-xs text-neutral-500 space-y-2">
-                <div className="font-semibold text-neutral-400 uppercase tracking-wider text-[10px]">
+              <div className="bg-neutral-100/70 dark:bg-neutral-800/60 border border-dashed border-neutral-300 dark:border-neutral-700 rounded-2xl p-6 text-center text-xs text-neutral-500 dark:text-neutral-400 space-y-2">
+                <div className="font-semibold text-neutral-400 dark:text-neutral-500 uppercase tracking-wider text-[10px]">
                   Anúncio patrocinado / AdSense
                 </div>
-                <p className="text-[11px] text-neutral-400">
+                <p className="text-[11px] text-neutral-400 dark:text-neutral-500">
                   Espaço reservado para monetização com Google AdSense.
                 </p>
               </div>

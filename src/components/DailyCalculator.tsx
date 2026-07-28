@@ -115,15 +115,15 @@ export default function DailyCalculator({ onSelectTab }: DailyCalculatorProps) {
 
   return (
     <div className="animate-in fade-in duration-500">
-      <div className="flex flex-wrap items-center justify-between gap-3 bg-blue-50/70 border border-blue-200/90 p-3 rounded-xl mb-5 no-print">
-        <div className="flex items-center gap-2 text-xs font-semibold text-blue-900">
+      <div className="flex flex-wrap items-center justify-between gap-3 bg-blue-50/70 dark:bg-blue-950/40 border border-blue-200/90 dark:border-blue-800/60 p-3 rounded-xl mb-5 no-print">
+        <div className="flex items-center gap-2 text-xs font-semibold text-blue-900 dark:text-blue-200">
           <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
           <span>💾 Salvamento automático ativo em tempo real</span>
-          <span className="text-blue-700 font-normal hidden md:inline">(Tudo o que você digita fica salvo no seu navegador)</span>
+          <span className="text-blue-700 dark:text-blue-300 font-normal hidden md:inline">(Tudo o que você digita fica salvo no seu navegador)</span>
         </div>
         <div className="flex items-center gap-2 text-xs">
-          <button onClick={copyResult} className="bg-white hover:bg-neutral-100 border border-neutral-300 text-neutral-800 px-2.5 py-1.5 rounded-lg transition-colors font-bold flex items-center gap-1 cursor-pointer shadow-2xs">
-            {copied ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5 text-blue-600" />} {copied ? 'Copiado!' : 'Copiar Resultado'}
+          <button onClick={copyResult} className="bg-white dark:bg-neutral-800 hover:bg-neutral-100 dark:hover:bg-neutral-700 border border-neutral-300 dark:border-neutral-700 text-neutral-800 dark:text-neutral-200 px-2.5 py-1.5 rounded-lg transition-colors font-bold flex items-center gap-1 cursor-pointer shadow-2xs">
+            {copied ? <Check className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" /> : <Copy className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />} {copied ? 'Copiado!' : 'Copiar Resultado'}
           </button>
           <button onClick={handlePrint} className="bg-blue-600 hover:bg-blue-700 text-white px-2.5 py-1.5 rounded-lg transition-colors font-bold flex items-center gap-1 cursor-pointer shadow-2xs">
             <Printer className="w-3.5 h-3.5 text-white" /> Imprimir / Salvar PDF
@@ -133,8 +133,8 @@ export default function DailyCalculator({ onSelectTab }: DailyCalculatorProps) {
 
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
         <div>
-          <h2 className="text-2xl font-bold text-neutral-900">Calculadora de Horas Trabalhadas Diária</h2>
-          <p className="text-neutral-600 text-sm mt-1">
+          <h2 className="text-2xl font-bold text-neutral-900 dark:text-white">Calculadora de Horas Trabalhadas Diária</h2>
+          <p className="text-neutral-600 dark:text-neutral-400 text-sm mt-1">
             Calcule o total de horas trabalhadas no dia com batida de ponto e intervalo de almoço.
           </p>
         </div>
@@ -147,11 +147,11 @@ export default function DailyCalculator({ onSelectTab }: DailyCalculatorProps) {
           >
             <Sparkles className="w-3.5 h-3.5 text-amber-300" /> Preencher Exemplo
           </button>
-          <div className="inline-flex p-1 bg-neutral-100 rounded-lg text-xs font-semibold">
+          <div className="inline-flex p-1 bg-neutral-100 dark:bg-neutral-800 rounded-lg text-xs font-semibold">
             <button
               onClick={() => setMode('4points')}
               className={`px-3 py-1.5 rounded-md transition-all cursor-pointer ${
-                mode === '4points' ? 'bg-white text-blue-600 shadow-sm' : 'text-neutral-600 hover:text-neutral-900'
+                mode === '4points' ? 'bg-white dark:bg-neutral-700 text-blue-600 dark:text-blue-400 shadow-sm font-bold' : 'text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white'
               }`}
             >
               4 Batidas (Ponto)
@@ -159,7 +159,7 @@ export default function DailyCalculator({ onSelectTab }: DailyCalculatorProps) {
             <button
               onClick={() => setMode('simple')}
               className={`px-3 py-1.5 rounded-md transition-all cursor-pointer ${
-                mode === 'simple' ? 'bg-white text-blue-600 shadow-sm' : 'text-neutral-600 hover:text-neutral-900'
+                mode === 'simple' ? 'bg-white dark:bg-neutral-700 text-blue-600 dark:text-blue-400 shadow-sm font-bold' : 'text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white'
               }`}
             >
               Entrada / Saída
@@ -169,7 +169,7 @@ export default function DailyCalculator({ onSelectTab }: DailyCalculatorProps) {
           <button
             onClick={handlePrint}
             title="Imprimir / Salvar PDF"
-            className="p-2 text-neutral-600 hover:text-blue-600 bg-neutral-100 hover:bg-neutral-200 rounded-lg transition-colors cursor-pointer"
+            className="p-2 text-neutral-600 dark:text-neutral-300 hover:text-blue-600 dark:hover:text-blue-400 bg-neutral-100 dark:bg-neutral-800 hover:bg-neutral-200 dark:hover:bg-neutral-700 rounded-lg transition-colors cursor-pointer"
           >
             <Printer className="w-4 h-4" />
           </button>
@@ -177,7 +177,7 @@ export default function DailyCalculator({ onSelectTab }: DailyCalculatorProps) {
           <button
             onClick={handleReset}
             title="Restaurar padrões"
-            className="p-2 text-neutral-500 hover:text-red-600 bg-neutral-100 hover:bg-neutral-200 rounded-lg transition-colors cursor-pointer"
+            className="p-2 text-neutral-500 dark:text-neutral-400 hover:text-red-600 dark:hover:text-red-400 bg-neutral-100 dark:bg-neutral-800 hover:bg-neutral-200 dark:hover:bg-neutral-700 rounded-lg transition-colors cursor-pointer"
           >
             <RotateCcw className="w-4 h-4" />
           </button>
@@ -186,7 +186,7 @@ export default function DailyCalculator({ onSelectTab }: DailyCalculatorProps) {
 
       {/* Quick presets for common shifts */}
       <div className="mb-6 flex flex-wrap items-center gap-2 text-xs no-print">
-        <span className="font-semibold text-neutral-500">Atalhos de Turnos:</span>
+        <span className="font-semibold text-neutral-500 dark:text-neutral-400">Atalhos de Turnos:</span>
         <button
           onClick={() => {
             setMode('4points');
@@ -195,7 +195,7 @@ export default function DailyCalculator({ onSelectTab }: DailyCalculatorProps) {
             setIn2('13:00');
             setOut2('18:00');
           }}
-          className="bg-neutral-100 hover:bg-neutral-200 text-neutral-700 px-2.5 py-1 rounded-lg transition-colors cursor-pointer font-medium"
+          className="bg-neutral-100 dark:bg-neutral-800 hover:bg-neutral-200 dark:hover:bg-neutral-700 text-neutral-700 dark:text-neutral-200 px-2.5 py-1 rounded-lg transition-colors cursor-pointer font-medium"
         >
           Comercial 8h às 18h (1h almoço)
         </button>
@@ -208,7 +208,7 @@ export default function DailyCalculator({ onSelectTab }: DailyCalculatorProps) {
             setOut2('17:48');
             setDailyTarget('08:48');
           }}
-          className="bg-neutral-100 hover:bg-neutral-200 text-neutral-700 px-2.5 py-1 rounded-lg transition-colors cursor-pointer font-medium"
+          className="bg-neutral-100 dark:bg-neutral-800 hover:bg-neutral-200 dark:hover:bg-neutral-700 text-neutral-700 dark:text-neutral-200 px-2.5 py-1 rounded-lg transition-colors cursor-pointer font-medium"
         >
           CLT 44h 2ª a 6ª (8h48m)
         </button>
@@ -220,16 +220,16 @@ export default function DailyCalculator({ onSelectTab }: DailyCalculatorProps) {
             setIn2('13:00');
             setOut2('16:00');
           }}
-          className="bg-neutral-100 hover:bg-neutral-200 text-neutral-700 px-2.5 py-1 rounded-lg transition-colors cursor-pointer font-medium"
+          className="bg-neutral-100 dark:bg-neutral-800 hover:bg-neutral-200 dark:hover:bg-neutral-700 text-neutral-700 dark:text-neutral-200 px-2.5 py-1 rounded-lg transition-colors cursor-pointer font-medium"
         >
           Manhã 7h às 16h
         </button>
       </div>
 
       {/* Target & Hourly Wage selector */}
-      <div className="mb-6 bg-neutral-50 p-4 rounded-2xl border border-neutral-200 grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs sm:text-sm">
+      <div className="mb-6 bg-neutral-50 dark:bg-neutral-800/50 p-4 rounded-2xl border border-neutral-200 dark:border-neutral-700 grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs sm:text-sm">
         <div>
-          <span className="font-semibold text-neutral-700 flex items-center gap-1.5 mb-2">
+          <span className="font-semibold text-neutral-700 dark:text-neutral-300 flex items-center gap-1.5 mb-2">
             <Info className="w-4 h-4 text-blue-500" />
             Meta de Jornada Diária (CLT):
           </span>
@@ -239,8 +239,8 @@ export default function DailyCalculator({ onSelectTab }: DailyCalculatorProps) {
               onClick={() => setDailyTarget('08:00')}
               className={`px-3 py-1.5 rounded-lg border text-xs font-medium transition-colors cursor-pointer ${
                 dailyTarget === '08:00'
-                  ? 'bg-blue-50 border-blue-300 text-blue-700 font-bold'
-                  : 'bg-white border-neutral-300 text-neutral-600 hover:bg-neutral-100'
+                  ? 'bg-blue-50 dark:bg-blue-900/30 border-blue-300 dark:border-blue-700 text-blue-700 dark:text-blue-300 font-bold'
+                  : 'bg-white dark:bg-neutral-800 border-neutral-300 dark:border-neutral-700 text-neutral-600 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-700'
               }`}
             >
               8h (2ª a Sábado)
@@ -250,8 +250,8 @@ export default function DailyCalculator({ onSelectTab }: DailyCalculatorProps) {
               onClick={() => setDailyTarget('08:48')}
               className={`px-3 py-1.5 rounded-lg border text-xs font-medium transition-colors cursor-pointer ${
                 dailyTarget === '08:48'
-                  ? 'bg-blue-50 border-blue-300 text-blue-700 font-bold'
-                  : 'bg-white border-neutral-300 text-neutral-600 hover:bg-neutral-100'
+                  ? 'bg-blue-50 dark:bg-blue-900/30 border-blue-300 dark:border-blue-700 text-blue-700 dark:text-blue-300 font-bold'
+                  : 'bg-white dark:bg-neutral-800 border-neutral-300 dark:border-neutral-700 text-neutral-600 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-700'
               }`}
             >
               8h48m (2ª a 6ª sem Sábado)
@@ -260,8 +260,8 @@ export default function DailyCalculator({ onSelectTab }: DailyCalculatorProps) {
         </div>
 
         <div>
-          <span className="font-semibold text-neutral-700 flex items-center gap-1.5 mb-2">
-            <Clock className="w-4 h-4 text-emerald-600" />
+          <span className="font-semibold text-neutral-700 dark:text-neutral-300 flex items-center gap-1.5 mb-2">
+            <Clock className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
             Estimativa Financeira em Reais (Opcional):
           </span>
           <div className="flex gap-2 items-center">
@@ -276,7 +276,7 @@ export default function DailyCalculator({ onSelectTab }: DailyCalculatorProps) {
                 value={hourlyWage}
                 onChange={e => setHourlyWage(e.target.value)}
                 placeholder="Valor/Hora (Ex: 20.00)"
-                className="w-full bg-white border border-neutral-300 rounded-lg p-1.5 pl-8 text-xs font-bold outline-none focus:ring-2 focus:ring-emerald-500 min-h-[42px]"
+                className="w-full bg-white dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-700 text-neutral-900 dark:text-white rounded-lg p-1.5 pl-8 text-xs font-bold outline-none focus:ring-2 focus:ring-emerald-500 min-h-[42px]"
               />
             </div>
             <select
@@ -284,7 +284,7 @@ export default function DailyCalculator({ onSelectTab }: DailyCalculatorProps) {
               aria-label="Percentual de hora extra"
               value={overtimePercent}
               onChange={e => setOvertimePercent(e.target.value)}
-              className="bg-white border border-neutral-300 rounded-lg p-1.5 text-xs font-bold outline-none focus:ring-2 focus:ring-emerald-500"
+              className="bg-white dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-700 text-neutral-900 dark:text-white rounded-lg p-1.5 text-xs font-bold outline-none focus:ring-2 focus:ring-emerald-500"
             >
               <option value="50">+50% HE</option>
               <option value="100">+100% HE</option>
@@ -296,83 +296,83 @@ export default function DailyCalculator({ onSelectTab }: DailyCalculatorProps) {
       {mode === '4points' ? (
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
           <div>
-            <label htmlFor="daily-in1" className="block text-xs font-semibold text-neutral-600 mb-1">Entrada 1 (Manhã)</label>
+            <label htmlFor="daily-in1" className="block text-xs font-semibold text-neutral-600 dark:text-neutral-300 mb-1">Entrada 1 (Manhã)</label>
             <input
               id="daily-in1"
               aria-label="Entrada 1 (Manhã)"
               type="time"
               value={in1}
               onChange={(e) => setIn1(e.target.value)}
-              className="w-full border border-neutral-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 outline-none"
+              className="w-full bg-white dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-700 text-neutral-900 dark:text-white rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 outline-none"
             />
           </div>
           <div>
-            <label htmlFor="daily-out1" className="block text-xs font-semibold text-neutral-600 mb-1">Saída 1 (Almoço)</label>
+            <label htmlFor="daily-out1" className="block text-xs font-semibold text-neutral-600 dark:text-neutral-300 mb-1">Saída 1 (Almoço)</label>
             <input
               id="daily-out1"
               aria-label="Saída 1 (Almoço)"
               type="time"
               value={out1}
               onChange={(e) => setOut1(e.target.value)}
-              className="w-full border border-neutral-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 outline-none"
+              className="w-full bg-white dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-700 text-neutral-900 dark:text-white rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 outline-none"
             />
           </div>
           <div>
-            <label htmlFor="daily-in2" className="block text-xs font-semibold text-neutral-600 mb-1">Entrada 2 (Retorno)</label>
+            <label htmlFor="daily-in2" className="block text-xs font-semibold text-neutral-600 dark:text-neutral-300 mb-1">Entrada 2 (Retorno)</label>
             <input
               id="daily-in2"
               aria-label="Entrada 2 (Retorno)"
               type="time"
               value={in2}
               onChange={(e) => setIn2(e.target.value)}
-              className="w-full border border-neutral-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 outline-none"
+              className="w-full bg-white dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-700 text-neutral-900 dark:text-white rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 outline-none"
             />
           </div>
           <div>
-            <label htmlFor="daily-out2" className="block text-xs font-semibold text-neutral-600 mb-1">Saída 2 (Fim)</label>
+            <label htmlFor="daily-out2" className="block text-xs font-semibold text-neutral-600 dark:text-neutral-300 mb-1">Saída 2 (Fim)</label>
             <input
               id="daily-out2"
               aria-label="Saída 2 (Fim)"
               type="time"
               value={out2}
               onChange={(e) => setOut2(e.target.value)}
-              className="w-full border border-neutral-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 outline-none"
+              className="w-full bg-white dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-700 text-neutral-900 dark:text-white rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 outline-none"
             />
           </div>
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
           <div>
-            <label htmlFor="daily-start-simple" className="block text-xs font-semibold text-neutral-600 mb-1">Hora de Entrada</label>
+            <label htmlFor="daily-start-simple" className="block text-xs font-semibold text-neutral-600 dark:text-neutral-300 mb-1">Hora de Entrada</label>
             <input
               id="daily-start-simple"
               aria-label="Hora de Entrada"
               type="time"
               value={startSimple}
               onChange={(e) => setStartSimple(e.target.value)}
-              className="w-full border border-neutral-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 outline-none"
+              className="w-full bg-white dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-700 text-neutral-900 dark:text-white rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 outline-none"
             />
           </div>
           <div>
-            <label htmlFor="daily-end-simple" className="block text-xs font-semibold text-neutral-600 mb-1">Hora de Saída</label>
+            <label htmlFor="daily-end-simple" className="block text-xs font-semibold text-neutral-600 dark:text-neutral-300 mb-1">Hora de Saída</label>
             <input
               id="daily-end-simple"
               aria-label="Hora de Saída"
               type="time"
               value={endSimple}
               onChange={(e) => setEndSimple(e.target.value)}
-              className="w-full border border-neutral-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 outline-none"
+              className="w-full bg-white dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-700 text-neutral-900 dark:text-white rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 outline-none"
             />
           </div>
           <div>
-            <label htmlFor="daily-break-simple" className="block text-xs font-semibold text-neutral-600 mb-1">Duração do Intervalo</label>
+            <label htmlFor="daily-break-simple" className="block text-xs font-semibold text-neutral-600 dark:text-neutral-300 mb-1">Duração do Intervalo</label>
             <input
               id="daily-break-simple"
               aria-label="Duração do Intervalo"
               type="time"
               value={breakTimeSimple}
               onChange={(e) => setBreakTimeSimple(e.target.value)}
-              className="w-full border border-neutral-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 outline-none"
+              className="w-full bg-white dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-700 text-neutral-900 dark:text-white rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 outline-none"
             />
           </div>
         </div>
@@ -386,8 +386,8 @@ export default function DailyCalculator({ onSelectTab }: DailyCalculatorProps) {
 
       {/* Warnings */}
       {showIntervalWarning && (
-        <div className="mb-6 bg-amber-50 border border-amber-200 text-amber-800 p-3.5 rounded-xl text-xs flex items-center gap-2">
-          <AlertCircle className="w-4 h-4 text-amber-600 shrink-0" />
+        <div className="mb-6 bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800/60 text-amber-800 dark:text-amber-200 p-3.5 rounded-xl text-xs flex items-center gap-2">
+          <AlertCircle className="w-4 h-4 text-amber-600 dark:text-amber-400 shrink-0" />
           <span>
             <strong>Atenção CLT (Art. 71):</strong> Para jornadas superiores a 6 horas diárias, é obrigatória a concessão de um intervalo de no mínimo 1 hora.
           </span>

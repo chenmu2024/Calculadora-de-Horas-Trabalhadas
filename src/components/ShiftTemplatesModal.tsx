@@ -84,20 +84,20 @@ export default function ShiftTemplatesModal({ isOpen, onClose, onApplyTemplate }
 
   return (
     <div className="fixed inset-0 bg-neutral-900/60 backdrop-blur-xs z-50 flex items-center justify-center p-4 animate-in fade-in duration-200 no-print">
-      <div className="bg-white rounded-2xl max-w-2xl w-full p-6 shadow-2xl border border-neutral-200 max-h-[90vh] overflow-y-auto">
-        <div className="flex items-center justify-between pb-4 border-b border-neutral-100">
+      <div className="bg-white dark:bg-neutral-900 rounded-2xl max-w-2xl w-full p-6 shadow-2xl border border-neutral-200 dark:border-neutral-800 max-h-[90vh] overflow-y-auto">
+        <div className="flex items-center justify-between pb-4 border-b border-neutral-100 dark:border-neutral-800">
           <div className="flex items-center gap-2">
-            <div className="p-2 bg-blue-100 text-blue-700 rounded-xl">
+            <div className="p-2 bg-blue-100 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 rounded-xl">
               <Sparkles className="w-5 h-5" />
             </div>
             <div>
-              <h3 className="text-base font-bold text-neutral-900">Modelos Prontos de Escalas de Trabalho</h3>
-              <p className="text-xs text-neutral-500">Preencha todo o cartão de ponto da semana com 1 clique</p>
+              <h3 className="text-base font-bold text-neutral-900 dark:text-white">Modelos Prontos de Escalas de Trabalho</h3>
+              <p className="text-xs text-neutral-500 dark:text-neutral-400">Preencha todo o cartão de ponto da semana com 1 clique</p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="text-neutral-400 hover:text-neutral-700 p-1 rounded-lg hover:bg-neutral-100 transition-colors"
+            className="text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-200 p-1 rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
@@ -107,21 +107,21 @@ export default function ShiftTemplatesModal({ isOpen, onClose, onApplyTemplate }
           {PRESET_TEMPLATES.map((tmpl) => (
             <div
               key={tmpl.id}
-              className="p-4 rounded-xl border border-neutral-200 hover:border-blue-300 hover:bg-blue-50/30 transition-all space-y-2 group"
+              className="p-4 rounded-xl border border-neutral-200 dark:border-neutral-800 hover:border-blue-300 dark:hover:border-blue-700 hover:bg-blue-50/30 dark:hover:bg-blue-950/20 transition-all space-y-2 group"
             >
               <div className="flex items-center justify-between flex-wrap gap-2">
-                <span className="font-bold text-sm text-neutral-900 group-hover:text-blue-700">
+                <span className="font-bold text-sm text-neutral-900 dark:text-white group-hover:text-blue-700 dark:group-hover:text-blue-400">
                   {tmpl.name}
                 </span>
-                <span className="text-[10px] font-bold bg-blue-100 text-blue-800 px-2 py-0.5 rounded-full">
+                <span className="text-[10px] font-bold bg-blue-100 dark:bg-blue-900/50 text-blue-800 dark:text-blue-200 px-2 py-0.5 rounded-full">
                   {tmpl.badge}
                 </span>
               </div>
-              <p className="text-xs text-neutral-600 leading-relaxed">
+              <p className="text-xs text-neutral-600 dark:text-neutral-300 leading-relaxed">
                 {tmpl.description}
               </p>
-              <div className="pt-2 flex items-center justify-between border-t border-neutral-100">
-                <span className="text-xs font-semibold text-neutral-500 flex items-center gap-1">
+              <div className="pt-2 flex items-center justify-between border-t border-neutral-100 dark:border-neutral-800">
+                <span className="text-xs font-semibold text-neutral-500 dark:text-neutral-400 flex items-center gap-1">
                   <Clock className="w-3.5 h-3.5" /> {tmpl.days.length} Dias Programados
                 </span>
                 <button
@@ -138,10 +138,10 @@ export default function ShiftTemplatesModal({ isOpen, onClose, onApplyTemplate }
           ))}
         </div>
 
-        <div className="pt-4 border-t border-neutral-100 flex justify-end">
+        <div className="pt-4 border-t border-neutral-100 dark:border-neutral-800 flex justify-end">
           <button
             onClick={onClose}
-            className="px-4 py-2 text-xs font-semibold text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100 rounded-lg transition-colors cursor-pointer"
+            className="px-4 py-2 text-xs font-semibold text-neutral-600 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded-lg transition-colors cursor-pointer"
           >
             Fechar
           </button>
