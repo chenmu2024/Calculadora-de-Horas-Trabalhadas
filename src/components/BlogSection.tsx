@@ -5,6 +5,7 @@ import {
   FileText, Layers, ChevronRight, X, ChevronDown, 
   UserCheck, Calendar, Calculator, ShieldCheck
 } from 'lucide-react';
+import { getHrefForTab } from '../utils/routes';
 
 interface Article {
   id: string;
@@ -62,9 +63,7 @@ export default function BlogSection({ onSelectCalculator }: { onSelectCalculator
               alt="Relógio de ponto e anotações para cálculo de horas trabalhadas diárias" 
               width={1200}
               height={675}
-              className="w-full h-64 object-cover hover:scale-105 transition-transform duration-700"
-              loading="lazy"
-              decoding="async"
+              className="w-full h-64 object-cover hover:scale-105 transition-transform duration-700" loading="lazy" decoding="async"
             />
             <figcaption className="text-center text-xs text-neutral-500 mt-2 pb-2">Controle preciso da jornada de trabalho e cálculo de horas diárias pela CLT.</figcaption>
           </figure>
@@ -79,7 +78,7 @@ export default function BlogSection({ onSelectCalculator }: { onSelectCalculator
               <li>Para calcular horas com minutos no relógio, converta os minutos dividindo por 60 (ex: 30 min = 0,5h).</li>
               <li>Jornadas acima de 6 horas exigem intervalo obrigatório de no mínimo 1 hora de repouso e alimentação.</li>
               <li>Tolerância legal no cartão de ponto: até 5 minutos por registro, não excedendo 10 minutos diários.</li>
-              <li>Você pode calcular seus horários exatos usando a <a href="https://calculadoradehorastrabalhadas.org" className="text-blue-700 font-bold underline">Calculadora de Horas Trabalhadas Online</a>.</li>
+              <li>Você pode calcular seus horários exatos usando a <a href={getHrefForTab('daily')} onClick={(e) => { e.preventDefault(); onSelectCalculator('daily'); }} className="text-blue-700 font-bold underline">Calculadora de Horas Trabalhadas Online</a>.</li>
             </ul>
           </div>
 
@@ -90,7 +89,7 @@ export default function BlogSection({ onSelectCalculator }: { onSelectCalculator
             Entender <strong>como calcular horas trabalhadas</strong> de forma precisa é essencial tanto para empregados que desejam conferir seus contracheques quanto para gestores de RH e contadores encarregados da folha de pagamento. No Brasil, as relações trabalhistas sob o regime da Consolidação das Leis do Trabalho (<a href="https://www.planalto.gov.br/ccivil_03/decreto-lei/del5452.htm" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline inline-flex items-center gap-0.5">Decreto-Lei nº 5.452/1943 <ExternalLink className="w-3 h-3" /></a>) estabelecem normas rígidas para a contagem do tempo à disposição do empregador.
           </p>
           <p>
-            O cálculo correto do cartão de ponto influencia diretamente a apuração de adicionais como <em>horas extras de 50% e 100%</em>, <em>adicional noturno</em> e os reflexos no <em>Descanso Semanal Remunerado (DSR)</em>. Por isso, a utilização de ferramentas especializadas como a nossa <a href="https://calculadoradehorastrabalhadas.org" className="text-blue-600 font-bold hover:underline">calculadora de horas trabalhadas</a> evita divergências financeiras e previne passivos trabalhistas no <a href="https://www.tst.jus.br/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline inline-flex items-center gap-0.5">Tribunal Superior do Trabalho (TST) <ExternalLink className="w-3 h-3" /></a>.
+            O cálculo correto do cartão de ponto influencia diretamente a apuração de adicionais como <em>horas extras de 50% e 100%</em>, <em>adicional noturno</em> e os reflexos no <em>Descanso Semanal Remunerado (DSR)</em>. Por isso, a utilização de ferramentas especializadas como a nossa <a href={getHrefForTab('daily')} onClick={(e) => { e.preventDefault(); onSelectCalculator('daily'); }} className="text-blue-600 font-bold hover:underline">calculadora de horas trabalhadas</a> evita divergências financeiras e previne passivos trabalhistas no <a href="https://www.tst.jus.br/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline inline-flex items-center gap-0.5">Tribunal Superior do Trabalho (TST) <ExternalLink className="w-3 h-3" /></a>.
           </p>
 
           <h2 id="art1-formula" className="text-xl font-extrabold text-neutral-900 pt-4 border-b border-neutral-200 pb-2">
@@ -180,12 +179,13 @@ export default function BlogSection({ onSelectCalculator }: { onSelectCalculator
           </div>
 
           <div className="pt-2">
-            <button
-              onClick={() => onSelect('daily')}
+            <a
+              href={getHrefForTab('daily')}
+              onClick={(e) => { e.preventDefault(); onSelectCalculator('daily'); }}
               className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-bold px-5 py-3 rounded-xl text-xs transition-colors shadow-sm cursor-pointer"
             >
               <Calculator className="w-4 h-4" /> Testar na Calculadora Diária de Horas Trabalhadas
-            </button>
+            </a>
           </div>
 
           <h2 id="art1-faq" className="text-xl font-extrabold text-neutral-900 pt-6 border-b border-neutral-200 pb-2">
@@ -201,7 +201,7 @@ export default function BlogSection({ onSelectCalculator }: { onSelectCalculator
             <div className="bg-neutral-50 p-4 rounded-xl border border-neutral-200">
               <h4 className="font-bold text-neutral-900 text-xs">Onde posso fazer o cálculo automático das minhas horas semanais?</h4>
               <p className="text-xs text-neutral-600 mt-1">
-                Você pode utilizar gratuitamente a nossa ferramenta de apuração semanal no site <a href="https://calculadoradehorastrabalhadas.org" className="text-blue-600 font-bold underline">calculadoradehorastrabalhadas.org</a> para somar os horários de segunda a domingo com exportação para Excel.
+                Você pode utilizar gratuitamente a nossa ferramenta de apuração semanal no site <a href={getHrefForTab('timesheet')} onClick={(e) => { e.preventDefault(); onSelectCalculator('timesheet'); }} className="text-blue-600 font-bold underline">calculadoradehorastrabalhadas.org</a> para somar os horários de segunda a domingo com exportação para Excel.
               </p>
             </div>
           </div>
@@ -235,9 +235,7 @@ export default function BlogSection({ onSelectCalculator }: { onSelectCalculator
               alt="Calculadora e planejamento semanal para escala de 44 horas de segunda a sexta" 
               width={1200}
               height={675}
-              className="w-full h-64 object-cover hover:scale-105 transition-transform duration-700"
-              loading="lazy"
-              decoding="async"
+              className="w-full h-64 object-cover hover:scale-105 transition-transform duration-700" loading="lazy" decoding="async"
             />
             <figcaption className="text-center text-xs text-neutral-500 mt-2 pb-2">Planejamento de escalas de 44 horas semanais e compensação de sábados.</figcaption>
           </figure>
@@ -251,7 +249,7 @@ export default function BlogSection({ onSelectCalculator }: { onSelectCalculator
               <li>A Constituição Federal (Art. 7º, XIII) fixa o limite máximo de 44 horas semanais normais.</li>
               <li>Para folgar aos sábados, a empresa compensa as 4 horas do sábado dividindo-as por 5 dias = <strong>48 minutos adicionais por dia</strong>.</li>
               <li>A jornada diária de segunda a sexta fica fixada em <strong>8 horas e 48 minutos</strong> (ou 8,80 horas decimais).</li>
-              <li>Calculadores online como o <a href="https://calculadoradehorastrabalhadas.org" className="text-emerald-800 font-bold underline">calculadoradehorastrabalhadas.org</a> automatizam a conferência de horas excedentes.</li>
+              <li>Calculadores online como o <a href={getHrefForTab('timesheet')} onClick={(e) => { e.preventDefault(); onSelectCalculator('timesheet'); }} className="text-emerald-800 font-bold underline">calculadoradehorastrabalhadas.org</a> automatizam a conferência de horas excedentes.</li>
             </ul>
           </div>
 
@@ -331,12 +329,13 @@ export default function BlogSection({ onSelectCalculator }: { onSelectCalculator
           </div>
 
           <div className="pt-2">
-            <button
-              onClick={() => onSelect('timesheet')}
+            <a
+              href={getHrefForTab('timesheet')}
+              onClick={(e) => { e.preventDefault(); onSelectCalculator('timesheet'); }}
               className="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-5 py-3 rounded-xl text-xs transition-colors shadow-sm cursor-pointer"
             >
               <Calculator className="w-4 h-4" /> Acessar Calculadora Semanal 44h na Prática
-            </button>
+            </a>
           </div>
 
           <h2 id="art2-faq" className="text-xl font-extrabold text-neutral-900 pt-6 border-b border-neutral-200 pb-2">
@@ -380,9 +379,7 @@ export default function BlogSection({ onSelectCalculator }: { onSelectCalculator
               alt="Cálculo do valor da hora salarial com base no divisor 220 da CLT" 
               width={1200}
               height={675}
-              className="w-full h-64 object-cover hover:scale-105 transition-transform duration-700"
-              loading="lazy"
-              decoding="async"
+              className="w-full h-64 object-cover hover:scale-105 transition-transform duration-700" loading="lazy" decoding="async"
             />
             <figcaption className="text-center text-xs text-neutral-500 mt-2 pb-2">Entenda como utilizar a tabela oficial de divisores CLT (220, 200, 180).</figcaption>
           </figure>
@@ -396,7 +393,7 @@ export default function BlogSection({ onSelectCalculator }: { onSelectCalculator
               <li>O valor da hora é a base fundamental para calcular qualquer hora extra, adicional noturno e rescisão.</li>
               <li>O divisor mensal oficial da CLT para 44h semanais é <strong>220</strong> (44h ÷ 6 dias úteis x 30 dias no mês).</li>
               <li>Para jornada de 40 horas semanais, utiliza-se o divisor <strong>200</strong>.</li>
-              <li>Consulte gratuitamente a ferramenta do <a href="https://calculadoradehorastrabalhadas.org" className="text-purple-800 font-bold underline">calculadoradehorastrabalhadas.org</a> para simulação imediata.</li>
+              <li>Consulte gratuitamente a ferramenta do <a href={getHrefForTab('rate')} onClick={(e) => { e.preventDefault(); onSelectCalculator('rate'); }} className="text-purple-800 font-bold underline">calculadoradehorastrabalhadas.org</a> para simulação imediata.</li>
             </ul>
           </div>
 
@@ -496,12 +493,13 @@ export default function BlogSection({ onSelectCalculator }: { onSelectCalculator
           </div>
 
           <div className="pt-2">
-            <button
-              onClick={() => onSelect('rate')}
+            <a
+              href={getHrefForTab('rate')}
+              onClick={(e) => { e.preventDefault(); onSelectCalculator('rate'); }}
               className="inline-flex items-center gap-2 bg-purple-600 hover:bg-purple-700 text-white font-bold px-5 py-3 rounded-xl text-xs transition-colors shadow-sm cursor-pointer"
             >
               <Calculator className="w-4 h-4" /> Calcular Meu Valor Hora CLT e PJ no Simulador
-            </button>
+            </a>
           </div>
 
           <h2 id="art3-faq" className="text-xl font-extrabold text-neutral-900 pt-6 border-b border-neutral-200 pb-2">
@@ -547,9 +545,7 @@ export default function BlogSection({ onSelectCalculator }: { onSelectCalculator
               alt="Cálculo de hora extra noturna com redução da hora ficta" 
               width={1200}
               height={675}
-              className="w-full h-64 object-cover hover:scale-105 transition-transform duration-700"
-              loading="lazy"
-              decoding="async"
+              className="w-full h-64 object-cover hover:scale-105 transition-transform duration-700" loading="lazy" decoding="async"
             />
             <figcaption className="text-center text-xs text-neutral-500 mt-2 pb-2">O trabalho noturno exige compensação financeira pelo desgaste e cálculo da hora reduzida.</figcaption>
           </figure>
@@ -564,7 +560,7 @@ export default function BlogSection({ onSelectCalculator }: { onSelectCalculator
               <li>Adicional Noturno Urbano: acréscimo de no mínimo <strong>20%</strong> das 22h às 05h.</li>
               <li>Hora Ficta Noturna: 1 hora no relógio equivale a <strong>52m30s</strong> (fator de conversão 1,142857).</li>
               <li>Súmula 60 do TST: Prorrogação após as 05h mantém o adicional noturno.</li>
-              <li>Use os simuladores interativos do <a href="https://calculadoradehorastrabalhadas.org" className="text-indigo-800 font-bold underline">calculadoradehorastrabalhadas.org</a> para simulação precisa.</li>
+              <li>Use os simuladores interativos do <a href={getHrefForTab('night')} onClick={(e) => { e.preventDefault(); onSelectCalculator('night'); }} className="text-indigo-800 font-bold underline">calculadoradehorastrabalhadas.org</a> para simulação precisa.</li>
             </ul>
           </div>
 
@@ -633,18 +629,20 @@ export default function BlogSection({ onSelectCalculator }: { onSelectCalculator
           </div>
 
           <div className="pt-4 flex flex-wrap gap-2">
-            <button
-              onClick={() => onSelect('overtime')}
+            <a
+              href={getHrefForTab('overtime')}
+              onClick={(e) => { e.preventDefault(); onSelectCalculator('overtime'); }}
               className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-bold px-4 py-2.5 rounded-xl text-xs transition-colors shadow-sm cursor-pointer"
             >
               <Calculator className="w-4 h-4" /> Simular Horas Extras 50% / 100%
-            </button>
-            <button
-              onClick={() => onSelect('night')}
+            </a>
+            <a
+              href={getHrefForTab('night')}
+              onClick={(e) => { e.preventDefault(); onSelectCalculator('night'); }}
               className="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-4 py-2.5 rounded-xl text-xs transition-colors shadow-sm cursor-pointer"
             >
               <MoonIcon className="w-4 h-4 text-indigo-200" /> Simular Adicional Noturno e DSR
-            </button>
+            </a>
           </div>
 
           <h2 id="art4-faq" className="text-xl font-extrabold text-neutral-900 pt-6 border-b border-neutral-200 pb-2">
@@ -790,7 +788,7 @@ export default function BlogSection({ onSelectCalculator }: { onSelectCalculator
           {/* Footer of Reader */}
           <div className="flex justify-between items-center pt-4 border-t border-neutral-200">
             <span className="text-xs text-neutral-500">
-              Fonte Oficial: <a href="https://calculadoradehorastrabalhadas.org" className="text-blue-600 font-bold underline">calculadoradehorastrabalhadas.org</a>
+              Fonte Oficial: <a href={getHrefForTab('daily')} onClick={(e) => { e.preventDefault(); onSelectCalculator('daily'); }} className="text-blue-600 font-bold underline">calculadoradehorastrabalhadas.org</a>
             </span>
             <button
               onClick={() => setActiveArticleId(null)}

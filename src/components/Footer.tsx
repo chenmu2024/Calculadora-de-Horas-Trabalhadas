@@ -60,6 +60,51 @@ export default function Footer({ setActiveTab }: FooterProps) {
                 Calculadora de Adicional Noturno
               </a>
             </li>
+            <li>
+              <a href={getHrefForTab('escala12x36')} onClick={(e) => { e.preventDefault(); handleNav('escala12x36'); }} className="hover:text-white transition-colors" title="Calculadora de Escala 12x36 CLT">
+                Escala 12x36 (Plantões)
+              </a>
+            </li>
+            <li>
+              <a href={getHrefForTab('faltas')} onClick={(e) => { e.preventDefault(); handleNav('faltas'); }} className="hover:text-white transition-colors" title="Calculadora de Faltas, Atrasos e DSR">
+                Atrasos e Faltas (Perda DSR)
+              </a>
+            </li>
+            <li>
+              <a href={getHrefForTab('ferias')} onClick={(e) => { e.preventDefault(); handleNav('ferias'); }} className="hover:text-white transition-colors" title="Calculadora de Férias CLT 2026">
+                Calculadora de Férias CLT
+              </a>
+            </li>
+            <li>
+              <a href={getHrefForTab('decimo')} onClick={(e) => { e.preventDefault(); handleNav('decimo'); }} className="hover:text-white transition-colors" title="Calculadora de 13º Salário 2026">
+                Calculadora de 13º Salário
+              </a>
+            </li>
+            <li>
+              <a href={getHrefForTab('seguro')} onClick={(e) => { e.preventDefault(); handleNav('seguro'); }} className="hover:text-white transition-colors" title="Calculadora de Seguro-Desemprego 2026">
+                Seguro-Desemprego
+              </a>
+            </li>
+            <li>
+              <a href={getHrefForTab('insalubridade')} onClick={(e) => { e.preventDefault(); handleNav('insalubridade'); }} className="hover:text-white transition-colors" title="Calculadora de Insalubridade e Periculosidade">
+                Insalubridade e Periculosidade
+              </a>
+            </li>
+            <li>
+              <a href={getHrefForTab('cltpj')} onClick={(e) => { e.preventDefault(); handleNav('cltpj'); }} className="hover:text-white transition-colors" title="Comparador Salarial CLT vs PJ">
+                Comparador CLT vs PJ
+              </a>
+            </li>
+            <li>
+              <a href={getHrefForTab('holerite')} onClick={(e) => { e.preventDefault(); handleNav('holerite'); }} className="hover:text-white transition-colors" title="Simulador de Holerite e Salário Líquido">
+                Simulador de Holerite
+              </a>
+            </li>
+            <li>
+              <a href={getHrefForTab('rescisao')} onClick={(e) => { e.preventDefault(); handleNav('rescisao'); }} className="hover:text-white transition-colors" title="Calculadora de Rescisão Trabalhista CLT">
+                Calculadora de Rescisão
+              </a>
+            </li>
           </ul>
         </div>
 

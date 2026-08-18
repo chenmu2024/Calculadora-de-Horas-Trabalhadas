@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { calculateDuration, minutesToTime, timeToMinutes } from '../utils/time';
-import { Clock, AlertCircle, Copy, Check, Info, Printer, RotateCcw, Sparkles } from 'lucide-react';
+import { Clock, AlertCircle, Copy, Check, Info, Printer, RotateCcw, Sparkles, ArrowRight } from 'lucide-react';
 import InternalLinkCTA from './InternalLinkCTA';
 import CLTAlertBanner from './CLTAlertBanner';
 
@@ -459,6 +459,30 @@ export default function DailyCalculator({ onSelectTab }: DailyCalculatorProps) {
           </button>
         </div>
       </div>
+
+      {/* Smart Contextual Overtime Recommendation */}
+      {overtimeMin > 0 && onSelectTab && (
+        <div className="bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800/80 rounded-2xl p-4 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs no-print transition-colors">
+          <div className="flex items-center gap-2.5">
+            <Sparkles className="w-5 h-5 text-amber-600 dark:text-amber-400 shrink-0" />
+            <div>
+              <strong className="text-amber-950 dark:text-amber-200 font-bold block">
+                Você acumulou {overtimeFormatted} de horas extras hoje!
+              </strong>
+              <span className="text-amber-800 dark:text-amber-300">
+                Deseja calcular o valor exato a receber em R$ com adicional de 50%, 100% e reflexo no DSR?
+              </span>
+            </div>
+          </div>
+          <button
+            onClick={() => onSelectTab('overtime')}
+            className="shrink-0 bg-amber-500 hover:bg-amber-600 text-neutral-900 font-bold px-3.5 py-2 rounded-xl transition-colors shadow-xs flex items-center gap-1.5 cursor-pointer"
+          >
+            <span>Calcular Hora Extra</span>
+            <ArrowRight className="w-3.5 h-3.5" />
+          </button>
+        </div>
+      )}
 
       {onSelectTab && <InternalLinkCTA currentTab="daily" onSelectTab={onSelectTab} />}
     </div>

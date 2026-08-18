@@ -17,6 +17,13 @@ const TAB_NAMES: Record<string, string> = {
   rate: 'Valor da Hora',
   overtime: 'Horas Extras',
   night: 'Adicional Noturno',
+  escala12x36: 'Escala 12x36',
+  faltas: 'Atrasos e Faltas (DSR)',
+  ferias: 'Calculadora de Férias',
+  decimo: '13º Salário',
+  seguro: 'Seguro-Desemprego',
+  insalubridade: 'Insalubridade e Periculosidade',
+  cltpj: 'Comparador CLT x PJ',
   excel: 'Planilhas em Excel',
   blog: 'Guia da CLT',
   about: 'Sobre Nós',
@@ -29,16 +36,16 @@ export default function Breadcrumb({ activeTab, onSelectTab }: BreadcrumbProps) 
   const currentLabel = TAB_NAMES[activeTab] || 'Calculadora';
 
   return (
-    <nav aria-label="Breadcrumb" className="mb-4 text-xs text-neutral-500 flex items-center gap-1.5 flex-wrap no-print">
+    <nav aria-label="Breadcrumb" className="mb-4 text-xs text-neutral-500 dark:text-neutral-400 flex items-center gap-1.5 flex-wrap no-print">
       <button 
         onClick={() => onSelectTab('daily')}
-        className="hover:text-blue-600 transition-colors flex items-center gap-1 font-medium cursor-pointer"
+        className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors flex items-center gap-1 font-medium cursor-pointer"
       >
         <Home className="w-3.5 h-3.5 text-neutral-400" />
         <span>Início</span>
       </button>
-      <ChevronRight className="w-3 h-3 text-neutral-300 shrink-0" />
-      <span className="font-semibold text-neutral-800 bg-neutral-100 px-2 py-0.5 rounded-md">
+      <ChevronRight className="w-3 h-3 text-neutral-300 dark:text-neutral-600 shrink-0" />
+      <span className="font-semibold text-neutral-800 dark:text-neutral-200 bg-neutral-100 dark:bg-neutral-800 px-2 py-0.5 rounded-md">
         {currentLabel}
       </span>
     </nav>

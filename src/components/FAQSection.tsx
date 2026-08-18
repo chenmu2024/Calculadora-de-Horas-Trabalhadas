@@ -341,7 +341,7 @@ export default function FAQSection({ activeTab = 'daily', onSelectTab }: FAQSect
       </div>
 
       {/* FAQ Accordion List */}
-      <div className="space-y-3">
+      <div className="space-y-3" itemScope itemType="https://schema.org/FAQPage">
         {filteredFaqs.length === 0 ? (
           <div className="p-8 text-center bg-neutral-50 rounded-2xl border border-dashed border-neutral-300 text-neutral-500 space-y-2">
             <HelpCircle className="w-8 h-8 text-neutral-400 mx-auto" />
@@ -360,7 +360,7 @@ export default function FAQSection({ activeTab = 'daily', onSelectTab }: FAQSect
             const feedback = feedbackGiven[faq.id];
 
             return (
-              <div key={faq.id} className="border border-neutral-200 rounded-xl overflow-hidden transition-all duration-200">
+              <div key={faq.id} className="border border-neutral-200 rounded-xl overflow-hidden transition-all duration-200" itemScope itemProp="mainEntity" itemType="https://schema.org/Question">
                 <button
                   onClick={() => setOpenId(isOpen ? null : faq.id)}
                   className={`w-full p-4 text-left font-bold text-xs sm:text-sm text-neutral-800 flex items-center justify-between gap-4 transition-colors cursor-pointer ${
@@ -377,8 +377,8 @@ export default function FAQSection({ activeTab = 'daily', onSelectTab }: FAQSect
                 </button>
 
                 {isOpen && (
-                  <div className="p-4 sm:p-5 text-xs sm:text-sm text-neutral-600 leading-relaxed bg-white space-y-4">
-                    <p>{faq.a}</p>
+                  <div className="p-4 sm:p-5 text-xs sm:text-sm text-neutral-600 leading-relaxed bg-white space-y-4" itemScope itemProp="acceptedAnswer" itemType="https://schema.org/Answer">
+                    <p itemProp="text">{faq.a}</p>
 
                     {/* Bottom Toolbar: Direct CTA & Feedback Buttons */}
                     <div className="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-neutral-100 text-xs">

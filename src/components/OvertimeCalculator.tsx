@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { DollarSign, Clock, Printer, Copy, Check, Download, Sparkles, Moon } from 'lucide-react';
+import { DollarSign, Clock, Printer, Copy, Check, Download, Sparkles, Moon, ArrowRight } from 'lucide-react';
 import { generateTimesheetCSV } from '../utils/excelGenerator';
 import InternalLinkCTA from './InternalLinkCTA';
 
@@ -475,6 +475,30 @@ Calculado em calculadoradehorastrabalhadas.org`;
           <DollarSign className="w-8 h-8 text-white" />
         </div>
       </div>
+
+      {/* Smart Contextual Holerite Recommendation */}
+      {results.grandTotalOT > 0 && onSelectTab && (
+        <div className="bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800/80 rounded-2xl p-4 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs no-print transition-colors">
+          <div className="flex items-center gap-2.5">
+            <Sparkles className="w-5 h-5 text-emerald-600 dark:text-emerald-400 shrink-0" />
+            <div>
+              <strong className="text-emerald-950 dark:text-emerald-200 font-bold block">
+                Total de Extras a Receber: R$ {results.grandTotalOT.toFixed(2).replace('.', ',')}
+              </strong>
+              <span className="text-emerald-800 dark:text-emerald-300">
+                Veja o impacto líquido real no seu salário com descontos progressivos do INSS e IRRF 2026.
+              </span>
+            </div>
+          </div>
+          <button
+            onClick={() => onSelectTab('holerite')}
+            className="shrink-0 bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-3.5 py-2 rounded-xl transition-colors shadow-xs flex items-center gap-1.5 cursor-pointer"
+          >
+            <span>Simular Holerite Completo</span>
+            <ArrowRight className="w-3.5 h-3.5" />
+          </button>
+        </div>
+      )}
 
       {onSelectTab && <InternalLinkCTA currentTab="overtime" onSelectTab={onSelectTab} />}
     </div>

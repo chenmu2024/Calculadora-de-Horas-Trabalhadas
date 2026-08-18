@@ -20,6 +20,41 @@ const PAGE_META: Record<string, { title: string; description: string; canonical:
     description: 'Calcule o total de horas trabalhadas no mês inteiro. Simulação completa com divisor 220, saldo de horas e total a receber.',
     canonical: 'https://calculadoradehorastrabalhadas.org/calculadora-mensal'
   },
+  escala12x36: {
+    title: 'Calculadora de Escala 12x36 CLT - Plantões, Noturno e Feriados',
+    description: 'Calcule horas trabalhadas na escala 12x36, adicional noturno urbano com prorrogação (Súmula 60 TST), feriados em dobro e salário bruto.',
+    canonical: 'https://calculadoradehorastrabalhadas.org/escala-12x36'
+  },
+  faltas: {
+    title: 'Calculadora de Desconto de Faltas, Atrasos e Perda do DSR CLT',
+    description: 'Calcule o desconto no salário por atrasos em minutos, faltas injustificadas e reflexo na perda do DSR conforme o Artigo 6º da Lei 605/49.',
+    canonical: 'https://calculadoradehorastrabalhadas.org/atrasos-e-faltas'
+  },
+  ferias: {
+    title: 'Calculadora de Férias CLT 2026 - 1/3 Constitucional, Venda e Impostos',
+    description: 'Calcule o valor exato a receber de férias com 1/3 constitucional, abono pecuniário (venda de 10 dias), adiantamento de 13º e descontos INSS/IRRF.',
+    canonical: 'https://calculadoradehorastrabalhadas.org/calculadora-de-ferias'
+  },
+  decimo: {
+    title: 'Calculadora de 13º Salário 2026 - 1ª e 2ª Parcelas CLT',
+    description: 'Calcule o valor exato da 1ª e 2ª parcela do 13º salário. Apuração proporcional com descontos oficiais de INSS e IRRF 2026.',
+    canonical: 'https://calculadoradehorastrabalhadas.org/decimo-terceiro'
+  },
+  seguro: {
+    title: 'Calculadora de Seguro-Desemprego 2026 - Valor e Parcelas MTE',
+    description: 'Simule o valor e a quantidade de parcelas (3 a 5) do seu Seguro-Desemprego conforme a tabela oficial do Ministério do Trabalho 2026.',
+    canonical: 'https://calculadoradehorastrabalhadas.org/seguro-desemprego'
+  },
+  insalubridade: {
+    title: 'Calculadora de Insalubridade e Periculosidade CLT 2026',
+    description: 'Calcule o adicional de insalubridade (10%, 20%, 40%) e periculosidade (30%) com reflexos no 13º salário, férias e FGTS.',
+    canonical: 'https://calculadoradehorastrabalhadas.org/insalubridade-e-periculosidade'
+  },
+  cltpj: {
+    title: 'Calculadora CLT x PJ 2026 - Comparador Salarial e Benefícios',
+    description: 'Compare seu salário CLT líquido com propostas PJ. Descubra quanto cobrar como PJ para compensar férias, 13º salário e FGTS.',
+    canonical: 'https://calculadoradehorastrabalhadas.org/calculadora-clt-pj'
+  },
   banco: {
     title: 'Calculadora de Banco de Horas e Saldo - CLT',
     description: 'Calcule o saldo do seu banco de horas. Descubra se você tem horas a compensar ou a receber como hora extra conforme a convenção CLT.',
@@ -84,6 +119,11 @@ const PAGE_META: Record<string, { title: string; description: string; canonical:
     title: 'Política de Privacidade e Conformidade LGPD',
     description: 'Entenda como garantimos a total privacidade dos seus dados. Processamento 100% no seu navegador sem armazenamento em servidores.',
     canonical: 'https://calculadoradehorastrabalhadas.org/privacidade'
+  },
+  'not-found': {
+    title: '404 - Página Não Encontrada | Calculadora de Horas',
+    description: 'A página que você está procurando não existe ou foi movida.',
+    canonical: 'https://calculadoradehorastrabalhadas.org/404'
   }
 };
 
@@ -124,6 +164,11 @@ export default function SEOHead({ activeTab }: SEOHeadProps) {
     setMetaTag('og:locale', 'pt_BR');
     setMetaTag('og:site_name', 'Calculadora de Horas Trabalhadas');
     setMetaTag('og:image', 'https://calculadoradehorastrabalhadas.org/og-image.png');
+    setMetaTag('og:updated_time', '2026-08-18T12:00:00+00:00');
+    if (activeTab === 'blog') {
+      setMetaTag('article:published_time', '2026-01-01T12:00:00+00:00');
+      setMetaTag('article:modified_time', '2026-08-18T12:00:00+00:00');
+    }
 
     setMetaTag('twitter:card', 'summary_large_image', false);
     setMetaTag('twitter:title', meta.title, false);
@@ -162,6 +207,130 @@ export default function SEOHead({ activeTab }: SEOHeadProps) {
     // Dynamic HowTo & FAQ Generator per tool tab
     const getTabHowToAndFAQs = (tab: string) => {
       switch (tab) {
+        case 'escala12x36':
+          return {
+            howTo: {
+              "@type": "HowTo",
+              "name": "Como calcular o salário e horas na escala 12x36 CLT",
+              "description": "Passo a passo para apurar plantões, adicional noturno, hora ficta e feriados na escala 12x36.",
+              "step": [
+                { "@type": "HowToStep", "position": 1, "name": "Informe seu salário bruto e número de plantões", "text": "Insira o salário contratual e o número de plantões realizados (geralmente 15 em meses de 30 dias e 16 em meses de 31 dias)." },
+                { "@type": "HowToStep", "position": 2, "name": "Selecione o turno (Diurno ou Noturno)", "text": "No turno noturno (19h às 07h), o sistema aplica a hora ficta reduzida (52m30s) e adicional noturno de 20% com prorrogação após as 05h (Súmula 60 TST)." },
+                { "@type": "HowToStep", "position": 3, "name": "Verifique feriados trabalhados e insalubridade", "text": "Confira o pagamento de plantões em feriados e o resumo de ganhos brutos totais no mês." }
+              ]
+            },
+            faqs: [
+              { "name": "Quantas horas mensais tem a escala 12x36?", "answer": "Em um mês de 30 dias com 15 plantões de 12 horas, o total é de 180 horas físicas trabalhadas. Em meses de 31 dias com 16 plantões, o total é de 192 horas." },
+              { "name": "Como funciona o adicional noturno na escala 12x36?", "answer": "Pela Súmula 60 do TST, no plantão das 19h às 07h, as horas das 22h às 05h recebem adicional noturno de 20% com hora ficta de 52m30s, e as horas prorrogadas das 05h às 07h continuam remuneradas com adicional noturno." },
+              { "name": "Feriado na escala 12x36 é pago em dobro?", "answer": "O Artigo 59-A da CLT estabelece que o salário mensal já remunera os descansos, mas diversas Convenções Coletivas (CCT) e a jurisprudência da Súmula 444 do TST garantem o pagamento em dobro de plantões em feriados." }
+            ]
+          };
+        case 'faltas':
+          return {
+            howTo: {
+              "@type": "HowTo",
+              "name": "Como calcular descontos de faltas, atrasos e perda do DSR na CLT",
+              "description": "Passo a passo para apurar descontos salariais por minutos de atraso, faltas sem atestado e perda do repouso semanal.",
+              "step": [
+                { "@type": "HowToStep", "position": 1, "name": "Informe o salário mensal e carga horária", "text": "Digite o salário bruto contratual e a jornada semanal para apuração do valor do minuto e do dia trabalhado (divisor 30)." },
+                { "@type": "HowToStep", "position": 2, "name": "Insira os minutos de atraso e faltas", "text": "Informe os minutos acumulados que ultrapassaram a tolerância legal de 10 min/dia e os dias de falta sem justificativa legal." },
+                { "@type": "HowToStep", "position": 3, "name": "Calcule a perda do DSR", "text": "Pelo Art. 6º da Lei 605/49, a ausência injustificada autoriza o desconto de 1 dia de Descanso Semanal Remunerado (domingo)." }
+              ]
+            },
+            faqs: [
+              { "name": "Qual é a tolerância legal para atrasos no ponto?", "answer": "O Artigo 58, § 1º da CLT e a Súmula 366 do TST estabelecem tolerância de até 5 minutos por registro, com teto de 10 minutos no dia. Se ultrapassar 10 minutos, desconta-se a totalidade do atraso." },
+              { "name": "Falta injustificada desconta o domingo (DSR)?", "answer": "Sim. De acordo com o Artigo 6º da Lei nº 605/1949, para ter direito à remuneração do repouso semanal, o empregado deve ter trabalhado durante toda a semana anterior sem faltas não justificadas." },
+              { "name": "Quais faltas são abonadas pela CLT?", "answer": "Faltas justificadas pelo Art. 473 da CLT (como casamento, falecimento de parentes diretos, nascimento de filho, doação de sangue e atestado médico) não podem ser descontadas nem causam perda do DSR." }
+            ]
+          };
+        case 'ferias':
+          return {
+            howTo: {
+              "@type": "HowTo",
+              "name": "Como calcular o valor das Férias CLT com 1/3 e Abono Pecuniário",
+              "description": "Passo a passo para calcular férias proporcionais, 1/3 constitucional, venda de 10 dias e descontos legais.",
+              "step": [
+                { "@type": "HowToStep", "position": 1, "name": "Insira o salário bruto e período de férias", "text": "Digite o salário atual e selecione a quantidade de dias a usufruir (30, 20 ou 15 dias)." },
+                { "@type": "HowToStep", "position": 2, "name": "Decida sobre o abono pecuniário (venda de dias)", "text": "Pelo Art. 143 da CLT, o trabalhador pode converter até 1/3 do período (10 dias) em dinheiro com isenção de INSS e IRRF." },
+                { "@type": "HowToStep", "position": 3, "name": "Confira o valor líquido a receber 2 dias antes", "text": "O sistema calcula o 1/3 constitucional, deduz o INSS e IRRF progressivos de 2026 e exibe o valor líquido exato que deve estar na conta até 2 dias antes do início do gozo (Art. 145 CLT)." }
+              ]
+            },
+            faqs: [
+              { "name": "Quando as férias devem ser pagas pelo empregador?", "answer": "Pelo Artigo 145 da CLT, o pagamento das férias e do 1/3 constitucional deve ser efetuado até 2 (dois) dias antes do início do período de gozo." },
+              { "name": "Vender 10 dias de férias (abono pecuniário) tem desconto de INSS?", "answer": "Não. O valor recebido referente ao abono pecuniário e seu respectivo 1/3 constitucional tem natureza indenizatória e é 100% isento de descontos de INSS e Imposto de Renda." },
+              { "name": "Pode dividir as férias em quantas vezes?", "answer": "Com a Reforma Trabalhista (Art. 134, § 1º da CLT), as férias podem ser usufruídas em até 3 períodos, desde que um deles não seja inferior a 14 dias corridos e os demais não sejam inferiores a 5 dias corridos cada." }
+            ]
+          };
+        case 'decimo':
+          return {
+            howTo: {
+              "@type": "HowTo",
+              "name": "Como calcular o 13º Salário (1ª e 2ª Parcelas)",
+              "description": "Passo a passo para calcular as parcelas do décimo terceiro com base nos meses trabalhados e deduções legais.",
+              "step": [
+                { "@type": "HowToStep", "position": 1, "name": "Informe o salário bruto e meses trabalhados", "text": "Digite seu salário contratual e selecione quantos meses trabalhou por mais de 15 dias no ano." },
+                { "@type": "HowToStep", "position": 2, "name": "Calcule a 1ª parcela (sem descontos)", "text": "A 1ª parcela equivale a 50% do valor bruto devido, sem qualquer desconto de INSS ou IRRF, paga entre 1º de fevereiro e 30 de novembro." },
+                { "@type": "HowToStep", "position": 3, "name": "Calcule a 2ª parcela com deduções", "text": "A 2ª parcela (paga até 20 de dezembro) desconta o valor adiantado na 1ª e todas as alíquotas de INSS e IRRF progressivos." }
+              ]
+            },
+            faqs: [
+              { "name": "Quais são as datas de pagamento do 13º salário?", "answer": "A 1ª parcela deve ser paga entre 1º de fevereiro e 30 de novembro. A 2ª parcela deve ser creditada impreterivelmente até o dia 20 de dezembro (Lei 4.749/65)." },
+              { "name": "A 1ª parcela do 13º tem desconto de INSS ou Imposto de Renda?", "answer": "Não. A 1ª parcela é paga integralmente (50% do valor bruto). Todos os descontos legais de INSS e IRRF incidem exclusivamente na 2ª parcela." },
+              { "name": "Como funciona o cálculo proporcional do 13º salário?", "answer": "Para cada mês em que você trabalhou 15 dias ou mais com carteira assinada, você adquire o direito a 1/12 avos do seu salário integral de dezembro." }
+            ]
+          };
+        case 'seguro':
+          return {
+            howTo: {
+              "@type": "HowTo",
+              "name": "Como calcular o Seguro-Desemprego 2026",
+              "description": "Veja como apurar a média dos 3 últimos salários e determinar a quantidade de parcelas de 3 a 5.",
+              "step": [
+                { "@type": "HowToStep", "position": 1, "name": "Selecione o número da solicitação", "text": "Escolha se é a 1ª, 2ª ou 3ª solicitação do benefício para validar os meses de carência exigidos por lei." },
+                { "@type": "HowToStep", "position": 2, "name": "Informe os 3 últimos salários recebidos", "text": "Digite o salário bruto dos últimos 3 meses antes da rescisão para obter a média salarial apurada." },
+                { "@type": "HowToStep", "position": 3, "name": "Consulte o valor e número de parcelas", "text": "A calculadora aplica as faixas oficiais de cálculo do MTE 2026 e o piso de R$ 1.518,00." }
+              ]
+            },
+            faqs: [
+              { "name": "Qual é o valor mínimo e máximo do Seguro-Desemprego em 2026?", "answer": "O valor mínimo de cada parcela é de R$ 1.518,00 (Salário Mínimo 2026) e o teto máximo fixado pelo Ministério do Trabalho é de R$ 2.313,74." },
+              { "name": "Quantos meses de carteira assinada preciso para pedir seguro-desemprego?", "answer": "Na 1ª solicitação, são exigidos pelo menos 12 meses nos últimos 18 meses. Na 2ª solicitação, 9 meses nos últimos 12 meses. A partir da 3ª, bastam 6 meses ininterruptos." },
+              { "name": "Qual o prazo para dar entrada no seguro-desemprego?", "answer": "O trabalhador tem do 7º ao 120º dia corrido após a data da demissão sem justa causa para solicitar o benefício no portal Gov.br ou aplicativo Carteira de Trabalho Digital." }
+            ]
+          };
+        case 'insalubridade':
+          return {
+            howTo: {
+              "@type": "HowTo",
+              "name": "Como calcular Insalubridade e Periculosidade",
+              "description": "Passo a passo para apurar o valor do adicional de insalubridade (10%, 20%, 40%) ou periculosidade (30%) e seus reflexos.",
+              "step": [
+                { "@type": "HowToStep", "position": 1, "name": "Escolha entre Insalubridade e Periculosidade", "text": "Defina se o risco decorre de agentes nocivos à saúde (insalubre) ou perigo iminente de morte/eletricidade/motocicleta (perigoso)." },
+                { "@type": "HowToStep", "position": 2, "name": "Defina a base e o grau percentual", "text": "Para insalubridade, selecione o grau mínimo (10%), médio (20%) ou máximo (40%) sobre o salário mínimo. Para periculosidade, a alíquota é de 30% sobre o salário base." },
+                { "@type": "HowToStep", "position": 3, "name": "Apure os reflexos trabalhistas", "text": "O valor integra a remuneração para fins de 13º salário, férias com 1/3 constitucional, horas extras e FGTS." }
+              ]
+            },
+            faqs: [
+              { "name": "Qual é a base de cálculo do adicional de insalubridade?", "answer": "Pela jurisprudência do STF (Súmula Vinculante nº 4), o adicional de insalubridade é calculado sobre o Salário Mínimo Nacional, salvo se a Convenção Coletiva de Trabalho (CCT) estabelecer o salário base da categoria." },
+              { "name": "Pode receber insalubridade e periculosidade ao mesmo tempo?", "answer": "Não. Conforme o Artigo 193, § 2º da CLT e súmulas do TST, os adicionais não são cumulativos para a mesma atividade; o trabalhador pode optar pelo que for mais vantajoso." }
+            ]
+          };
+        case 'cltpj':
+          return {
+            howTo: {
+              "@type": "HowTo",
+              "name": "Como comparar proposta de trabalho CLT vs PJ",
+              "description": "Veja como colocar na balança o salário líquido CLT, pacote de benefícios e impostos do Simples Nacional.",
+              "step": [
+                { "@type": "HowToStep", "position": 1, "name": "Preencha o salário CLT e benefícios", "text": "Digite seu salário bruto, vale refeição, plano de saúde e previdência oferecidos pela empresa." },
+                { "@type": "HowToStep", "position": 2, "name": "Informe a proposta e despesas da empresa PJ", "text": "Insira o valor negociado da nota fiscal PJ, alíquota estimada do Simples (ex: 6% Anexo III) e custos com contador." },
+                { "@type": "HowToStep", "position": 3, "name": "Compare o líquido livre e o multiplicador ideal", "text": "A ferramenta calcula a regra padrão do mercado (1.55x a 1.8x) para garantir que você não perca dinheiro ao abrir CNPJ." }
+              ]
+            },
+            faqs: [
+              { "name": "Quanto cobrar como PJ para empatar com a CLT?", "answer": "A regra prática recomendada por consultores de RH e contabilidade é multiplicar o salário bruto CLT por 1,55 a 1,80 para cobrir 13º, férias remuneradas, FGTS, plano de saúde e impostos do CNPJ." },
+              { "name": "Qual imposto um profissional PJ paga no Simples Nacional?", "answer": "Prestadores de serviços no Simples Nacional podem pagar a partir de 6% (Anexo III com Fator R) ou 15,5% (Anexo V), além da contribuição previdenciária (INSS de 11%) sobre o pró-labore." }
+            ]
+          };
         case 'rescisao':
           return {
             howTo: {
@@ -281,6 +450,37 @@ export default function SEOHead({ activeTab }: SEOHeadProps) {
               { "name": "Como funciona o fechamento da folha de ponto semanal?", "answer": "O fechamento compara o total de horas trabalhadas na semana com a jornada contratada, destinando o excedente para banco de horas ou pagamento em horas extras." }
             ]
           };
+        case 'blog':
+          return {
+            article: {
+              "@type": "Article",
+              "headline": "Guia Completo da CLT e Horas Trabalhadas 2026",
+              "description": "Aprenda tudo sobre regras de ponto, tolerância de 10 minutos, intervalo intrajornada, adicional noturno e divisor 220 da CLT.",
+              "author": {
+                "@type": "Organization",
+                "name": "CalculadoraDeHorasTrabalhadas.org"
+              },
+              "publisher": {
+                "@type": "Organization",
+                "name": "CalculadoraDeHorasTrabalhadas.org",
+                "logo": {
+                  "@type": "ImageObject",
+                  "url": "https://calculadoradehorastrabalhadas.org/favicon.ico"
+                }
+              },
+              "datePublished": "2026-01-01",
+              "dateModified": "2026-08-18",
+              "mainEntityOfPage": {
+                "@type": "WebPage",
+                "@id": "https://calculadoradehorastrabalhadas.org/guia-clt"
+              }
+            },
+            faqs: [
+              { "name": "Qual é a jornada de trabalho padrão na CLT?", "answer": "A jornada de trabalho padrão máxima permitida pela Constituição Federal é de 8 horas diárias e 44 horas semanais." },
+              { "name": "Como é o cálculo de horas extras na CLT?", "answer": "Horas extras são pagas com acréscimo mínimo de 50% em dias úteis, e 100% aos domingos e feriados." },
+              { "name": "O que é o adicional noturno?", "answer": "Trabalho realizado entre 22h e 5h (urbano) tem acréscimo mínimo de 20% sobre a hora diurna, além da contagem da hora reduzida de 52m30s." }
+            ]
+          };
         default:
           return {
             howTo: {
@@ -317,14 +517,6 @@ export default function SEOHead({ activeTab }: SEOHeadProps) {
           "publisher": {
             "@id": "https://calculadoradehorastrabalhadas.org/#organization"
           },
-          "potentialAction": {
-            "@type": "SearchAction",
-            "target": {
-              "@type": "EntryPoint",
-              "urlTemplate": "https://calculadoradehorastrabalhadas.org/guia-clt?q={search_term_string}"
-            },
-            "query-input": "required name=search_term_string"
-          },
           "inLanguage": "pt-BR"
         },
         {
@@ -338,9 +530,12 @@ export default function SEOHead({ activeTab }: SEOHeadProps) {
           "browserRequirements": "Requires JavaScript",
           "description": meta.description,
           "inLanguage": ["pt-BR", "pt-PT"],
-          "softwareVersion": "2026.2.0",
+          "softwareVersion": "2026.3.0",
           "featureList": [
             "Cálculo de horas trabalhadas com desconto de intervalo intrajornada",
+            "Calculadora de escala 12x36 com hora noturna e feriados",
+            "Cálculo de desconto de faltas, atrasos e perda do DSR (Lei 605/49)",
+            "Calculadora de férias CLT com 1/3 constitucional e abono pecuniário",
             "Simulação completa de holerite com INSS progressivo e IRRF",
             "Cálculo de horas extras 50% e 100% com reflexo no DSR (Súmula 172 TST)",
             "Apuração de adicional noturno urbano com hora ficta reduzida de 52m30s",
@@ -402,21 +597,28 @@ export default function SEOHead({ activeTab }: SEOHeadProps) {
               "item": meta.canonical
             }
           ]
-        },
-        tabSchemaData.howTo,
-        {
-          "@type": "FAQPage",
-          "mainEntity": tabSchemaData.faqs.map(f => ({
-            "@type": "Question",
-            "name": f.name,
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": f.answer
-            }
-          }))
         }
       ]
     };
+
+    if (tabSchemaData.howTo) {
+      structuredData["@graph"].push(tabSchemaData.howTo as any);
+    }
+    if (tabSchemaData.article) {
+      structuredData["@graph"].push(tabSchemaData.article as any);
+    }
+
+    structuredData["@graph"].push({
+      "@type": "FAQPage",
+      "mainEntity": tabSchemaData.faqs.map(f => ({
+        "@type": "Question",
+        "name": f.name,
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": f.answer
+        }
+      }))
+    } as any);
 
     schemaScript.textContent = JSON.stringify(structuredData);
   }, [activeTab]);

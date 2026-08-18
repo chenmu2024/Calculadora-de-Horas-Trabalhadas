@@ -1,36 +1,74 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import SEOHead from './components/SEOHead';
 import PWAInstallPrompt from './components/PWAInstallPrompt';
-import DailyCalculator from './components/DailyCalculator';
-import TimesheetCalculator from './components/TimesheetCalculator';
-import MonthlyCalculator from './components/MonthlyCalculator';
-import BancoDeHorasCalculator from './components/BancoDeHorasCalculator';
-import TimeSumCalculator from './components/TimeSumCalculator';
-import HourlyRateCalculator from './components/HourlyRateCalculator';
-import OvertimeCalculator from './components/OvertimeCalculator';
-import NightHoursCalculator from './components/NightHoursCalculator';
-import HoleriteCalculator from './components/HoleriteCalculator';
-import RescisaoCalculator from './components/RescisaoCalculator';
-import ExcelDownloadSection from './components/ExcelDownloadSection';
-import BlogSection from './components/BlogSection';
+
+const DailyCalculator = React.lazy(() => import('./components/DailyCalculator'));
+const TimesheetCalculator = React.lazy(() => import('./components/TimesheetCalculator'));
+const MonthlyCalculator = React.lazy(() => import('./components/MonthlyCalculator'));
+const BancoDeHorasCalculator = React.lazy(() => import('./components/BancoDeHorasCalculator'));
+const TimeSumCalculator = React.lazy(() => import('./components/TimeSumCalculator'));
+const HourlyRateCalculator = React.lazy(() => import('./components/HourlyRateCalculator'));
+const OvertimeCalculator = React.lazy(() => import('./components/OvertimeCalculator'));
+const NightHoursCalculator = React.lazy(() => import('./components/NightHoursCalculator'));
+const HoleriteCalculator = React.lazy(() => import('./components/HoleriteCalculator'));
+const RescisaoCalculator = React.lazy(() => import('./components/RescisaoCalculator'));
+const Escala12x36Calculator = React.lazy(() => import('./components/Escala12x36Calculator'));
+const FaltasAtrasosCalculator = React.lazy(() => import('./components/FaltasAtrasosCalculator'));
+const FeriasCalculator = React.lazy(() => import('./components/FeriasCalculator'));
+const DecimoTerceiroCalculator = React.lazy(() => import('./components/DecimoTerceiroCalculator'));
+const SeguroDesempregoCalculator = React.lazy(() => import('./components/SeguroDesempregoCalculator'));
+const InsalubridadePericulosidadeCalculator = React.lazy(() => import('./components/InsalubridadePericulosidadeCalculator'));
+const CltVsPjCalculator = React.lazy(() => import('./components/CltVsPjCalculator'));
+const ExcelDownloadSection = React.lazy(() => import('./components/ExcelDownloadSection'));
+const BlogSection = React.lazy(() => import('./components/BlogSection'));
+
 import FAQSection from './components/FAQSection';
 import SEOContent from './components/SEOContent';
 import Breadcrumb from './components/Breadcrumb';
-import AboutUsPage from './components/AboutUsPage';
-import ContactPage from './components/ContactPage';
-import TermsPage from './components/TermsPage';
-import PrivacyPage from './components/PrivacyPage';
-import NotFound from './components/NotFound';
+import CalculationHistoryModal from './components/CalculationHistoryModal';
+
+const AboutUsPage = React.lazy(() => import('./components/AboutUsPage'));
+const ContactPage = React.lazy(() => import('./components/ContactPage'));
+const TermsPage = React.lazy(() => import('./components/TermsPage'));
+const PrivacyPage = React.lazy(() => import('./components/PrivacyPage'));
+const NotFound = React.lazy(() => import('./components/NotFound'));
+
 import CookieBanner from './components/CookieBanner';
 import QuickConverterModal from './components/QuickConverterModal';
 import { HolidayCalendarModal } from './components/HolidayCalendarModal';
 import { LegalFAQModal } from './components/LegalFAQModal';
-import { FileSpreadsheet, Clock, Sparkles, CheckCircle, Calculator, ArrowRightLeft, Calendar, BookOpen, Scale, WifiOff, Moon, Sun } from 'lucide-react';
+import { FileSpreadsheet, Clock, Sparkles, CheckCircle, Calculator, ArrowRightLeft, Calendar, BookOpen, Scale, WifiOff, Moon, Sun, ShieldAlert, Biohazard, Gift, Palmtree } from 'lucide-react';
 import { getTabFromLocation, getHrefForTab, TAB_ROUTES } from './utils/routes';
 import { useOfflineStatus } from './hooks/useOfflineStatus';
 import { useDarkMode } from './hooks/useDarkMode';
+
+const PAGE_SUBTITLES: Record<string, string> = {
+  daily: 'Calcule o total de horas trabalhadas no dia com batida de ponto de 4 horários e intervalo de almoço. Resultado instantâneo no padrão CLT.',
+  timesheet: 'Calcule o cartão de ponto da semana completa. Apuração automática de horas normais, banco de horas e saldo de horas extras.',
+  monthly: 'Calcule o total de horas trabalhadas no mês inteiro com simulação completa do divisor 220, saldo de horas e total a receber.',
+  banco: 'Descubra se você tem horas a compensar ou a receber como hora extra conforme a convenção CLT.',
+  sum: 'Ferramenta rápida para somar e subtrair horas e minutos. Ideal para conferir cartões de ponto, atestados e relatórios de ponto.',
+  holerite: 'Simule o seu holerite completo com cálculo de salário líquido, descontos de INSS, IRRF, vale transporte e adicionais.',
+  rescisao: 'Simule o cálculo exato de rescisão: aviso prévio, saldo de salário, 13º proporcional, férias com 1/3 e multa do FGTS.',
+  rate: 'Descubra exatamente quanto vale a sua hora de trabalho com base no salário bruto e divisor oficial CLT.',
+  overtime: 'Calcule o valor exato das suas horas extras com adicional de 50% em dias úteis e 100% aos domingos e feriados.',
+  night: 'Calcule o valor do adicional noturno de 20% e a redução da hora ficta (52min30s) para jornadas noturnas na CLT.',
+  escala12x36: 'Plantões de 12 horas com cálculo de hora noturna, feriados trabalhados em dobro e estimativa de remuneração.',
+  faltas: 'Calcule os descontos de atrasos por minuto, faltas injustificadas e reflexo na perda do DSR (Lei 605/49).',
+  ferias: 'Cálculo de férias CLT 2026 com 1/3 constitucional, abono pecuniário (venda de 10 dias) e deduções INSS/IRRF.',
+  decimo: 'Simule a 1ª e 2ª parcelas do 13º salário com cálculo de meses trabalhados e deduções progressivas de 2026.',
+  seguro: 'Calcule a quantidade de parcelas (3 a 5) e o valor de cada parcela do seguro-desemprego segundo a tabela oficial do MTE.',
+  insalubridade: 'Calcule adicionais de insalubridade (10%, 20%, 40%) e periculosidade (30%) com reflexos em 13º, férias e FGTS.',
+  cltpj: 'Compare seu salário líquido CLT com propostas PJ. Descubra quanto cobrar para manter seu padrão financeiro.',
+  excel: 'Modelos de planilhas prontas para controle de ponto diário, semanal e mensal em Excel com fórmulas automáticas.',
+  blog: 'Aprenda tudo sobre regras de ponto, tolerância de 10 minutos, intervalo intrajornada, adicional noturno e divisor 220 da CLT.',
+  about: 'Conheça nossa missão, transparência, precisão dos cálculos e compromisso com os direitos trabalhistas no Brasil.',
+  contact: 'Entre em contato com nossa equipe para dúvidas sobre cálculos, report de divergências ou parcerias comerciais.',
+  terms: 'Aviso legal e termos de utilização das ferramentas de cálculo de horas trabalhadas do portal.',
+  privacy: 'Entenda como garantimos a total privacidade dos seus dados. Processamento 100% no seu navegador.'
+};
 
 const PAGE_H1_TITLES: Record<string, string> = {
   daily: 'Calculadora de Horas Trabalhadas Diária',
@@ -43,6 +81,13 @@ const PAGE_H1_TITLES: Record<string, string> = {
   rate: 'Calculadora de Valor da Hora de Trabalho',
   overtime: 'Calculadora de Horas Extras e DSR (50% e 100%)',
   night: 'Calculadora de Adicional Noturno e Hora Ficta',
+  escala12x36: 'Calculadora de Escala 12x36 (Plantões e Noturno)',
+  faltas: 'Calculadora de Faltas, Atrasos e Perda do DSR',
+  ferias: 'Calculadora de Férias CLT 2026 com 1/3 e Venda',
+  decimo: 'Calculadora de 13º Salário (1ª e 2ª Parcelas)',
+  seguro: 'Calculadora de Seguro-Desemprego 2026',
+  insalubridade: 'Calculadora de Insalubridade e Periculosidade',
+  cltpj: 'Calculadora CLT x PJ (Comparador de Salário Líquido)',
   excel: 'Planilhas de Controle de Ponto em Excel',
   blog: 'Guia Completo da CLT e Horas Trabalhadas',
   about: 'Sobre Nós - Transparência e Precisão no Cálculo CLT',
@@ -59,22 +104,18 @@ export default function App() {
   const [isQuickConverterOpen, setIsQuickConverterOpen] = useState(false);
   const [isHolidayCalendarOpen, setIsHolidayCalendarOpen] = useState(false);
   const [isLegalFAQOpen, setIsLegalFAQOpen] = useState(false);
+  const [isHistoryOpen, setIsHistoryOpen] = useState(false);
 
+  // Sync state with browser URL
   const setActiveTab = (tab: string) => {
     setActiveTabState(tab);
-    const targetPath = TAB_ROUTES[tab] || '/';
-    window.history.pushState({}, '', targetPath);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    const path = getHrefForTab(tab);
+    if (window.location.pathname !== path) {
+      window.history.pushState({ tab }, '', path);
+    }
   };
 
   useEffect(() => {
-    // Clean up query param ?tab= if present on initial load by replacing history state
-    if (typeof window !== 'undefined' && window.location.search.includes('tab=')) {
-      const currentTab = getTabFromLocation();
-      const cleanPath = TAB_ROUTES[currentTab] || '/';
-      window.history.replaceState({}, '', cleanPath);
-    }
-
     const handlePopState = () => {
       setActiveTabState(getTabFromLocation());
     };
@@ -85,19 +126,20 @@ export default function App() {
   const isStandalonePage = ['about', 'contact', 'terms', 'privacy'].includes(activeTab);
 
   return (
-    <div className="min-h-screen bg-neutral-50 dark:bg-neutral-900 text-neutral-900 dark:text-neutral-100 font-sans selection:bg-blue-200 flex flex-col transition-colors duration-200">
+    <div className="min-h-screen flex flex-col bg-neutral-100/60 dark:bg-neutral-950 font-sans text-neutral-900 dark:text-neutral-100 transition-colors duration-200">
+      {/* SEO Head Dynamic Metadata */}
       <SEOHead activeTab={activeTab} />
 
-      {/* Offline Banner */}
+      {/* Offline Alert Banner */}
       {isOffline && (
-        <div className="bg-amber-100 dark:bg-amber-900/60 border-b border-amber-200 dark:border-amber-800 text-amber-900 dark:text-amber-100 px-4 py-2 text-center text-sm font-medium flex items-center justify-center gap-2 z-50">
+        <div className="bg-amber-500 text-neutral-950 px-4 py-2 text-xs font-bold flex items-center justify-center gap-2 shadow-sm animate-in fade-in duration-300">
           <WifiOff className="w-4 h-4" />
-          <span>Você está no modo offline. As calculadoras continuam funcionando localmente.</span>
+          <span>Modo Offline Ativo: Todas as calculadoras continuam funcionando perfeitamente sem internet!</span>
         </div>
       )}
 
-      {/* Top Banner Bar */}
-      <div className="bg-gradient-to-r from-blue-700 via-blue-600 to-indigo-700 text-white text-xs py-2 px-4 text-center font-medium shadow-sm flex items-center justify-center gap-2">
+      {/* Top Banner */}
+      <div className="bg-neutral-900 text-neutral-200 py-1.5 px-4 text-xs font-medium flex items-center justify-center gap-1.5 transition-colors">
         <Sparkles className="w-3.5 h-3.5 text-amber-300" />
         <span>Calculadora de Horas Trabalhadas Online Grátis - Padrão CLT 2026</span>
         <button
@@ -109,16 +151,22 @@ export default function App() {
       </div>
 
       {/* Header */}
-      <Header activeTab={activeTab} setActiveTab={setActiveTab} isDark={isDark} toggleDark={toggleDark} />
+      <Header 
+        activeTab={activeTab} 
+        setActiveTab={setActiveTab} 
+        isDark={isDark} 
+        toggleDark={toggleDark} 
+        onOpenHistory={() => setIsHistoryOpen(true)}
+      />
 
       {/* Hero Headline Section */}
       <section className="bg-white dark:bg-neutral-900 border-b border-neutral-200 dark:border-neutral-800 py-8 px-4 transition-colors">
         <div className="max-w-4xl mx-auto text-center space-y-3">
-          <h1 className="text-2xl sm:text-4xl font-extrabold text-neutral-900 tracking-tight leading-tight">
+          <h1 className="text-2xl sm:text-4xl font-extrabold text-neutral-900 dark:text-white tracking-tight leading-tight">
             {PAGE_H1_TITLES[activeTab] || 'Calculadora de Horas Trabalhadas'}
           </h1>
-          <p className="text-neutral-600 text-xs sm:text-base max-w-2xl mx-auto leading-relaxed">
-            Ferramenta gratuita para calcular <strong>horas trabalhadas no dia, na semana e no mês</strong>, intervalo de almoço, valor da hora, horas extras (50% e 100%) e adicional noturno no padrão CLT.
+          <p className="text-neutral-600 dark:text-neutral-400 text-xs sm:text-base max-w-2xl mx-auto leading-relaxed">
+            {PAGE_SUBTITLES[activeTab] || 'Ferramenta gratuita para calcular horas trabalhadas no dia, na semana e no mês, intervalo de almoço, valor da hora, horas extras (50% e 100%) e adicional noturno no padrão CLT.'}
           </p>
 
           {/* Quick Sub-tools Pill Bar */}
@@ -148,45 +196,81 @@ export default function App() {
               Semanal 44h
             </a>
             <a
-              href={getHrefForTab('monthly')}
-              onClick={(e) => { e.preventDefault(); setActiveTab('monthly'); }}
-              title="Calculadora Mensal de Horas Trabalhadas"
+              href={getHrefForTab('overtime')}
+              onClick={(e) => { e.preventDefault(); setActiveTab('overtime'); }}
+              title="Calculadora de Horas Extras"
               className={`px-3 py-1.5 rounded-full border transition-all cursor-pointer ${
-                activeTab === 'monthly'
+                activeTab === 'overtime'
                   ? 'bg-blue-600 border-blue-600 text-white font-bold shadow-sm'
                   : 'bg-neutral-50 dark:bg-neutral-800 border-neutral-200 dark:border-neutral-700 text-neutral-700 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-700'
               }`}
             >
-              Cálculo Mensal
+              Horas Extras
             </a>
             <a
-              href={getHrefForTab('banco')}
-              onClick={(e) => { e.preventDefault(); setActiveTab('banco'); }}
-              title="Calculadora de Banco de Horas"
+              href={getHrefForTab('ferias')}
+              onClick={(e) => { e.preventDefault(); setActiveTab('ferias'); }}
+              title="Calculadora de Férias CLT"
               className={`px-3 py-1.5 rounded-full border transition-all cursor-pointer ${
-                activeTab === 'banco'
+                activeTab === 'ferias'
                   ? 'bg-blue-600 border-blue-600 text-white font-bold shadow-sm'
                   : 'bg-neutral-50 dark:bg-neutral-800 border-neutral-200 dark:border-neutral-700 text-neutral-700 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-700'
               }`}
             >
-              Banco de Horas
+              Férias CLT
             </a>
             <a
-              href={getHrefForTab('sum')}
-              onClick={(e) => { e.preventDefault(); setActiveTab('sum'); }}
-              title="Somador de Horas Online"
+              href={getHrefForTab('decimo')}
+              onClick={(e) => { e.preventDefault(); setActiveTab('decimo'); }}
+              title="Calculadora de 13º Salário"
               className={`px-3 py-1.5 rounded-full border transition-all cursor-pointer ${
-                activeTab === 'sum'
+                activeTab === 'decimo'
                   ? 'bg-blue-600 border-blue-600 text-white font-bold shadow-sm'
                   : 'bg-neutral-50 dark:bg-neutral-800 border-neutral-200 dark:border-neutral-700 text-neutral-700 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-700'
               }`}
             >
-              Somador de Horas
+              13º Salário
+            </a>
+            <a
+              href={getHrefForTab('seguro')}
+              onClick={(e) => { e.preventDefault(); setActiveTab('seguro'); }}
+              title="Calculadora de Seguro-Desemprego"
+              className={`px-3 py-1.5 rounded-full border transition-all cursor-pointer ${
+                activeTab === 'seguro'
+                  ? 'bg-blue-600 border-blue-600 text-white font-bold shadow-sm'
+                  : 'bg-neutral-50 dark:bg-neutral-800 border-neutral-200 dark:border-neutral-700 text-neutral-700 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-700'
+              }`}
+            >
+              Seguro-Desemprego
+            </a>
+            <a
+              href={getHrefForTab('insalubridade')}
+              onClick={(e) => { e.preventDefault(); setActiveTab('insalubridade'); }}
+              title="Calculadora de Insalubridade e Periculosidade"
+              className={`px-3 py-1.5 rounded-full border transition-all cursor-pointer ${
+                activeTab === 'insalubridade'
+                  ? 'bg-blue-600 border-blue-600 text-white font-bold shadow-sm'
+                  : 'bg-neutral-50 dark:bg-neutral-800 border-neutral-200 dark:border-neutral-700 text-neutral-700 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-700'
+              }`}
+            >
+              Insalubridade
+            </a>
+            <a
+              href={getHrefForTab('cltpj')}
+              onClick={(e) => { e.preventDefault(); setActiveTab('cltpj'); }}
+              title="Calculadora CLT x PJ"
+              className={`px-3 py-1.5 rounded-full border transition-all cursor-pointer ${
+                activeTab === 'cltpj'
+                  ? 'bg-blue-600 border-blue-600 text-white font-bold shadow-sm'
+                  : 'bg-neutral-50 dark:bg-neutral-800 border-neutral-200 dark:border-neutral-700 text-neutral-700 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-700'
+              }`}
+            >
+              CLT x PJ
             </a>
             <a
               href={getHrefForTab('holerite')}
               onClick={(e) => { e.preventDefault(); setActiveTab('holerite'); }}
-              title="Simulador de Holerite e Salário Líquido"
+              title="Simulador de Holerite"
               className={`px-3 py-1.5 rounded-full border transition-all cursor-pointer ${
                 activeTab === 'holerite'
                   ? 'bg-blue-600 border-blue-600 text-white font-bold shadow-sm'
@@ -198,56 +282,24 @@ export default function App() {
             <a
               href={getHrefForTab('rescisao')}
               onClick={(e) => { e.preventDefault(); setActiveTab('rescisao'); }}
-              title="Calculadora de Rescisão Contratual CLT"
+              title="Calculadora de Rescisão"
               className={`px-3 py-1.5 rounded-full border transition-all cursor-pointer ${
                 activeTab === 'rescisao'
                   ? 'bg-blue-600 border-blue-600 text-white font-bold shadow-sm'
                   : 'bg-neutral-50 dark:bg-neutral-800 border-neutral-200 dark:border-neutral-700 text-neutral-700 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-700'
               }`}
             >
-              Rescisão CLT
+              Rescisão
             </a>
-            <a
-              href={getHrefForTab('rate')}
-              onClick={(e) => { e.preventDefault(); setActiveTab('rate'); }}
-              title="Calculadora de Valor da Hora Trabalhada"
-              className={`px-3 py-1.5 rounded-full border transition-all ${
-                activeTab === 'rate'
-                  ? 'bg-blue-600 border-blue-600 text-white font-bold shadow-sm'
-                  : 'bg-neutral-50 dark:bg-neutral-800 border-neutral-200 dark:border-neutral-700 text-neutral-700 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-700'
-              }`}
-            >
-              Valor Hora
-            </a>
-            <a
-              href={getHrefForTab('overtime')}
-              onClick={(e) => { e.preventDefault(); setActiveTab('overtime'); }}
-              title="Calculadora de Horas Extras 50% e 100%"
-              className={`px-3 py-1.5 rounded-full border transition-all ${
-                activeTab === 'overtime'
-                  ? 'bg-blue-600 border-blue-600 text-white font-bold shadow-sm'
-                  : 'bg-neutral-50 dark:bg-neutral-800 border-neutral-200 dark:border-neutral-700 text-neutral-700 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-700'
-              }`}
-            >
-              Hora Extra
-            </a>
-            <a
-              href={getHrefForTab('night')}
-              onClick={(e) => { e.preventDefault(); setActiveTab('night'); }}
-              title="Calculadora de Adicional Noturno"
-              className={`px-3 py-1.5 rounded-full border transition-all ${
-                activeTab === 'night'
-                  ? 'bg-blue-600 border-blue-600 text-white font-bold shadow-sm'
-                  : 'bg-neutral-50 dark:bg-neutral-800 border-neutral-200 dark:border-neutral-700 text-neutral-700 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-700'
-              }`}
-            >
-              Adicional Noturno
-            </a>
+          </div>
+
+          {/* Practical Utilities Row */}
+          <div className="flex flex-wrap items-center justify-center gap-2 pt-3 text-xs">
             <button
               onClick={() => setIsQuickConverterOpen(true)}
-              className="px-3 py-1.5 rounded-full border border-amber-300 dark:border-amber-700/60 bg-amber-50 dark:bg-amber-950/40 hover:bg-amber-100 dark:hover:bg-amber-900/60 text-amber-900 dark:text-amber-200 font-bold transition-all flex items-center gap-1 cursor-pointer shadow-xs"
+              className="px-3 py-1.5 rounded-full border border-emerald-200 dark:border-emerald-800/60 bg-emerald-50 dark:bg-emerald-950/40 hover:bg-emerald-100 dark:hover:bg-emerald-900/60 text-emerald-900 dark:text-emerald-200 font-bold transition-all flex items-center gap-1 cursor-pointer shadow-xs"
             >
-              <ArrowRightLeft className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" /> Conversor ⇄
+              <ArrowRightLeft className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" /> Converter Horas ↔ Decimal
             </button>
             <button
               onClick={() => setIsHolidayCalendarOpen(true)}
@@ -270,12 +322,12 @@ export default function App() {
         <Breadcrumb activeTab={activeTab} onSelectTab={setActiveTab} />
 
         {isStandalonePage ? (
-          <div>
+          <Suspense fallback={<div className="p-8 text-center text-xs text-neutral-500">Carregando conteúdo...</div>}>
             {activeTab === 'about' && <AboutUsPage onSelectCalculator={setActiveTab} />}
             {activeTab === 'contact' && <ContactPage onSelectCalculator={setActiveTab} />}
             {activeTab === 'terms' && <TermsPage />}
             {activeTab === 'privacy' && <PrivacyPage />}
-          </div>
+          </Suspense>
         ) : (
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
             {/* Main Column (8 cols) */}
@@ -283,29 +335,44 @@ export default function App() {
               
               {/* Main Calculator Container Card */}
               {activeTab === 'not-found' ? (
-                <NotFound onNavigateHome={() => setActiveTab('daily')} />
+                <Suspense fallback={<div className="p-8 text-center text-xs text-neutral-500">Carregando...</div>}>
+                  <NotFound onNavigateHome={() => setActiveTab('daily')} />
+                </Suspense>
               ) : (
                 <div id="main-calculator" className="bg-white dark:bg-neutral-900 rounded-2xl shadow-sm border border-neutral-200 dark:border-neutral-800 p-6 sm:p-8 transition-colors">
-                  {activeTab === 'daily' && <DailyCalculator onSelectTab={setActiveTab} />}
-                  {activeTab === 'timesheet' && <TimesheetCalculator onSelectTab={setActiveTab} />}
-                  {activeTab === 'monthly' && <MonthlyCalculator onSelectTab={setActiveTab} />}
-                  {activeTab === 'banco' && <BancoDeHorasCalculator onSelectTab={setActiveTab} />}
-                  {activeTab === 'sum' && <TimeSumCalculator onSelectTab={setActiveTab} />}
-                  {activeTab === 'holerite' && <HoleriteCalculator onSelectTab={setActiveTab} />}
-                  {activeTab === 'rescisao' && <RescisaoCalculator onSelectTab={setActiveTab} />}
-                  {activeTab === 'rate' && <HourlyRateCalculator onSelectTab={setActiveTab} />}
-                  {activeTab === 'overtime' && <OvertimeCalculator onSelectTab={setActiveTab} />}
-                  {activeTab === 'night' && <NightHoursCalculator onSelectTab={setActiveTab} />}
-                  {activeTab === 'excel' && <ExcelDownloadSection />}
-                  {activeTab === 'blog' && <BlogSection onSelectCalculator={setActiveTab} />}
+                  <Suspense fallback={<div className="p-12 text-center text-xs text-neutral-400">Carregando calculadora...</div>}>
+                    {activeTab === 'daily' && <DailyCalculator onSelectTab={setActiveTab} />}
+                    {activeTab === 'timesheet' && <TimesheetCalculator onSelectTab={setActiveTab} />}
+                    {activeTab === 'monthly' && <MonthlyCalculator onSelectTab={setActiveTab} />}
+                    {activeTab === 'banco' && <BancoDeHorasCalculator onSelectTab={setActiveTab} />}
+                    {activeTab === 'sum' && <TimeSumCalculator onSelectTab={setActiveTab} />}
+                    {activeTab === 'holerite' && <HoleriteCalculator onSelectTab={setActiveTab} />}
+                    {activeTab === 'rescisao' && <RescisaoCalculator onSelectTab={setActiveTab} />}
+                    {activeTab === 'rate' && <HourlyRateCalculator onSelectTab={setActiveTab} />}
+                    {activeTab === 'overtime' && <OvertimeCalculator onSelectTab={setActiveTab} />}
+                    {activeTab === 'night' && <NightHoursCalculator onSelectTab={setActiveTab} />}
+                    {activeTab === 'escala12x36' && <Escala12x36Calculator onSelectTab={setActiveTab} />}
+                    {activeTab === 'faltas' && <FaltasAtrasosCalculator onSelectTab={setActiveTab} />}
+                    {activeTab === 'ferias' && <FeriasCalculator onSelectTab={setActiveTab} />}
+                    {activeTab === 'decimo' && <DecimoTerceiroCalculator onSelectTab={setActiveTab} />}
+                    {activeTab === 'seguro' && <SeguroDesempregoCalculator onSelectTab={setActiveTab} />}
+                    {activeTab === 'insalubridade' && <InsalubridadePericulosidadeCalculator onSelectTab={setActiveTab} />}
+                    {activeTab === 'cltpj' && <CltVsPjCalculator onSelectTab={setActiveTab} />}
+                    {activeTab === 'excel' && <ExcelDownloadSection />}
+                    {activeTab === 'blog' && <BlogSection onSelectCalculator={setActiveTab} />}
+                  </Suspense>
                 </div>
               )}
 
               {/* SEO Structured Content */}
-              <SEOContent onSelectTab={setActiveTab} />
+              <SEOContent activeTab={activeTab} onSelectTab={setActiveTab} />
 
-              {/* Knowledge Base Articles Section */}
-              <BlogSection onSelectCalculator={setActiveTab} />
+              {/* Knowledge Base Articles Section (when not on blog page) */}
+              {activeTab !== 'blog' && (
+                <Suspense fallback={null}>
+                  <BlogSection onSelectCalculator={setActiveTab} />
+                </Suspense>
+              )}
 
               {/* FAQ Section */}
               <FAQSection activeTab={activeTab} onSelectTab={setActiveTab} />
@@ -400,6 +467,13 @@ export default function App() {
       <LegalFAQModal
         isOpen={isLegalFAQOpen}
         onClose={() => setIsLegalFAQOpen(false)}
+      />
+
+      {/* Calculation History Modal */}
+      <CalculationHistoryModal
+        isOpen={isHistoryOpen}
+        onClose={() => setIsHistoryOpen(false)}
+        onSelectTab={setActiveTab}
       />
 
       {/* PWA Floating Install Prompt */}

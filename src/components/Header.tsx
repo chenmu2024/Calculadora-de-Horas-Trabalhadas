@@ -1,4 +1,4 @@
-import { Calculator, Clock, Calendar, DollarSign, Moon, Sun, BookOpen, FileSpreadsheet, Menu, X, Scale, ArrowRightLeft, FileText, Users, Mail, Share2, Check, Briefcase } from 'lucide-react';
+import { Calculator, Clock, Calendar, DollarSign, Moon, Sun, BookOpen, FileSpreadsheet, Menu, X, Scale, ArrowRightLeft, FileText, Users, Mail, Share2, Check, Briefcase, History, Palmtree, AlertTriangle, ShieldCheck, Gift, ShieldAlert, Biohazard } from 'lucide-react';
 import { useState } from 'react';
 import { getHrefForTab } from '../utils/routes';
 
@@ -7,9 +7,10 @@ interface HeaderProps {
   setActiveTab: (tab: string) => void;
   isDark?: boolean;
   toggleDark?: () => void;
+  onOpenHistory?: () => void;
 }
 
-export default function Header({ activeTab, setActiveTab, isDark, toggleDark }: HeaderProps) {
+export default function Header({ activeTab, setActiveTab, isDark, toggleDark, onOpenHistory }: HeaderProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [copiedShare, setCopiedShare] = useState(false);
 
@@ -17,15 +18,21 @@ export default function Header({ activeTab, setActiveTab, isDark, toggleDark }: 
     { id: 'daily', label: 'Diária', icon: Clock },
     { id: 'timesheet', label: 'Semanal', icon: Calendar },
     { id: 'monthly', label: 'Mensal', icon: Calculator },
-    { id: 'banco', label: 'Banco de Horas', icon: Scale },
+    { id: 'overtime', label: 'Hora Extra', icon: Clock },
+    { id: 'night', label: 'Noturno', icon: Moon },
+    { id: 'escala12x36', label: '12x36', icon: ShieldCheck },
+    { id: 'faltas', label: 'Faltas/DSR', icon: AlertTriangle },
+    { id: 'ferias', label: 'Férias', icon: Palmtree },
+    { id: 'decimo', label: '13º Salário', icon: Gift },
+    { id: 'seguro', label: 'Seguro-Desemp.', icon: ShieldAlert },
+    { id: 'insalubridade', label: 'Insalubridade', icon: Biohazard },
+    { id: 'cltpj', label: 'CLT x PJ', icon: ArrowRightLeft },
     { id: 'holerite', label: 'Holerite', icon: FileText },
     { id: 'rescisao', label: 'Rescisão', icon: Briefcase },
     { id: 'rate', label: 'Valor Hora', icon: DollarSign },
-    { id: 'overtime', label: 'Hora Extra', icon: Clock },
-    { id: 'night', label: 'Noturno', icon: Moon },
+    { id: 'banco', label: 'Banco', icon: Scale },
     { id: 'excel', label: 'Planilha', icon: FileSpreadsheet },
-    { id: 'blog', label: 'Guia', icon: BookOpen },
-    { id: 'about', label: 'Sobre', icon: Users },
+    { id: 'blog', label: 'Guia CLT', icon: BookOpen },
   ];
 
   const handleSelect = (id: string) => {
@@ -39,8 +46,8 @@ export default function Header({ activeTab, setActiveTab, isDark, toggleDark }: 
     if (navigator.share) {
       try {
         await navigator.share({
-          title: 'Calculadora de Horas Trabalhadas CLT',
-          text: 'Calcule suas horas diárias, semanais, holerite e horas extras gratuitamente!',
+          title: 'Calculadora de Horas Trabalhadas CLT 2026',
+          text: 'Calcule horas diárias, 12x36, férias, horas extras e holerite grátis!',
           url: url,
         });
       } catch (err) {
@@ -54,8 +61,8 @@ export default function Header({ activeTab, setActiveTab, isDark, toggleDark }: 
   };
 
   return (
-    <header className="bg-white dark:bg-neutral-900 border-b border-neutral-200 dark:border-neutral-800 sticky top-0 z-50 shadow-sm transition-colors">
-      <div className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
+    <header className="bg-white dark:bg-neutral-900 border-b border-neutral-200 dark:border-neutral-800 sticky top-0 z-50 shadow-xs transition-colors">
+      <div className="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between gap-2">
         {/* Logo Brand */}
         <a
           href="/"
@@ -63,7 +70,7 @@ export default function Header({ activeTab, setActiveTab, isDark, toggleDark }: 
             e.preventDefault();
             handleSelect('daily');
           }}
-          className="flex items-center gap-2.5 text-left group"
+          className="flex items-center gap-2.5 text-left group shrink-0"
           title="Calculadora de Horas Trabalhadas - Página Inicial"
         >
           <div className="w-9 h-9 bg-blue-600 rounded-xl flex items-center justify-center text-white font-bold shadow-sm group-hover:bg-blue-700 transition-colors">
@@ -79,8 +86,8 @@ export default function Header({ activeTab, setActiveTab, isDark, toggleDark }: 
           </div>
         </a>
 
-        {/* Desktop Nav */}
-        <nav className="hidden lg:flex items-center gap-1 text-xs font-semibold text-neutral-600 dark:text-neutral-300">
+        {/* Desktop Nav - Horizontal Scroll on medium screens, flex on large */}
+        <nav className="hidden xl:flex items-center gap-0.5 text-xs font-semibold text-neutral-600 dark:text-neutral-300">
           {navItems.map((item) => {
             const Icon = item.icon;
             const isActive = activeTab === item.id;
@@ -94,21 +101,32 @@ export default function Header({ activeTab, setActiveTab, isDark, toggleDark }: 
                   handleSelect(item.id);
                 }}
                 title={`Calculadora ${item.label}`}
-                className={`flex items-center gap-1.5 px-3 py-2 rounded-lg transition-all ${
+                className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg transition-all ${
                   isActive
                     ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 font-bold'
                     : 'hover:bg-neutral-100 dark:hover:bg-neutral-800 hover:text-neutral-900 dark:hover:text-white'
                 }`}
               >
-                <Icon className={`w-3.5 h-3.5 ${isActive ? 'text-blue-600 dark:text-blue-400' : 'text-neutral-400 dark:text-neutral-500'}`} />
+                <Icon className={`w-3.5 h-3.5 ${isActive ? 'text-blue-600 dark:text-blue-400' : 'text-neutral-400 dark:text-neutral-500'}`} aria-hidden="true" />
                 {item.label}
               </a>
             );
           })}
         </nav>
 
-        {/* Share & Mobile Hamburger Toggle */}
-        <div className="flex items-center gap-2">
+        {/* Action Controls */}
+        <div className="flex items-center gap-1.5 sm:gap-2">
+          {onOpenHistory && (
+            <button
+              onClick={onOpenHistory}
+              title="Histórico de Cálculos"
+              className="flex items-center gap-1 text-xs font-semibold text-neutral-700 dark:text-neutral-200 hover:text-blue-600 dark:hover:text-blue-400 bg-neutral-100 dark:bg-neutral-800 hover:bg-neutral-200 dark:hover:bg-neutral-700 px-2.5 py-2 rounded-xl transition-colors cursor-pointer no-print"
+            >
+              <History className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+              <span className="hidden sm:inline">Histórico</span>
+            </button>
+          )}
+
           <button
             onClick={toggleDark}
             title={isDark ? "Alternar para Modo Claro" : "Alternar para Modo Escuro"}
@@ -137,7 +155,7 @@ export default function Header({ activeTab, setActiveTab, isDark, toggleDark }: 
 
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="lg:hidden p-2 text-neutral-600 hover:text-neutral-900 rounded-lg hover:bg-neutral-100 transition-colors cursor-pointer"
+            className="xl:hidden p-2 text-neutral-600 dark:text-neutral-300 hover:text-neutral-900 rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors cursor-pointer"
             aria-label="Abrir Menu"
           >
             {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -147,7 +165,7 @@ export default function Header({ activeTab, setActiveTab, isDark, toggleDark }: 
 
       {/* Mobile Drawer Navigation */}
       {mobileMenuOpen && (
-        <div className="lg:hidden bg-white border-b border-neutral-200 px-4 py-3 space-y-1 shadow-lg animate-in slide-in-from-top-2 duration-200">
+        <div className="xl:hidden bg-white dark:bg-neutral-900 border-b border-neutral-200 dark:border-neutral-800 px-4 py-3 grid grid-cols-2 gap-1.5 shadow-lg animate-in slide-in-from-top-2 duration-200 max-h-[70vh] overflow-y-auto">
           {navItems.map((item) => {
             const Icon = item.icon;
             const isActive = activeTab === item.id;
@@ -160,11 +178,15 @@ export default function Header({ activeTab, setActiveTab, isDark, toggleDark }: 
                   e.preventDefault();
                   handleSelect(item.id);
                 }}
-                className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-colors ${
-                  isActive ? 'bg-blue-50 text-blue-700 font-bold' : 'text-neutral-700 hover:bg-neutral-50'
+                title={`Calculadora ${item.label}`}
+                aria-label={`Calculadora ${item.label}`}
+                className={`flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs font-medium transition-colors ${
+                  isActive
+                    ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 font-bold'
+                    : 'text-neutral-700 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-800'
                 }`}
               >
-                <Icon className={`w-4 h-4 ${isActive ? 'text-blue-600' : 'text-neutral-400'}`} />
+                <Icon className={`w-4 h-4 ${isActive ? 'text-blue-600 dark:text-blue-400' : 'text-neutral-400'}`} aria-hidden="true" />
                 {item.label}
               </a>
             );
