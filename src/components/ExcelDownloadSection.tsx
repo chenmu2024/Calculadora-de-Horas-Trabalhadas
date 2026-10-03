@@ -9,6 +9,7 @@ type TemplateType = 'clt_standard' | 'banco_horas' | 'escala_12x36' | 'adicional
 
 export default function ExcelDownloadSection() {
   const [activeTemplate, setActiveTemplate] = useState<TemplateType>('clt_standard');
+  const [extendNight, setExtendNight] = useState(false);
   const [email, setEmail] = useState('');
   const [downloaded, setDownloaded] = useState(false);
   const [copiedTable, setCopiedTable] = useState(false);
@@ -40,7 +41,7 @@ export default function ExcelDownloadSection() {
         { date: 'Dia 01/05', start: '08:00', lunchStart: '12:00', lunchEnd: '13:00', end: '19:00', breakTime: '01:00', totalHours: '10:00 ( +2h extra 50% )' },
         { date: 'Dia 02/05', start: '08:00', lunchStart: '12:00', lunchEnd: '13:00', end: '18:00', breakTime: '01:00', totalHours: '09:00 (  0h saldo )' },
         { date: 'Dia 03/05', start: '08:30', lunchStart: '12:00', lunchEnd: '13:00', end: '17:30', breakTime: '01:00', totalHours: '08:00 ( -1h débito )' },
-        { date: 'Dia 04/05 (Domingo)', start: '08:00', lunchStart: '12:00', lunchEnd: '13:00', end: '16:00', breakTime: '01:00', totalHours: '07:00 ( +7h extra 100% )' },
+        { restDay: true, overtimePct: 1, date: 'Dia 04/05 (Domingo)', start: '08:00', lunchStart: '12:00', lunchEnd: '13:00', end: '16:00', breakTime: '01:00', totalHours: '07:00 ( +7h extra 100% )' },
       ],
     },
     escala_12x36: {
@@ -55,7 +56,7 @@ export default function ExcelDownloadSection() {
     },
     adicional_noturno: {
       title: 'Planilha de Jornada Noturna (22h às 05h com Hora Ficta)',
-      desc: 'Inclui conversão da hora reduzida (52m30s = 1,1428x) e adicional de 20% conforme Art. 73 da CLT. Desconta a pausa informada; prorrogação após 05h depende da jornada e do acordo aplicável e não está incluída neste modelo.',
+      desc: 'Inclui conversão da hora reduzida (52m30s = 1,1428x) e adicional de 20% conforme Art. 73 da CLT. Desconta a pausa informada; prorrogação após 05h depende da jornada e do acordo aplicável e exige confirmação abaixo.',
       entries: [
         { date: 'Segunda-Feira', start: '22:00', lunchStart: '02:00', lunchEnd: '03:00', end: '06:00', breakTime: '01:00', totalHours: '07:00 rel. (8.00h fictas)' },
         { date: 'Terça-Feira', start: '22:00', lunchStart: '02:00', lunchEnd: '03:00', end: '06:00', breakTime: '01:00', totalHours: '07:00 rel. (8.00h fictas)' },
@@ -86,7 +87,7 @@ export default function ExcelDownloadSection() {
   const handleDownload = (e: React.FormEvent) => {
     e.preventDefault();
     if (!validTemplate) { notify('Confira horários e intervalo antes de baixar.'); return; }
-    downloadWorkbook(currentTemplate.entries, nonNegative(customHourlyRate, 25), activeTemplate === 'adicional_noturno');
+    downloadWorkbook(currentTemplate.entries, nonNegative(customHourlyRate, 25), activeTemplate === 'adicional_noturno', activeTemplate === 'banco_horas', extendNight && activeTemplate === 'adicional_noturno');
     setDownloaded(true);
     setTimeout(() => setDownloaded(false), 4000);
   };
@@ -135,6 +136,8 @@ export default function ExcelDownloadSection() {
   return (
     <div className="bg-white dark:bg-neutral-900 rounded-2xl p-6 sm:p-8 border border-neutral-200 dark:border-neutral-700 shadow-sm animate-in fade-in duration-500 space-y-8">
       <button type="button" className="text-xs underline text-blue-700 dark:text-blue-300" onClick={() => { if (validTemplate) generateTimesheetCSV(currentTemplate.entries, currentTemplate.title); else notify('Confira horários e intervalo antes de baixar.'); }}>Baixar também em CSV (valores, sem fórmulas)</button>
+      {activeTemplate === 'adicional_noturno' && <label className="flex gap-2 text-xs"><input type="checkbox" checked={extendNight} onChange={e => setExtendNight(e.target.checked)} />Confirmo a aplicação da prorrogação após 05h para jornada que cobre todo o período 22–05. A pausa também será descontada.</label>}
+      <p className="text-xs text-neutral-600 dark:text-neutral-300">No modelo de banco, P define o adicional HE (0,5 = 50%; 1 = 100%) e Q indica descanso (1) ou dia normal (0). Confira o acordo antes de alterar. A meta M2 representa horas reais; férias e compensações não são inferidas por datas.</p>
       {/* Header */}
       <div className="text-center max-w-2xl mx-auto space-y-3">
         <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 text-xs font-semibold">

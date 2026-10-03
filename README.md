@@ -31,3 +31,10 @@ As tabelas financeiras estão em `src/utils/taxCalculations.ts`; atualize os tes
 ## Contato e privacidade
 
 O formulário abre um rascunho no aplicativo de e-mail para o endereço já informado pelo site; não afirma que o e-mail foi enviado nem garante prazo de resposta. Um backend de envio não está configurado. Os registros antigos de histórico são lidos sem apagar dados; falhas de armazenamento/clipboard são informadas na tela. As preferências de cookies podem ser reabertas no rodapé. Não há publicidade ou análise de terceiros ativa no aplicativo.
+
+## Atualizações de 04/10/2026
+
+- As planilhas usam P por linha para o adicional HE (0.5 / 1) e Q para descanso (1 / 0). Não inferem feriados pela descrição. M2 representa a meta em horas reais; ajuste conforme a jornada e o acordo. O modelo noturno oferece confirmação de prorrogação (O2 = 1), apenas para jornada cobrindo integralmente 22–05 e descontando pausas. As fórmulas calculam o adicional HE, hora reduzida e integração dos adicionais, com totais e valores editáveis.
+- O assistente de rescisão recebe explicitamente o início dos períodos de 13º e férias não quitados/gozados. Mostra projeção e 13º por ano, conta férias por aniversário e separa períodos completos simples/em dobro. Férias parcialmente gozadas, pagamentos anteriores, suspensões e condições especiais devem ser ajustados pelos registros; não são inferidos. Não reutilize o modo manual após aplicar as datas sem conferir os períodos de férias.
+- Dados inválidos de divisor, horas faturáveis ou alíquota impedem resultados, cópia, exportação e impressão. A exportação da comparação CLT/PJ usa o resultado da comparação.
+- GitHub Actions executa instalação pelo lockfile, tipos, regressões e build em PRs e alterações na main; não publica o site.

@@ -1,3 +1,4 @@
+import RescisaoCalculator from '../src/components/RescisaoCalculator';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import React from 'react';
@@ -87,7 +88,7 @@ test('Excel workbook is a valid ZIP with formula cells and cached values', () =>
   const bytes = buildWorkbook([{ date: 'Dia', start: '08:00', end: '18:00', breakTime: '01:00', totalHours: '09:00' }]);
   assert.equal(new DataView(bytes.buffer).getUint32(0, true), 0x04034b50);
   const text = new TextDecoder().decode(bytes);
-  assert.ok(text.includes('MOD(E2-B2,1)-F2'));
+  assert.ok(text.includes('MOD(E2-B2+1,1)-F2'));
   assert.ok(text.includes('<c r="G2" s="1"><f>'));
   writeFileSync('../verified-workbook.xlsx', bytes);
 });
@@ -99,4 +100,38 @@ test('night workbook deducts lunch and includes fictitious hours and premium for
   assert.ok(xml.includes('<v>6.857142857142857</v>'));
   assert.ok(xml.includes('<c r="N2" s="2"><v>0.2</v>'));
   writeFileSync('../verified-night-workbook.xlsx', bytes);
+});
+
+test('overtime workbook pays 50% and rest-day 100%, without inferring dates', () => {
+  const rows = [{ date: 'Normal', start: '08:00', end: '18:00', lunchStart: '12:00', lunchEnd: '13:00', breakTime: '01:00', totalHours: '09:00' }, { date: 'Rest', start: '08:00', end: '16:00', lunchStart: '12:00', lunchEnd: '13:00', breakTime: '01:00', totalHours: '07:00', restDay: true, overtimePct: 1 }];
+  const bytes = buildWorkbook(rows, 25, false, true);
+  const xml = new TextDecoder().decode(bytes);
+  assert.ok(xml.includes('<v>237.5</v>'));
+  assert.ok(xml.includes('<v>350</v>'));
+  assert.ok(xml.includes('H2*24*$L$2*P2'));
+  writeFileSync('../verified-overtime-workbook.xlsx', bytes);
+});
+test('night extension is opt-in, deducts breaks after 05h, and short night never extends', () => {
+  const row = { date: 'Night', start: '22:00', end: '07:00', lunchStart: '05:15', lunchEnd: '05:45', breakTime: '00:30', totalHours: '08:30' };
+  const bytes = buildWorkbook([row], 25, true, true, true);
+  const xml = new TextDecoder().decode(bytes);
+  assert.ok(xml.includes('<v>9.714285714285714</v>'));
+  writeFileSync('../verified-extension-workbook.xlsx', bytes);
+  const short = new TextDecoder().decode(buildWorkbook([{ ...row, start: '23:00', end: '06:00', lunchStart: '', lunchEnd: '', breakTime: '00:00' }], 25, true, false, true));
+  assert.ok(short.includes('<v>6.857142857142857</v>'));
+  assert.throws(() => buildWorkbook([]));
+  assert.throws(() => buildWorkbook([{ ...row, lunchStart: '08:00', lunchEnd: '09:00' }]));
+});
+
+test('saved date projection survives refresh and malformed date storage falls back safely', () => {
+  data.clear();
+  data.set('calc_rescisao_dates', JSON.stringify({ admission: '2020-01-01', last: '2026-12-20', start13: '2026-01-01', vacation: '2026-01-01' }));
+  data.set('calc_rescisao_dates_active', 'true');
+  data.set('calc_rescisao_simple_periods', '1');
+  const html = renderToStaticMarkup(<RescisaoCalculator />);
+  assert.ok(html.includes('2027-02-06'));
+  assert.ok(html.includes('2026: 12/12; 2027: 1/12'));
+  data.set('calc_rescisao_dates', '{broken');
+  assert.ok(!renderToStaticMarkup(<RescisaoCalculator />).includes('2027-02-06'));
+  data.clear();
 });

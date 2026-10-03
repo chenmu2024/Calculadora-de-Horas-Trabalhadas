@@ -41,5 +41,5 @@ export function generateTimesheetCSV(entries: Array<{
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
-  setTimeout(() => URL.revokeObjectURL(url), 0);
+  setTimeout(() => URL.revokeObjectURL(url), 30000);
 }

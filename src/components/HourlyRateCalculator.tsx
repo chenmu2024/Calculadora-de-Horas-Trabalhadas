@@ -1,4 +1,4 @@
-import { storage, copyText as writeClipboard, nonNegative } from '../utils/browser';
+import { storage, copyText as writeClipboard, nonNegative, notify } from '../utils/browser';
 import { MINIMUM_WAGE_2026 } from '../utils/taxCalculations';
 import React, { useState, useEffect } from 'react';
 import { DollarSign, Clock, Briefcase, Copy, Check, Download, Printer, Sparkles, HelpCircle } from 'lucide-react';
@@ -103,6 +103,10 @@ export default function HourlyRateCalculator({ onSelectTab }: HourlyRateCalculat
   const cmpPjAcc = nonNegative(comparePjAccounting, 200);
   const cmpEquivalentPjGross = (cmpCltTotalPackage + cmpPjAcc) / (cmpPjTax < 1 ? 1 - cmpPjTax : Infinity);
 
+  const validTax = (value: string) => value.trim() !== '' && Number.isFinite(Number(value)) && Number(value) >= 0 && Number(value) < 100;
+  const resultValid = activeTab === 'clt' ? divVal > 0 : activeTab === 'pj' ? validTax(taxRate) && billableW > 0 : validTax(comparePjTaxPct);
+  const displayedAmount = (value: number) => resultValid && Number.isFinite(value) ? value.toFixed(2).replace('.', ',') : '—';
+
   const selectPreset = (hours: string, div: string) => {
     setWeeklyHours(hours);
     setCustomDivisor(div);
@@ -110,6 +114,7 @@ export default function HourlyRateCalculator({ onSelectTab }: HourlyRateCalculat
   };
 
   const copyResults = async () => {
+    if (!resultValid) { notify('Corrija os dados antes de copiar.'); return; }
     let text = '';
     if (activeTab === 'clt') {
       text = `VALOR DA HORA DE TRABALHO (CLT):
@@ -148,6 +153,7 @@ Calculado em calculadoradehorastrabalhadas.org`;
   };
 
   const exportCSV = async () => {
+    if (!resultValid) { notify('Corrija os dados antes de exportar.'); return; }
     if (activeTab === 'clt') {
       generateTimesheetCSV([
         { date: 'Hora Base Normal', start: '-', end: '-', breakTime: '-', totalHours: `R$ ${baseRate.toFixed(2)}` },
@@ -157,11 +163,13 @@ Calculado em calculadoradehorastrabalhadas.org`;
         { date: 'Hora Extra Noturna (80%)', start: '-', end: '-', breakTime: '-', totalHours: `R$ ${heNoturna50.toFixed(2)}` },
         { date: 'Hora de Sobreaviso (1/3)', start: '-', end: '-', breakTime: '-', totalHours: `R$ ${sobreaviso.toFixed(2)}` },
       ], 'Tabela_Valor_Hora_CLT');
+    } else if (activeTab === 'compare') {
+      generateTimesheetCSV([{ date: 'Pacote Total CLT', start: '', end: '', totalHours: `R$ ${cmpCltTotalPackage.toFixed(2)}` }, { date: 'Faturamento PJ Mínimo Equivalente', start: '', end: '', totalHours: `R$ ${cmpEquivalentPjGross.toFixed(2)}` }], 'Comparativo_CLT_PJ');
     } else {
       generateTimesheetCSV([
         { date: 'Meta Líquida Mensal', start: '-', end: '-', breakTime: '-', totalHours: `R$ ${netDesired.toFixed(2)}` },
         { date: 'Custos Fixos e Impostos', start: '-', end: '-', breakTime: '-', totalHours: `R$ ${exp.toFixed(2)}` },
-        { date: 'Faturamento Bruto Mensal Necessário', start: '-', end: '-', breakTime: '-', totalHours: `R$ ${grossIncomeNeeded.toFixed(2)}` },
+        { date: 'Faturamento Bruto Mensal Necessário', start: '-', end: '-', breakTime: '-', totalHours: `R$ ${displayedAmount(grossIncomeNeeded)}` },
         { date: 'VALOR RECOMENDADO POR HORA PJ', start: '-', end: '-', breakTime: '-', totalHours: `R$ ${pjHourlyRate.toFixed(2)}` },
       ], 'Estimativa_Valor_Hora_PJ');
     }
@@ -169,7 +177,7 @@ Calculado em calculadoradehorastrabalhadas.org`;
 
   return (
     <div className="animate-in fade-in duration-500 space-y-8">
-      {(nonNegative(taxRate) >= 100 || nonNegative(comparePjTaxPct) >= 100) && <p role="alert" className="text-red-700 dark:text-red-300 text-sm">A alíquota deve ser menor que 100% para calcular a proposta.</p>}
+      {!resultValid && <p role="alert" className="text-red-700 dark:text-red-300 text-sm">Informe divisor e horas faturáveis maiores que zero e alíquota entre 0% e menos de 100%.</p>}
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
@@ -180,13 +188,13 @@ Calculado em calculadoradehorastrabalhadas.org`;
         </div>
 
         <div className="flex items-center gap-2 self-start md:self-auto">
-          <button onClick={exportCSV} className="flex items-center gap-1.5 text-xs font-semibold text-neutral-700 dark:text-neutral-300 bg-neutral-100 hover:bg-neutral-200 px-3 py-2 rounded-xl transition-colors cursor-pointer">
+          <button disabled={!resultValid} onClick={exportCSV} className="flex items-center gap-1.5 text-xs font-semibold text-neutral-700 dark:text-neutral-300 bg-neutral-100 hover:bg-neutral-200 px-3 py-2 rounded-xl transition-colors cursor-pointer">
             <Download className="w-3.5 h-3.5 text-emerald-600" /> Exportar CSV
           </button>
-          <button onClick={copyResults} className="flex items-center gap-1.5 text-xs font-semibold text-neutral-700 dark:text-neutral-300 bg-neutral-100 hover:bg-neutral-200 px-3 py-2 rounded-xl transition-colors cursor-pointer">
+          <button disabled={!resultValid} onClick={copyResults} className="flex items-center gap-1.5 text-xs font-semibold text-neutral-700 dark:text-neutral-300 bg-neutral-100 hover:bg-neutral-200 px-3 py-2 rounded-xl transition-colors cursor-pointer">
             {copied ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5 text-blue-600" />} Copiar Resumo
           </button>
-          <button onClick={() => window.print()} className="flex items-center gap-1.5 text-xs font-semibold text-neutral-700 dark:text-neutral-300 bg-neutral-100 hover:bg-neutral-200 px-3 py-2 rounded-xl transition-colors cursor-pointer">
+          <button disabled={!resultValid} onClick={() => { if (resultValid) window.print(); }} className="flex items-center gap-1.5 text-xs font-semibold text-neutral-700 dark:text-neutral-300 bg-neutral-100 hover:bg-neutral-200 px-3 py-2 rounded-xl transition-colors cursor-pointer">
             <Printer className="w-3.5 h-3.5 text-neutral-600 dark:text-neutral-400" /> Imprimir
           </button>
         </div>
@@ -323,7 +331,7 @@ Calculado em calculadoradehorastrabalhadas.org`;
                 Sua Hora Base Normal Vale
               </span>
               <div className="text-4xl font-extrabold font-mono tracking-tight">
-                R$ {baseRate.toFixed(2).replace('.', ',')} <span className="text-lg font-normal text-emerald-200">/ hora</span>
+                R$ {displayedAmount(baseRate)} <span className="text-lg font-normal text-emerald-200">/ hora</span>
               </div>
               <p className="text-emerald-100 text-xs mt-1">
                 Calculado com divisor de {divVal} horas mensais sobre base total de R$ {totalRemunerationBase.toFixed(2).replace('.', ',')}.
@@ -501,10 +509,10 @@ Calculado em calculadoradehorastrabalhadas.org`;
                 Preço Mínimo Recomendado por Hora PJ
               </span>
               <div className="text-4xl font-extrabold font-mono tracking-tight">
-                R$ {pjHourlyRate.toFixed(2).replace('.', ',')} <span className="text-lg font-normal text-purple-200">/ hora</span>
+                R$ {displayedAmount(pjHourlyRate)} <span className="text-lg font-normal text-purple-200">/ hora</span>
               </div>
               <p className="text-purple-200 text-xs mt-1">
-                Faturamento bruto necessário: R$ {grossIncomeNeeded.toFixed(2)}/mês para atingir R$ {netDesired.toFixed(2)} líquidos.
+                Faturamento bruto necessário: R$ {displayedAmount(grossIncomeNeeded)}/mês para atingir R$ {netDesired.toFixed(2)} líquidos.
               </p>
             </div>
             <div className="w-16 h-16 bg-white/10 rounded-2xl flex items-center justify-center shrink-0">
@@ -541,14 +549,15 @@ Calculado em calculadoradehorastrabalhadas.org`;
               <div className="bg-neutral-800 p-3 rounded-xl border border-neutral-700">
                 <span className="text-xs text-neutral-400 block mb-1">Valor Total Estimado do Projeto:</span>
                 <span className="text-2xl font-black font-mono text-emerald-400">
-                  R$ {projectTotalPj.toFixed(2).replace('.', ',')}
+                  R$ {displayedAmount(projectTotalPj)}
                 </span>
               </div>
 
               <div className="flex items-end">
                 <button
                   type="button"
-                  onClick={async () => {
+                  disabled={!resultValid} onClick={async () => {
+                    if (!resultValid) return;
                     const text = `PROPOSTA COMERCIAL DE PROJETO:
 • Estimativa do Projeto: ${projHours} horas de trabalho
 • Valor da Hora do Profissional: R$ ${pjHourlyRate.toFixed(2)}/h
@@ -660,7 +669,7 @@ Calculado via calculadoradehorastrabalhadas.org`;
               </span>
               <div className="pt-2">
                 <div className="text-3xl font-extrabold font-mono tracking-tight">
-                  R$ {cmpEquivalentPjGross.toFixed(2).replace('.', ',')} <span className="text-sm text-amber-100 font-normal">/ mês</span>
+                  R$ {displayedAmount(cmpEquivalentPjGross)} <span className="text-sm text-amber-100 font-normal">/ mês</span>
                 </div>
                 <p className="text-xs text-amber-100 mt-2 leading-relaxed">
                   Para compensar a falta de FGTS, 13º salário, férias remuneradas, aviso prévio e benefícios da CLT, sua nota fiscal PJ deve ter este valor mínimo.
@@ -669,7 +678,7 @@ Calculado via calculadoradehorastrabalhadas.org`;
               <div className="bg-amber-600/60 p-3 rounded-xl text-[11px] space-y-1 text-amber-50 border border-amber-400/40">
                 <div className="flex justify-between">
                   <span>Impostos ({comparePjTaxPct}%):</span>
-                  <span className="font-bold font-mono">- R$ {(cmpEquivalentPjGross * cmpPjTax).toFixed(2)}</span>
+                  <span className="font-bold font-mono">- R$ {displayedAmount(cmpEquivalentPjGross * cmpPjTax)}</span>
                 </div>
                 <div className="flex justify-between">
                   <span>Contabilidade/Despesas Fixas:</span>

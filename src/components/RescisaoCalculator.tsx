@@ -1,4 +1,5 @@
-import { storage, copyText as writeClipboard, nonNegative } from '../utils/browser';
+import { terminationDates } from '../utils/termination';
+import { storage, copyText as writeClipboard, nonNegative, notify } from '../utils/browser';
 import { MINIMUM_WAGE_2026, calculateINSS, calculateIRRF, calculateSeguroDesemprego } from '../utils/taxCalculations';
 import React, { useState, useEffect } from 'react';
 import { DollarSign, FileText, Info, ShieldCheck, Download, Copy, Check, Printer, AlertTriangle, Calculator, Briefcase, Sparkles, ShieldAlert } from 'lucide-react';
@@ -30,10 +31,25 @@ export default function RescisaoCalculator({ onSelectTab }: RescisaoCalculatorPr
   const [fgtsBalance, setFgtsBalance] = useState(() => storage.getItem('calc_rescisao_fgts') || '12000.00');
   const [dependents, setDependents] = useState(() => storage.getItem('calc_rescisao_deps') || '0');
   const [variableAverage, setVariableAverage] = useState(() => storage.getItem('calc_rescisao_vars') || '0');
+  const [dates, setDates] = useState(() => {
+    const empty = { admission: '', last: '', start13: '', vacation: '', projectDays: '' };
+    try { const saved = JSON.parse(storage.getItem('calc_rescisao_dates') ?? '{}'); for (const key of Object.keys(empty) as (keyof typeof empty)[]) if (typeof saved?.[key] === 'string') empty[key] = saved[key]; } catch { /* Use empty fields for malformed saved data. */ }
+    return empty;
+  });
+  const [projection, setProjection] = useState<ReturnType<typeof terminationDates> | null>(() => {
+    if (storage.getItem('calc_rescisao_dates_active') !== 'true') return null;
+    try { return terminationDates(dates.admission, dates.last, dates.start13, dates.vacation, tipoAviso !== 'indenizado' ? false : tipoDesligamento === 'acordo_mutuo' ? dates.projectDays.trim() === '' ? NaN : Number(dates.projectDays) : tipoDesligamento === 'sem_justa_causa'); } catch { return null; }
+  });
+  const [simplePeriods, setSimplePeriods] = useState(() => storage.getItem('calc_rescisao_simple_periods') ?? (storage.getItem('calc_rescisao_has_exp_vac') === 'true' ? '1' : '0'));
+  const [doublePeriods, setDoublePeriods] = useState(() => storage.getItem('calc_rescisao_double_periods') ?? '0');
   const [copied, setCopied] = useState(false);
+
+  useEffect(() => { storage.setItem('calc_rescisao_dates', JSON.stringify(dates)); storage.setItem('calc_rescisao_dates_active', String(projection !== null)); }, [dates, projection]);
 
   // Persistence
   useEffect(() => {
+    storage.setItem('calc_rescisao_simple_periods', simplePeriods);
+    storage.setItem('calc_rescisao_double_periods', doublePeriods);
     storage.setItem('calc_rescisao_gross', grossSalary);
     storage.setItem('calc_rescisao_tipo', tipoDesligamento);
     storage.setItem('calc_rescisao_aviso', tipoAviso);
@@ -45,12 +61,12 @@ export default function RescisaoCalculator({ onSelectTab }: RescisaoCalculatorPr
     storage.setItem('calc_rescisao_fgts', fgtsBalance);
     storage.setItem('calc_rescisao_deps', dependents);
     storage.setItem('calc_rescisao_vars', variableAverage);
-  }, [grossSalary, tipoDesligamento, tipoAviso, yearsWorked, workedDaysMonth, months13th, monthsVacation, hasExpiredVacation, fgtsBalance, dependents, variableAverage]);
+  }, [grossSalary, tipoDesligamento, tipoAviso, yearsWorked, workedDaysMonth, months13th, monthsVacation, hasExpiredVacation, fgtsBalance, dependents, variableAverage, simplePeriods, doublePeriods]);
 
   const baseSalary = nonNegative(grossSalary, 0);
   const varsAvg = nonNegative(variableAverage, 0);
   const salary = baseSalary + varsAvg; // Total remuneratório para cálculo das verbas
-  const years = nonNegative(yearsWorked, 0);
+  const years = projection?.years ?? Math.floor(nonNegative(yearsWorked, 0));
   const daysInMonth = Math.min(30, Math.max(0, nonNegative(workedDaysMonth, 0)));
   const m13 = Math.min(12, Math.max(0, nonNegative(months13th, 0)));
   const mVac = Math.min(12, Math.max(0, nonNegative(monthsVacation, 0)));
@@ -62,7 +78,7 @@ export default function RescisaoCalculator({ onSelectTab }: RescisaoCalculatorPr
 
   // 2. Aviso Prévio Proporcional (Lei 12.506/2011)
   // 30 dias + 3 dias por ano completo de serviço (máximo 90 dias)
-  const avisoDays = Math.min(90, 30 + (years * 3));
+  const avisoDays = tipoDesligamento === 'com_justa_causa' ? 0 : tipoDesligamento === 'pedido_demissao' ? 30 : Math.min(90, 30 + (years * 3));
   let avisoPrevioValor = 0;
   
   if (tipoDesligamento === 'sem_justa_causa') {
@@ -83,7 +99,7 @@ export default function RescisaoCalculator({ onSelectTab }: RescisaoCalculatorPr
 
   // 3. 13º Salário Proporcional
   // Informe os avos já considerando a projeção do aviso nas datas do contrato.
-  let m13Final = m13;
+  const m13Final = projection ? Object.values(projection.byYear).reduce((sum, avos) => sum + avos, 0) : m13;
 
   
   let décimoTerceiro = 0;
@@ -92,7 +108,7 @@ export default function RescisaoCalculator({ onSelectTab }: RescisaoCalculatorPr
   }
 
   // 4. Férias Proporcionais + 1/3
-  let mVacFinal = mVac;
+  const mVacFinal = projection?.avos ?? mVac;
 
 
   let feriasProporcionais = 0;
@@ -101,7 +117,9 @@ export default function RescisaoCalculator({ onSelectTab }: RescisaoCalculatorPr
   }
 
   // 5. Férias Vencidas + 1/3
-  const feriasVencidas = hasExpiredVacation ? salary : 0;
+  const simpleCount = Math.min(100, Math.floor(nonNegative(simplePeriods)));
+  const doubleCount = Math.min(100, Math.floor(nonNegative(doublePeriods)));
+  const feriasVencidas = salary * (simpleCount + 2 * doubleCount);
 
   // Terço Constitucional sobre Férias Proporcionais + Vencidas
   const tercoFerias = (feriasProporcionais + feriasVencidas) / 3;
@@ -116,9 +134,10 @@ export default function RescisaoCalculator({ onSelectTab }: RescisaoCalculatorPr
   }
 
   const inssSaldoSalario = calculateINSS(saldoSalario);
-  const inss13o = calculateINSS(décimoTerceiro);
+  const thirteenthAmounts = tipoDesligamento === 'com_justa_causa' ? [0] : projection ? Object.values(projection.byYear).map(avos => salary * avos / 12) : [décimoTerceiro];
+  const inss13o = thirteenthAmounts.reduce((sum, amount) => sum + calculateINSS(amount), 0);
   const irrfSaldoSalario = calculateIRRF(saldoSalario, deps, inssSaldoSalario);
-  const irrf13o = calculateIRRF(décimoTerceiro, deps, inss13o);
+  const irrf13o = thirteenthAmounts.reduce((sum, amount) => sum + calculateIRRF(amount, deps, calculateINSS(amount)), 0);
 
   // Totais Brutos e Líquidos
   const proventosRendimentos = saldoSalario + (avisoPrevioValor > 0 ? avisoPrevioValor : 0) + décimoTerceiro + totalFerias + multaFGTS;
@@ -152,6 +171,7 @@ export default function RescisaoCalculator({ onSelectTab }: RescisaoCalculatorPr
     setMonths13th('7');
     setMonthsVacation('7');
     setHasExpiredVacation(false);
+    setSimplePeriods('0'); setDoublePeriods('0'); setProjection(null);
     setFgtsBalance('14200.00');
     setDependents('1');
   };
@@ -195,7 +215,15 @@ VALOR LÍQUIDO RESCISÓRIO A RECEBER: ${formatBRL(totalLiquido)}
 
   return (
     <div className="space-y-6">
-      <p className="text-xs text-neutral-600 dark:text-neutral-300" role="note">Informe os meses de 13º e férias já incluindo a projeção do aviso prévio pelas datas do contrato. Férias vencidas representam um período simples; períodos em dobro e a elegibilidade do seguro-desemprego exigem análise específica.</p>
+      <p className="text-xs text-neutral-600 dark:text-neutral-300" role="note">No modo manual, informe os avos incluindo a projeção do aviso. O assistente usa apenas períodos não quitados que você informar; confira pagamentos anteriores, férias parciais e acordos antes de aplicar.</p>
+      <details className="border border-neutral-200 dark:border-neutral-700 rounded-xl p-4 text-xs space-y-3">
+        <summary className="font-bold cursor-pointer">Assistente de datas e períodos não quitados</summary>
+        <div className="grid sm:grid-cols-2 gap-3 mt-3">{([['admission', 'Data de admissão'], ['last', 'Último dia do contrato sem projeção indenizada'], ['start13', 'Início do período de 13º ainda não quitado'], ['vacation', 'Início do primeiro período de férias não quitado nem gozado']] as const).map(([key, label]) => <label key={key} className="grid gap-1">{label}<input type="date" value={dates[key]} onChange={e => { setDates(current => ({ ...current, [key]: e.target.value })); setProjection(null); }} className="border rounded p-2 bg-white dark:bg-neutral-900" /></label>)}</div>
+        {tipoDesligamento === 'acordo_mutuo' && tipoAviso === 'indenizado' && <label className="grid gap-1 mt-3">Dias de projeção previstos no acordo<input type="number" min="0" max="90" step="1" value={dates.projectDays} onChange={e => { setDates(current => ({ ...current, projectDays: e.target.value })); setProjection(null); }} className="border rounded p-2 bg-white dark:bg-neutral-900" /></label>}
+        <p className="mt-3">Projeta o aviso indenizado na dispensa sem justa causa. No acordo mútuo, informe os dias de projeção conforme os documentos, sem presumir que o pagamento pela metade define a duração. No aviso trabalhado, informe o último dia já incluindo esse período. Conta 13º por ano e férias por aniversário; não detecta valores já pagos nem férias parcialmente gozadas.</p>
+        <button type="button" className="mt-3 bg-blue-600 text-white rounded px-3 py-2" onClick={() => { try { const result = terminationDates(dates.admission, dates.last, dates.start13, dates.vacation, tipoAviso !== 'indenizado' ? false : tipoDesligamento === 'acordo_mutuo' ? dates.projectDays.trim() === '' ? NaN : Number(dates.projectDays) : tipoDesligamento === 'sem_justa_causa'); setProjection(result); setSimplePeriods(String(result.simple)); setDoublePeriods(String(result.doubled)); } catch (error) { setProjection(null); notify((error as Error).message); } }}>Aplicar datas aos cálculos</button>
+        {projection && <p role="status" className="mt-3">Data projetada: {projection.projected}. 13º: {Object.entries(projection.byYear).map(([year, avos]) => `${year}: ${avos}/12`).join('; ')}. Férias proporcionais: {projection.avos}/12; períodos simples: {simpleCount}; em dobro: {doubleCount}. <button className="underline" onClick={() => setProjection(null)}>Voltar aos avos manuais</button></p>}
+      </details>
       {/* Header Title Banner */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-neutral-200 dark:border-neutral-700">
         <div>
@@ -304,7 +332,7 @@ VALOR LÍQUIDO RESCISÓRIO A RECEBER: ${formatBRL(totalLiquido)}
             id="rescisao-tipo-desligamento"
             aria-label="Tipo de Desligamento ou Motivo"
             value={tipoDesligamento}
-            onChange={(e) => setTipoDesligamento(e.target.value as TipoDesligamento)}
+            onChange={(e) => { setTipoDesligamento(e.target.value as TipoDesligamento); setProjection(null); }}
             className="w-full px-3 py-2.5 bg-white dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-600 rounded-xl font-bold text-neutral-900 dark:text-neutral-100 focus:ring-2 focus:ring-blue-500 focus:outline-none cursor-pointer"
           >
             <option value="sem_justa_causa">Demissão sem justa causa (Pelo empregador)</option>
@@ -325,8 +353,8 @@ VALOR LÍQUIDO RESCISÓRIO A RECEBER: ${formatBRL(totalLiquido)}
             type="number" inputMode="decimal"
             min="0"
             max="40"
-            value={yearsWorked}
-            onChange={(e) => setYearsWorked(e.target.value)}
+            disabled={projection !== null} value={projection?.years ?? yearsWorked}
+            onChange={(e) => { setYearsWorked(e.target.value); setProjection(null); }}
             className="w-full px-3 py-2.5 bg-white dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-600 rounded-xl font-bold text-neutral-900 dark:text-neutral-100 focus:ring-2 focus:ring-blue-500 focus:outline-none"
           />
           <span className="text-[11px] text-neutral-500 mt-1 block">
@@ -343,7 +371,7 @@ VALOR LÍQUIDO RESCISÓRIO A RECEBER: ${formatBRL(totalLiquido)}
             id="rescisao-tipo-aviso"
             aria-label="Tipo de Aviso Prévio"
             value={tipoAviso}
-            onChange={(e) => setTipoAviso(e.target.value as TipoAvisoPrevio)}
+            onChange={(e) => { setTipoAviso(e.target.value as TipoAvisoPrevio); setProjection(null); }}
             className="w-full px-3 py-2.5 bg-white dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-600 rounded-xl font-bold text-neutral-900 dark:text-neutral-100 focus:ring-2 focus:ring-blue-500 focus:outline-none cursor-pointer"
           >
             <option value="indenizado">Indenizado (Pago em dinheiro sem trabalhar)</option>
@@ -380,8 +408,8 @@ VALOR LÍQUIDO RESCISÓRIO A RECEBER: ${formatBRL(totalLiquido)}
             type="number" inputMode="decimal"
             min="0"
             max="12"
-            value={months13th}
-            onChange={(e) => setMonths13th(e.target.value)}
+            disabled={projection !== null} value={projection ? m13Final : months13th}
+            onChange={(e) => { setMonths13th(e.target.value); setProjection(null); }}
             className="w-full px-3 py-2.5 bg-white dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-600 rounded-xl font-bold text-neutral-900 dark:text-neutral-100 focus:ring-2 focus:ring-blue-500 focus:outline-none"
           />
           <span className="text-[11px] text-neutral-500 mt-1 block">
@@ -400,8 +428,8 @@ VALOR LÍQUIDO RESCISÓRIO A RECEBER: ${formatBRL(totalLiquido)}
             type="number" inputMode="decimal"
             min="0"
             max="12"
-            value={monthsVacation}
-            onChange={(e) => setMonthsVacation(e.target.value)}
+            disabled={projection !== null} value={projection?.avos ?? monthsVacation}
+            onChange={(e) => { setMonthsVacation(e.target.value); setProjection(null); }}
             className="w-full px-3 py-2.5 bg-white dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-600 rounded-xl font-bold text-neutral-900 dark:text-neutral-100 focus:ring-2 focus:ring-blue-500 focus:outline-none"
           />
         </div>
@@ -469,18 +497,10 @@ VALOR LÍQUIDO RESCISÓRIO A RECEBER: ${formatBRL(totalLiquido)}
           </span>
         </div>
 
-        {/* Checkbox Férias Vencidas */}
-        <div className="md:col-span-2 flex items-center gap-3 pt-2">
-          <input
-            type="checkbox"
-            id="expired_vacation"
-            checked={hasExpiredVacation}
-            onChange={(e) => setHasExpiredVacation(e.target.checked)}
-            className="w-4 h-4 text-blue-600 rounded-md border-neutral-300 dark:border-neutral-600 focus:ring-blue-500 cursor-pointer"
-          />
-          <label htmlFor="expired_vacation" className="text-xs sm:text-sm font-bold text-neutral-800 dark:text-neutral-200 cursor-pointer">
-            Possui 1 Período de Férias Vencidas Não Gozadas (Adiciona 1 salário integral + 1/3)
-          </label>
+        <div className="md:col-span-2 grid sm:grid-cols-2 gap-3">
+          <label className="grid gap-1 text-xs font-bold">Períodos completos de férias simples não quitados<input type="number" min="0" max="100" step="1" value={simplePeriods} onChange={e => setSimplePeriods(e.target.value)} className="border rounded p-2 bg-white dark:bg-neutral-900" /></label>
+          <label className="grid gap-1 text-xs font-bold">Períodos completos de férias em dobro não quitados<input type="number" min="0" max="100" step="1" value={doublePeriods} onChange={e => setDoublePeriods(e.target.value)} className="border rounded p-2 bg-white dark:bg-neutral-900" /></label>
+          <p className="text-xs text-neutral-500 sm:col-span-2">Cada período representa 30 dias. Em dobro aplica-se ao período não concedido dentro do prazo concessivo, não apenas por atraso no pagamento. O terço constitucional é incluído; ajuste os períodos conforme os registros.</p>
         </div>
       </div>
 
