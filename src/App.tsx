@@ -387,10 +387,10 @@ export default function App() {
 
               <CalculationReference activeTab={activeTab} />
               {/* SEO Structured Content */}
-              <div className="no-print"><Suspense fallback={null}><SEOContent activeTab={activeTab} onSelectTab={setActiveTab} /></Suspense></div>
+              <div className="no-print"><CalculatorErrorBoundary key={`content-${activeTab}`} message="Não foi possível carregar este guia. Tente novamente."><Suspense fallback={null}><SEOContent activeTab={activeTab} onSelectTab={setActiveTab} /></Suspense></CalculatorErrorBoundary></div>
 
               {/* FAQ Section */}
-              <div className="no-print"><Suspense fallback={null}>{TOOL_ANSWERS[activeTab] && <FAQSection activeTab={activeTab} onSelectTab={setActiveTab} />}</Suspense></div>
+              <div className="no-print"><CalculatorErrorBoundary key={`faq-${activeTab}`} message="Não foi possível carregar as perguntas frequentes. Tente novamente."><Suspense fallback={null}>{TOOL_ANSWERS[activeTab] && <FAQSection activeTab={activeTab} onSelectTab={setActiveTab} />}</Suspense></CalculatorErrorBoundary></div>
             </div>
 
             {/* Sidebar Column (4 cols) */}
