@@ -1,3 +1,4 @@
+import { copyText as writeClipboard } from '../utils/browser';
 import { Calculator, Clock, Calendar, DollarSign, Moon, Sun, BookOpen, FileSpreadsheet, Menu, X, Scale, ArrowRightLeft, FileText, Users, Mail, Share2, Check, Briefcase, History, Palmtree, AlertTriangle, ShieldCheck, Gift, ShieldAlert, Biohazard } from 'lucide-react';
 import { useState } from 'react';
 import { getHrefForTab } from '../utils/routes';
@@ -54,14 +55,14 @@ export default function Header({ activeTab, setActiveTab, isDark, toggleDark, on
         // user cancelled share
       }
     } else {
-      navigator.clipboard.writeText(url);
+      if (!await writeClipboard(url)) return;
       setCopiedShare(true);
       setTimeout(() => setCopiedShare(false), 2000);
     }
   };
 
   return (
-    <header className="bg-white dark:bg-neutral-900 border-b border-neutral-200 dark:border-neutral-800 sticky top-0 z-50 shadow-xs transition-colors">
+    <header className="bg-white dark:bg-neutral-900 border-b border-neutral-200 dark:border-neutral-800 sticky top-0 z-30 shadow-xs transition-colors">
       <div className="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between gap-2">
         {/* Logo Brand */}
         <a
@@ -70,24 +71,24 @@ export default function Header({ activeTab, setActiveTab, isDark, toggleDark, on
             e.preventDefault();
             handleSelect('daily');
           }}
-          className="flex items-center gap-2.5 text-left group shrink-0"
+          className="flex items-center gap-2.5 text-left group min-w-0 flex-1 sm:flex-none"
           title="Calculadora de Horas Trabalhadas - Página Inicial"
         >
-          <div className="w-9 h-9 bg-blue-600 rounded-xl flex items-center justify-center text-white font-bold shadow-sm group-hover:bg-blue-700 transition-colors">
+          <div className="w-9 h-9 shrink-0 bg-blue-600 rounded-xl flex items-center justify-center text-white font-bold shadow-sm group-hover:bg-blue-700 transition-colors">
             <Calculator className="w-5 h-5" />
           </div>
-          <div>
-            <span className="font-extrabold text-neutral-900 dark:text-white text-base tracking-tight block leading-none">
+          <div className="min-w-0">
+            <span className="font-extrabold text-neutral-900 dark:text-white text-xs sm:text-base tracking-tight block truncate leading-none">
               Calculadora de Horas
             </span>
-            <span className="text-[10px] text-blue-600 dark:text-blue-400 font-semibold tracking-wider uppercase block mt-0.5">
+            <span className="text-[10px] text-blue-600 dark:text-blue-400 font-semibold tracking-wider uppercase hidden sm:block mt-0.5">
               calculadoradehorastrabalhadas.org
             </span>
           </div>
         </a>
 
         {/* Desktop Nav - Horizontal Scroll on medium screens, flex on large */}
-        <nav className="hidden xl:flex items-center gap-0.5 text-xs font-semibold text-neutral-600 dark:text-neutral-300">
+        <nav className="hidden items-center gap-0.5 text-xs font-semibold text-neutral-600 dark:text-neutral-300">
           {navItems.map((item) => {
             const Icon = item.icon;
             const isActive = activeTab === item.id;
@@ -115,7 +116,7 @@ export default function Header({ activeTab, setActiveTab, isDark, toggleDark, on
         </nav>
 
         {/* Action Controls */}
-        <div className="flex items-center gap-1.5 sm:gap-2">
+        <div className="flex items-center gap-1 sm:gap-2 shrink-0">
           {onOpenHistory && (
             <button
               onClick={onOpenHistory}
@@ -155,8 +156,8 @@ export default function Header({ activeTab, setActiveTab, isDark, toggleDark, on
 
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="xl:hidden p-2 text-neutral-600 dark:text-neutral-300 hover:text-neutral-900 rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors cursor-pointer"
-            aria-label="Abrir Menu"
+            aria-expanded={mobileMenuOpen} aria-controls="tool-menu" className="p-2 text-neutral-600 dark:text-neutral-300 hover:text-neutral-900 rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors cursor-pointer"
+            aria-label={mobileMenuOpen ? "Fechar Menu" : "Abrir Menu"}
           >
             {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>
@@ -165,7 +166,7 @@ export default function Header({ activeTab, setActiveTab, isDark, toggleDark, on
 
       {/* Mobile Drawer Navigation */}
       {mobileMenuOpen && (
-        <div className="xl:hidden bg-white dark:bg-neutral-900 border-b border-neutral-200 dark:border-neutral-800 px-4 py-3 grid grid-cols-2 gap-1.5 shadow-lg animate-in slide-in-from-top-2 duration-200 max-h-[70vh] overflow-y-auto">
+        <div id="tool-menu" className="bg-white dark:bg-neutral-900 border-b border-neutral-200 dark:border-neutral-800 px-4 py-3 grid grid-cols-2 gap-1.5 shadow-lg animate-in slide-in-from-top-2 duration-200 max-h-[70vh] overflow-y-auto">
           {navItems.map((item) => {
             const Icon = item.icon;
             const isActive = activeTab === item.id;

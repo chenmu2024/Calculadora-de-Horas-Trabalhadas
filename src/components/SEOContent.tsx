@@ -1,3 +1,4 @@
+import { copyText as writeClipboard } from '../utils/browser';
 import { MouseEvent, useState } from 'react';
 import EATBadge from './EATBadge';
 import RatingWidget from './RatingWidget';
@@ -43,8 +44,8 @@ export default function SEOContent({ activeTab = 'daily', onSelectTab }: SEOCont
     }
   };
 
-  const copyToClipboard = (text: string, id: string) => {
-    navigator.clipboard.writeText(text);
+  const copyToClipboard = async (text: string, id: string) => {
+    if (!await writeClipboard(text)) return;
     setCopiedFormula(id);
     setTimeout(() => setCopiedFormula(null), 2000);
   };
@@ -325,22 +326,22 @@ export default function SEOContent({ activeTab = 'daily', onSelectTab }: SEOCont
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
           <div className="p-3 bg-neutral-50 dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700">
             <span className="text-neutral-500 font-semibold block">1ª Faixa</span>
-            <div className="font-bold text-neutral-900 dark:text-white">Até R$ 1.518,00</div>
+            <div className="font-bold text-neutral-900 dark:text-white">Até R$ 1.621,00</div>
             <div className="text-emerald-600 dark:text-emerald-400 font-mono font-bold mt-1">Alíquota: 7,5%</div>
           </div>
           <div className="p-3 bg-neutral-50 dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700">
             <span className="text-neutral-500 font-semibold block">2ª Faixa</span>
-            <div className="font-bold text-neutral-900 dark:text-white">De R$ 1.518,01 a R$ 2.793,88</div>
+            <div className="font-bold text-neutral-900 dark:text-white">De R$ 1.621,01 a R$ 2.902,84</div>
             <div className="text-emerald-600 dark:text-emerald-400 font-mono font-bold mt-1">Alíquota: 9,0%</div>
           </div>
           <div className="p-3 bg-neutral-50 dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700">
             <span className="text-neutral-500 font-semibold block">3ª Faixa</span>
-            <div className="font-bold text-neutral-900 dark:text-white">De R$ 2.793,89 a R$ 4.190,83</div>
+            <div className="font-bold text-neutral-900 dark:text-white">De R$ 2.902,85 a R$ 4.354,27</div>
             <div className="text-emerald-600 dark:text-emerald-400 font-mono font-bold mt-1">Alíquota: 12,0%</div>
           </div>
           <div className="p-3 bg-neutral-50 dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700">
             <span className="text-neutral-500 font-semibold block">4ª Faixa</span>
-            <div className="font-bold text-neutral-900 dark:text-white">De R$ 4.190,84 a R$ 8.157,41</div>
+            <div className="font-bold text-neutral-900 dark:text-white">De R$ 4.354,28 a R$ 8.475,55</div>
             <div className="text-emerald-600 dark:text-emerald-400 font-mono font-bold mt-1">Alíquota: 14,0%</div>
           </div>
         </div>
@@ -671,10 +672,10 @@ export default function SEOContent({ activeTab = 'daily', onSelectTab }: SEOCont
             Insalubridade (NR-15)
           </h3>
           <ul className="text-xs text-neutral-700 dark:text-neutral-300 space-y-1.5">
-            <li>• <strong>Grau Mínimo (10%):</strong> R$ 151,80/mês</li>
-            <li>• <strong>Grau Médio (20%):</strong> R$ 303,60/mês</li>
-            <li>• <strong>Grau Máximo (40%):</strong> R$ 607,20/mês</li>
-            <li>• <em>Base de cálculo:</em> Salário Mínimo Nacional (R$ 1.518,00).</li>
+            <li>• <strong>Grau Mínimo (10%):</strong> R$ 162,10/mês</li>
+            <li>• <strong>Grau Médio (20%):</strong> R$ 324,20/mês</li>
+            <li>• <strong>Grau Máximo (40%):</strong> R$ 648,40/mês</li>
+            <li>• <em>Base de cálculo:</em> Salário Mínimo Nacional (R$ 1.621,00).</li>
           </ul>
         </div>
 

@@ -1,37 +1,15 @@
+import { useDialog } from '../hooks/useDialog';
+import { copyText as writeClipboard } from '../utils/browser';
+import { HistoryItem, readHistory, clearHistory } from '../utils/history';
 import React, { useState, useEffect } from 'react';
 import { History, Trash2, X, Clock, Copy, Check, Calculator, ExternalLink } from 'lucide-react';
 import { getHrefForTab } from '../utils/routes';
-
-export interface HistoryItem {
-  id: string;
-  date: string;
-  toolTab: string;
-  toolName: string;
-  summary: string;
-  mainValue: string;
-}
 
 interface CalculationHistoryModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSelectTab: (tab: string) => void;
 }
-
-export const saveToHistory = (item: Omit<HistoryItem, 'id' | 'date'>) => {
-  try {
-    const existing = JSON.parse(localStorage.getItem('user_calc_history') || '[]');
-    const newItem: HistoryItem = {
-      ...item,
-      id: Date.now().toString(),
-      date: new Date().toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' })
-    };
-    // Keep max 20 items
-    const updated = [newItem, ...existing.filter((i: HistoryItem) => i.summary !== item.summary)].slice(0, 20);
-    localStorage.setItem('user_calc_history', JSON.stringify(updated));
-  } catch (err) {
-    // ignore localstorage errors
-  }
-};
 
 export default function CalculationHistoryModal({ isOpen, onClose, onSelectTab }: CalculationHistoryModalProps) {
   const [history, setHistory] = useState<HistoryItem[]>([]);
@@ -40,7 +18,7 @@ export default function CalculationHistoryModal({ isOpen, onClose, onSelectTab }
   useEffect(() => {
     if (isOpen) {
       try {
-        const saved = JSON.parse(localStorage.getItem('user_calc_history') || '[]');
+        const saved = readHistory();
         setHistory(saved);
       } catch {
         setHistory([]);
@@ -49,20 +27,20 @@ export default function CalculationHistoryModal({ isOpen, onClose, onSelectTab }
   }, [isOpen]);
 
   const handleClear = () => {
-    localStorage.removeItem('user_calc_history');
-    setHistory([]);
+    if (clearHistory()) setHistory([]);
   };
 
-  const handleCopy = (item: HistoryItem) => {
-    navigator.clipboard.writeText(`[${item.toolName}] ${item.summary} | Valor: ${item.mainValue} (em ${item.date})`);
+  const handleCopy = async (item: HistoryItem) => {
+    if (!await writeClipboard(`[${item.toolName}] ${item.summary} | Valor: ${item.mainValue} (em ${item.date})`)) return;
     setCopiedId(item.id);
     setTimeout(() => setCopiedId(null), 2000);
   };
 
+  const dialogRef = useDialog(isOpen, onClose);
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in duration-200">
+    <div ref={dialogRef} role="dialog" aria-modal="true" aria-label="Histórico de Cálculos" tabIndex={-1} className="fixed inset-0 z-[70] flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in duration-200">
       <div className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-3xl w-full max-w-lg shadow-2xl overflow-hidden flex flex-col max-h-[85vh]">
         {/* Modal Header */}
         <div className="p-5 border-b border-neutral-100 dark:border-neutral-800 flex items-center justify-between">
@@ -77,6 +55,7 @@ export default function CalculationHistoryModal({ isOpen, onClose, onSelectTab }
           </div>
           <button
             onClick={onClose}
+            aria-label="Fechar"
             className="p-2 text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-200 rounded-xl hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors cursor-pointer"
           >
             <X className="w-5 h-5" />
@@ -104,7 +83,7 @@ export default function CalculationHistoryModal({ isOpen, onClose, onSelectTab }
                     </span>
                     <span className="text-neutral-400 text-[10px]">{item.date}</span>
                   </div>
-                  <p className="font-medium text-neutral-800 dark:text-neutral-200 truncate">{item.summary}</p>
+                  <p className="font-medium text-neutral-800 dark:text-neutral-200 break-words">{item.summary}</p>
                   <div className="font-mono font-bold text-emerald-600 dark:text-emerald-400 text-sm">
                     {item.mainValue}
                   </div>
@@ -146,6 +125,7 @@ export default function CalculationHistoryModal({ isOpen, onClose, onSelectTab }
             </button>
             <button
               onClick={onClose}
+            aria-label="Fechar"
               className="bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 font-bold text-xs py-2 px-4 rounded-xl cursor-pointer"
             >
               Fechar

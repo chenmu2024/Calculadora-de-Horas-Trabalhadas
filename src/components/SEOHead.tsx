@@ -1,10 +1,12 @@
+import { ARTICLE_META } from '../utils/articles';
 import { useEffect } from 'react';
 
 interface SEOHeadProps {
   activeTab: string;
+  pathname?: string;
 }
 
-const PAGE_META: Record<string, { title: string; description: string; canonical: string }> = {
+export const PAGE_META: Record<string, { title: string; description: string; canonical: string }> = {
   daily: {
     title: 'Calculadora de Horas Trabalhadas Diária - CLT',
     description: 'Calcule o total de horas trabalhadas no dia com batida de ponto de 4 horários e intervalo de almoço. Resultado instantâneo no padrão CLT com horas extras.',
@@ -127,9 +129,10 @@ const PAGE_META: Record<string, { title: string; description: string; canonical:
   }
 };
 
-export default function SEOHead({ activeTab }: SEOHeadProps) {
+export default function SEOHead({ activeTab, pathname }: SEOHeadProps) {
   useEffect(() => {
-    const meta = PAGE_META[activeTab] || PAGE_META.daily;
+    const article = ARTICLE_META.find(row => pathname === `/guia-clt/${row.slug}`);
+    const meta = article ? { ...article, canonical: `https://calculadoradehorastrabalhadas.org/guia-clt/${article.slug}` } : PAGE_META[activeTab] || PAGE_META.daily;
     document.title = meta.title;
 
     // Update Meta Description
@@ -173,6 +176,9 @@ export default function SEOHead({ activeTab }: SEOHeadProps) {
     setMetaTag('twitter:card', 'summary_large_image', false);
     setMetaTag('twitter:title', meta.title, false);
     setMetaTag('twitter:description', meta.description, false);
+    setMetaTag('twitter:image', 'https://calculadoradehorastrabalhadas.org/og-image.png', false);
+    setMetaTag('twitter:url', meta.canonical, false);
+    setMetaTag('robots', activeTab === 'not-found' ? 'noindex, follow' : 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1', false);
 
     // Update Canonical & Hreflang Tags
     let canonicalLink = document.querySelector('link[rel="canonical"]');
@@ -192,8 +198,8 @@ export default function SEOHead({ activeTab }: SEOHeadProps) {
     };
 
     updateHreflang('pt-BR', meta.canonical);
-    updateHreflang('pt-PT', meta.canonical);
-    updateHreflang('x-default', 'https://calculadoradehorastrabalhadas.org/');
+    document.querySelector('link[hreflang="pt-PT"]')?.remove();
+    updateHreflang('x-default', meta.canonical);
 
     // Inject/Update Dynamic JSON-LD Structured Data
     let schemaScript = document.getElementById('jsonld-schema');
@@ -288,11 +294,11 @@ export default function SEOHead({ activeTab }: SEOHeadProps) {
               "step": [
                 { "@type": "HowToStep", "position": 1, "name": "Selecione o número da solicitação", "text": "Escolha se é a 1ª, 2ª ou 3ª solicitação do benefício para validar os meses de carência exigidos por lei." },
                 { "@type": "HowToStep", "position": 2, "name": "Informe os 3 últimos salários recebidos", "text": "Digite o salário bruto dos últimos 3 meses antes da rescisão para obter a média salarial apurada." },
-                { "@type": "HowToStep", "position": 3, "name": "Consulte o valor e número de parcelas", "text": "A calculadora aplica as faixas oficiais de cálculo do MTE 2026 e o piso de R$ 1.518,00." }
+                { "@type": "HowToStep", "position": 3, "name": "Consulte o valor e número de parcelas", "text": "A calculadora aplica as faixas oficiais de cálculo do MTE 2026 e o piso de R$ 1.621,00." }
               ]
             },
             faqs: [
-              { "name": "Qual é o valor mínimo e máximo do Seguro-Desemprego em 2026?", "answer": "O valor mínimo de cada parcela é de R$ 1.518,00 (Salário Mínimo 2026) e o teto máximo fixado pelo Ministério do Trabalho é de R$ 2.313,74." },
+              { "name": "Qual é o valor mínimo e máximo do Seguro-Desemprego em 2026?", "answer": "O valor mínimo de cada parcela é de R$ 1.621,00 (Salário Mínimo 2026) e o teto máximo fixado pelo Ministério do Trabalho é de R$ 2.518,65." },
               { "name": "Quantos meses de carteira assinada preciso para pedir seguro-desemprego?", "answer": "Na 1ª solicitação, são exigidos pelo menos 12 meses nos últimos 18 meses. Na 2ª solicitação, 9 meses nos últimos 12 meses. A partir da 3ª, bastam 6 meses ininterruptos." },
               { "name": "Qual o prazo para dar entrada no seguro-desemprego?", "answer": "O trabalhador tem do 7º ao 120º dia corrido após a data da demissão sem justa causa para solicitar o benefício no portal Gov.br ou aplicativo Carteira de Trabalho Digital." }
             ]
@@ -465,7 +471,7 @@ export default function SEOHead({ activeTab }: SEOHeadProps) {
                 "name": "CalculadoraDeHorasTrabalhadas.org",
                 "logo": {
                   "@type": "ImageObject",
-                  "url": "https://calculadoradehorastrabalhadas.org/favicon.ico"
+                  "url": "https://calculadoradehorastrabalhadas.org/favicon.svg"
                 }
               },
               "datePublished": "2026-01-01",
@@ -529,7 +535,7 @@ export default function SEOHead({ activeTab }: SEOHeadProps) {
           "operatingSystem": "All",
           "browserRequirements": "Requires JavaScript",
           "description": meta.description,
-          "inLanguage": ["pt-BR", "pt-PT"],
+          "inLanguage": "pt-BR",
           "softwareVersion": "2026.3.0",
           "featureList": [
             "Cálculo de horas trabalhadas com desconto de intervalo intrajornada",
@@ -549,14 +555,6 @@ export default function SEOHead({ activeTab }: SEOHeadProps) {
           "publisher": {
             "@id": "https://calculadoradehorastrabalhadas.org/#organization"
           },
-          "aggregateRating": {
-            "@type": "AggregateRating",
-            "ratingValue": "4.9",
-            "bestRating": "5",
-            "worstRating": "1",
-            "ratingCount": "3280",
-            "reviewCount": "3280"
-          },
           "offers": {
             "@type": "Offer",
             "price": "0",
@@ -568,7 +566,7 @@ export default function SEOHead({ activeTab }: SEOHeadProps) {
           "@id": "https://calculadoradehorastrabalhadas.org/#organization",
           "name": "CalculadoraDeHorasTrabalhadas.org",
           "url": "https://calculadoradehorastrabalhadas.org/",
-          "logo": "https://calculadoradehorastrabalhadas.org/favicon.ico",
+          "logo": "https://calculadoradehorastrabalhadas.org/favicon.svg",
           "knowsAbout": ["Legislação Trabalhista CLT", "Cálculo de Horas Extras", "Holerite e Folha de Pagamento", "Rescisão de Contrato de Trabalho", "Súmulas TST e Reforma Trabalhista"],
           "publishingPrinciples": "https://calculadoradehorastrabalhadas.org/sobre"
         },
@@ -621,7 +619,7 @@ export default function SEOHead({ activeTab }: SEOHeadProps) {
     } as any);
 
     schemaScript.textContent = JSON.stringify(structuredData);
-  }, [activeTab]);
+  }, [activeTab, pathname]);
 
   return null;
 }

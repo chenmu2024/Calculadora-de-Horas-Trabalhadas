@@ -1,3 +1,4 @@
+import { ARTICLE_META } from './articles';
 export const TAB_ROUTES: Record<string, string> = {
   daily: '/',
   timesheet: '/calculadora-semanal',
@@ -88,6 +89,7 @@ export function getTabFromLocation(): string {
 
   // 2. Check clean pathname
   const pathname = window.location.pathname.replace(/\/$/, '') || '/';
+  if (ARTICLE_META.some(article => pathname === `/guia-clt/${article.slug}`)) return 'blog';
   if (PATH_TO_TAB[pathname]) {
     return PATH_TO_TAB[pathname];
   }

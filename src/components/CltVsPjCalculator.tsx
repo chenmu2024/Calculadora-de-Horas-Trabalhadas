@@ -1,3 +1,5 @@
+import { copyText as writeClipboard } from '../utils/browser';
+import { saveToHistory } from '../utils/history';
 import { useState, useMemo } from 'react';
 import { 
   Scale, 
@@ -13,7 +15,7 @@ import {
   TrendingUp,
   Percent
 } from 'lucide-react';
-import { calculateINSS, calculateIRRF } from '../utils/taxCalculations';
+import { calculateINSS, calculateIRRF, MINIMUM_WAGE_2026 } from '../utils/taxCalculations';
 import InternalLinkCTA from './InternalLinkCTA';
 
 interface CltVsPjCalculatorProps {
@@ -39,7 +41,7 @@ export default function CltVsPjCalculator({ onSelectTab }: CltVsPjCalculatorProp
   const results = useMemo(() => {
     // 1. CLT Calculations
     const inssClt = calculateINSS(salarioCltBruto);
-    const irrfClt = calculateIRRF(salarioCltBruto - inssClt, 0);
+    const irrfClt = calculateIRRF(salarioCltBruto, 0, inssClt);
     const cltLiquidoMensal = salarioCltBruto - inssClt - irrfClt;
 
     // Benefícios CLT convertidos em base mensal
@@ -52,7 +54,7 @@ export default function CltVsPjCalculator({ onSelectTab }: CltVsPjCalculatorProp
 
     // 2. PJ Calculations
     const impostoDasPj = propostaPj * (impostoPjPercent / 100);
-    const inssProLabore = 1518 * 0.11; // 11% sobre salário mínimo
+    const inssProLabore = MINIMUM_WAGE_2026 * 0.11; // 11% sobre salário mínimo
     const totalDespesasPj = impostoDasPj + inssProLabore + custoContador + gastosPropriosPj;
     const pjLiquidoEfetivo = Math.max(0, propostaPj - totalDespesasPj);
 
@@ -95,9 +97,7 @@ export default function CltVsPjCalculator({ onSelectTab }: CltVsPjCalculatorProp
         }
       };
 
-      const existingHistory = JSON.parse(localStorage.getItem('calc_history') || '[]');
-      const updatedHistory = [historyItem, ...existingHistory.slice(0, 49)];
-      localStorage.setItem('calc_history', JSON.stringify(updatedHistory));
+      if (!saveToHistory({ toolTab: historyItem.tab, toolName: historyItem.title, summary: historyItem.summary, mainValue: `R$ ${results.pjLiquidoEfetivo.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}` })) return;
       setSaved(true);
       setTimeout(() => setSaved(false), 2500);
     } catch {
@@ -105,9 +105,9 @@ export default function CltVsPjCalculator({ onSelectTab }: CltVsPjCalculatorProp
     }
   };
 
-  const handleCopySummary = () => {
+  const handleCopySummary = async () => {
     const text = `⚖️ Comparativo CLT x PJ 2026\n• Salário CLT Bruto: R$ ${salarioCltBruto.toFixed(2)} → Líquido no Bolso: R$ ${results.cltLiquidoMensal.toFixed(2)} (Pacote Total com Benefícios: R$ ${results.cltTotalPacoteMensal.toFixed(2)})\n• Faturamento PJ: R$ ${propostaPj.toFixed(2)} → Líquido Livre: R$ ${results.pjLiquidoEfetivo.toFixed(2)}\n• PJ Recomendado para empatar: R$ ${results.pjEquivalenteSugerido.toFixed(2)}\n• Veredito: Mais vantajoso financeiramente em ${results.melhorOpcao}\nCalculado em: calculadoradehorastrabalhadas.org/calculadora-clt-pj`;
-    navigator.clipboard.writeText(text);
+    if (!await writeClipboard(text)) return;
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
@@ -156,7 +156,7 @@ export default function CltVsPjCalculator({ onSelectTab }: CltVsPjCalculatorProp
                 <label className="block text-xs font-bold text-neutral-700 dark:text-neutral-300 mb-1">
                   Salário CLT Bruto (R$)
                 </label>
-                <input
+                <input aria-label="Salário CLT Bruto (R$)"
                   type="number"
                   min="0"
                   step="100"
@@ -169,7 +169,7 @@ export default function CltVsPjCalculator({ onSelectTab }: CltVsPjCalculatorProp
                 <label className="block text-xs font-bold text-neutral-700 dark:text-neutral-300 mb-1">
                   Benefícios Mensais (VR+VA+Plano)
                 </label>
-                <input
+                <input aria-label="Benefícios Mensais (VR+VA+Plano)"
                   type="number"
                   min="0"
                   step="50"
@@ -192,7 +192,7 @@ export default function CltVsPjCalculator({ onSelectTab }: CltVsPjCalculatorProp
                 <label className="block text-xs font-bold text-neutral-700 dark:text-neutral-300 mb-1">
                   Valor da Nota Fiscal PJ (R$)
                 </label>
-                <input
+                <input aria-label="Valor da Nota Fiscal PJ (R$)"
                   type="number"
                   min="0"
                   step="100"
@@ -205,7 +205,7 @@ export default function CltVsPjCalculator({ onSelectTab }: CltVsPjCalculatorProp
                 <label className="block text-xs font-bold text-neutral-700 dark:text-neutral-300 mb-1">
                   Alíquota de Imposto Simples (%)
                 </label>
-                <select
+                <select aria-label="Alíquota de Imposto Simples (%)"
                   value={impostoPjPercent}
                   onChange={(e) => setImpostoPjPercent(parseFloat(e.target.value))}
                   className="w-full px-3 py-2 bg-neutral-50 dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-700 rounded-xl text-xs font-bold text-neutral-900 dark:text-white outline-none focus:ring-2 focus:ring-emerald-500"
@@ -219,7 +219,7 @@ export default function CltVsPjCalculator({ onSelectTab }: CltVsPjCalculatorProp
                 <label className="block text-xs font-bold text-neutral-700 dark:text-neutral-300 mb-1">
                   Contabilidade Mensal (R$)
                 </label>
-                <input
+                <input aria-label="Contabilidade Mensal (R$)"
                   type="number"
                   min="0"
                   step="50"
@@ -232,7 +232,7 @@ export default function CltVsPjCalculator({ onSelectTab }: CltVsPjCalculatorProp
                 <label className="block text-xs font-bold text-neutral-700 dark:text-neutral-300 mb-1">
                   Seus Gastos com Saúde/VR (R$)
                 </label>
-                <input
+                <input aria-label="Seus Gastos com Saúde/VR (R$)"
                   type="number"
                   min="0"
                   step="50"

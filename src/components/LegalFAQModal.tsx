@@ -1,3 +1,4 @@
+import { useDialog } from '../hooks/useDialog';
 import React, { useState } from 'react';
 import { BookOpen, X, ChevronDown, ChevronUp, Scale, AlertTriangle, ShieldCheck } from 'lucide-react';
 
@@ -9,6 +10,7 @@ interface LegalFAQModalProps {
 export const LegalFAQModal: React.FC<LegalFAQModalProps> = ({ isOpen, onClose }) => {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
+  const dialogRef = useDialog(isOpen, onClose);
   if (!isOpen) return null;
 
   const faqs = [
@@ -41,10 +43,10 @@ Principais tipos de demissão:
       title: 'Como é calculada a tabela progressiva do INSS 2026?',
       legalRef: 'Portaria Interministerial MPS/MF 2026',
       content: `O INSS é calculado de forma progressiva por faixas salariais:
-- Até R$ 1.518,00: 7,5%
-- De R$ 1.518,01 até R$ 2.793,88: 9,0%
-- De R$ 2.793,89 até R$ 4.190,83: 12,0%
-- De R$ 4.190,84 até R$ 8.157,41 (Teto): 14,0%
+- Até R$ 1.621,00: 7,5%
+- De R$ 1.621,01 até R$ 2.902,84: 9,0%
+- De R$ 2.902,85 até R$ 4.354,27: 12,0%
+- De R$ 4.354,28 até R$ 8.475,55 (Teto): 14,0%
 
 O valor retido é a soma das alíquotas aplicadas em cada faixa do salário do empregado.`
     },
@@ -56,10 +58,11 @@ O valor retido é a soma das alíquotas aplicadas em cada faixa do salário do e
   ];
 
   return (
-    <div className="fixed inset-0 bg-neutral-900/60 backdrop-blur-xs flex items-center justify-center p-4 z-50 animate-fade-in no-print">
+    <div ref={dialogRef} role="dialog" aria-modal="true" aria-label="Guia CLT" tabIndex={-1} className="fixed inset-0 bg-neutral-900/60 backdrop-blur-xs flex items-center justify-center p-4 z-[70] animate-fade-in no-print">
       <div className="bg-white dark:bg-neutral-900 rounded-2xl max-w-2xl w-full p-6 shadow-2xl border border-neutral-100 dark:border-neutral-800 space-y-5 relative max-h-[90vh] overflow-y-auto transition-colors">
         <button
           onClick={onClose}
+            aria-label="Fechar"
           className="absolute top-4 right-4 text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-200 p-1.5 rounded-full hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors cursor-pointer"
         >
           <X className="w-5 h-5" />
@@ -118,6 +121,7 @@ O valor retido é a soma das alíquotas aplicadas em cada faixa do salário do e
           </div>
           <button
             onClick={onClose}
+            aria-label="Fechar"
             className="px-4 py-2 bg-neutral-900 dark:bg-blue-600 hover:bg-neutral-800 dark:hover:bg-blue-700 text-white font-bold text-xs rounded-xl transition-colors cursor-pointer"
           >
             Fechar Guia

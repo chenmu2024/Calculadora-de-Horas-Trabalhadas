@@ -14,21 +14,23 @@ export function generateTimesheetCSV(entries: Array<{
   
   const rows = entries.map(e => [
     e.date || 'Dia sem data',
-    e.start || '08:00',
-    e.lunchStart || '12:00',
-    e.lunchEnd || '13:00',
-    e.end || '18:00',
-    e.breakTime || '01:00',
+    e.start || '',
+    e.lunchStart || '',
+    e.lunchEnd || '',
+    e.end || '',
+    e.breakTime || '',
     e.totalHours || '00:00'
   ]);
 
   // UTF-8 BOM for Excel to open accents properly (e.g. Terça, Saída)
   let csvContent = '\uFEFF';
-  csvContent += `"${title} - calculadoradehorastrabalhadas.org"\n\n`;
+  const quote = (cell: string) => `"${cell.replace(/"/g, '""')}"`;
+  csvContent += quote(`${title} - calculadoradehorastrabalhadas.org`) + '\r\n\r\n';
   csvContent += headers.map(h => `"${h}"`).join(';') + '\n';
 
   rows.forEach(row => {
-    csvContent += row.map(cell => `"${cell}"`).join(';') + '\n';
+    // Prefix formula-like user text to prevent spreadsheet formula injection.
+    csvContent += row.map(cell => quote(/^[=+@-]/.test(cell) ? `'${cell}` : cell)).join(';') + '\r\n';
   });
 
   const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
@@ -39,4 +41,5 @@ export function generateTimesheetCSV(entries: Array<{
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
+  setTimeout(() => URL.revokeObjectURL(url), 0);
 }

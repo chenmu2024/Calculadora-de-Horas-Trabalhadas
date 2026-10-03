@@ -1,3 +1,4 @@
+import { useDialog } from '../hooks/useDialog';
 import React, { useState } from 'react';
 import { Calendar, X, Check, Info, ShieldCheck } from 'lucide-react';
 import { MONTH_NAMES_PT, getMonthWorkStats, HOLIDAYS_2026 } from '../utils/holidays2026';
@@ -11,15 +12,19 @@ export const HolidayCalendarModal: React.FC<HolidayCalendarModalProps> = ({ isOp
   const [selectedMonth, setSelectedMonth] = useState<number>(new Date().getMonth());
   const [includeSaturday, setIncludeSaturday] = useState<boolean>(true);
 
+  const [includeOptional, setIncludeOptional] = useState(false);
+  const [localDates, setLocalDates] = useState('');
+  const dialogRef = useDialog(isOpen, onClose);
   if (!isOpen) return null;
 
-  const stats = getMonthWorkStats(2026, selectedMonth, includeSaturday);
+  const stats = getMonthWorkStats(2026, selectedMonth, includeSaturday, includeOptional, localDates.split(/[,\s]+/).filter(Boolean));
 
   return (
-    <div className="fixed inset-0 bg-neutral-900/60 backdrop-blur-xs flex items-center justify-center p-4 z-50 animate-fade-in no-print">
+    <div ref={dialogRef} role="dialog" aria-modal="true" aria-label="Calendário de Dias Úteis" tabIndex={-1} className="fixed inset-0 bg-neutral-900/60 backdrop-blur-xs flex items-center justify-center p-4 z-[70] animate-fade-in no-print">
       <div className="bg-white dark:bg-neutral-900 rounded-2xl max-w-lg w-full p-6 shadow-2xl border border-neutral-100 dark:border-neutral-800 space-y-5 relative max-h-[90vh] overflow-y-auto transition-colors">
         <button
           onClick={onClose}
+            aria-label="Fechar"
           className="absolute top-4 right-4 text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-200 p-1.5 rounded-full hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors cursor-pointer"
         >
           <X className="w-5 h-5" />
@@ -61,6 +66,7 @@ export const HolidayCalendarModal: React.FC<HolidayCalendarModalProps> = ({ isOp
           <label className="relative inline-flex items-center cursor-pointer">
             <input
               type="checkbox"
+              aria-label="Sábado conta como Dia Útil"
               checked={includeSaturday}
               onChange={(e) => setIncludeSaturday(e.target.checked)}
               className="sr-only peer"
@@ -69,6 +75,9 @@ export const HolidayCalendarModal: React.FC<HolidayCalendarModalProps> = ({ isOp
           </label>
         </div>
 
+        <label className="block text-xs"><input aria-label={"Incluir pontos facultativos conforme o acordo aplicável"} type="checkbox" checked={includeOptional} onChange={e => setIncludeOptional(e.target.checked)} /> Incluir pontos facultativos conforme o acordo aplicável</label>
+        <label className="block text-xs">Feriados locais (AAAA-MM-DD, separados por vírgula)<input aria-label={"Feriados locais (AAAA-MM-DD, separados por vírgula)"} className="w-full border rounded-lg p-2" value={localDates} onChange={e => setLocalDates(e.target.value)} placeholder="2026-01-25" /></label>
+        <p className="text-xs">Sábados sem expediente: {stats.saturdaysOff}. Eles não foram somados aos domingos e feriados. Confirme o divisor de DSR do contrato.</p>
         {/* Result Cards */}
         <div className="grid grid-cols-2 gap-3">
           <div className="bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800/60 p-3.5 rounded-xl">
@@ -110,6 +119,7 @@ export const HolidayCalendarModal: React.FC<HolidayCalendarModalProps> = ({ isOp
           </div>
           <button
             onClick={onClose}
+            aria-label="Fechar"
             className="px-4 py-2 bg-neutral-900 dark:bg-blue-600 hover:bg-neutral-800 dark:hover:bg-blue-700 text-white font-bold text-xs rounded-xl transition-colors cursor-pointer"
           >
             Entendi / Fechar

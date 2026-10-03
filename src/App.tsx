@@ -1,3 +1,5 @@
+import BrowserNotice from './components/BrowserNotice';
+import CalculatorErrorBoundary from './components/CalculatorErrorBoundary';
 import React, { useState, useEffect, Suspense } from 'react';
 import Header from './components/Header';
 import Footer from './components/Footer';
@@ -24,8 +26,8 @@ const CltVsPjCalculator = React.lazy(() => import('./components/CltVsPjCalculato
 const ExcelDownloadSection = React.lazy(() => import('./components/ExcelDownloadSection'));
 const BlogSection = React.lazy(() => import('./components/BlogSection'));
 
-import FAQSection from './components/FAQSection';
-import SEOContent from './components/SEOContent';
+const FAQSection = React.lazy(() => import('./components/FAQSection'));
+const SEOContent = React.lazy(() => import('./components/SEOContent'));
 import Breadcrumb from './components/Breadcrumb';
 import CalculationHistoryModal from './components/CalculationHistoryModal';
 
@@ -44,7 +46,7 @@ import { getTabFromLocation, getHrefForTab, TAB_ROUTES } from './utils/routes';
 import { useOfflineStatus } from './hooks/useOfflineStatus';
 import { useDarkMode } from './hooks/useDarkMode';
 
-const PAGE_SUBTITLES: Record<string, string> = {
+export const PAGE_SUBTITLES: Record<string, string> = {
   daily: 'Calcule o total de horas trabalhadas no dia com batida de ponto de 4 horários e intervalo de almoço. Resultado instantâneo no padrão CLT.',
   timesheet: 'Calcule o cartão de ponto da semana completa. Apuração automática de horas normais, banco de horas e saldo de horas extras.',
   monthly: 'Calcule o total de horas trabalhadas no mês inteiro com simulação completa do divisor 220, saldo de horas e total a receber.',
@@ -70,7 +72,7 @@ const PAGE_SUBTITLES: Record<string, string> = {
   privacy: 'Entenda como garantimos a total privacidade dos seus dados. Processamento 100% no seu navegador.'
 };
 
-const PAGE_H1_TITLES: Record<string, string> = {
+export const PAGE_H1_TITLES: Record<string, string> = {
   daily: 'Calculadora de Horas Trabalhadas Diária',
   timesheet: 'Calculadora de Horas Trabalhadas Semanal (CLT 44h)',
   monthly: 'Calculadora de Horas Trabalhadas Mensal',
@@ -98,8 +100,17 @@ const PAGE_H1_TITLES: Record<string, string> = {
 
 export default function App() {
   const [activeTab, setActiveTabState] = useState(() => getTabFromLocation());
+  const [pathname, setPathname] = useState(() => window.location.pathname);
   const isOffline = useOfflineStatus();
   const { isDark, toggle: toggleDark } = useDarkMode();
+
+  const [auxOpen, setAuxOpen] = useState(() => window.matchMedia('(min-width: 640px)').matches);
+  useEffect(() => {
+    const media = window.matchMedia('(min-width: 640px)');
+    const sync = () => setAuxOpen(media.matches);
+    media.addEventListener('change', sync);
+    return () => media.removeEventListener('change', sync);
+  }, []);
 
   const [isQuickConverterOpen, setIsQuickConverterOpen] = useState(false);
   const [isHolidayCalendarOpen, setIsHolidayCalendarOpen] = useState(false);
@@ -113,10 +124,12 @@ export default function App() {
     if (window.location.pathname !== path) {
       window.history.pushState({ tab }, '', path);
     }
+    setPathname(window.location.pathname);
   };
 
   useEffect(() => {
     const handlePopState = () => {
+      setPathname(window.location.pathname);
       setActiveTabState(getTabFromLocation());
     };
     window.addEventListener('popstate', handlePopState);
@@ -128,7 +141,8 @@ export default function App() {
   return (
     <div className="min-h-screen flex flex-col bg-neutral-100/60 dark:bg-neutral-950 font-sans text-neutral-900 dark:text-neutral-100 transition-colors duration-200">
       {/* SEO Head Dynamic Metadata */}
-      <SEOHead activeTab={activeTab} />
+      <SEOHead activeTab={activeTab} pathname={pathname} />
+      <BrowserNotice />
 
       {/* Offline Alert Banner */}
       {isOffline && (
@@ -160,7 +174,7 @@ export default function App() {
       />
 
       {/* Hero Headline Section */}
-      <section className="bg-white dark:bg-neutral-900 border-b border-neutral-200 dark:border-neutral-800 py-8 px-4 transition-colors">
+      <section className="bg-white dark:bg-neutral-900 border-b border-neutral-200 dark:border-neutral-800 py-4 sm:py-8 px-4 transition-colors">
         <div className="max-w-4xl mx-auto text-center space-y-3">
           <h1 className="text-2xl sm:text-4xl font-extrabold text-neutral-900 dark:text-white tracking-tight leading-tight">
             {PAGE_H1_TITLES[activeTab] || 'Calculadora de Horas Trabalhadas'}
@@ -169,8 +183,9 @@ export default function App() {
             {PAGE_SUBTITLES[activeTab] || 'Ferramenta gratuita para calcular horas trabalhadas no dia, na semana e no mês, intervalo de almoço, valor da hora, horas extras (50% e 100%) e adicional noturno no padrão CLT.'}
           </p>
 
+          <a href={activeTab === 'daily' ? '#daily-hours' : '#main-calculator'} className="inline-block text-sm font-bold text-blue-700 dark:text-blue-300 underline">Ir para a calculadora</a>
           {/* Quick Sub-tools Pill Bar */}
-          <div className="flex flex-wrap items-center justify-center gap-1.5 pt-2 text-xs">
+          <details className="tool-links"><summary className="cursor-pointer text-xs py-2">Outras calculadoras</summary><div className="flex flex-wrap items-center justify-center gap-1.5 pt-2 text-xs">
             <a
               href="/"
               onClick={(e) => { e.preventDefault(); setActiveTab('daily'); }}
@@ -293,6 +308,8 @@ export default function App() {
             </a>
           </div>
 
+          </details>
+          <details open={auxOpen} onToggle={e => setAuxOpen(e.currentTarget.open)}><summary className="sm:hidden text-xs cursor-pointer py-2">Conversor, calendário e guia CLT</summary>
           {/* Practical Utilities Row */}
           <div className="flex flex-wrap items-center justify-center gap-2 pt-3 text-xs">
             <button
@@ -314,6 +331,7 @@ export default function App() {
               <Scale className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" /> Guia CLT 2026
             </button>
           </div>
+          </details>
         </div>
       </section>
 
@@ -340,7 +358,7 @@ export default function App() {
                 </Suspense>
               ) : (
                 <div id="main-calculator" className="bg-white dark:bg-neutral-900 rounded-2xl shadow-sm border border-neutral-200 dark:border-neutral-800 p-6 sm:p-8 transition-colors">
-                  <Suspense fallback={<div className="p-12 text-center text-xs text-neutral-400">Carregando calculadora...</div>}>
+                  <CalculatorErrorBoundary key={activeTab}><Suspense fallback={<div className="p-12 text-center text-xs text-neutral-400">Carregando calculadora...</div>}>
                     {activeTab === 'daily' && <DailyCalculator onSelectTab={setActiveTab} />}
                     {activeTab === 'timesheet' && <TimesheetCalculator onSelectTab={setActiveTab} />}
                     {activeTab === 'monthly' && <MonthlyCalculator onSelectTab={setActiveTab} />}
@@ -360,12 +378,12 @@ export default function App() {
                     {activeTab === 'cltpj' && <CltVsPjCalculator onSelectTab={setActiveTab} />}
                     {activeTab === 'excel' && <ExcelDownloadSection />}
                     {activeTab === 'blog' && <BlogSection onSelectCalculator={setActiveTab} />}
-                  </Suspense>
+                  </Suspense></CalculatorErrorBoundary>
                 </div>
               )}
 
               {/* SEO Structured Content */}
-              <SEOContent activeTab={activeTab} onSelectTab={setActiveTab} />
+              <div className="no-print"><Suspense fallback={null}><SEOContent activeTab={activeTab} onSelectTab={setActiveTab} /></Suspense></div>
 
               {/* Knowledge Base Articles Section (when not on blog page) */}
               {activeTab !== 'blog' && (
@@ -375,11 +393,11 @@ export default function App() {
               )}
 
               {/* FAQ Section */}
-              <FAQSection activeTab={activeTab} onSelectTab={setActiveTab} />
+              <div className="no-print"><Suspense fallback={null}><FAQSection activeTab={activeTab} onSelectTab={setActiveTab} /></Suspense></div>
             </div>
 
             {/* Sidebar Column (4 cols) */}
-            <div className="lg:col-span-4 space-y-6">
+            <div className="lg:col-span-4 space-y-6 no-print">
               
               {/* Sidebar CTA 1: Excel Planilha Download */}
               <div className="bg-gradient-to-br from-blue-600 to-indigo-700 rounded-2xl p-6 text-white shadow-md space-y-4">
@@ -450,6 +468,7 @@ export default function App() {
 
       {/* Footer */}
       <Footer setActiveTab={setActiveTab} />
+      <button className="text-xs underline py-3 bg-neutral-100 dark:bg-neutral-900 no-print" onClick={() => window.dispatchEvent(new Event('cookie-preferences'))}>Gerenciar preferências de cookies</button>
 
       {/* Quick Converter Modal */}
       <QuickConverterModal

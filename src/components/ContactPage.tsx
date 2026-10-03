@@ -23,11 +23,11 @@ export default function ContactPage({ onSelectCalculator }: ContactPageProps) {
     e.preventDefault();
     if (!formData.name || !formData.email || !formData.message) return;
 
-    setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-      setSubmitted(true);
-    }, 800);
+    const subject = encodeURIComponent(`Contato: ${formData.subject}`);
+    const body = encodeURIComponent(`Nome: ${formData.name}\nE-mail para resposta: ${formData.email}\n\n${formData.message}`);
+    window.location.href = `mailto:contato@calculadoradehorastrabalhadas.org?subject=${subject}&body=${body}`;
+    setSubmitted(true);
+
   };
 
   return (
@@ -50,14 +50,14 @@ export default function ContactPage({ onSelectCalculator }: ContactPageProps) {
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         {/* Left Column: Form (7 cols) */}
-        <div className="lg:col-span-7 bg-white rounded-3xl border border-neutral-200 p-6 sm:p-8 shadow-sm space-y-6">
+        <div className="lg:col-span-7 bg-white dark:bg-neutral-900 rounded-3xl border border-neutral-200 dark:border-neutral-700 p-6 sm:p-8 shadow-sm space-y-6">
           <div className="border-b border-neutral-100 pb-4">
-            <h2 className="text-lg font-bold text-neutral-900 flex items-center gap-2">
+            <h2 className="text-lg font-bold text-neutral-900 dark:text-neutral-100 flex items-center gap-2">
               <MessageSquare className="w-5 h-5 text-blue-600" />
               Envie sua Mensagem
             </h2>
             <p className="text-xs text-neutral-500 mt-1">
-              Preencha o formulário abaixo. Responderemos diretamente em seu e-mail cadastrado.
+              Preencha o formulário abaixo para abrir uma mensagem no seu aplicativo de e-mail. Se ele não abrir, use o endereço de contato ao lado.
             </p>
           </div>
 
@@ -66,9 +66,9 @@ export default function ContactPage({ onSelectCalculator }: ContactPageProps) {
               <div className="w-12 h-12 bg-emerald-600 text-white rounded-full flex items-center justify-center mx-auto">
                 <CheckCircle2 className="w-6 h-6" />
               </div>
-              <h3 className="font-bold text-emerald-950 text-base">Mensagem Enviada com Sucesso!</h3>
+              <h3 className="font-bold text-emerald-950 text-base">Mensagem Preparada para Envio</h3>
               <p className="text-xs text-emerald-800 max-w-md mx-auto leading-relaxed">
-                Agradecemos seu contato. Sua mensagem foi recebida pela equipe do <strong>calculadoradehorastrabalhadas.org</strong> e responderemos no prazo máximo de 24 a 48 horas úteis.
+                Agradecemos seu contato. Seu aplicativo de e-mail foi solicitado. Revise e envie a mensagem para contato@calculadoradehorastrabalhadas.org. Ela só será recebida após o envio no seu aplicativo.
               </p>
               <button
                 onClick={() => {
@@ -84,42 +84,42 @@ export default function ContactPage({ onSelectCalculator }: ContactPageProps) {
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-bold text-neutral-700 mb-1">
+                  <label className="block text-xs font-bold text-neutral-700 dark:text-neutral-300 mb-1">
                     Seu Nome Completo <span className="text-red-500">*</span>
                   </label>
-                  <input
+                  <input aria-label="Seu Nome Completo *"
                     type="text"
                     required
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                     placeholder="Ex: Maria Silva"
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-neutral-300 text-xs focus:ring-2 focus:ring-blue-600 focus:border-blue-600 outline-none transition-all"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-neutral-300 dark:border-neutral-600 text-xs focus:ring-2 focus:ring-blue-600 focus:border-blue-600 outline-none transition-all"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-neutral-700 mb-1">
+                  <label className="block text-xs font-bold text-neutral-700 dark:text-neutral-300 mb-1">
                     Seu E-mail <span className="text-red-500">*</span>
                   </label>
-                  <input
+                  <input aria-label="Seu E-mail *"
                     type="email"
                     required
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                     placeholder="Ex: maria@exemplo.com"
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-neutral-300 text-xs focus:ring-2 focus:ring-blue-600 focus:border-blue-600 outline-none transition-all"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-neutral-300 dark:border-neutral-600 text-xs focus:ring-2 focus:ring-blue-600 focus:border-blue-600 outline-none transition-all"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-neutral-700 mb-1">
+                <label className="block text-xs font-bold text-neutral-700 dark:text-neutral-300 mb-1">
                   Assunto Principal <span className="text-red-500">*</span>
                 </label>
-                <select
+                <select aria-label="Assunto Principal *"
                   value={formData.subject}
                   onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-neutral-300 text-xs focus:ring-2 focus:ring-blue-600 focus:border-blue-600 outline-none bg-white transition-all cursor-pointer"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-neutral-300 dark:border-neutral-600 text-xs focus:ring-2 focus:ring-blue-600 focus:border-blue-600 outline-none bg-white dark:bg-neutral-900 transition-all cursor-pointer"
                 >
                   <option value="duvida">Dúvida sobre Cálculos ou CLT</option>
                   <option value="sugestao">Sugestão de Nova Funcionalidade</option>
@@ -131,7 +131,7 @@ export default function ContactPage({ onSelectCalculator }: ContactPageProps) {
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-neutral-700 mb-1">
+                <label className="block text-xs font-bold text-neutral-700 dark:text-neutral-300 mb-1">
                   Sua Mensagem <span className="text-red-500">*</span>
                 </label>
                 <textarea
@@ -140,7 +140,7 @@ export default function ContactPage({ onSelectCalculator }: ContactPageProps) {
                   value={formData.message}
                   onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                   placeholder="Descreva detalhadamente sua dúvida, cálculo ou sugestão..."
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-neutral-300 text-xs focus:ring-2 focus:ring-blue-600 focus:border-blue-600 outline-none transition-all resize-y"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-neutral-300 dark:border-neutral-600 text-xs focus:ring-2 focus:ring-blue-600 focus:border-blue-600 outline-none transition-all resize-y"
                 ></textarea>
               </div>
 
@@ -167,43 +167,43 @@ export default function ContactPage({ onSelectCalculator }: ContactPageProps) {
         {/* Right Column: Contact Details & Info (5 cols) */}
         <div className="lg:col-span-5 space-y-6">
           {/* Direct Channels Card */}
-          <div className="bg-white rounded-3xl border border-neutral-200 p-6 shadow-sm space-y-4">
-            <h3 className="font-bold text-neutral-900 text-sm border-b border-neutral-100 pb-3 flex items-center gap-2">
+          <div className="bg-white dark:bg-neutral-900 rounded-3xl border border-neutral-200 dark:border-neutral-700 p-6 shadow-sm space-y-4">
+            <h3 className="font-bold text-neutral-900 dark:text-neutral-100 text-sm border-b border-neutral-100 pb-3 flex items-center gap-2">
               <Building2 className="w-4 h-4 text-blue-600" /> Canais Oficiais de Atendimento
             </h3>
 
             <div className="space-y-3 text-xs">
-              <div className="flex items-start gap-3 p-3 rounded-xl bg-neutral-50 border border-neutral-100">
+              <div className="flex items-start gap-3 p-3 rounded-xl bg-neutral-50 dark:bg-neutral-800 border border-neutral-100">
                 <Mail className="w-4 h-4 text-blue-600 shrink-0 mt-0.5" />
                 <div>
-                  <span className="font-bold text-neutral-800 block">E-mail Direto:</span>
+                  <span className="font-bold text-neutral-800 dark:text-neutral-200 block">E-mail Direto:</span>
                   <a href="mailto:contato@calculadoradehorastrabalhadas.org" className="text-blue-600 font-medium hover:underline">
                     contato@calculadoradehorastrabalhadas.org
                   </a>
                 </div>
               </div>
 
-              <div className="flex items-start gap-3 p-3 rounded-xl bg-neutral-50 border border-neutral-100">
+              <div className="flex items-start gap-3 p-3 rounded-xl bg-neutral-50 dark:bg-neutral-800 border border-neutral-100">
                 <Clock className="w-4 h-4 text-blue-600 shrink-0 mt-0.5" />
                 <div>
-                  <span className="font-bold text-neutral-800 block">Atendimento & Prazo de Resposta (SLA):</span>
-                  <span className="text-neutral-600">Atendimento em até 24 a 48 horas úteis (Segunda a Sexta, das 08h às 18h - Horário de Brasília)</span>
+                  <span className="font-bold text-neutral-800 dark:text-neutral-200 block">Atendimento & Prazo de Resposta (SLA):</span>
+                  <span className="text-neutral-600 dark:text-neutral-400">Atendimento em até 24 a 48 horas úteis (Segunda a Sexta, das 08h às 18h - Horário de Brasília)</span>
                 </div>
               </div>
 
-              <div className="flex items-start gap-3 p-3 rounded-xl bg-neutral-50 border border-neutral-100">
+              <div className="flex items-start gap-3 p-3 rounded-xl bg-neutral-50 dark:bg-neutral-800 border border-neutral-100">
                 <MapPin className="w-4 h-4 text-blue-600 shrink-0 mt-0.5" />
                 <div>
-                  <span className="font-bold text-neutral-800 block">Abrangência e Localização:</span>
-                  <span className="text-neutral-600">Atendimento a trabalhadores e empresas de todo o Brasil • São Paulo - SP, Brasil</span>
+                  <span className="font-bold text-neutral-800 dark:text-neutral-200 block">Abrangência e Localização:</span>
+                  <span className="text-neutral-600 dark:text-neutral-400">Atendimento a trabalhadores e empresas de todo o Brasil • São Paulo - SP, Brasil</span>
                 </div>
               </div>
 
-              <div className="flex items-start gap-3 p-3 rounded-xl bg-neutral-50 border border-neutral-100">
+              <div className="flex items-start gap-3 p-3 rounded-xl bg-neutral-50 dark:bg-neutral-800 border border-neutral-100">
                 <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
                 <div>
-                  <span className="font-bold text-neutral-800 block">Compromisso com o Usuário:</span>
-                  <span className="text-neutral-600">Garantimos resposta individualizada e sigilosa para relatórios de bugs e dúvidas de cálculo conforme a LGPD.</span>
+                  <span className="font-bold text-neutral-800 dark:text-neutral-200 block">Compromisso com o Usuário:</span>
+                  <span className="text-neutral-600 dark:text-neutral-400">Recebemos mensagens enviadas por e-mail para relatórios de bugs e dúvidas de cálculo conforme a LGPD.</span>
                 </div>
               </div>
             </div>

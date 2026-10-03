@@ -1,6 +1,7 @@
+import { storage, copyText as writeClipboard, nonNegative } from '../utils/browser';
 import React, { useState, useEffect } from 'react';
 import { Scale, ArrowUpRight, ArrowDownRight, Clock, Info, Plus, Trash2, Download, Copy, Check, Printer, AlertTriangle, Calendar, Sparkles } from 'lucide-react';
-import { timeToMinutes, minutesToTime } from '../utils/time';
+import { timeToMinutes, minutesToTime, isValidTime } from '../utils/time';
 import { generateTimesheetCSV } from '../utils/excelGenerator';
 import InternalLinkCTA from './InternalLinkCTA';
 import CLTAlertBanner from './CLTAlertBanner';
@@ -21,26 +22,26 @@ export default function BancoDeHorasCalculator({ onSelectTab }: BancoDeHorasCalc
   const [activeMode, setActiveMode] = useState<'quick' | 'ledger'>('ledger');
 
   // Quick Daily Calculator state
-  const [expectedHours, setExpectedHours] = useState(() => localStorage.getItem('calc_bank_exph') || '08');
-  const [expectedMinutes, setExpectedMinutes] = useState(() => localStorage.getItem('calc_bank_expm') || '48');
-  const [actualHours, setActualHours] = useState(() => localStorage.getItem('calc_bank_acth') || '09');
-  const [actualMinutes, setActualMinutes] = useState(() => localStorage.getItem('calc_bank_actm') || '30');
-  const [applyCLTTolerance, setApplyCLTTolerance] = useState(() => localStorage.getItem('calc_bank_tol') !== 'false');
+  const [expectedHours, setExpectedHours] = useState(() => storage.getItem('calc_bank_exph') || '08');
+  const [expectedMinutes, setExpectedMinutes] = useState(() => storage.getItem('calc_bank_expm') || '48');
+  const [actualHours, setActualHours] = useState(() => storage.getItem('calc_bank_acth') || '09');
+  const [actualMinutes, setActualMinutes] = useState(() => storage.getItem('calc_bank_actm') || '30');
+  const [applyCLTTolerance, setApplyCLTTolerance] = useState(() => storage.getItem('calc_bank_tol') === 'true');
 
   // Financial & Rate state
-  const [hourlyWage, setHourlyWage] = useState(() => localStorage.getItem('calc_bank_wage') || '15.00');
-  const [overtimePercentage, setOvertimePercentage] = useState(() => localStorage.getItem('calc_bank_pct') || '50');
-  const [agreementTerm, setAgreementTerm] = useState<'6m' | '12m'>(() => (localStorage.getItem('calc_bank_term') as any) || '6m');
+  const [hourlyWage, setHourlyWage] = useState(() => storage.getItem('calc_bank_wage') || '15.00');
+  const [overtimePercentage, setOvertimePercentage] = useState(() => storage.getItem('calc_bank_pct') || '50');
+  const [agreementTerm, setAgreementTerm] = useState<'6m' | '12m'>(() => (storage.getItem('calc_bank_term') as any) || '6m');
 
   // Ledger state (Acumulado)
-  const [initialBalanceSign, setInitialBalanceSign] = useState<'+' | '-'>(() => (localStorage.getItem('calc_bank_initsign') as any) || '+');
-  const [initialBalanceHours, setInitialBalanceHours] = useState(() => localStorage.getItem('calc_bank_inith') || '10');
-  const [initialBalanceMinutes, setInitialBalanceMinutes] = useState(() => localStorage.getItem('calc_bank_initm') || '00');
+  const [initialBalanceSign, setInitialBalanceSign] = useState<'+' | '-'>(() => (storage.getItem('calc_bank_initsign') as any) || '+');
+  const [initialBalanceHours, setInitialBalanceHours] = useState(() => storage.getItem('calc_bank_inith') || '10');
+  const [initialBalanceMinutes, setInitialBalanceMinutes] = useState(() => storage.getItem('calc_bank_initm') || '00');
 
   const [logs, setLogs] = useState<BankLogEntry[]>(() => {
-    const saved = localStorage.getItem('calc_bank_logs');
+    const saved = storage.getItem('calc_bank_logs');
     if (saved) {
-      try { return JSON.parse(saved); } catch (e) {}
+      try { const rows = JSON.parse(saved); if (Array.isArray(rows) && rows.length <= 1000 && rows.every(row => row && typeof row.id === 'string' && typeof row.date === 'string' && typeof row.description === 'string' && ['credit', 'debit'].includes(row.type) && isValidTime(row.hours, true))) return rows; } catch (e) {}
     }
     return [
       { id: '1', date: '2026-07-20', description: 'Hora extra no projeto', type: 'credit', hours: '02:00' },
@@ -53,23 +54,23 @@ export default function BancoDeHorasCalculator({ onSelectTab }: BancoDeHorasCalc
   const [copied, setCopied] = useState(false);
 
   useEffect(() => {
-    localStorage.setItem('calc_bank_exph', expectedHours);
-    localStorage.setItem('calc_bank_expm', expectedMinutes);
-    localStorage.setItem('calc_bank_acth', actualHours);
-    localStorage.setItem('calc_bank_actm', actualMinutes);
-    localStorage.setItem('calc_bank_tol', String(applyCLTTolerance));
-    localStorage.setItem('calc_bank_wage', hourlyWage);
-    localStorage.setItem('calc_bank_pct', overtimePercentage);
-    localStorage.setItem('calc_bank_term', agreementTerm);
-    localStorage.setItem('calc_bank_initsign', initialBalanceSign);
-    localStorage.setItem('calc_bank_inith', initialBalanceHours);
-    localStorage.setItem('calc_bank_initm', initialBalanceMinutes);
-    localStorage.setItem('calc_bank_logs', JSON.stringify(logs));
+    storage.setItem('calc_bank_exph', expectedHours);
+    storage.setItem('calc_bank_expm', expectedMinutes);
+    storage.setItem('calc_bank_acth', actualHours);
+    storage.setItem('calc_bank_actm', actualMinutes);
+    storage.setItem('calc_bank_tol', String(applyCLTTolerance));
+    storage.setItem('calc_bank_wage', hourlyWage);
+    storage.setItem('calc_bank_pct', overtimePercentage);
+    storage.setItem('calc_bank_term', agreementTerm);
+    storage.setItem('calc_bank_initsign', initialBalanceSign);
+    storage.setItem('calc_bank_inith', initialBalanceHours);
+    storage.setItem('calc_bank_initm', initialBalanceMinutes);
+    storage.setItem('calc_bank_logs', JSON.stringify(logs));
   }, [expectedHours, expectedMinutes, actualHours, actualMinutes, applyCLTTolerance, hourlyWage, overtimePercentage, agreementTerm, initialBalanceSign, initialBalanceHours, initialBalanceMinutes, logs]);
 
   // Quick mode calculation
-  const expectedMin = (parseInt(expectedHours) || 0) * 60 + (parseInt(expectedMinutes) || 0);
-  const actualMin = (parseInt(actualHours) || 0) * 60 + (parseInt(actualMinutes) || 0);
+  const expectedMin = (nonNegative(expectedHours, 0)) * 60 + (nonNegative(expectedMinutes, 0));
+  const actualMin = (nonNegative(actualHours, 0)) * 60 + (nonNegative(actualMinutes, 0));
   let rawDiffMin = actualMin - expectedMin;
 
   // Art 58 § 1º CLT Tolerance: variation <= 10 mins per day is disregarded
@@ -84,8 +85,8 @@ export default function BancoDeHorasCalculator({ onSelectTab }: BancoDeHorasCalc
   const absQuickDiffMin = Math.abs(quickDiffMin);
   const quickDiffFormatted = minutesToTime(absQuickDiffMin);
 
-  const wage = parseFloat(hourlyWage) || 0;
-  const otPct = parseFloat(overtimePercentage) || 50;
+  const wage = nonNegative(hourlyWage, 0);
+  const otPct = nonNegative(overtimePercentage, 50);
   const quickHoursDecimal = absQuickDiffMin / 60;
   const hourlyRateMultiplier = 1 + (otPct / 100);
   const quickFinancialImpact = isQuickPositive
@@ -93,7 +94,7 @@ export default function BancoDeHorasCalculator({ onSelectTab }: BancoDeHorasCalc
     : quickHoursDecimal * wage;
 
   // Ledger calculation
-  const initialMin = ((parseInt(initialBalanceHours) || 0) * 60 + (parseInt(initialBalanceMinutes) || 0)) * (initialBalanceSign === '+' ? 1 : -1);
+  const initialMin = ((nonNegative(initialBalanceHours, 0)) * 60 + (nonNegative(initialBalanceMinutes, 0))) * (initialBalanceSign === '+' ? 1 : -1);
 
   const totalCreditLogsMin = logs.filter(l => l.type === 'credit').reduce((acc, log) => acc + timeToMinutes(log.hours), 0);
   const totalDebitLogsMin = logs.filter(l => l.type === 'debit').reduce((acc, log) => acc + timeToMinutes(log.hours), 0);
@@ -155,12 +156,12 @@ export default function BancoDeHorasCalculator({ onSelectTab }: BancoDeHorasCalc
     ]);
   };
 
-  const copyLedgerSummary = () => {
+  const copyLedgerSummary = async () => {
     const currentModeText = activeMode === 'ledger'
       ? `EXTRATO DE BANCO DE HORAS ACUMULADO:\nSaldo Inicial: ${initialBalanceSign}${initialBalanceHours}:${initialBalanceMinutes}\nTotal de Lançamentos: ${logs.length}\nSALDO FINAL: ${isLedgerPositive ? '+' : '-'}${ledgerFormatted} h\nValor Estimado de Quitação: R$ ${ledgerFinancialImpact.toFixed(2).replace('.', ',')}`
       : `APURAÇÃO DIÁRIA DE BANCO DE HORAS:\nJornada Esperada: ${expectedHours}:${expectedMinutes}\nRealizado: ${actualHours}:${actualMinutes}\nSaldo do Dia: ${isQuickPositive ? '+' : '-'}${quickDiffFormatted} h\nValor Estimado: R$ ${quickFinancialImpact.toFixed(2).replace('.', ',')}`;
 
-    navigator.clipboard.writeText(`${currentModeText}\n\nCalculado em calculadoradehorastrabalhadas.org`);
+    if (!await writeClipboard(`${currentModeText}\n\nCalculado em calculadoradehorastrabalhadas.org`)) return;
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
@@ -194,8 +195,8 @@ export default function BancoDeHorasCalculator({ onSelectTab }: BancoDeHorasCalc
     <div className="animate-in fade-in duration-500">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
         <div>
-          <h2 className="text-2xl font-bold text-neutral-900">Calculadora de Banco de Horas (Saldo Positivo / Negativo)</h2>
-          <p className="text-neutral-600 text-sm mt-1">
+          <h2 className="text-2xl font-bold text-neutral-900 dark:text-neutral-100">Calculadora de Banco de Horas (Saldo Positivo / Negativo)</h2>
+          <p className="text-neutral-600 dark:text-neutral-400 text-sm mt-1">
             Controle o saldo de horas acumulado, folgas compensatórias e tolerância do ponto conforme o Art. 58 e 59 da CLT.
           </p>
         </div>
@@ -233,28 +234,28 @@ export default function BancoDeHorasCalculator({ onSelectTab }: BancoDeHorasCalc
         /* Quick Mode UI */
         <div className="space-y-6">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div className="bg-neutral-50 p-4 rounded-xl border border-neutral-200">
-              <label htmlFor="banco-expected-hours" className="block text-xs font-semibold text-neutral-700 mb-2">
+            <div className="bg-neutral-50 dark:bg-neutral-800 p-4 rounded-xl border border-neutral-200 dark:border-neutral-700">
+              <label htmlFor="banco-expected-hours" className="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 mb-2">
                 Jornada Esperada (Meta Contratual)
               </label>
               <div className="flex items-center gap-2">
                 <input
                   id="banco-expected-hours"
                   aria-label="Horas esperadas na jornada"
-                  type="number" inputMode="decimal"
+                  type="number" min="0" inputMode="decimal"
                   value={expectedHours}
                   onChange={(e) => setExpectedHours(e.target.value)}
-                  className="w-1/2 border border-neutral-300 bg-white rounded-lg p-2.5 text-sm outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-1/2 border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-900 rounded-lg p-2.5 text-sm outline-none focus:ring-2 focus:ring-blue-500"
                   placeholder="Horas"
                 />
                 <span className="font-bold text-neutral-400">:</span>
                 <input
                   id="banco-expected-minutes"
                   aria-label="Minutos esperados na jornada"
-                  type="number" inputMode="decimal"
+                  type="number" min="0" inputMode="decimal"
                   value={expectedMinutes}
                   onChange={(e) => setExpectedMinutes(e.target.value)}
-                  className="w-1/2 border border-neutral-300 bg-white rounded-lg p-2.5 text-sm outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-1/2 border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-900 rounded-lg p-2.5 text-sm outline-none focus:ring-2 focus:ring-blue-500"
                   placeholder="Minutos"
                 />
               </div>
@@ -263,28 +264,28 @@ export default function BancoDeHorasCalculator({ onSelectTab }: BancoDeHorasCalc
               </p>
             </div>
 
-            <div className="bg-neutral-50 p-4 rounded-xl border border-neutral-200">
-              <label htmlFor="banco-actual-hours" className="block text-xs font-semibold text-neutral-700 mb-2">
+            <div className="bg-neutral-50 dark:bg-neutral-800 p-4 rounded-xl border border-neutral-200 dark:border-neutral-700">
+              <label htmlFor="banco-actual-hours" className="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 mb-2">
                 Horas Realmente Trabalhadas
               </label>
               <div className="flex items-center gap-2">
                 <input
                   id="banco-actual-hours"
                   aria-label="Horas realmente trabalhadas"
-                  type="number" inputMode="decimal"
+                  type="number" min="0" inputMode="decimal"
                   value={actualHours}
                   onChange={(e) => setActualHours(e.target.value)}
-                  className="w-1/2 border border-neutral-300 bg-white rounded-lg p-2.5 text-sm outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-1/2 border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-900 rounded-lg p-2.5 text-sm outline-none focus:ring-2 focus:ring-blue-500"
                   placeholder="Horas"
                 />
                 <span className="font-bold text-neutral-400">:</span>
                 <input
                   id="banco-actual-minutes"
                   aria-label="Minutos realmente trabalhados"
-                  type="number" inputMode="decimal"
+                  type="number" min="0" inputMode="decimal"
                   value={actualMinutes}
                   onChange={(e) => setActualMinutes(e.target.value)}
-                  className="w-1/2 border border-neutral-300 bg-white rounded-lg p-2.5 text-sm outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-1/2 border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-900 rounded-lg p-2.5 text-sm outline-none focus:ring-2 focus:ring-blue-500"
                   placeholder="Minutos"
                 />
               </div>
@@ -303,14 +304,14 @@ export default function BancoDeHorasCalculator({ onSelectTab }: BancoDeHorasCalc
               className="w-4 h-4 text-blue-600 rounded cursor-pointer"
             />
             <label htmlFor="tolCLT" className="cursor-pointer font-medium">
-              Aplicar Tolerância Legal da CLT (Art. 58 § 1º) — Variação de até 10 minutos diários não gera saldo extra ou negativo.
+              Aplicar Tolerância Legal da CLT (Art. 58 § 1º) — Confirmo variações de até 5 minutos por batida e até 10 minutos no dia, sem compensações entre batidas.
             </label>
           </div>
 
           {isTolerated && (
             <div className="bg-amber-50 p-3 rounded-xl border border-amber-200 text-xs text-amber-900 flex items-center gap-2">
               <AlertTriangle className="w-4 h-4 text-amber-600 shrink-0" />
-              <span>Diferença apurada foi de {rawDiffMin > 0 ? `+${rawDiffMin}` : rawDiffMin} min. Pela CLT, variações até 10 min são desconsideradas.</span>
+              <span>Diferença apurada foi de {rawDiffMin > 0 ? `+${rawDiffMin}` : rawDiffMin} min. Saldo desconsiderado conforme as condições por batida que você confirmou.</span>
             </div>
           )}
 
@@ -331,7 +332,7 @@ export default function BancoDeHorasCalculator({ onSelectTab }: BancoDeHorasCalc
                   {isQuickPositive ? '+' : '-'}{quickDiffFormatted} h
                 </div>
               </div>
-              <Scale className="w-10 h-10 text-neutral-700" />
+              <Scale className="w-10 h-10 text-neutral-700 dark:text-neutral-300" />
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
@@ -356,9 +357,9 @@ export default function BancoDeHorasCalculator({ onSelectTab }: BancoDeHorasCalc
         /* Ledger Mode UI */
         <div className="space-y-6">
           {/* Initial Balance bar */}
-          <div className="bg-neutral-50 p-4 rounded-xl border border-neutral-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div className="bg-neutral-50 dark:bg-neutral-800 p-4 rounded-xl border border-neutral-200 dark:border-neutral-700 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div>
-              <span className="text-xs font-bold text-neutral-800 uppercase tracking-wider block mb-1">
+              <span className="text-xs font-bold text-neutral-800 dark:text-neutral-200 uppercase tracking-wider block mb-1">
                 Saldo Inicial Anterior (Banco de Horas)
               </span>
               <p className="text-xs text-neutral-500">Informe o saldo acumulado que você já possui de meses anteriores.</p>
@@ -368,15 +369,15 @@ export default function BancoDeHorasCalculator({ onSelectTab }: BancoDeHorasCalc
               <select
                 value={initialBalanceSign}
                 onChange={(e) => setInitialBalanceSign(e.target.value as '+' | '-')}
-                className="bg-white border border-neutral-300 font-bold text-sm rounded-lg p-2.5 outline-none"
+                className="bg-white dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-600 font-bold text-sm rounded-lg p-2.5 outline-none"
               >
                 <option value="+">Crédito (+)</option>
                 <option value="-">Débito (-)</option>
               </select>
 
-              <div className="flex items-center gap-1 bg-white border border-neutral-300 rounded-lg p-1.5">
+              <div className="flex items-center gap-1 bg-white dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-600 rounded-lg p-1.5">
                 <input
-                  type="number" inputMode="decimal"
+                  type="number" min="0" inputMode="decimal"
                   value={initialBalanceHours}
                   onChange={(e) => setInitialBalanceHours(e.target.value)}
                   className="w-12 font-mono font-bold text-sm text-center outline-none"
@@ -384,7 +385,7 @@ export default function BancoDeHorasCalculator({ onSelectTab }: BancoDeHorasCalc
                 />
                 <span className="font-bold text-neutral-400">:</span>
                 <input
-                  type="number" inputMode="decimal"
+                  type="number" min="0" inputMode="decimal"
                   value={initialBalanceMinutes}
                   onChange={(e) => setInitialBalanceMinutes(e.target.value)}
                   className="w-12 font-mono font-bold text-sm text-center outline-none"
@@ -396,7 +397,7 @@ export default function BancoDeHorasCalculator({ onSelectTab }: BancoDeHorasCalc
 
           {/* Quick presets for adding logs */}
           <div className="flex flex-wrap items-center justify-between gap-2">
-            <span className="text-xs font-bold text-neutral-700">Lançamentos do Banco de Horas:</span>
+            <span className="text-xs font-bold text-neutral-700 dark:text-neutral-300">Lançamentos do Banco de Horas:</span>
             <div className="flex flex-wrap gap-2">
               <button
                 onClick={() => addLog('credit', 'Hora Extra Trabalhada', '02:00')}
@@ -416,13 +417,13 @@ export default function BancoDeHorasCalculator({ onSelectTab }: BancoDeHorasCalc
           {/* Logs Table */}
           <div className="space-y-2">
             {logs.map((log) => (
-              <div key={log.id} className="grid grid-cols-1 sm:grid-cols-12 gap-3 items-center bg-white border border-neutral-200 p-3 rounded-xl hover:border-blue-300 transition-colors">
+              <div key={log.id} className="grid grid-cols-1 sm:grid-cols-12 gap-3 items-center bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700 p-3 rounded-xl hover:border-blue-300 transition-colors">
                 <div className="col-span-1 sm:col-span-3">
                   <input
                     type="date"
                     value={log.date}
                     onChange={(e) => updateLog(log.id, 'date', e.target.value)}
-                    className="w-full border border-neutral-300 rounded-lg p-2 text-xs outline-none"
+                    className="w-full border border-neutral-300 dark:border-neutral-600 rounded-lg p-2 text-xs outline-none"
                   />
                 </div>
                 <div className="col-span-1 sm:col-span-4">
@@ -430,7 +431,7 @@ export default function BancoDeHorasCalculator({ onSelectTab }: BancoDeHorasCalc
                     type="text"
                     value={log.description}
                     onChange={(e) => updateLog(log.id, 'description', e.target.value)}
-                    className="w-full border border-neutral-300 rounded-lg p-2 text-xs outline-none"
+                    className="w-full border border-neutral-300 dark:border-neutral-600 rounded-lg p-2 text-xs outline-none"
                     placeholder="Descrição / Motivo"
                   />
                 </div>
@@ -451,7 +452,7 @@ export default function BancoDeHorasCalculator({ onSelectTab }: BancoDeHorasCalc
                     type="time"
                     value={log.hours}
                     onChange={(e) => updateLog(log.id, 'hours', e.target.value)}
-                    className="w-full border border-neutral-300 font-mono font-bold text-center rounded-lg p-2 text-xs outline-none"
+                    className="w-full border border-neutral-300 dark:border-neutral-600 font-mono font-bold text-center rounded-lg p-2 text-xs outline-none"
                   />
                   <button
                     onClick={() => removeLog(log.id)}
@@ -486,14 +487,14 @@ export default function BancoDeHorasCalculator({ onSelectTab }: BancoDeHorasCalc
             </div>
 
             <div className="flex items-center gap-2">
-              <button onClick={exportCSV} className="flex items-center gap-1 text-xs font-semibold text-neutral-700 bg-neutral-100 hover:bg-neutral-200 px-3 py-2 rounded-xl transition-colors cursor-pointer">
+              <button onClick={exportCSV} className="flex items-center gap-1 text-xs font-semibold text-neutral-700 dark:text-neutral-300 bg-neutral-100 hover:bg-neutral-200 px-3 py-2 rounded-xl transition-colors cursor-pointer">
                 <Download className="w-3.5 h-3.5 text-emerald-600" /> Exportar CSV
               </button>
-              <button onClick={copyLedgerSummary} className="flex items-center gap-1 text-xs font-semibold text-neutral-700 bg-neutral-100 hover:bg-neutral-200 px-3 py-2 rounded-xl transition-colors cursor-pointer">
+              <button onClick={copyLedgerSummary} className="flex items-center gap-1 text-xs font-semibold text-neutral-700 dark:text-neutral-300 bg-neutral-100 hover:bg-neutral-200 px-3 py-2 rounded-xl transition-colors cursor-pointer">
                 {copied ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5 text-blue-600" />} Copiar Resumo
               </button>
-              <button onClick={() => window.print()} className="flex items-center gap-1 text-xs font-semibold text-neutral-700 bg-neutral-100 hover:bg-neutral-200 px-3 py-2 rounded-xl transition-colors cursor-pointer">
-                <Printer className="w-3.5 h-3.5 text-neutral-600" /> Imprimir
+              <button onClick={() => window.print()} className="flex items-center gap-1 text-xs font-semibold text-neutral-700 dark:text-neutral-300 bg-neutral-100 hover:bg-neutral-200 px-3 py-2 rounded-xl transition-colors cursor-pointer">
+                <Printer className="w-3.5 h-3.5 text-neutral-600 dark:text-neutral-400" /> Imprimir
               </button>
             </div>
           </div>
@@ -510,7 +511,7 @@ export default function BancoDeHorasCalculator({ onSelectTab }: BancoDeHorasCalc
                   {isLedgerPositive ? '+' : '-'}{ledgerFormatted} h
                 </div>
               </div>
-              <Scale className="w-10 h-10 text-neutral-700" />
+              <Scale className="w-10 h-10 text-neutral-700 dark:text-neutral-300" />
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-4 gap-3 text-xs">
@@ -546,24 +547,24 @@ export default function BancoDeHorasCalculator({ onSelectTab }: BancoDeHorasCalc
       )}
 
       {/* Hourly rate input, percentage and validity term for financial valuation */}
-      <div className="mt-6 pt-6 border-t border-neutral-200 grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <div className="mt-6 pt-6 border-t border-neutral-200 dark:border-neutral-700 grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div>
-          <label className="block text-xs font-semibold text-neutral-700 mb-1">Valor da Hora Normal (R$)</label>
-          <input
-            type="number" inputMode="decimal"
+          <label className="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 mb-1">Valor da Hora Normal (R$)</label>
+          <input aria-label="Valor da Hora Normal (R$)"
+            type="number" min="0" inputMode="decimal"
             step="0.01"
             value={hourlyWage}
             onChange={(e) => setHourlyWage(e.target.value)}
-            className="w-full border border-neutral-300 rounded-lg p-2.5 text-sm outline-none focus:ring-2 focus:ring-blue-500 font-bold"
+            className="w-full border border-neutral-300 dark:border-neutral-600 rounded-lg p-2.5 text-sm outline-none focus:ring-2 focus:ring-blue-500 font-bold"
             placeholder="Ex: 15.00"
           />
         </div>
         <div>
-          <label className="block text-xs font-semibold text-neutral-700 mb-1">Adicional para Quitação Rescisória (%)</label>
-          <select
+          <label className="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 mb-1">Adicional para Quitação Rescisória (%)</label>
+          <select aria-label="Adicional para Quitação Rescisória (%)"
             value={overtimePercentage}
             onChange={(e) => setOvertimePercentage(e.target.value)}
-            className="w-full border border-neutral-300 rounded-lg p-2.5 text-sm outline-none focus:ring-2 focus:ring-blue-500 bg-white"
+            className="w-full border border-neutral-300 dark:border-neutral-600 rounded-lg p-2.5 text-sm outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-neutral-900"
           >
             <option value="50">50% (Dias Úteis Padrão CLT)</option>
             <option value="60">60% (Acordo Coletivo Específico)</option>
@@ -571,11 +572,11 @@ export default function BancoDeHorasCalculator({ onSelectTab }: BancoDeHorasCalc
           </select>
         </div>
         <div>
-          <label className="block text-xs font-semibold text-neutral-700 mb-1">Prazo de Validade do Acordo (Art. 59)</label>
-          <select
+          <label className="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 mb-1">Prazo de Validade do Acordo (Art. 59)</label>
+          <select aria-label="Prazo de Validade do Acordo (Art. 59)"
             value={agreementTerm}
             onChange={(e) => setAgreementTerm(e.target.value as '6m' | '12m')}
-            className="w-full border border-neutral-300 rounded-lg p-2.5 text-sm outline-none focus:ring-2 focus:ring-blue-500 bg-white"
+            className="w-full border border-neutral-300 dark:border-neutral-600 rounded-lg p-2.5 text-sm outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-neutral-900"
           >
             <option value="6m">6 Meses (Acordo Individual Escrito)</option>
             <option value="12m">12 Meses / 1 Ano (Convenção / Acordo Coletivo)</option>
@@ -584,11 +585,11 @@ export default function BancoDeHorasCalculator({ onSelectTab }: BancoDeHorasCalc
       </div>
 
       {/* Legal Info Box */}
-      <div className="mt-6 bg-neutral-50 p-4 rounded-xl border border-neutral-200 text-xs text-neutral-600 flex items-start gap-2.5">
+      <div className="mt-6 bg-neutral-50 dark:bg-neutral-800 p-4 rounded-xl border border-neutral-200 dark:border-neutral-700 text-xs text-neutral-600 dark:text-neutral-400 flex items-start gap-2.5">
         <Info className="w-5 h-5 text-blue-600 shrink-0 mt-0.5" />
         <div className="space-y-1">
-          <p className="font-bold text-neutral-800">Regras do Banco de Horas (Art. 59 da CLT):</p>
-          <ul className="list-disc pl-4 space-y-1 text-neutral-600">
+          <p className="font-bold text-neutral-800 dark:text-neutral-200">Regras do Banco de Horas (Art. 59 da CLT):</p>
+          <ul className="list-disc pl-4 space-y-1 text-neutral-600 dark:text-neutral-400">
             <li><strong>Acordo Individual Escrito:</strong> Compensação no prazo máximo de <strong>6 meses</strong>.</li>
             <li><strong>Acordo ou Convenção Coletiva:</strong> Compensação no prazo máximo de <strong>1 ano</strong>.</li>
             <li><strong>Rescisão do Contrato:</strong> Se houver saldo positivo de horas no desligamento, a empresa deve pagar as horas não compensadas como horas extras com adicional mínimo de 50%.</li>

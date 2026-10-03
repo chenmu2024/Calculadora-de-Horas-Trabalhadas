@@ -1,3 +1,6 @@
+import { copyText as writeClipboard } from '../utils/browser';
+import { saveToHistory } from '../utils/history';
+import { MINIMUM_WAGE_2026, calculateSeguroDesemprego } from '../utils/taxCalculations';
 import { useState, useMemo } from 'react';
 import { 
   ShieldAlert, 
@@ -36,25 +39,11 @@ export default function SeguroDesempregoCalculator({ onSelectTab }: SeguroDesemp
 
   const results = useMemo(() => {
     const mediaSalarial = (salario1 + salario2 + salario3) / 3;
-    const SALARIO_MINIMO = 1518;
-    const TETO_SEGURO = 2313.74;
-
-    // Valor da parcela (Tabela oficial MTE)
-    let valorParcela = 0;
-    if (mediaSalarial <= 2041.39) {
-      valorParcela = mediaSalarial * 0.8;
-    } else if (mediaSalarial <= 3402.65) {
-      valorParcela = 1633.11 + ((mediaSalarial - 2041.39) * 0.5);
-    } else {
-      valorParcela = TETO_SEGURO;
-    }
-
-    // O valor não pode ser inferior ao salário mínimo
-    valorParcela = Math.max(SALARIO_MINIMO, Math.min(TETO_SEGURO, valorParcela));
+    const valorParcela = calculateSeguroDesemprego(mediaSalarial);
 
     // Determinação do número de parcelas
     let numParcelas = 0;
-    let elegivel = true;
+    let elegivel = mediaSalarial > 0;
     let motivoInelegivel = '';
 
     if (solicitacao === '1') {
@@ -122,9 +111,7 @@ export default function SeguroDesempregoCalculator({ onSelectTab }: SeguroDesemp
         }
       };
 
-      const existingHistory = JSON.parse(localStorage.getItem('calc_history') || '[]');
-      const updatedHistory = [historyItem, ...existingHistory.slice(0, 49)];
-      localStorage.setItem('calc_history', JSON.stringify(updatedHistory));
+      if (!saveToHistory({ toolTab: historyItem.tab, toolName: historyItem.title, summary: historyItem.summary, mainValue: `R$ ${results.totalBeneficio.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}` })) return;
       setSaved(true);
       setTimeout(() => setSaved(false), 2500);
     } catch {
@@ -132,15 +119,16 @@ export default function SeguroDesempregoCalculator({ onSelectTab }: SeguroDesemp
     }
   };
 
-  const handleCopySummary = () => {
+  const handleCopySummary = async () => {
     const text = `📋 Resumo do Seguro-Desemprego 2026\n• Média dos 3 Últimos Salários: R$ ${results.mediaSalarial.toFixed(2)}\n• Solicitação: ${solicitacao}ª vez (${mesesTrabalhados} meses trabalhados)\n• Quantidade de Parcelas: ${results.numParcelas} parcelas\n• Valor de Cada Parcela: R$ ${results.valorParcela.toFixed(2)}\n• Total Previsto do Benefício: R$ ${results.totalBeneficio.toFixed(2)}\nCalculado em: calculadoradehorastrabalhadas.org/seguro-desemprego`;
-    navigator.clipboard.writeText(text);
+    if (!await writeClipboard(text)) return;
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
 
   return (
     <div className="space-y-6">
+      <p className="text-xs text-neutral-600 dark:text-neutral-300">Estimativa para trabalhador formal dispensado sem justa causa, sem renda própria suficiente e sem benefício previdenciário incompatível. Confirme os vínculos nas janelas legais e a elegibilidade no MTE; a quantidade usa os meses computáveis nos últimos 36 meses.</p>
       {/* Quick Scenarios */}
       <div className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-950/30 dark:to-indigo-950/30 p-4 rounded-2xl border border-blue-100 dark:border-blue-900/40">
         <div className="flex items-center gap-2 mb-2 text-xs font-bold text-blue-900 dark:text-blue-300">
@@ -228,7 +216,7 @@ export default function SeguroDesempregoCalculator({ onSelectTab }: SeguroDesemp
                   {mesesTrabalhados} meses
                 </span>
               </div>
-              <input
+              <input aria-label="Meses Trabalhados nos últimos 36 meses"
                 type="range"
                 min="1"
                 max="36"
@@ -245,7 +233,7 @@ export default function SeguroDesempregoCalculator({ onSelectTab }: SeguroDesemp
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
                 <div>
                   <label className="block text-[11px] text-neutral-500 mb-1">Último mês (Mês 1)</label>
-                  <input
+                  <input aria-label="Último mês (Mês 1)"
                     type="number"
                     min="0"
                     step="50"
@@ -256,7 +244,7 @@ export default function SeguroDesempregoCalculator({ onSelectTab }: SeguroDesemp
                 </div>
                 <div>
                   <label className="block text-[11px] text-neutral-500 mb-1">Penúltimo (Mês 2)</label>
-                  <input
+                  <input aria-label="Penúltimo (Mês 2)"
                     type="number"
                     min="0"
                     step="50"
@@ -267,7 +255,7 @@ export default function SeguroDesempregoCalculator({ onSelectTab }: SeguroDesemp
                 </div>
                 <div>
                   <label className="block text-[11px] text-neutral-500 mb-1">Antepenúltimo (Mês 3)</label>
-                  <input
+                  <input aria-label="Antepenúltimo (Mês 3)"
                     type="number"
                     min="0"
                     step="50"
@@ -353,8 +341,8 @@ export default function SeguroDesempregoCalculator({ onSelectTab }: SeguroDesemp
               <span>Regras Oficiais do Seguro-Desemprego 2026:</span>
             </h3>
             <ul className="space-y-1 text-neutral-600 dark:text-neutral-400">
-              <li>• <strong>Piso Nacional:</strong> Nenhuma parcela pode ser inferior a R$ 1.518,00 (Salário Mínimo).</li>
-              <li>• <strong>Teto Máximo:</strong> O valor máximo por parcela é de R$ 2.313,74.</li>
+              <li>• <strong>Piso Nacional:</strong> Nenhuma parcela pode ser inferior a R$ 1.621,00 (Salário Mínimo).</li>
+              <li>• <strong>Teto Máximo:</strong> O valor máximo por parcela é de R$ 2.518,65.</li>
               <li>• <strong>Prazo para requerer:</strong> De 7 a 120 dias corridos após a demissão sem justa causa.</li>
             </ul>
           </div>

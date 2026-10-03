@@ -1,3 +1,5 @@
+import { copyText as writeClipboard } from '../utils/browser';
+import { saveToHistory } from '../utils/history';
 import { useState, useMemo } from 'react';
 import { 
   Gift, 
@@ -12,7 +14,7 @@ import {
   TrendingUp,
   BookmarkPlus
 } from 'lucide-react';
-import { calculateINSS, calculateIRRF } from '../utils/taxCalculations';
+import { calculateINSS, calculateIRRF, MINIMUM_WAGE_2026 } from '../utils/taxCalculations';
 import InternalLinkCTA from './InternalLinkCTA';
 
 interface DecimoTerceiroCalculatorProps {
@@ -44,7 +46,7 @@ export default function DecimoTerceiroCalculator({ onSelectTab }: DecimoTerceiro
 
     // 2ª Parcela (50% restante menos a totalidade do INSS e do IRRF incidentes sobre o total)
     const inss = calculateINSS(valorIntegralProporcional);
-    const irrf = calculateIRRF(valorIntegralProporcional - inss, dependentes);
+    const irrf = calculateIRRF(valorIntegralProporcional, dependentes, inss);
     const totalDescontos = inss + irrf;
     
     const segundaParcelaBruta = valorIntegralProporcional - primeiraParcela;
@@ -82,9 +84,7 @@ export default function DecimoTerceiroCalculator({ onSelectTab }: DecimoTerceiro
         }
       };
 
-      const existingHistory = JSON.parse(localStorage.getItem('calc_history') || '[]');
-      const updatedHistory = [historyItem, ...existingHistory.slice(0, 49)];
-      localStorage.setItem('calc_history', JSON.stringify(updatedHistory));
+      if (!saveToHistory({ toolTab: historyItem.tab, toolName: historyItem.title, summary: historyItem.summary, mainValue: `R$ ${results.totalLiquido.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}` })) return;
       setSaved(true);
       setTimeout(() => setSaved(false), 2500);
     } catch {
@@ -92,9 +92,9 @@ export default function DecimoTerceiroCalculator({ onSelectTab }: DecimoTerceiro
     }
   };
 
-  const handleCopySummary = () => {
+  const handleCopySummary = async () => {
     const text = `💰 Resumo do 13º Salário CLT (2026)\n• Salário Base: R$ ${salarioBruto.toFixed(2)}\n• Meses: ${mesesTrabalhados}/12 avos\n• 1ª Parcela (sem descontos): R$ ${results.primeiraParcela.toFixed(2)}\n• 2ª Parcela Líquida: R$ ${results.segundaParcelaLiquida.toFixed(2)} (INSS: R$ ${results.inss.toFixed(2)}, IRRF: R$ ${results.irrf.toFixed(2)})\n• Total Líquido a Receber: R$ ${results.totalLiquido.toFixed(2)}\nCalculado em: calculadoradehorastrabalhadas.org/decimo-terceiro`;
-    navigator.clipboard.writeText(text);
+    if (!await writeClipboard(text)) return;
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
@@ -109,7 +109,7 @@ export default function DecimoTerceiroCalculator({ onSelectTab }: DecimoTerceiro
         </div>
         <div className="flex flex-wrap gap-2 text-xs">
           <button
-            onClick={() => applyScenario(1518, 12)}
+            onClick={() => applyScenario(MINIMUM_WAGE_2026, 12)}
             className="px-3 py-1.5 bg-white dark:bg-neutral-800 rounded-lg border border-emerald-200 dark:border-neutral-700 hover:border-emerald-500 font-medium text-neutral-800 dark:text-neutral-200 transition-colors"
           >
             Salário Mínimo (Ano Completo)
@@ -144,7 +144,7 @@ export default function DecimoTerceiroCalculator({ onSelectTab }: DecimoTerceiro
               </label>
               <div className="relative">
                 <span className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400 font-bold text-sm">R$</span>
-                <input
+                <input aria-label="Salário Bruto Mensal Contratual (R$)"
                   type="number"
                   min="0"
                   step="50"
@@ -165,7 +165,7 @@ export default function DecimoTerceiroCalculator({ onSelectTab }: DecimoTerceiro
                   {mesesTrabalhados} / 12 avos
                 </span>
               </div>
-              <input
+              <input aria-label="Meses Trabalhados no Ano (Fração ≥ 15 dias = 1 mês)"
                 type="range"
                 min="1"
                 max="12"
@@ -184,7 +184,7 @@ export default function DecimoTerceiroCalculator({ onSelectTab }: DecimoTerceiro
               <label className="block text-xs font-bold text-neutral-700 dark:text-neutral-300 mb-1.5">
                 Número de Dependentes (para dedução do IRRF)
               </label>
-              <input
+              <input aria-label="Número de Dependentes (para dedução do IRRF)"
                 type="number"
                 min="0"
                 max="15"
@@ -199,7 +199,7 @@ export default function DecimoTerceiroCalculator({ onSelectTab }: DecimoTerceiro
 
             <div className="pt-2 border-t border-neutral-100 dark:border-neutral-800">
               <label className="flex items-center gap-2 cursor-pointer">
-                <input
+                <input aria-label={"Incluir média de Horas Extras / Adicionais recebidos no ano"}
                   type="checkbox"
                   checked={incluirMedias}
                   onChange={(e) => setIncluirMedias(e.target.checked)}
@@ -215,7 +215,7 @@ export default function DecimoTerceiroCalculator({ onSelectTab }: DecimoTerceiro
                   <label className="block text-xs text-neutral-600 dark:text-neutral-400 mb-1">
                     Média Mensal de Horas Extras e Adicionais (R$)
                   </label>
-                  <input
+                  <input aria-label="Média Mensal de Horas Extras e Adicionais (R$)"
                     type="number"
                     min="0"
                     step="10"

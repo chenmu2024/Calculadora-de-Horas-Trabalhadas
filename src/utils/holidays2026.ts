@@ -29,10 +29,11 @@ export const MONTH_NAMES_PT = [
 /**
  * Calculates working days (Mon-Sat or Mon-Fri) and Sundays/Holidays for a given month in 2026
  */
-export function getMonthWorkStats(year: number, monthZeroIndexed: number, includeSaturdayAsWorkday: boolean = true) {
+export function getMonthWorkStats(year: number, monthZeroIndexed: number, includeSaturdayAsWorkday: boolean = true, includeOptional = false, localDates: string[] = []) {
   const daysInMonth = new Date(year, monthZeroIndexed + 1, 0).getDate();
   let workingDays = 0;
   let sundaysAndHolidays = 0;
+  let saturdaysOff = 0;
   const monthHolidays: { day: number; name: string }[] = [];
 
   for (let day = 1; day <= daysInMonth; day++) {
@@ -42,16 +43,16 @@ export function getMonthWorkStats(year: number, monthZeroIndexed: number, includ
     
     const holiday = HOLIDAYS_2026.find(h => h.date === dateStr);
 
-    if (holiday) {
+    if (holiday) monthHolidays.push({ day, name: holiday.name });
+    if ((holiday && (holiday.type === 'nacional' || includeOptional)) || localDates.includes(dateStr)) {
       sundaysAndHolidays++;
-      monthHolidays.push({ day, name: holiday.name });
     } else if (dayOfWeek === 0) {
       sundaysAndHolidays++;
     } else if (dayOfWeek === 6) {
       if (includeSaturdayAsWorkday) {
         workingDays++;
       } else {
-        sundaysAndHolidays++;
+        saturdaysOff++;
       }
     } else {
       workingDays++;
@@ -62,6 +63,7 @@ export function getMonthWorkStats(year: number, monthZeroIndexed: number, includ
     daysInMonth,
     workingDays,
     sundaysAndHolidays,
-    monthHolidays
+    monthHolidays,
+    saturdaysOff
   };
 }

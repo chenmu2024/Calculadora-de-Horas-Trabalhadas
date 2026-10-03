@@ -1,3 +1,4 @@
+import { copyText as writeClipboard, nonNegative } from '../utils/browser';
 import React, { useState } from 'react';
 import { Clock, AlertTriangle, AlertCircle, Copy, Check, Printer, Sparkles, HelpCircle, ArrowRight, DollarSign, Calendar, Scale } from 'lucide-react';
 import InternalLinkCTA from './InternalLinkCTA';
@@ -19,15 +20,15 @@ export default function FaltasAtrasosCalculator({ onSelectTab }: FaltasAtrasosCa
 
   const [copied, setCopied] = useState(false);
 
-  const baseSalary = parseFloat(salary) || 0;
+  const baseSalary = nonNegative(salary, 0);
   const divisor = weeklyHours === '44' ? 220 : weeklyHours === '40' ? 200 : weeklyHours === '36' ? 180 : 150;
   const hourlyRate = baseSalary > 0 ? baseSalary / divisor : 0;
   const minuteRate = hourlyRate / 60;
   const dailyWage = baseSalary / 30; // Art. 64 CLT: Salário diário = Salário ÷ 30
 
-  const totalDelayMin = parseInt(delayMinutes) || 0;
-  const absences = parseInt(unjustifiedAbsences) || 0;
-  const dsrs = parseInt(dsrLostCount) || 0;
+  const totalDelayMin = nonNegative(delayMinutes, 0);
+  const absences = nonNegative(unjustifiedAbsences, 0);
+  const dsrs = nonNegative(dsrLostCount, 0);
 
   // Calculations
   const delayDiscount = totalDelayMin * minuteRate;
@@ -36,9 +37,9 @@ export default function FaltasAtrasosCalculator({ onSelectTab }: FaltasAtrasosCa
   const totalDiscount = delayDiscount + absenceDiscount + dsrDiscount;
   const remainingSalary = Math.max(0, baseSalary - totalDiscount);
 
-  const copyResults = () => {
+  const copyResults = async () => {
     const text = `=== Desconto de Faltas e Atrasos (CLT 2026) ===\nSalário Base: R$ ${baseSalary.toFixed(2)}\nDesconto por Atrasos (${totalDelayMin} min): R$ ${delayDiscount.toFixed(2)}\nDesconto por Faltas (${absences} dia(s)): R$ ${absenceDiscount.toFixed(2)}\nPerda do DSR (${dsrs} domingo(s)): R$ ${dsrDiscount.toFixed(2)}\nTotal de Descontos: R$ ${totalDiscount.toFixed(2)}\nSalário Restante Estimado: R$ ${remainingSalary.toFixed(2)}\nCalculado em: https://calculadoradehorastrabalhadas.org/atrasos-e-faltas`;
-    navigator.clipboard.writeText(text);
+    if (!await writeClipboard(text)) return;
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
@@ -75,7 +76,7 @@ export default function FaltasAtrasosCalculator({ onSelectTab }: FaltasAtrasosCa
             <span className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400 text-xs font-bold">R$</span>
             <input
               id="fa-sal"
-              type="number"
+              type="number" min="0"
               value={salary}
               onChange={(e) => setSalary(e.target.value)}
               className="w-full bg-white dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-700 rounded-xl py-2.5 pl-9 pr-3 text-sm font-bold text-neutral-900 dark:text-white focus:ring-2 focus:ring-rose-500 outline-none"
@@ -92,7 +93,7 @@ export default function FaltasAtrasosCalculator({ onSelectTab }: FaltasAtrasosCa
           <label className="block text-xs font-bold text-neutral-700 dark:text-neutral-300">
             Jornada Semanal Contratual
           </label>
-          <select
+          <select aria-label="Jornada Semanal Contratual"
             value={weeklyHours}
             onChange={(e) => setWeeklyHours(e.target.value as any)}
             className="w-full bg-white dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-700 rounded-xl py-2.5 px-3 text-xs font-bold text-neutral-900 dark:text-white outline-none focus:ring-2 focus:ring-rose-500"
@@ -114,7 +115,7 @@ export default function FaltasAtrasosCalculator({ onSelectTab }: FaltasAtrasosCa
           </label>
           <input
             id="fa-delay"
-            type="number"
+            type="number" min="0"
             value={delayMinutes}
             onChange={(e) => setDelayMinutes(e.target.value)}
             className="w-full bg-white dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-700 rounded-xl py-2 px-3 text-sm font-bold text-neutral-900 dark:text-white focus:ring-2 focus:ring-rose-500 outline-none"
@@ -133,7 +134,7 @@ export default function FaltasAtrasosCalculator({ onSelectTab }: FaltasAtrasosCa
           <div className="flex gap-2">
             <input
               id="fa-absences"
-              type="number"
+              type="number" min="0"
               value={unjustifiedAbsences}
               onChange={(e) => {
                 setUnjustifiedAbsences(e.target.value);
@@ -166,7 +167,7 @@ export default function FaltasAtrasosCalculator({ onSelectTab }: FaltasAtrasosCa
           <label htmlFor="fa-dsr" className="font-bold text-amber-950 dark:text-amber-200">DSRs a descontar:</label>
           <input
             id="fa-dsr"
-            type="number"
+            type="number" min="0"
             value={dsrLostCount}
             onChange={(e) => setDsrLostCount(e.target.value)}
             className="w-16 bg-white dark:bg-neutral-900 border border-amber-300 dark:border-amber-700 rounded-lg p-1.5 text-center font-bold text-xs"

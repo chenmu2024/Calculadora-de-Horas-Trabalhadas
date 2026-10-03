@@ -33,10 +33,10 @@ export default function TermsPage() {
         </div>
       </div>
 
-      <div className="bg-white rounded-3xl border border-neutral-200 p-6 sm:p-10 shadow-sm space-y-8">
+      <div className="bg-white dark:bg-neutral-900 rounded-3xl border border-neutral-200 dark:border-neutral-700 p-6 sm:p-10 shadow-sm space-y-8">
         {/* Table of Contents Box */}
-        <div className="bg-neutral-50 border border-neutral-200 p-5 rounded-2xl space-y-2">
-          <h3 className="font-bold text-neutral-900 text-sm flex items-center gap-2">
+        <div className="bg-neutral-50 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 p-5 rounded-2xl space-y-2">
+          <h3 className="font-bold text-neutral-900 dark:text-neutral-100 text-sm flex items-center gap-2">
             <Scale className="w-4 h-4 text-blue-600" />
             Índice de Seções dos Termos de Uso
           </h3>
@@ -53,10 +53,10 @@ export default function TermsPage() {
         </div>
 
         {/* Legal Sections */}
-        <div className="space-y-8 text-neutral-700 text-sm leading-relaxed">
+        <div className="space-y-8 text-neutral-700 dark:text-neutral-300 text-sm leading-relaxed">
           {/* Section 1 */}
           <section id="term-1" className="space-y-3 border-b border-neutral-100 pb-6">
-            <h2 className="text-lg font-bold text-neutral-900">
+            <h2 className="text-lg font-bold text-neutral-900 dark:text-neutral-100">
               1. Aceitação dos Termos de Uso
             </h2>
             <p>
@@ -66,7 +66,7 @@ export default function TermsPage() {
 
           {/* Section 2 */}
           <section id="term-2" className="space-y-3 border-b border-neutral-100 pb-6">
-            <h2 className="text-lg font-bold text-neutral-900">
+            <h2 className="text-lg font-bold text-neutral-900 dark:text-neutral-100">
               2. Descrição e Natureza Informativa dos Serviços
             </h2>
             <p>
@@ -84,7 +84,7 @@ export default function TermsPage() {
 
           {/* Section 3 */}
           <section id="term-3" className="space-y-3 border-b border-neutral-100 pb-6">
-            <h2 className="text-lg font-bold text-neutral-900">
+            <h2 className="text-lg font-bold text-neutral-900 dark:text-neutral-100">
               3. Isenção de Responsabilidade e Exatidão dos Cálculos
             </h2>
             <p>
@@ -99,7 +99,7 @@ export default function TermsPage() {
 
           {/* Section 4 */}
           <section id="term-4" className="space-y-3 border-b border-neutral-100 pb-6">
-            <h2 className="text-lg font-bold text-neutral-900">
+            <h2 className="text-lg font-bold text-neutral-900 dark:text-neutral-100">
               4. Propriedade Intelectual e Direitos Autorais
             </h2>
             <p>
@@ -112,7 +112,7 @@ export default function TermsPage() {
 
           {/* Section 5 */}
           <section id="term-5" className="space-y-3 border-b border-neutral-100 pb-6">
-            <h2 className="text-lg font-bold text-neutral-900">
+            <h2 className="text-lg font-bold text-neutral-900 dark:text-neutral-100">
               5. Regras de Uso Aceitável e Proibições
             </h2>
             <p>
@@ -127,7 +127,7 @@ export default function TermsPage() {
 
           {/* Section 6 */}
           <section id="term-6" className="space-y-3 border-b border-neutral-100 pb-6">
-            <h2 className="text-lg font-bold text-neutral-900">
+            <h2 className="text-lg font-bold text-neutral-900 dark:text-neutral-100">
               6. Links para Terceiros e Anúncios Publicitários
             </h2>
             <p>
@@ -137,7 +137,7 @@ export default function TermsPage() {
 
           {/* Section 7 */}
           <section id="term-7" className="space-y-3 border-b border-neutral-100 pb-6">
-            <h2 className="text-lg font-bold text-neutral-900">
+            <h2 className="text-lg font-bold text-neutral-900 dark:text-neutral-100">
               7. Modificações dos Termos e Atualizações
             </h2>
             <p>
@@ -147,7 +147,7 @@ export default function TermsPage() {
 
           {/* Section 8 */}
           <section id="term-8" className="space-y-3">
-            <h2 className="text-lg font-bold text-neutral-900">
+            <h2 className="text-lg font-bold text-neutral-900 dark:text-neutral-100">
               8. Legislação Aplicável e Foro
             </h2>
             <p>

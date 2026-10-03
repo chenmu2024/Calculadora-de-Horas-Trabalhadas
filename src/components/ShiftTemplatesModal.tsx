@@ -1,3 +1,4 @@
+import { useDialog } from '../hooks/useDialog';
 import React from 'react';
 import { Sparkles, Calendar, Check, X, Clock } from 'lucide-react';
 
@@ -80,10 +81,11 @@ export const PRESET_TEMPLATES: ShiftTemplate[] = [
 ];
 
 export default function ShiftTemplatesModal({ isOpen, onClose, onApplyTemplate }: ShiftTemplatesModalProps) {
+  const dialogRef = useDialog(isOpen, onClose);
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-neutral-900/60 backdrop-blur-xs z-50 flex items-center justify-center p-4 animate-in fade-in duration-200 no-print">
+    <div ref={dialogRef} role="dialog" aria-modal="true" aria-label="Modelos de Jornada" tabIndex={-1} className="fixed inset-0 bg-neutral-900/60 backdrop-blur-xs z-[70] flex items-center justify-center p-4 animate-in fade-in duration-200 no-print">
       <div className="bg-white dark:bg-neutral-900 rounded-2xl max-w-2xl w-full p-6 shadow-2xl border border-neutral-200 dark:border-neutral-800 max-h-[90vh] overflow-y-auto">
         <div className="flex items-center justify-between pb-4 border-b border-neutral-100 dark:border-neutral-800">
           <div className="flex items-center gap-2">
@@ -97,6 +99,7 @@ export default function ShiftTemplatesModal({ isOpen, onClose, onApplyTemplate }
           </div>
           <button
             onClick={onClose}
+            aria-label="Fechar"
             className="text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-200 p-1 rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
           >
             <X className="w-5 h-5" />
@@ -141,6 +144,7 @@ export default function ShiftTemplatesModal({ isOpen, onClose, onApplyTemplate }
         <div className="pt-4 border-t border-neutral-100 dark:border-neutral-800 flex justify-end">
           <button
             onClick={onClose}
+            aria-label="Fechar"
             className="px-4 py-2 text-xs font-semibold text-neutral-600 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded-lg transition-colors cursor-pointer"
           >
             Fechar
