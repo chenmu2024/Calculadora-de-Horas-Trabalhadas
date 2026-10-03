@@ -1,3 +1,5 @@
+import { storage, copyText as writeClipboard, nonNegative } from '../utils/browser';
+import { MINIMUM_WAGE_2026 } from '../utils/taxCalculations';
 import { useState, useEffect } from 'react';
 import { DollarSign, Clock, Printer, Copy, Check, Download, Sparkles, Moon, ArrowRight } from 'lucide-react';
 import { generateTimesheetCSV } from '../utils/excelGenerator';
@@ -8,12 +10,12 @@ interface OvertimeCalculatorProps {
 }
 
 export default function OvertimeCalculator({ onSelectTab }: OvertimeCalculatorProps) {
-  const [salary, setSalary] = useState(() => localStorage.getItem('calc_ot_salary') || '2500');
-  const [weeklyHours, setWeeklyHours] = useState(() => localStorage.getItem('calc_ot_hours') || '44');
+  const [salary, setSalary] = useState(() => storage.getItem('calc_ot_salary') || '2500');
+  const [weeklyHours, setWeeklyHours] = useState(() => storage.getItem('calc_ot_hours') || '44');
   
   // Dual-tier Overtime Hours
-  const [ot50Hours, setOt50Hours] = useState(() => localStorage.getItem('calc_ot_50h') || '10');
-  const [ot100Hours, setOt100Hours] = useState(() => localStorage.getItem('calc_ot_100h') || '0');
+  const [ot50Hours, setOt50Hours] = useState(() => storage.getItem('calc_ot_50h') || '10');
+  const [ot100Hours, setOt100Hours] = useState(() => storage.getItem('calc_ot_100h') || '0');
   const [customOtPct, setCustomOtPct] = useState('60');
   const [otCustomHours, setOtCustomHours] = useState('0');
 
@@ -22,24 +24,24 @@ export default function OvertimeCalculator({ onSelectTab }: OvertimeCalculatorPr
   const [insalubridadeGrade, setInsalubridadeGrade] = useState<'0' | '10' | '20' | '40'>('0');
 
   // Night Shift Allowance & Reduced Night Hour
-  const [includeNight, setIncludeNight] = useState(() => localStorage.getItem('calc_ot_night') === 'true');
+  const [includeNight, setIncludeNight] = useState(() => storage.getItem('calc_ot_night') === 'true');
 
   // DSR Reflex on Overtime
-  const [includeDSR, setIncludeDSR] = useState(() => localStorage.getItem('calc_ot_dsr_inc') === 'true');
-  const [workingDays, setWorkingDays] = useState(() => localStorage.getItem('calc_ot_wdays') || '25');
-  const [sundaysHolidays, setSundaysHolidays] = useState(() => localStorage.getItem('calc_ot_sdays') || '5');
+  const [includeDSR, setIncludeDSR] = useState(() => storage.getItem('calc_ot_dsr_inc') === 'true');
+  const [workingDays, setWorkingDays] = useState(() => storage.getItem('calc_ot_wdays') || '25');
+  const [sundaysHolidays, setSundaysHolidays] = useState(() => storage.getItem('calc_ot_sdays') || '5');
 
   const [copied, setCopied] = useState(false);
 
   useEffect(() => {
-    localStorage.setItem('calc_ot_salary', salary);
-    localStorage.setItem('calc_ot_hours', weeklyHours);
-    localStorage.setItem('calc_ot_50h', ot50Hours);
-    localStorage.setItem('calc_ot_100h', ot100Hours);
-    localStorage.setItem('calc_ot_night', String(includeNight));
-    localStorage.setItem('calc_ot_dsr_inc', String(includeDSR));
-    localStorage.setItem('calc_ot_wdays', workingDays);
-    localStorage.setItem('calc_ot_sdays', sundaysHolidays);
+    storage.setItem('calc_ot_salary', salary);
+    storage.setItem('calc_ot_hours', weeklyHours);
+    storage.setItem('calc_ot_50h', ot50Hours);
+    storage.setItem('calc_ot_100h', ot100Hours);
+    storage.setItem('calc_ot_night', String(includeNight));
+    storage.setItem('calc_ot_dsr_inc', String(includeDSR));
+    storage.setItem('calc_ot_wdays', workingDays);
+    storage.setItem('calc_ot_sdays', sundaysHolidays);
   }, [salary, weeklyHours, ot50Hours, ot100Hours, includeNight, includeDSR, workingDays, sundaysHolidays]);
 
   const fillExample = () => {
@@ -57,20 +59,20 @@ export default function OvertimeCalculator({ onSelectTab }: OvertimeCalculatorPr
   };
 
   const calcOvertime = () => {
-    const s = parseFloat(salary) || 0;
-    const w = parseFloat(weeklyHours) || 0;
-    const h50 = parseFloat(ot50Hours) || 0;
-    const h100 = parseFloat(ot100Hours) || 0;
-    const hCust = parseFloat(otCustomHours) || 0;
-    const custPctVal = (parseFloat(customOtPct) || 60) / 100;
+    const s = nonNegative(salary, 0);
+    const w = nonNegative(weeklyHours, 0);
+    const h50 = nonNegative(ot50Hours, 0);
+    const h100 = nonNegative(ot100Hours, 0);
+    const hCust = nonNegative(otCustomHours, 0);
+    const custPctVal = (nonNegative(customOtPct, 60)) / 100;
 
-    const minimumWage = 1518.00;
-    const insalubridadeVal = minimumWage * ((parseFloat(insalubridadeGrade) || 0) / 100);
+    const minimumWage = MINIMUM_WAGE_2026;
+    const insalubridadeVal = minimumWage * ((nonNegative(insalubridadeGrade, 0)) / 100);
     const periculosidadeVal = hasPericulosidade ? s * 0.30 : 0;
     const totalRemunerationBase = s + insalubridadeVal + periculosidadeVal;
 
-    const wDays = parseFloat(workingDays) || 25;
-    const sDays = parseFloat(sundaysHolidays) || 5;
+    const wDays = nonNegative(workingDays, 25);
+    const sDays = nonNegative(sundaysHolidays, 5);
     
     // CLT pattern: monthly divisor is weekly hours * 5
     const divisor = w * 5;
@@ -125,7 +127,7 @@ export default function OvertimeCalculator({ onSelectTab }: OvertimeCalculatorPr
 
   const results = calcOvertime();
 
-  const copyResult = () => {
+  const copyResult = async () => {
     const text = `Cálculo de Horas Extras e DSR:
 Salário Base: R$ ${salary}
 Hora Normal Base: R$ ${results.hourlyRate.toFixed(2)}
@@ -133,7 +135,7 @@ ${parseFloat(ot50Hours) > 0 ? `• Horas Extras 50%: ${ot50Hours}h = R$ ${result
 ${includeDSR ? `Reflexo no DSR (Súmula 172 TST): R$ ${results.dsrAmount.toFixed(2)}\n` : ''}TOTAL A RECEBER: R$ ${results.grandTotalOT.toFixed(2)}
 
 Calculado em calculadoradehorastrabalhadas.org`;
-    navigator.clipboard.writeText(text);
+    if (!await writeClipboard(text)) return;
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
@@ -154,8 +156,8 @@ Calculado em calculadoradehorastrabalhadas.org`;
     <div className="animate-in fade-in duration-500">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
         <div>
-          <h2 className="text-2xl font-bold text-neutral-900">Calculadora de Horas Extras e DSR</h2>
-          <p className="text-neutral-600 text-sm mt-1">Calcule o valor das suas horas extras com acréscimos legais (50%, 100%, CCT) e reflexo no DSR (Súmula 172 do TST).</p>
+          <h2 className="text-2xl font-bold text-neutral-900 dark:text-neutral-100">Calculadora de Horas Extras e DSR</h2>
+          <p className="text-neutral-600 dark:text-neutral-400 text-sm mt-1">Calcule o valor das suas horas extras com acréscimos legais (50%, 100%, CCT) e reflexo no DSR (Súmula 172 do TST).</p>
         </div>
 
         <div className="flex flex-wrap items-center gap-2 self-start sm:self-auto no-print">
@@ -167,37 +169,37 @@ Calculado em calculadoradehorastrabalhadas.org`;
           </button>
           <button
             onClick={exportCSV}
-            className="flex items-center gap-1.5 text-xs font-semibold text-neutral-700 bg-neutral-100 hover:bg-neutral-200 px-3 py-2 rounded-xl transition-colors cursor-pointer"
+            className="flex items-center gap-1.5 text-xs font-semibold text-neutral-700 dark:text-neutral-300 bg-neutral-100 hover:bg-neutral-200 px-3 py-2 rounded-xl transition-colors cursor-pointer"
           >
             <Download className="w-3.5 h-3.5 text-emerald-600" /> Exportar CSV
           </button>
           <button
             onClick={copyResult}
-            className="flex items-center gap-1.5 text-xs font-semibold text-neutral-700 bg-neutral-100 hover:bg-neutral-200 px-3 py-2 rounded-xl transition-colors cursor-pointer"
+            className="flex items-center gap-1.5 text-xs font-semibold text-neutral-700 dark:text-neutral-300 bg-neutral-100 hover:bg-neutral-200 px-3 py-2 rounded-xl transition-colors cursor-pointer"
           >
             {copied ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5 text-blue-600" />} Copiar
           </button>
           <button
             onClick={() => window.print()}
-            className="flex items-center gap-1.5 text-xs font-semibold text-neutral-700 bg-neutral-100 hover:bg-neutral-200 px-3 py-2 rounded-xl transition-colors cursor-pointer"
+            className="flex items-center gap-1.5 text-xs font-semibold text-neutral-700 dark:text-neutral-300 bg-neutral-100 hover:bg-neutral-200 px-3 py-2 rounded-xl transition-colors cursor-pointer"
           >
-            <Printer className="w-3.5 h-3.5 text-neutral-600" /> Imprimir
+            <Printer className="w-3.5 h-3.5 text-neutral-600 dark:text-neutral-400" /> Imprimir
           </button>
         </div>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
         <div>
-          <label htmlFor="ot-salary" className="block text-xs font-bold text-neutral-700 mb-1">Salário Mensal Bruto (R$)</label>
+          <label htmlFor="ot-salary" className="block text-xs font-bold text-neutral-700 dark:text-neutral-300 mb-1">Salário Mensal Bruto (R$)</label>
           <div className="relative">
             <span className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-500 font-bold text-xs">R$</span>
             <input 
               id="ot-salary"
               aria-label="Salário Mensal Bruto em Reais"
-              type="number" inputMode="decimal" 
+              type="number" min="0" inputMode="decimal"
               value={salary} 
               onChange={e => setSalary(e.target.value)} 
-              className="w-full border border-neutral-300 rounded-xl p-2.5 pl-9 focus:ring-2 focus:ring-blue-500 outline-none font-bold text-sm" 
+              className="w-full border border-neutral-300 dark:border-neutral-600 rounded-xl p-2.5 pl-9 focus:ring-2 focus:ring-blue-500 outline-none font-bold text-sm"
               placeholder="Ex: 2500"
             />
           </div>
@@ -205,7 +207,7 @@ Calculado em calculadoradehorastrabalhadas.org`;
           <div className="flex flex-wrap gap-1 mt-1.5">
             <span className="text-[10px] text-neutral-400 self-center">Atalhos:</span>
             {[
-              { label: 'R$ 1.518', val: '1518' },
+              { label: 'R$ 1.621', val: String(MINIMUM_WAGE_2026) },
               { label: 'R$ 2.500', val: '2500' },
               { label: 'R$ 3.500', val: '3500' },
               { label: 'R$ 5.000', val: '5000' },
@@ -227,15 +229,15 @@ Calculado em calculadoradehorastrabalhadas.org`;
         </div>
 
         <div>
-          <label htmlFor="ot-weekly-hours" className="block text-xs font-bold text-neutral-700 mb-1">Carga Horária Semanal (hs)</label>
+          <label htmlFor="ot-weekly-hours" className="block text-xs font-bold text-neutral-700 dark:text-neutral-300 mb-1">Carga Horária Semanal (hs)</label>
           <div className="relative">
              <input 
                id="ot-weekly-hours"
                aria-label="Carga Horária Semanal em horas"
-               type="number" inputMode="decimal" 
+               type="number" min="0" inputMode="decimal"
                value={weeklyHours} 
                onChange={e => setWeeklyHours(e.target.value)} 
-               className="w-full border border-neutral-300 rounded-xl p-2.5 pr-8 focus:ring-2 focus:ring-blue-500 outline-none font-bold text-sm" 
+               className="w-full border border-neutral-300 dark:border-neutral-600 rounded-xl p-2.5 pr-8 focus:ring-2 focus:ring-blue-500 outline-none font-bold text-sm"
                placeholder="Ex: 44"
              />
              <span className="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-500 font-bold text-xs">h</span>
@@ -264,23 +266,23 @@ Calculado em calculadoradehorastrabalhadas.org`;
         </div>
 
         <div>
-          <label htmlFor="ot-insalubridade" className="block text-xs font-bold text-neutral-700 mb-1">Insalubridade na Base (TST)</label>
+          <label htmlFor="ot-insalubridade" className="block text-xs font-bold text-neutral-700 dark:text-neutral-300 mb-1">Insalubridade na Base (TST)</label>
           <select
             id="ot-insalubridade"
             aria-label="Insalubridade na base de cálculo"
             value={insalubridadeGrade}
             onChange={e => setInsalubridadeGrade(e.target.value as any)}
-            className="w-full border border-neutral-300 bg-white rounded-xl p-2.5 text-xs outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-900 rounded-xl p-2.5 text-xs outline-none focus:ring-2 focus:ring-blue-500"
           >
             <option value="0">Não possui</option>
-            <option value="10">Mínimo (10% = R$ 151,80)</option>
-            <option value="20">Médio (20% = R$ 303,60)</option>
-            <option value="40">Máximo (40% = R$ 607,20)</option>
+            <option value="10">Mínimo (10% = R$ 162,10)</option>
+            <option value="20">Médio (20% = R$ 324,20)</option>
+            <option value="40">Máximo (40% = R$ 648,40)</option>
           </select>
         </div>
 
         <div>
-          <label className="block text-xs font-bold text-neutral-700 mb-1">Periculosidade na Base (TST)</label>
+          <label className="block text-xs font-bold text-neutral-700 dark:text-neutral-300 mb-1">Periculosidade na Base (TST)</label>
           <button
             type="button"
             onClick={() => setHasPericulosidade(!hasPericulosidade)}
@@ -296,25 +298,25 @@ Calculado em calculadoradehorastrabalhadas.org`;
       </div>
 
       {/* Multi-tier Horas Extras Inputs */}
-      <div className="bg-neutral-50 p-5 rounded-2xl border border-neutral-200 mb-6 space-y-4">
-        <h3 className="text-xs font-extrabold text-neutral-800 uppercase tracking-wider flex items-center gap-1.5">
+      <div className="bg-neutral-50 dark:bg-neutral-800 p-5 rounded-2xl border border-neutral-200 dark:border-neutral-700 mb-6 space-y-4">
+        <h3 className="text-xs font-extrabold text-neutral-800 dark:text-neutral-200 uppercase tracking-wider flex items-center gap-1.5">
           <Clock className="w-4 h-4 text-blue-600" /> Lançamento de Horas Extras por Adicional (Simultâneo)
         </h3>
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          <div className="bg-white p-3.5 rounded-xl border border-neutral-200">
+          <div className="bg-white dark:bg-neutral-900 p-3.5 rounded-xl border border-neutral-200 dark:border-neutral-700">
             <div className="flex justify-between items-center mb-1.5">
-              <label htmlFor="ot-50-hours" className="text-xs font-bold text-neutral-800">HE 50% (Dias Úteis)</label>
+              <label htmlFor="ot-50-hours" className="text-xs font-bold text-neutral-800 dark:text-neutral-200">HE 50% (Dias Úteis)</label>
               <span className="text-[10px] bg-blue-100 text-blue-800 font-bold px-2 py-0.5 rounded-full">+50%</span>
             </div>
             <div className="relative">
               <input
                 id="ot-50-hours"
                 aria-label="Horas Extras 50%"
-                type="number" inputMode="decimal"
+                type="number" min="0" inputMode="decimal"
                 value={ot50Hours}
                 onChange={e => setOt50Hours(e.target.value)}
-                className="w-full border border-neutral-300 rounded-lg p-2 font-bold text-sm outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full border border-neutral-300 dark:border-neutral-600 rounded-lg p-2 font-bold text-sm outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="Ex: 10"
               />
               <span className="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-400 text-xs font-bold">hs</span>
@@ -324,19 +326,19 @@ Calculado em calculadoradehorastrabalhadas.org`;
             </span>
           </div>
 
-          <div className="bg-white p-3.5 rounded-xl border border-neutral-200">
+          <div className="bg-white dark:bg-neutral-900 p-3.5 rounded-xl border border-neutral-200 dark:border-neutral-700">
             <div className="flex justify-between items-center mb-1.5">
-              <label htmlFor="ot-100-hours" className="text-xs font-bold text-neutral-800">HE 100% (Dom / Feriados)</label>
+              <label htmlFor="ot-100-hours" className="text-xs font-bold text-neutral-800 dark:text-neutral-200">HE 100% (Dom / Feriados)</label>
               <span className="text-[10px] bg-purple-100 text-purple-800 font-bold px-2 py-0.5 rounded-full">+100%</span>
             </div>
             <div className="relative">
               <input
                 id="ot-100-hours"
                 aria-label="Horas Extras 100%"
-                type="number" inputMode="decimal"
+                type="number" min="0" inputMode="decimal"
                 value={ot100Hours}
                 onChange={e => setOt100Hours(e.target.value)}
-                className="w-full border border-neutral-300 rounded-lg p-2 font-bold text-sm outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full border border-neutral-300 dark:border-neutral-600 rounded-lg p-2 font-bold text-sm outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="Ex: 0"
               />
               <span className="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-400 text-xs font-bold">hs</span>
@@ -346,19 +348,19 @@ Calculado em calculadoradehorastrabalhadas.org`;
             </span>
           </div>
 
-          <div className="bg-white p-3.5 rounded-xl border border-neutral-200">
+          <div className="bg-white dark:bg-neutral-900 p-3.5 rounded-xl border border-neutral-200 dark:border-neutral-700">
             <div className="flex justify-between items-center mb-1.5">
               <div className="flex items-center gap-1">
-                <label htmlFor="ot-custom-hours" className="text-xs font-bold text-neutral-800">HE Acordo/CCT</label>
+                <label htmlFor="ot-custom-hours" className="text-xs font-bold text-neutral-800 dark:text-neutral-200">HE Acordo/CCT</label>
                 <input
                   id="ot-custom-pct"
                   aria-label="Percentual customizado de hora extra"
-                  type="number" inputMode="decimal"
+                  type="number" min="0" inputMode="decimal"
                   value={customOtPct}
                   onChange={e => setCustomOtPct(e.target.value)}
-                  className="w-10 border border-neutral-300 rounded px-1 py-0.5 text-center text-xs font-bold"
+                  className="w-10 border border-neutral-300 dark:border-neutral-600 rounded px-1 py-0.5 text-center text-xs font-bold"
                 />
-                <span className="text-xs font-bold text-neutral-600">%</span>
+                <span className="text-xs font-bold text-neutral-600 dark:text-neutral-400">%</span>
               </div>
               <span className="text-[10px] bg-amber-100 text-amber-800 font-bold px-2 py-0.5 rounded-full">+{customOtPct}%</span>
             </div>
@@ -366,10 +368,10 @@ Calculado em calculadoradehorastrabalhadas.org`;
               <input
                 id="ot-custom-hours"
                 aria-label="Horas Extras CCT"
-                type="number" inputMode="decimal"
+                type="number" min="0" inputMode="decimal"
                 value={otCustomHours}
                 onChange={e => setOtCustomHours(e.target.value)}
-                className="w-full border border-neutral-300 rounded-lg p-2 font-bold text-sm outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full border border-neutral-300 dark:border-neutral-600 rounded-lg p-2 font-bold text-sm outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="Ex: 0"
               />
               <span className="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-400 text-xs font-bold">hs</span>
@@ -383,7 +385,7 @@ Calculado em calculadoradehorastrabalhadas.org`;
 
       {/* DSR & Night shift options */}
       <div className="space-y-3 mb-6">
-        <div className="bg-neutral-50 p-4 rounded-xl border border-neutral-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-xs">
+        <div className="bg-neutral-50 dark:bg-neutral-800 p-4 rounded-xl border border-neutral-200 dark:border-neutral-700 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-xs">
           <div className="flex items-center gap-2">
             <input
               type="checkbox"
@@ -393,7 +395,7 @@ Calculado em calculadoradehorastrabalhadas.org`;
               onChange={(e) => setIncludeDSR(e.target.checked)}
               className="w-4 h-4 text-blue-600 rounded cursor-pointer"
             />
-            <label htmlFor="incDSR" className="cursor-pointer font-bold text-neutral-800">
+            <label htmlFor="incDSR" className="cursor-pointer font-bold text-neutral-800 dark:text-neutral-200">
               Incluir Reflexo no DSR (Descanso Semanal Remunerado — Súmula 172 TST)
             </label>
           </div>
@@ -404,19 +406,19 @@ Calculado em calculadoradehorastrabalhadas.org`;
               <input
                 id="ot-working-days"
                 aria-label="Dias Úteis no Mês para DSR"
-                type="number" inputMode="decimal"
+                type="number" min="0" inputMode="decimal"
                 value={workingDays}
                 onChange={(e) => setWorkingDays(e.target.value)}
-                className="w-14 bg-white border border-neutral-300 rounded p-1 text-center font-bold"
+                className="w-14 bg-white dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-600 rounded p-1 text-center font-bold"
               />
               <span className="text-neutral-500">Dom/Feriados:</span>
               <input
                 id="ot-sundays-holidays"
                 aria-label="Domingos e Feriados no Mês para DSR"
-                type="number" inputMode="decimal"
+                type="number" min="0" inputMode="decimal"
                 value={sundaysHolidays}
                 onChange={(e) => setSundaysHolidays(e.target.value)}
-                className="w-14 bg-white border border-neutral-300 rounded p-1 text-center font-bold"
+                className="w-14 bg-white dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-600 rounded p-1 text-center font-bold"
               />
             </div>
           )}
@@ -443,19 +445,19 @@ Calculado em calculadoradehorastrabalhadas.org`;
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-4 gap-4 mb-6">
-         <div className="bg-neutral-50 p-4 rounded-xl border border-neutral-200">
+         <div className="bg-neutral-50 dark:bg-neutral-800 p-4 rounded-xl border border-neutral-200 dark:border-neutral-700">
             <p className="text-xs text-neutral-500 mb-1 font-medium">Hora Normal Base</p>
-            <p className="text-xl font-bold font-mono text-neutral-700">R$ {results.hourlyRate.toFixed(2).replace('.', ',')}</p>
+            <p className="text-xl font-bold font-mono text-neutral-700 dark:text-neutral-300">R$ {results.hourlyRate.toFixed(2).replace('.', ',')}</p>
          </div>
-         <div className="bg-neutral-50 p-4 rounded-xl border border-neutral-200">
+         <div className="bg-neutral-50 dark:bg-neutral-800 p-4 rounded-xl border border-neutral-200 dark:border-neutral-700">
             <p className="text-xs text-neutral-500 mb-1 font-medium">Total Bruto HE (50%/100%)</p>
-            <p className="text-xl font-bold font-mono text-neutral-700">R$ {results.totalOTValue.toFixed(2).replace('.', ',')}</p>
+            <p className="text-xl font-bold font-mono text-neutral-700 dark:text-neutral-300">R$ {results.totalOTValue.toFixed(2).replace('.', ',')}</p>
          </div>
-         <div className="bg-neutral-50 p-4 rounded-xl border border-neutral-200">
+         <div className="bg-neutral-50 dark:bg-neutral-800 p-4 rounded-xl border border-neutral-200 dark:border-neutral-700">
             <p className="text-xs text-neutral-500 mb-1 font-medium">Reflexo no DSR</p>
             <p className="text-xl font-bold font-mono text-emerald-600">R$ {results.dsrAmount.toFixed(2).replace('.', ',')}</p>
          </div>
-         <div className="bg-neutral-50 p-4 rounded-xl border border-neutral-200">
+         <div className="bg-neutral-50 dark:bg-neutral-800 p-4 rounded-xl border border-neutral-200 dark:border-neutral-700">
             <p className="text-xs text-neutral-500 mb-1 font-medium">Salário Bruto + Extras</p>
             <p className="text-xl font-bold font-mono text-blue-700">R$ {results.totalSalaryWithOT.toFixed(2).replace('.', ',')}</p>
          </div>

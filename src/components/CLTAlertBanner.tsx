@@ -11,10 +11,11 @@ interface CLTCheckProps {
 
 export default function CLTAlertBanner({
   totalMinutes = 0,
-  breakMinutes = 0,
+  breakMinutes,
   overtimeMinutes = 0,
   isNightShift = false,
 }: CLTCheckProps) {
+  if (totalMinutes <= 0 && overtimeMinutes <= 0 && !isNightShift) return null;
   const alerts: Array<{
     type: 'danger' | 'warning' | 'info' | 'success';
     title: string;
@@ -23,18 +24,18 @@ export default function CLTAlertBanner({
   }> = [];
 
   const workHours = totalMinutes / 60;
-  const breakHours = breakMinutes / 60;
+  const breakHours = (breakMinutes ?? 0) / 60;
   const overtimeHours = overtimeMinutes / 60;
 
   // 1. Intrajornada check (Art. 71 CLT)
-  if (workHours > 6 && breakMinutes < 60) {
+  if (workHours > 6 && breakMinutes !== undefined && breakMinutes < 60) {
     alerts.push({
       type: 'danger',
       title: 'Intervalo Intrajornada Insuficiente',
-      description: `Jornadas superiores a 6 horas exigem no mínimo 1 hora (60 min) de intervalo para almoço/descanso. O intervalo atual é de ${breakMinutes} min.`,
+      description: `Jornadas superiores a 6 horas exigem no mínimo 1 hora (60 min) de intervalo para almoço/descanso, salvo redução válida por acordo coletivo. O intervalo atual é de ${breakMinutes} min.`,
       article: 'Art. 71 da CLT',
     });
-  } else if (workHours > 4 && workHours <= 6 && breakMinutes < 15) {
+  } else if (workHours > 4 && workHours <= 6 && breakMinutes !== undefined && breakMinutes < 15) {
     alerts.push({
       type: 'warning',
       title: 'Intervalo Mínimo de 15 Minutos Necessário',
@@ -68,7 +69,7 @@ export default function CLTAlertBanner({
       <div className="bg-emerald-50/80 border border-emerald-200 rounded-xl p-3 my-3 text-xs flex items-center gap-2.5 text-emerald-800 no-print">
         <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
         <div>
-          <span className="font-bold">Conformidade Legal CLT:</span> Os horários e descansos informados estão de acordo com as normas vigentes do Art. 58, 59 e 71 da CLT.
+          <span className="font-bold">Conformidade Legal CLT:</span> Nenhum alerta nas verificações disponíveis do Art. 59 e 71 da CLT. Intervalos não informados, acordos coletivos e outras condições não foram verificados.
         </div>
       </div>
     );

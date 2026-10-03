@@ -1,5 +1,6 @@
+import { storage, copyText as writeClipboard, notify } from '../utils/browser';
 import React, { useState, ChangeEvent } from 'react';
-import { calculateDuration, minutesToTime, timeToMinutes } from '../utils/time';
+import { calculateDuration, isValidTime, minutesToTime, timeToMinutes } from '../utils/time';
 import { Plus, Trash2, Calendar, Download, Printer, Copy, Check, RotateCcw, AlertCircle, Clock, CheckCircle2, Sparkles, Upload } from 'lucide-react';
 import { generateTimesheetCSV } from '../utils/excelGenerator';
 import InternalLinkCTA from './InternalLinkCTA';
@@ -14,6 +15,14 @@ interface DayEntry {
   breakTime: string;
 }
 
+export function isValidTimesheet(value: unknown): value is DayEntry[] {
+  return Array.isArray(value) && value.length <= 366 && value.every(row =>
+    row && typeof row === 'object' && typeof row.id === 'string' && typeof row.date === 'string' &&
+    isValidTime(row.start) && isValidTime(row.end) && isValidTime(row.breakTime, true) &&
+    timeToMinutes(row.breakTime) <= calculateDuration(row.start, row.end)
+  ) && new Set(value.map(row => row.id)).size === value.length;
+}
+
 interface TimesheetCalculatorProps {
   onSelectTab?: (tab: string) => void;
 }
@@ -22,8 +31,8 @@ export default function TimesheetCalculator({ onSelectTab }: TimesheetCalculator
   const [weeklyTarget, setWeeklyTarget] = useState('44:00'); // '44:00', '40:00', '36:00'
   const [entries, setEntries] = useState<DayEntry[]>(() => {
     try {
-      const saved = localStorage.getItem('timesheet_entries_v1');
-      if (saved) return JSON.parse(saved);
+      const saved = storage.getItem('timesheet_entries_v1');
+      if (saved) { const parsed = JSON.parse(saved); if (isValidTimesheet(parsed)) return parsed; }
     } catch (e) {
       // fallback
     }
@@ -42,7 +51,7 @@ export default function TimesheetCalculator({ onSelectTab }: TimesheetCalculator
   const saveEntries = (newEntries: DayEntry[]) => {
     setEntries(newEntries);
     try {
-      localStorage.setItem('timesheet_entries_v1', JSON.stringify(newEntries));
+      storage.setItem('timesheet_entries_v1', JSON.stringify(newEntries));
     } catch (e) {
       // ignore
     }
@@ -84,15 +93,17 @@ export default function TimesheetCalculator({ onSelectTab }: TimesheetCalculator
   const importJSONBackup = (e: React.ChangeEvent<HTMLInputElement>) => {
     const fileReader = new FileReader();
     if (e.target.files && e.target.files[0]) {
+      if (e.target.files[0].size > 1024 * 1024) { notify('Arquivo muito grande (máximo 1 MB).'); e.target.value = ''; return; }
+      fileReader.onerror = () => notify('Não foi possível ler o arquivo.');
       fileReader.readAsText(e.target.files[0], "UTF-8");
+      e.target.value = '';
       fileReader.onload = (event) => {
         try {
           const parsed = JSON.parse(event.target?.result as string);
-          if (Array.isArray(parsed)) {
-            saveEntries(parsed);
-          }
+          if (!isValidTimesheet(parsed)) throw new Error('Invalid rows');
+          saveEntries(parsed);
         } catch (err) {
-          alert('Arquivo JSON inválido.');
+          notify('Arquivo JSON inválido: confira os campos, horários e identificadores. Os dados atuais foram mantidos.');
         }
       };
     }
@@ -146,6 +157,7 @@ export default function TimesheetCalculator({ onSelectTab }: TimesheetCalculator
   const isDeficit = diffMinutes < 0;
 
   const exportCSV = () => {
+    if (!isValidTimesheet(entries)) { notify('Confira os horários antes de exportar.'); return; }
     const formattedData = entries.map(e => {
       const durationMin = calculateDuration(e.start, e.end, undefined, undefined, timeToMinutes(e.breakTime));
       return {
@@ -159,7 +171,7 @@ export default function TimesheetCalculator({ onSelectTab }: TimesheetCalculator
     generateTimesheetCSV(formattedData, 'Folha de Ponto Semanal');
   };
 
-  const copySummary = () => {
+  const copySummary = async () => {
     const summaryLines = entries.map(e => {
       const dur = calculateDuration(e.start, e.end, undefined, undefined, timeToMinutes(e.breakTime));
       return `${e.date || 'Dia'}: ${e.start} - ${e.end} (Int: ${e.breakTime}) = ${minutesToTime(dur)}`;
@@ -172,7 +184,7 @@ export default function TimesheetCalculator({ onSelectTab }: TimesheetCalculator
       : 'Carga Semanal Cumprida Exatamente';
 
     const fullText = `REGISTRO DE HORAS TRABALHADAS (SEMANAL):\n\n${summaryLines.join('\n')}\n\nTOTAL ACUMULADO: ${minutesToTime(totalMinutes)}\nMeta Semanal CLT: ${weeklyTarget}\n${balanceStr}\n\nCalculado em calculadoradehorastrabalhadas.org`;
-    navigator.clipboard.writeText(fullText);
+    if (!await writeClipboard(fullText)) return;
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
@@ -218,7 +230,7 @@ export default function TimesheetCalculator({ onSelectTab }: TimesheetCalculator
           </button>
           <label className="bg-neutral-100 dark:bg-neutral-800 hover:bg-neutral-200 dark:hover:bg-neutral-700 text-neutral-700 dark:text-neutral-200 px-2.5 py-2 rounded-xl transition-colors font-medium flex items-center gap-1 cursor-pointer">
             <Upload className="w-3.5 h-3.5" /> Restaurar
-            <input type="file" accept=".json" onChange={importJSONBackup} className="hidden" aria-label="Restaurar backup JSON" />
+            <input type="file" accept=".json" onChange={importJSONBackup} className="hidden" aria-label={"Restaurar"} />
           </label>
           <button onClick={clearAll} className="bg-neutral-100 dark:bg-neutral-800 hover:bg-red-50 dark:hover:bg-red-950/40 hover:text-red-600 dark:hover:text-red-400 text-neutral-500 dark:text-neutral-400 px-2.5 py-2 rounded-xl transition-colors font-medium flex items-center gap-1 cursor-pointer">
             <RotateCcw className="w-3.5 h-3.5" /> Limpar
@@ -290,10 +302,8 @@ export default function TimesheetCalculator({ onSelectTab }: TimesheetCalculator
       </div>
 
       {/* CLT Legal Compliance Check Banner */}
-      <CLTAlertBanner
-        totalMinutes={totalMinutes}
-        overtimeMinutes={diffMinutes > 0 ? diffMinutes : 0}
-      />
+      {!isValidTimesheet(entries) && <p role="alert" className="text-red-700 dark:text-red-300 text-sm">Confira os horários e intervalos das linhas antes de exportar.</p>}
+      {entries.map(entry => <div key={`check-${entry.id}`}><span className="text-xs font-bold">{entry.date}</span><CLTAlertBanner totalMinutes={calculateDuration(entry.start, entry.end, undefined, undefined, timeToMinutes(entry.breakTime))} breakMinutes={timeToMinutes(entry.breakTime)} overtimeMinutes={Math.max(0, calculateDuration(entry.start, entry.end, undefined, undefined, timeToMinutes(entry.breakTime)) - 480)} /></div>)}
 
       <div className="space-y-3 mb-6">
         {/* Table Headers */}

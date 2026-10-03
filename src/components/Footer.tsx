@@ -19,7 +19,7 @@ export default function Footer({ setActiveTab }: FooterProps) {
         <div className="space-y-3 md:col-span-1">
           <div className="flex items-center gap-2 text-white font-bold text-base">
             <Calculator className="w-5 h-5 text-blue-500" />
-            <span>calculadoradehorastrabalhadas.org</span>
+            <span className="break-all">calculadoradehorastrabalhadas.org</span>
           </div>
           <p className="text-neutral-400 leading-relaxed text-xs">
             A principal ferramenta online gratuita de cálculo de horas trabalhadas, folha de ponto, horas extras e adicional noturno no Brasil.
@@ -118,22 +118,22 @@ export default function Footer({ setActiveTab }: FooterProps) {
               </a>
             </li>
             <li>
-              <a href={getHrefForTab('blog')} onClick={(e) => { e.preventDefault(); handleNav('blog'); }} className="hover:text-white transition-colors" title="Guia Como calcular hora de trabalho">
+              <a href="/guia-clt/como-calcular-hora-de-trabalho" className="hover:text-white transition-colors" title="Guia Como calcular hora de trabalho">
                 Como calcular hora de trabalho
               </a>
             </li>
             <li>
-              <a href={getHrefForTab('blog')} onClick={(e) => { e.preventDefault(); handleNav('blog'); }} className="hover:text-white transition-colors" title="Guia Como calcular 44 horas de 2ª a 6ª">
+              <a href="/guia-clt/como-calcular-44-horas-trabalhadas-de-segunda-a-sexta" className="hover:text-white transition-colors" title="Guia Como calcular 44 horas de 2ª a 6ª">
                 Como calcular 44 horas de 2ª a 6ª
               </a>
             </li>
             <li>
-              <a href={getHrefForTab('blog')} onClick={(e) => { e.preventDefault(); handleNav('blog'); }} className="hover:text-white transition-colors" title="Guia Divisor de horas CLT 220">
+              <a href="/guia-clt/como-calcular-o-valor-da-hora-de-trabalho" className="hover:text-white transition-colors" title="Guia Divisor de horas CLT 220">
                 Divisor de horas CLT (220)
               </a>
             </li>
             <li>
-              <a href={getHrefForTab('blog')} onClick={(e) => { e.preventDefault(); handleNav('blog'); }} className="hover:text-white transition-colors" title="Guia Cálculo de hora extra 50% e 100%">
+              <a href="/guia-clt/como-calcular-hora-extra-e-adicional-noturno" className="hover:text-white transition-colors" title="Guia Cálculo de hora extra 50% e 100%">
                 Cálculo de hora extra 50% e 100%
               </a>
             </li>

@@ -1,3 +1,4 @@
+import { storage } from '../utils/browser';
 import React, { useState, useEffect } from 'react';
 import { Cookie, ShieldCheck, X, Check } from 'lucide-react';
 
@@ -9,28 +10,31 @@ export default function CookieBanner({ onOpenPrivacy }: CookieBannerProps) {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
-    const consent = localStorage.getItem('lgpd_cookie_consent');
+    const reopen = () => setIsVisible(true);
+    window.addEventListener('cookie-preferences', reopen);
+    const consent = storage.getItem('lgpd_cookie_consent');
     if (!consent) {
       setIsVisible(true);
     }
+    return () => window.removeEventListener('cookie-preferences', reopen);
   }, []);
 
   const handleAcceptAll = () => {
-    localStorage.setItem('lgpd_cookie_consent', 'accepted_all');
-    localStorage.setItem('lgpd_cookie_date', new Date().toISOString());
+    storage.setItem('lgpd_cookie_consent', 'accepted_all');
+    storage.setItem('lgpd_cookie_date', new Date().toISOString());
     setIsVisible(false);
   };
 
   const handleAcceptEssential = () => {
-    localStorage.setItem('lgpd_cookie_consent', 'essential_only');
-    localStorage.setItem('lgpd_cookie_date', new Date().toISOString());
+    storage.setItem('lgpd_cookie_consent', 'essential_only');
+    storage.setItem('lgpd_cookie_date', new Date().toISOString());
     setIsVisible(false);
   };
 
   if (!isVisible) return null;
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-50 p-4 sm:p-6 bg-neutral-900/95 backdrop-blur-md text-white border-t border-neutral-800 shadow-2xl animate-in slide-in-from-bottom duration-300">
+    <div className="fixed bottom-0 left-0 right-0 z-40 p-4 sm:p-6 bg-neutral-900/95 backdrop-blur-md text-white border-t border-neutral-800 shadow-2xl animate-in slide-in-from-bottom duration-300">
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
         
         {/* Left text & icon */}
@@ -46,7 +50,7 @@ export default function CookieBanner({ onOpenPrivacy }: CookieBannerProps) {
               </span>
             </div>
             <p className="leading-relaxed text-neutral-300 text-xs">
-              Utilizamos cookies essenciais para o funcionamento do site e tecnologias parceiras (incluindo <strong>Google AdSense</strong>) para personalizar anúncios e analisar o tráfego de acordo com a nossa{' '}
+              Utilizamos cookies essenciais para o funcionamento do site e preferências locais. Atualmente não carregamos publicidade ou análise de terceiros; qualquer ativação futura de <strong>Google AdSense</strong> deve respeitar sua escolha de acordo com a nossa{' '}
               <button
                 type="button"
                 onClick={onOpenPrivacy}

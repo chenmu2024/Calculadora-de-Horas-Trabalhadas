@@ -1,3 +1,6 @@
+import { copyText as writeClipboard } from '../utils/browser';
+import { saveToHistory } from '../utils/history';
+import { MINIMUM_WAGE_2026 } from '../utils/taxCalculations';
 import { useState, useMemo } from 'react';
 import { 
   Flame, 
@@ -19,7 +22,7 @@ interface InsalubridadePericulosidadeCalculatorProps {
 
 export default function InsalubridadePericulosidadeCalculator({ onSelectTab }: InsalubridadePericulosidadeCalculatorProps) {
   const [salarioBase, setSalarioBase] = useState<number>(2500);
-  const [salarioMinimo, setSalarioMinimo] = useState<number>(1518);
+  const [salarioMinimo, setSalarioMinimo] = useState<number>(MINIMUM_WAGE_2026);
   const [tipoAdicional, setTipoAdicional] = useState<'insalubridade' | 'periculosidade'>('insalubridade');
   const [grauInsalubridade, setGrauInsalubridade] = useState<10 | 20 | 40>(20);
   const [baseCalculoInsalubridade, setBaseCalculoInsalubridade] = useState<'minimo' | 'base'>('minimo');
@@ -83,9 +86,7 @@ export default function InsalubridadePericulosidadeCalculator({ onSelectTab }: I
         }
       };
 
-      const existingHistory = JSON.parse(localStorage.getItem('calc_history') || '[]');
-      const updatedHistory = [historyItem, ...existingHistory.slice(0, 49)];
-      localStorage.setItem('calc_history', JSON.stringify(updatedHistory));
+      if (!saveToHistory({ toolTab: historyItem.tab, toolName: historyItem.title, summary: historyItem.summary, mainValue: `R$ ${results.valorAdicional.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}` })) return;
       setSaved(true);
       setTimeout(() => setSaved(false), 2500);
     } catch {
@@ -93,9 +94,9 @@ export default function InsalubridadePericulosidadeCalculator({ onSelectTab }: I
     }
   };
 
-  const handleCopySummary = () => {
+  const handleCopySummary = async () => {
     const text = `⚠️ Resumo de Adicional CLT (2026)\n• Salário Base: R$ ${salarioBase.toFixed(2)}\n• Tipo: ${tipoAdicional === 'insalubridade' ? `Insalubridade Grau ${grauInsalubridade}%` : 'Periculosidade 30%'}\n• Valor do Adicional Mensal: R$ ${results.valorAdicional.toFixed(2)}\n• Salário Bruto Final: R$ ${results.salarioTotalComAdicional.toFixed(2)}\nCalculado em: calculadoradehorastrabalhadas.org/insalubridade-e-periculosidade`;
-    navigator.clipboard.writeText(text);
+    if (!await writeClipboard(text)) return;
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
@@ -177,7 +178,7 @@ export default function InsalubridadePericulosidadeCalculator({ onSelectTab }: I
               </label>
               <div className="relative">
                 <span className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400 font-bold text-sm">R$</span>
-                <input
+                <input aria-label="Salário Base Contratual (R$)"
                   type="number"
                   min="0"
                   step="50"

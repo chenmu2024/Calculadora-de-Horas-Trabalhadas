@@ -1,3 +1,6 @@
+import { downloadWorkbook } from '../utils/workbook';
+import { calculateDuration, minutesToTime, timeToMinutes, isValidTime } from '../utils/time';
+import { copyText as writeClipboard, nonNegative, notify } from '../utils/browser';
 import React, { useState } from 'react';
 import { FileSpreadsheet, Download, CheckCircle2, Mail, Sparkles, Copy, Check, Code, Layers, Table, Sliders, Info } from 'lucide-react';
 import { generateTimesheetCSV } from '../utils/excelGenerator';
@@ -6,6 +9,7 @@ type TemplateType = 'clt_standard' | 'banco_horas' | 'escala_12x36' | 'adicional
 
 export default function ExcelDownloadSection() {
   const [activeTemplate, setActiveTemplate] = useState<TemplateType>('clt_standard');
+  const [extendNight, setExtendNight] = useState(false);
   const [email, setEmail] = useState('');
   const [downloaded, setDownloaded] = useState(false);
   const [copiedTable, setCopiedTable] = useState(false);
@@ -37,7 +41,7 @@ export default function ExcelDownloadSection() {
         { date: 'Dia 01/05', start: '08:00', lunchStart: '12:00', lunchEnd: '13:00', end: '19:00', breakTime: '01:00', totalHours: '10:00 ( +2h extra 50% )' },
         { date: 'Dia 02/05', start: '08:00', lunchStart: '12:00', lunchEnd: '13:00', end: '18:00', breakTime: '01:00', totalHours: '09:00 (  0h saldo )' },
         { date: 'Dia 03/05', start: '08:30', lunchStart: '12:00', lunchEnd: '13:00', end: '17:30', breakTime: '01:00', totalHours: '08:00 ( -1h débito )' },
-        { date: 'Dia 04/05 (Domingo)', start: '08:00', lunchStart: '12:00', lunchEnd: '13:00', end: '16:00', breakTime: '01:00', totalHours: '07:00 ( +7h extra 100% )' },
+        { restDay: true, overtimePct: 1, date: 'Dia 04/05 (Domingo)', start: '08:00', lunchStart: '12:00', lunchEnd: '13:00', end: '16:00', breakTime: '01:00', totalHours: '07:00 ( +7h extra 100% )' },
       ],
     },
     escala_12x36: {
@@ -52,7 +56,7 @@ export default function ExcelDownloadSection() {
     },
     adicional_noturno: {
       title: 'Planilha de Jornada Noturna (22h às 05h com Hora Ficta)',
-      desc: 'Inclui conversão da hora reduzida (52m30s = 1,1428x) e adicional de 20% conforme Art. 73 da CLT.',
+      desc: 'Inclui conversão da hora reduzida (52m30s = 1,1428x) e adicional de 20% conforme Art. 73 da CLT. Desconta a pausa informada; prorrogação após 05h depende da jornada e do acordo aplicável e exige confirmação abaixo.',
       entries: [
         { date: 'Segunda-Feira', start: '22:00', lunchStart: '02:00', lunchEnd: '03:00', end: '06:00', breakTime: '01:00', totalHours: '07:00 rel. (8.00h fictas)' },
         { date: 'Terça-Feira', start: '22:00', lunchStart: '02:00', lunchEnd: '03:00', end: '06:00', breakTime: '01:00', totalHours: '07:00 rel. (8.00h fictas)' },
@@ -64,36 +68,44 @@ export default function ExcelDownloadSection() {
       title: 'Controle de Horas por Projeto / Cliente (PJ)',
       desc: 'Monitore horas trabalhadas por projeto e calcule o valor faturável em Reais multiplicando pela taxa horária.',
       entries: [
-        { date: 'Projeto Redesign Web', start: '09:00', lunchStart: '12:00', lunchEnd: '13:00', end: '15:00', breakTime: '01:00', totalHours: `05:00 ( R$ ${(5 * (parseFloat(customHourlyRate) || 25)).toFixed(2)} )` },
-        { date: 'Integração API Pix', start: '14:00', lunchStart: '-', lunchEnd: '-', end: '18:00', breakTime: '00:00', totalHours: `04:00 ( R$ ${(4 * (parseFloat(customHourlyRate) || 25)).toFixed(2)} )` },
-        { date: 'Suporte Técnico', start: '10:00', lunchStart: '12:00', lunchEnd: '13:00', end: '12:00', breakTime: '00:00', totalHours: `02:00 ( R$ ${(2 * (parseFloat(customHourlyRate) || 25)).toFixed(2)} )` },
+        { date: 'Projeto Redesign Web', start: '09:00', lunchStart: '12:00', lunchEnd: '13:00', end: '15:00', breakTime: '01:00', totalHours: `05:00 ( R$ ${(5 * (nonNegative(customHourlyRate, 25))).toFixed(2)} )` },
+        { date: 'Integração API Pix', start: '14:00', lunchStart: '-', lunchEnd: '-', end: '18:00', breakTime: '00:00', totalHours: `04:00 ( R$ ${(4 * (nonNegative(customHourlyRate, 25))).toFixed(2)} )` },
+        { date: 'Suporte Técnico', start: '10:00', lunchStart: '-', lunchEnd: '-', end: '12:00', breakTime: '00:00', totalHours: `02:00 ( R$ ${(2 * (nonNegative(customHourlyRate, 25))).toFixed(2)} )` },
       ],
     },
   };
 
-  const currentTemplate = templatesData[activeTemplate];
+  const selectedTemplate = templatesData[activeTemplate];
+  const currentTemplate = { ...selectedTemplate, entries: selectedTemplate.entries.map(entry => {
+    const custom = isCustomizing && activeTemplate === 'clt_standard';
+    const row = { ...entry, lunchStart: custom ? '' : entry.lunchStart, lunchEnd: custom ? '' : entry.lunchEnd };
+    return { ...row, totalHours: minutesToTime(calculateDuration(row.start, row.end, undefined, undefined, timeToMinutes(row.breakTime))) };
+  }) };
+  const validTemplate = currentTemplate.entries.every(row => row.start === 'FOLGA' || (isValidTime(row.start) && isValidTime(row.end) && isValidTime(row.breakTime, true) && timeToMinutes(row.breakTime) <= calculateDuration(row.start, row.end)));
+
 
   const handleDownload = (e: React.FormEvent) => {
     e.preventDefault();
-    generateTimesheetCSV(currentTemplate.entries, currentTemplate.title);
+    if (!validTemplate) { notify('Confira horários e intervalo antes de baixar.'); return; }
+    downloadWorkbook(currentTemplate.entries, nonNegative(customHourlyRate, 25), activeTemplate === 'adicional_noturno', activeTemplate === 'banco_horas', extendNight && activeTemplate === 'adicional_noturno');
     setDownloaded(true);
     setTimeout(() => setDownloaded(false), 4000);
   };
 
-  const copyTableToClipboard = () => {
+  const copyTableToClipboard = async () => {
     const headers = ['Dia / Descrição', 'Entrada', 'Saída Almoço', 'Retorno Almoço', 'Saída Final', 'Pausa', 'Cálculo Total'];
     const rowsText = currentTemplate.entries.map(e => 
       `${e.date}\t${e.start}\t${e.lunchStart || '-'}\t${e.lunchEnd || '-'}\t${e.end}\t${e.breakTime || '-'}\t${e.totalHours}`
     ).join('\n');
 
     const fullTSV = `${headers.join('\t')}\n${rowsText}`;
-    navigator.clipboard.writeText(fullTSV);
+    if (!await writeClipboard(fullTSV)) return;
     setCopiedTable(true);
     setTimeout(() => setCopiedTable(false), 2500);
   };
 
-  const copyFormula = (formula: string, label: string) => {
-    navigator.clipboard.writeText(formula);
+  const copyFormula = async (formula: string, label: string) => {
+    if (!await writeClipboard(formula)) return;
     setCopiedFormula(label);
     setTimeout(() => setCopiedFormula(null), 2000);
   };
@@ -122,23 +134,26 @@ export default function ExcelDownloadSection() {
   ];
 
   return (
-    <div className="bg-white rounded-2xl p-6 sm:p-8 border border-neutral-200 shadow-sm animate-in fade-in duration-500 space-y-8">
+    <div className="bg-white dark:bg-neutral-900 rounded-2xl p-6 sm:p-8 border border-neutral-200 dark:border-neutral-700 shadow-sm animate-in fade-in duration-500 space-y-8">
+      <button type="button" className="text-xs underline text-blue-700 dark:text-blue-300" onClick={() => { if (validTemplate) generateTimesheetCSV(currentTemplate.entries, currentTemplate.title); else notify('Confira horários e intervalo antes de baixar.'); }}>Baixar também em CSV (valores, sem fórmulas)</button>
+      {activeTemplate === 'adicional_noturno' && <label className="flex gap-2 text-xs"><input type="checkbox" checked={extendNight} onChange={e => setExtendNight(e.target.checked)} />Confirmo a aplicação da prorrogação após 05h para jornada que cobre todo o período 22–05. A pausa também será descontada.</label>}
+      <p className="text-xs text-neutral-600 dark:text-neutral-300">No modelo de banco, P define o adicional HE (0,5 = 50%; 1 = 100%) e Q indica descanso (1) ou dia normal (0). Confira o acordo antes de alterar. A meta M2 representa horas reais; férias e compensações não são inferidas por datas.</p>
       {/* Header */}
       <div className="text-center max-w-2xl mx-auto space-y-3">
         <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 text-xs font-semibold">
           <Sparkles className="w-3.5 h-3.5" /> Modelos Grátis e Prontos em Excel / Google Sheets
         </div>
-        <h2 className="text-2xl sm:text-3xl font-extrabold text-neutral-900 tracking-tight">
+        <h2 className="text-2xl sm:text-3xl font-extrabold text-neutral-900 dark:text-neutral-100 tracking-tight">
           Planilhas de Cálculo de Horas Trabalhadas
         </h2>
-        <p className="text-neutral-600 text-sm leading-relaxed">
+        <p className="text-neutral-600 dark:text-neutral-400 text-sm leading-relaxed">
           Baixe nossas planilhas prontas para Excel e Google Sheets com fórmulas automáticas de folha de ponto, controle de almoço, banco de horas, adicional noturno e horas extras.
         </p>
       </div>
 
       {/* Template Selector Tabs */}
       <div className="space-y-3">
-        <label className="block text-xs font-bold text-neutral-700 uppercase tracking-wider text-center sm:text-left">
+        <label className="block text-xs font-bold text-neutral-700 dark:text-neutral-300 uppercase tracking-wider text-center sm:text-left">
           Escolha o Modelo de Planilha Desejado:
         </label>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
@@ -169,9 +184,9 @@ export default function ExcelDownloadSection() {
       </div>
 
       {/* Interactive Customization Bar */}
-      <div className="bg-neutral-50 p-4 rounded-xl border border-neutral-200 space-y-3">
+      <div className="bg-neutral-50 dark:bg-neutral-800 p-4 rounded-xl border border-neutral-200 dark:border-neutral-700 space-y-3">
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2 text-xs font-bold text-neutral-800">
+          <div className="flex items-center gap-2 text-xs font-bold text-neutral-800 dark:text-neutral-200">
             <Sliders className="w-4 h-4 text-emerald-600" />
             Personalizar Parâmetros da Planilha em Tempo Real:
           </div>
@@ -187,40 +202,40 @@ export default function ExcelDownloadSection() {
         {isCustomizing && (
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2">
             <div>
-              <label className="block text-[11px] font-semibold text-neutral-600 mb-1">Entrada Padrão</label>
-              <input
+              <label className="block text-[11px] font-semibold text-neutral-600 dark:text-neutral-400 mb-1">Entrada Padrão</label>
+              <input aria-label="Entrada Padrão"
                 type="time"
                 value={customStart}
                 onChange={e => setCustomStart(e.target.value)}
-                className="w-full bg-white border border-neutral-300 rounded-lg p-2 text-xs font-bold"
+                className="w-full bg-white dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-600 rounded-lg p-2 text-xs font-bold"
               />
             </div>
             <div>
-              <label className="block text-[11px] font-semibold text-neutral-600 mb-1">Saída Padrão</label>
-              <input
+              <label className="block text-[11px] font-semibold text-neutral-600 dark:text-neutral-400 mb-1">Saída Padrão</label>
+              <input aria-label="Saída Padrão"
                 type="time"
                 value={customEnd}
                 onChange={e => setCustomEnd(e.target.value)}
-                className="w-full bg-white border border-neutral-300 rounded-lg p-2 text-xs font-bold"
+                className="w-full bg-white dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-600 rounded-lg p-2 text-xs font-bold"
               />
             </div>
             <div>
-              <label className="block text-[11px] font-semibold text-neutral-600 mb-1">Intervalo Almoço</label>
-              <input
+              <label className="block text-[11px] font-semibold text-neutral-600 dark:text-neutral-400 mb-1">Intervalo Almoço</label>
+              <input aria-label="Intervalo Almoço"
                 type="time"
                 value={customLunch}
                 onChange={e => setCustomLunch(e.target.value)}
-                className="w-full bg-white border border-neutral-300 rounded-lg p-2 text-xs font-bold"
+                className="w-full bg-white dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-600 rounded-lg p-2 text-xs font-bold"
               />
             </div>
             <div>
-              <label className="block text-[11px] font-semibold text-neutral-600 mb-1">Valor da Hora (R$)</label>
-              <input
-                type="number" inputMode="decimal"
+              <label className="block text-[11px] font-semibold text-neutral-600 dark:text-neutral-400 mb-1">Valor da Hora (R$)</label>
+              <input aria-label="Valor da Hora (R$)"
+                type="number" min="0" inputMode="decimal"
                 step="5"
                 value={customHourlyRate}
                 onChange={e => setCustomHourlyRate(e.target.value)}
-                className="w-full bg-white border border-neutral-300 rounded-lg p-2 text-xs font-bold"
+                className="w-full bg-white dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-600 rounded-lg p-2 text-xs font-bold"
               />
             </div>
           </div>
@@ -282,9 +297,9 @@ export default function ExcelDownloadSection() {
       <form onSubmit={handleDownload} className="bg-gradient-to-r from-emerald-600 to-teal-700 p-6 rounded-2xl text-white shadow-md">
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="space-y-1 text-center sm:text-left">
-            <h3 className="font-bold text-lg">Baixar Modelo Gratuitamente (.CSV / Excel)</h3>
+            <h3 className="font-bold text-lg">Baixar Modelo Gratuitamente (.XLSX / Excel)</h3>
             <p className="text-emerald-100 text-xs">
-              Faz o download direto do arquivo CSV pronto para Excel, LibreOffice e Google Sheets.
+              Faz o download direto do arquivo Excel com fórmulas de horas, saldo e valor. Edite a taxa e a meta diária nas células L2 e M2. CSV também disponível para importar em outros programas.
             </p>
           </div>
 
@@ -293,10 +308,11 @@ export default function ExcelDownloadSection() {
               <Mail className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400" />
               <input
                 type="email"
+                aria-label="E-mail opcional (não enviado ou armazenado)"
                 placeholder="Seu e-mail (opcional)"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full sm:w-60 pl-9 pr-3 py-2.5 rounded-xl text-neutral-900 bg-white text-xs outline-none focus:ring-2 focus:ring-amber-400"
+                className="w-full sm:w-60 pl-9 pr-3 py-2.5 rounded-xl text-neutral-900 dark:text-neutral-100 bg-white dark:bg-neutral-900 text-xs outline-none focus:ring-2 focus:ring-amber-400"
               />
             </div>
             <button
@@ -317,39 +333,39 @@ export default function ExcelDownloadSection() {
           <span className="font-bold block">Como importar no Google Planilhas sem desconfigurar acentos:</span>
           <p className="text-blue-800 leading-relaxed">
             1. Abra o Google Drive / Planilhas &gt; Clique em <strong>Arquivo &gt; Importar &gt; Fazer Upload</strong>.<br />
-            2. Selecione o arquivo <code>.csv</code> baixado e escolha o tipo de separador como <strong>"Ponto e vírgula (;)"</strong> ou <strong>"Detectar automaticamente"</strong>.
+            2. Para a opção CSV, selecione o arquivo <code>.csv</code> baixado e escolha o tipo de separador como <strong>"Ponto e vírgula (;)"</strong> ou <strong>"Detectar automaticamente"</strong>.
           </p>
         </div>
       </div>
 
       {/* Features checklist */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs text-neutral-700">
-        <div className="flex items-start gap-2 bg-neutral-50 p-3.5 rounded-xl border border-neutral-200">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs text-neutral-700 dark:text-neutral-300">
+        <div className="flex items-start gap-2 bg-neutral-50 dark:bg-neutral-800 p-3.5 rounded-xl border border-neutral-200 dark:border-neutral-700">
           <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
           <span>Fórmulas nativas prontas para cálculo de intervalos</span>
         </div>
-        <div className="flex items-start gap-2 bg-neutral-50 p-3.5 rounded-xl border border-neutral-200">
+        <div className="flex items-start gap-2 bg-neutral-50 dark:bg-neutral-800 p-3.5 rounded-xl border border-neutral-200 dark:border-neutral-700">
           <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
           <span>Compatível com Microsoft Excel, Numbers e Google Planilhas</span>
         </div>
-        <div className="flex items-start gap-2 bg-neutral-50 p-3.5 rounded-xl border border-neutral-200">
+        <div className="flex items-start gap-2 bg-neutral-50 dark:bg-neutral-800 p-3.5 rounded-xl border border-neutral-200 dark:border-neutral-700">
           <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
           <span>100% gratuito e sem necessidade de cadastro</span>
         </div>
       </div>
 
       {/* Excel Formulas Cheatsheet Section */}
-      <div className="bg-neutral-50 rounded-2xl p-5 border border-neutral-200 space-y-4">
-        <div className="flex items-center gap-2 text-neutral-900 font-bold text-sm">
+      <div className="bg-neutral-50 dark:bg-neutral-800 rounded-2xl p-5 border border-neutral-200 dark:border-neutral-700 space-y-4">
+        <div className="flex items-center gap-2 text-neutral-900 dark:text-neutral-100 font-bold text-sm">
           <Code className="w-4 h-4 text-blue-600" />
           Guia Rápido de Fórmulas do Excel para Controle de Ponto
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
           {formulasList.map((item, idx) => (
-            <div key={idx} className="bg-white p-4 rounded-xl border border-neutral-200 space-y-2 text-xs">
+            <div key={idx} className="bg-white dark:bg-neutral-900 p-4 rounded-xl border border-neutral-200 dark:border-neutral-700 space-y-2 text-xs">
               <div className="flex justify-between items-start gap-2">
-                <span className="font-bold text-neutral-800">{item.title}</span>
+                <span className="font-bold text-neutral-800 dark:text-neutral-200">{item.title}</span>
                 <button
                   onClick={() => copyFormula(item.formula, item.title)}
                   className="text-blue-600 hover:text-blue-800 font-semibold text-[11px] flex items-center gap-1 cursor-pointer shrink-0"
@@ -361,7 +377,7 @@ export default function ExcelDownloadSection() {
                   )}
                 </button>
               </div>
-              <div className="bg-neutral-100 p-2 rounded-lg font-mono text-[11px] text-neutral-800 font-bold border border-neutral-200">
+              <div className="bg-neutral-100 p-2 rounded-lg font-mono text-[11px] text-neutral-800 dark:text-neutral-200 font-bold border border-neutral-200 dark:border-neutral-700">
                 {item.formula}
               </div>
               <p className="text-[11px] text-neutral-500">{item.desc}</p>

@@ -1,3 +1,4 @@
+import { storage, copyText as writeClipboard, nonNegative } from '../utils/browser';
 import { useState, useEffect } from 'react';
 import { Calendar, Calculator, Download, Copy, Check, Printer, Clock, AlertCircle, Sparkles, Moon, ArrowRight } from 'lucide-react';
 import { minutesToTime } from '../utils/time';
@@ -9,47 +10,47 @@ interface MonthlyCalculatorProps {
 }
 
 export default function MonthlyCalculator({ onSelectTab }: MonthlyCalculatorProps) {
-  const [calculationType, setCalculationType] = useState<'hourly' | 'monthly'>(() => (localStorage.getItem('calc_monthly_type') as any) || 'monthly');
-  const [monthlySalary, setMonthlySalary] = useState(() => localStorage.getItem('calc_monthly_sal') || '3300.00');
-  const [divisorCLT, setDivisorCLT] = useState(() => localStorage.getItem('calc_monthly_div') || '220');
-  const [hourlyWageInput, setHourlyWageInput] = useState(() => localStorage.getItem('calc_monthly_hwage') || '15.00');
+  const [calculationType, setCalculationType] = useState<'hourly' | 'monthly'>(() => (storage.getItem('calc_monthly_type') as any) || 'monthly');
+  const [monthlySalary, setMonthlySalary] = useState(() => storage.getItem('calc_monthly_sal') || '3300.00');
+  const [divisorCLT, setDivisorCLT] = useState(() => storage.getItem('calc_monthly_div') || '220');
+  const [hourlyWageInput, setHourlyWageInput] = useState(() => storage.getItem('calc_monthly_hwage') || '15.00');
 
-  const [workingDays, setWorkingDays] = useState(() => localStorage.getItem('calc_monthly_wdays') || '22');
-  const [sundaysAndHolidays, setSundaysAndHolidays] = useState(() => localStorage.getItem('calc_monthly_sdays') || '8');
-  const [dailyHours, setDailyHours] = useState(() => localStorage.getItem('calc_monthly_dhours') || '8');
-  const [dailyMinutes, setDailyMinutes] = useState(() => localStorage.getItem('calc_monthly_dmins') || '48');
+  const [workingDays, setWorkingDays] = useState(() => storage.getItem('calc_monthly_wdays') || '22');
+  const [sundaysAndHolidays, setSundaysAndHolidays] = useState(() => storage.getItem('calc_monthly_sdays') || '8');
+  const [dailyHours, setDailyHours] = useState(() => storage.getItem('calc_monthly_dhours') || '8');
+  const [dailyMinutes, setDailyMinutes] = useState(() => storage.getItem('calc_monthly_dmins') || '48');
 
-  const [overtime50Hours, setOvertime50Hours] = useState(() => localStorage.getItem('calc_monthly_ot50') || '10');
-  const [overtime100Hours, setOvertime100Hours] = useState(() => localStorage.getItem('calc_monthly_ot100') || '2');
-  const [nightShiftHours, setNightShiftHours] = useState(() => localStorage.getItem('calc_monthly_night') || '0');
+  const [overtime50Hours, setOvertime50Hours] = useState(() => storage.getItem('calc_monthly_ot50') || '10');
+  const [overtime100Hours, setOvertime100Hours] = useState(() => storage.getItem('calc_monthly_ot100') || '2');
+  const [nightShiftHours, setNightShiftHours] = useState(() => storage.getItem('calc_monthly_night') || '0');
   const [copied, setCopied] = useState(false);
 
   useEffect(() => {
-    localStorage.setItem('calc_monthly_type', calculationType);
-    localStorage.setItem('calc_monthly_sal', monthlySalary);
-    localStorage.setItem('calc_monthly_div', divisorCLT);
-    localStorage.setItem('calc_monthly_hwage', hourlyWageInput);
-    localStorage.setItem('calc_monthly_wdays', workingDays);
-    localStorage.setItem('calc_monthly_sdays', sundaysAndHolidays);
-    localStorage.setItem('calc_monthly_dhours', dailyHours);
-    localStorage.setItem('calc_monthly_dmins', dailyMinutes);
-    localStorage.setItem('calc_monthly_ot50', overtime50Hours);
-    localStorage.setItem('calc_monthly_ot100', overtime100Hours);
-    localStorage.setItem('calc_monthly_night', nightShiftHours);
+    storage.setItem('calc_monthly_type', calculationType);
+    storage.setItem('calc_monthly_sal', monthlySalary);
+    storage.setItem('calc_monthly_div', divisorCLT);
+    storage.setItem('calc_monthly_hwage', hourlyWageInput);
+    storage.setItem('calc_monthly_wdays', workingDays);
+    storage.setItem('calc_monthly_sdays', sundaysAndHolidays);
+    storage.setItem('calc_monthly_dhours', dailyHours);
+    storage.setItem('calc_monthly_dmins', dailyMinutes);
+    storage.setItem('calc_monthly_ot50', overtime50Hours);
+    storage.setItem('calc_monthly_ot100', overtime100Hours);
+    storage.setItem('calc_monthly_night', nightShiftHours);
   }, [calculationType, monthlySalary, divisorCLT, hourlyWageInput, workingDays, sundaysAndHolidays, dailyHours, dailyMinutes, overtime50Hours, overtime100Hours, nightShiftHours]);
 
   // Derive hourly wage
   const calculatedHourlyWage = calculationType === 'monthly'
-    ? (parseFloat(monthlySalary) || 0) / (parseFloat(divisorCLT) || 220)
-    : parseFloat(hourlyWageInput) || 0;
+    ? (nonNegative(monthlySalary, 0)) / (nonNegative(divisorCLT, 220))
+    : nonNegative(hourlyWageInput, 0);
 
-  const days = parseFloat(workingDays) || 0;
-  const dsrDays = parseFloat(sundaysAndHolidays) || 0;
-  const h = parseFloat(dailyHours) || 0;
-  const m = parseFloat(dailyMinutes) || 0;
-  const ot50 = parseFloat(overtime50Hours) || 0;
-  const ot100 = parseFloat(overtime100Hours) || 0;
-  const nightHours = parseFloat(nightShiftHours) || 0;
+  const days = nonNegative(workingDays, 0);
+  const dsrDays = nonNegative(sundaysAndHolidays, 0);
+  const h = nonNegative(dailyHours, 0);
+  const m = nonNegative(dailyMinutes, 0);
+  const ot50 = nonNegative(overtime50Hours, 0);
+  const ot100 = nonNegative(overtime100Hours, 0);
+  const nightHours = nonNegative(nightShiftHours, 0);
 
   // Monthly worked hours calculation
   const totalMinutesPerDay = (h * 60) + m;
@@ -58,7 +59,7 @@ export default function MonthlyCalculator({ onSelectTab }: MonthlyCalculatorProp
 
   // Base salary calculated or from monthly
   const baseSalary = calculationType === 'monthly'
-    ? (parseFloat(monthlySalary) || 0)
+    ? (nonNegative(monthlySalary, 0))
     : (totalMonthlyMinutes / 60) * calculatedHourlyWage;
 
   // Overtime pay (50% and 100%)
@@ -81,7 +82,7 @@ export default function MonthlyCalculator({ onSelectTab }: MonthlyCalculatorProp
     setSundaysAndHolidays(sd);
   };
 
-  const copySummary = () => {
+  const copySummary = async () => {
     const text = `DEMONSTRATIVO MENSAL DE HORAS E VALORES (CLT):
 • Dias Úteis Trabalhados: ${days} dias
 • Domingos/Feriados (DSR): ${dsrDays} dias
@@ -96,7 +97,7 @@ export default function MonthlyCalculator({ onSelectTab }: MonthlyCalculatorProp
 
 Calculado em calculadoradehorastrabalhadas.org`;
 
-    navigator.clipboard.writeText(text);
+    if (!await writeClipboard(text)) return;
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
@@ -117,8 +118,8 @@ Calculado em calculadoradehorastrabalhadas.org`;
     <div className="animate-in fade-in duration-500">
       <div className="mb-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h2 className="text-2xl font-bold text-neutral-900">Calculadora de Horas Trabalhadas Mensal</h2>
-          <p className="text-neutral-600 text-sm mt-1">
+          <h2 className="text-2xl font-bold text-neutral-900 dark:text-neutral-100">Calculadora de Horas Trabalhadas Mensal</h2>
+          <p className="text-neutral-600 dark:text-neutral-400 text-sm mt-1">
             Simule a jornada mensal, valor da hora (divisor 220h/200h CLT), DSR e reflexo de horas extras 50%, 100% e adicional noturno.
           </p>
         </div>
@@ -149,26 +150,26 @@ Calculado em calculadoradehorastrabalhadas.org`;
         {calculationType === 'monthly' ? (
           <>
             <div>
-              <label htmlFor="monthly-salary" className="block text-xs font-semibold text-neutral-800 mb-1">Salário Mensal Bruto (R$)</label>
+              <label htmlFor="monthly-salary" className="block text-xs font-semibold text-neutral-800 dark:text-neutral-200 mb-1">Salário Mensal Bruto (R$)</label>
               <input
                 id="monthly-salary"
                 aria-label="Salário Mensal Bruto em Reais"
-                type="number" inputMode="decimal"
+                type="number" min="0" inputMode="decimal"
                 step="0.01"
                 value={monthlySalary}
                 onChange={(e) => setMonthlySalary(e.target.value)}
-                className="w-full bg-white border border-neutral-300 rounded-lg p-2.5 text-sm font-bold outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full bg-white dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-600 rounded-lg p-2.5 text-sm font-bold outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="Ex: 3300.00"
               />
             </div>
             <div>
-              <label htmlFor="monthly-divisor" className="block text-xs font-semibold text-neutral-800 mb-1">Divisor CLT Contratual</label>
+              <label htmlFor="monthly-divisor" className="block text-xs font-semibold text-neutral-800 dark:text-neutral-200 mb-1">Divisor CLT Contratual</label>
               <select
                 id="monthly-divisor"
                 aria-label="Divisor CLT Contratual"
                 value={divisorCLT}
                 onChange={(e) => setDivisorCLT(e.target.value)}
-                className="w-full bg-white border border-neutral-300 rounded-lg p-2.5 text-sm font-semibold outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer"
+                className="w-full bg-white dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-600 rounded-lg p-2.5 text-sm font-semibold outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer"
               >
                 <option value="220">220 Horas (44h Semanais - Padrão CLT)</option>
                 <option value="200">200 Horas (40h Semanais)</option>
@@ -176,7 +177,7 @@ Calculado em calculadoradehorastrabalhadas.org`;
                 <option value="150">150 Horas (30h Semanais)</option>
               </select>
             </div>
-            <div className="bg-white p-3 rounded-xl border border-blue-200 flex flex-col justify-center">
+            <div className="bg-white dark:bg-neutral-900 p-3 rounded-xl border border-blue-200 flex flex-col justify-center">
               <span className="text-[11px] text-neutral-500 font-medium">Valor da Hora Calculado:</span>
               <span className="text-xl font-mono font-extrabold text-blue-700">
                 R$ {calculatedHourlyWage.toFixed(2).replace('.', ',')} /h
@@ -185,15 +186,15 @@ Calculado em calculadoradehorastrabalhadas.org`;
           </>
         ) : (
           <div className="sm:col-span-3">
-            <label htmlFor="monthly-hourly-wage" className="block text-xs font-semibold text-neutral-800 mb-1">Valor da Hora Normal (R$)</label>
+            <label htmlFor="monthly-hourly-wage" className="block text-xs font-semibold text-neutral-800 dark:text-neutral-200 mb-1">Valor da Hora Normal (R$)</label>
             <input
               id="monthly-hourly-wage"
               aria-label="Valor da Hora Normal em Reais"
-              type="number" inputMode="decimal"
+              type="number" min="0" inputMode="decimal"
               step="0.01"
               value={hourlyWageInput}
               onChange={(e) => setHourlyWageInput(e.target.value)}
-              className="w-full sm:w-1/2 bg-white border border-neutral-300 rounded-lg p-2.5 text-sm font-bold outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full sm:w-1/2 bg-white dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-600 rounded-lg p-2.5 text-sm font-bold outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="Ex: 15.00"
             />
           </div>
@@ -203,8 +204,8 @@ Calculado em calculadoradehorastrabalhadas.org`;
       {/* Days & Hours setup */}
       <div className="space-y-4 mb-6">
         {/* Quick Days Presets */}
-        <div className="bg-neutral-50 p-3 rounded-xl border border-neutral-200 flex flex-wrap items-center justify-between gap-2 text-xs">
-          <span className="font-semibold text-neutral-700 flex items-center gap-1.5">
+        <div className="bg-neutral-50 dark:bg-neutral-800 p-3 rounded-xl border border-neutral-200 dark:border-neutral-700 flex flex-wrap items-center justify-between gap-2 text-xs">
+          <span className="font-semibold text-neutral-700 dark:text-neutral-300 flex items-center gap-1.5">
             <Sparkles className="w-3.5 h-3.5 text-amber-500" /> Preenchimento Rápido de Dias no Mês:
           </span>
           <div className="flex flex-wrap items-center gap-1.5">
@@ -243,49 +244,49 @@ Calculado em calculadoradehorastrabalhadas.org`;
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <div>
-            <label htmlFor="monthly-working-days" className="block text-xs font-semibold text-neutral-700 mb-1">Dias Úteis Trabalhados no Mês</label>
+            <label htmlFor="monthly-working-days" className="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 mb-1">Dias Úteis Trabalhados no Mês</label>
             <input
               id="monthly-working-days"
               aria-label="Dias Úteis Trabalhados no Mês"
-              type="number" inputMode="decimal"
+              type="number" min="0" inputMode="decimal"
               value={workingDays}
               onChange={(e) => setWorkingDays(e.target.value)}
-              className="w-full border border-neutral-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 outline-none font-bold"
+              className="w-full border border-neutral-300 dark:border-neutral-600 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 outline-none font-bold"
               placeholder="Ex: 22"
             />
           </div>
           <div>
-            <label htmlFor="monthly-sundays" className="block text-xs font-semibold text-neutral-700 mb-1">Domingos e Feriados no Mês (DSR)</label>
+            <label htmlFor="monthly-sundays" className="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 mb-1">Domingos e Feriados no Mês (DSR)</label>
             <input
               id="monthly-sundays"
               aria-label="Domingos e Feriados no Mês para DSR"
-              type="number" inputMode="decimal"
+              type="number" min="0" inputMode="decimal"
               value={sundaysAndHolidays}
               onChange={(e) => setSundaysAndHolidays(e.target.value)}
-              className="w-full border border-neutral-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 outline-none font-bold"
+              className="w-full border border-neutral-300 dark:border-neutral-600 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 outline-none font-bold"
               placeholder="Ex: 8"
             />
           </div>
           <div>
-            <label htmlFor="monthly-daily-hours" className="block text-xs font-semibold text-neutral-700 mb-1">Jornada Diária (Horas:Minutos)</label>
+            <label htmlFor="monthly-daily-hours" className="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 mb-1">Jornada Diária (Horas:Minutos)</label>
             <div className="flex gap-2">
               <input
                 id="monthly-daily-hours"
                 aria-label="Horas da jornada diária"
-                type="number" inputMode="decimal"
+                type="number" min="0" inputMode="decimal"
                 value={dailyHours}
                 onChange={(e) => setDailyHours(e.target.value)}
-                className="w-1/2 border border-neutral-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 outline-none font-bold"
+                className="w-1/2 border border-neutral-300 dark:border-neutral-600 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 outline-none font-bold"
                 placeholder="8"
               />
               <span className="self-center font-bold text-neutral-400">:</span>
               <input
                 id="monthly-daily-minutes"
                 aria-label="Minutos da jornada diária"
-                type="number" inputMode="decimal"
+                type="number" min="0" inputMode="decimal"
                 value={dailyMinutes}
                 onChange={(e) => setDailyMinutes(e.target.value)}
-                className="w-1/2 border border-neutral-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 outline-none font-bold"
+                className="w-1/2 border border-neutral-300 dark:border-neutral-600 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 outline-none font-bold"
                 placeholder="48"
               />
             </div>
@@ -296,43 +297,43 @@ Calculado em calculadoradehorastrabalhadas.org`;
       {/* Overtime 50%, 100% & Night Shift */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
         <div>
-          <label htmlFor="monthly-ot50" className="block text-xs font-semibold text-neutral-700 mb-1">Horas Extras 50% (Dias Úteis/Sáb)</label>
+          <label htmlFor="monthly-ot50" className="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 mb-1">Horas Extras 50% (Dias Úteis/Sáb)</label>
           <input
             id="monthly-ot50"
             aria-label="Horas Extras 50%"
-            type="number" inputMode="decimal"
+            type="number" min="0" inputMode="decimal"
             step="0.5"
             value={overtime50Hours}
             onChange={(e) => setOvertime50Hours(e.target.value)}
-            className="w-full border border-neutral-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 outline-none"
+            className="w-full border border-neutral-300 dark:border-neutral-600 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 outline-none"
             placeholder="Ex: 10"
           />
         </div>
         <div>
-          <label htmlFor="monthly-ot100" className="block text-xs font-semibold text-neutral-700 mb-1">Horas Extras 100% (Dom/Feriados)</label>
+          <label htmlFor="monthly-ot100" className="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 mb-1">Horas Extras 100% (Dom/Feriados)</label>
           <input
             id="monthly-ot100"
             aria-label="Horas Extras 100%"
-            type="number" inputMode="decimal"
+            type="number" min="0" inputMode="decimal"
             step="0.5"
             value={overtime100Hours}
             onChange={(e) => setOvertime100Hours(e.target.value)}
-            className="w-full border border-neutral-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 outline-none"
+            className="w-full border border-neutral-300 dark:border-neutral-600 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 outline-none"
             placeholder="Ex: 2"
           />
         </div>
         <div>
-          <label htmlFor="monthly-night-shift" className="block text-xs font-semibold text-neutral-700 mb-1 flex items-center gap-1">
+          <label htmlFor="monthly-night-shift" className="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 mb-1 flex items-center gap-1">
             <Moon className="w-3.5 h-3.5 text-indigo-600" /> Horas Noturnas (22h às 05h)
           </label>
           <input
             id="monthly-night-shift"
             aria-label="Horas Noturnas 22h às 05h"
-            type="number" inputMode="decimal"
+            type="number" min="0" inputMode="decimal"
             step="0.5"
             value={nightShiftHours}
             onChange={(e) => setNightShiftHours(e.target.value)}
-            className="w-full border border-neutral-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 outline-none"
+            className="w-full border border-neutral-300 dark:border-neutral-600 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 outline-none"
             placeholder="Ex: 0"
           />
         </div>
@@ -340,14 +341,14 @@ Calculado em calculadoradehorastrabalhadas.org`;
 
       {/* Action buttons */}
       <div className="flex flex-wrap items-center justify-end gap-3 mb-6">
-        <button onClick={exportCSV} className="flex items-center gap-1.5 text-xs font-semibold text-neutral-700 bg-neutral-100 hover:bg-neutral-200 px-3 py-2 rounded-xl transition-colors cursor-pointer">
+        <button onClick={exportCSV} className="flex items-center gap-1.5 text-xs font-semibold text-neutral-700 dark:text-neutral-300 bg-neutral-100 hover:bg-neutral-200 px-3 py-2 rounded-xl transition-colors cursor-pointer">
           <Download className="w-3.5 h-3.5 text-emerald-600" /> Exportar CSV
         </button>
-        <button onClick={copySummary} className="flex items-center gap-1.5 text-xs font-semibold text-neutral-700 bg-neutral-100 hover:bg-neutral-200 px-3 py-2 rounded-xl transition-colors cursor-pointer">
+        <button onClick={copySummary} className="flex items-center gap-1.5 text-xs font-semibold text-neutral-700 dark:text-neutral-300 bg-neutral-100 hover:bg-neutral-200 px-3 py-2 rounded-xl transition-colors cursor-pointer">
           {copied ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5 text-blue-600" />} Copiar Resumo
         </button>
-        <button onClick={() => window.print()} className="flex items-center gap-1.5 text-xs font-semibold text-neutral-700 bg-neutral-100 hover:bg-neutral-200 px-3 py-2 rounded-xl transition-colors cursor-pointer">
-          <Printer className="w-3.5 h-3.5 text-neutral-600" /> Imprimir
+        <button onClick={() => window.print()} className="flex items-center gap-1.5 text-xs font-semibold text-neutral-700 dark:text-neutral-300 bg-neutral-100 hover:bg-neutral-200 px-3 py-2 rounded-xl transition-colors cursor-pointer">
+          <Printer className="w-3.5 h-3.5 text-neutral-600 dark:text-neutral-400" /> Imprimir
         </button>
       </div>
 

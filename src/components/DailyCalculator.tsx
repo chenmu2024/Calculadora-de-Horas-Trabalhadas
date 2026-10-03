@@ -1,5 +1,6 @@
+import { storage, copyText as writeClipboard, nonNegative, notify } from '../utils/browser';
 import { useState, useEffect } from 'react';
-import { calculateDuration, minutesToTime, timeToMinutes } from '../utils/time';
+import { calculateDuration, calculateFourPunches, isValidTime, minutesToTime, timeToMinutes } from '../utils/time';
 import { Clock, AlertCircle, Copy, Check, Info, Printer, RotateCcw, Sparkles, ArrowRight } from 'lucide-react';
 import InternalLinkCTA from './InternalLinkCTA';
 import CLTAlertBanner from './CLTAlertBanner';
@@ -10,40 +11,40 @@ interface DailyCalculatorProps {
 
 export default function DailyCalculator({ onSelectTab }: DailyCalculatorProps) {
   const [mode, setMode] = useState<'4points' | 'simple'>(() => {
-    return (localStorage.getItem('calc_daily_mode') as '4points' | 'simple') || '4points';
+    return (storage.getItem('calc_daily_mode') as '4points' | 'simple') || '4points';
   });
   
   // Mode 4 points
-  const [in1, setIn1] = useState(() => localStorage.getItem('calc_daily_in1') || '08:00');
-  const [out1, setOut1] = useState(() => localStorage.getItem('calc_daily_out1') || '12:00');
-  const [in2, setIn2] = useState(() => localStorage.getItem('calc_daily_in2') || '13:00');
-  const [out2, setOut2] = useState(() => localStorage.getItem('calc_daily_out2') || '18:00');
+  const [in1, setIn1] = useState(() => storage.getItem('calc_daily_in1') || '08:00');
+  const [out1, setOut1] = useState(() => storage.getItem('calc_daily_out1') || '12:00');
+  const [in2, setIn2] = useState(() => storage.getItem('calc_daily_in2') || '13:00');
+  const [out2, setOut2] = useState(() => storage.getItem('calc_daily_out2') || '18:00');
 
   // Mode simple
-  const [startSimple, setStartSimple] = useState(() => localStorage.getItem('calc_daily_start') || '08:00');
-  const [endSimple, setEndSimple] = useState(() => localStorage.getItem('calc_daily_end') || '18:00');
-  const [breakTimeSimple, setBreakTimeSimple] = useState(() => localStorage.getItem('calc_daily_break') || '01:00');
+  const [startSimple, setStartSimple] = useState(() => storage.getItem('calc_daily_start') || '08:00');
+  const [endSimple, setEndSimple] = useState(() => storage.getItem('calc_daily_end') || '18:00');
+  const [breakTimeSimple, setBreakTimeSimple] = useState(() => storage.getItem('calc_daily_break') || '01:00');
 
   // Daily target
-  const [dailyTarget, setDailyTarget] = useState(() => localStorage.getItem('calc_daily_target') || '08:00');
+  const [dailyTarget, setDailyTarget] = useState(() => storage.getItem('calc_daily_target') || '08:00');
   const [copied, setCopied] = useState(false);
 
   // Hourly Rate & Financial Estimation
-  const [hourlyWage, setHourlyWage] = useState(() => localStorage.getItem('calc_daily_rate') || '');
+  const [hourlyWage, setHourlyWage] = useState(() => storage.getItem('calc_daily_rate') || '');
   const [overtimePercent, setOvertimePercent] = useState('50');
 
   // Save to localStorage
   useEffect(() => {
-    localStorage.setItem('calc_daily_mode', mode);
-    localStorage.setItem('calc_daily_in1', in1);
-    localStorage.setItem('calc_daily_out1', out1);
-    localStorage.setItem('calc_daily_in2', in2);
-    localStorage.setItem('calc_daily_out2', out2);
-    localStorage.setItem('calc_daily_start', startSimple);
-    localStorage.setItem('calc_daily_end', endSimple);
-    localStorage.setItem('calc_daily_break', breakTimeSimple);
-    localStorage.setItem('calc_daily_target', dailyTarget);
-    localStorage.setItem('calc_daily_rate', hourlyWage);
+    storage.setItem('calc_daily_mode', mode);
+    storage.setItem('calc_daily_in1', in1);
+    storage.setItem('calc_daily_out1', out1);
+    storage.setItem('calc_daily_in2', in2);
+    storage.setItem('calc_daily_out2', out2);
+    storage.setItem('calc_daily_start', startSimple);
+    storage.setItem('calc_daily_end', endSimple);
+    storage.setItem('calc_daily_break', breakTimeSimple);
+    storage.setItem('calc_daily_target', dailyTarget);
+    storage.setItem('calc_daily_rate', hourlyWage);
   }, [mode, in1, out1, in2, out2, startSimple, endSimple, breakTimeSimple, dailyTarget, hourlyWage]);
 
   const fillExampleDaily = () => {
@@ -67,18 +68,11 @@ export default function DailyCalculator({ onSelectTab }: DailyCalculatorProps) {
     setDailyTarget('08:00');
   };
 
-  let totalMin = 0;
-  let intervalMin = 0;
-
-  if (mode === '4points') {
-    const shift1 = calculateDuration(in1, out1);
-    const shift2 = calculateDuration(in2, out2);
-    intervalMin = calculateDuration(out1, in2);
-    totalMin = shift1 + shift2;
-  } else {
-    intervalMin = timeToMinutes(breakTimeSimple);
-    totalMin = calculateDuration(startSimple, endSimple, undefined, undefined, intervalMin);
-  }
+  const fourPunches = calculateFourPunches([in1, out1, in2, out2]);
+  const simpleValid = isValidTime(startSimple) && isValidTime(endSimple) && isValidTime(breakTimeSimple, true) && timeToMinutes(breakTimeSimple) <= calculateDuration(startSimple, endSimple);
+  const validInputs = mode === '4points' ? fourPunches !== null : simpleValid;
+  const intervalMin = mode === '4points' ? (fourPunches?.rest ?? 0) : timeToMinutes(breakTimeSimple);
+  const totalMin = mode === '4points' ? (fourPunches?.worked ?? 0) : (simpleValid ? calculateDuration(startSimple, endSimple, undefined, undefined, intervalMin) : 0);
 
   const targetMin = timeToMinutes(dailyTarget);
   const overtimeMin = Math.max(0, totalMin - targetMin);
@@ -90,21 +84,22 @@ export default function DailyCalculator({ onSelectTab }: DailyCalculatorProps) {
   const showIntervalWarning = totalMin > 360 && intervalMin < 60;
 
   // Financial calculations
-  const wageVal = parseFloat(hourlyWage) || 0;
+  const wageVal = nonNegative(hourlyWage, 0);
   const normalHoursCount = Math.min(totalMin, targetMin) / 60;
   const overtimeHoursCount = overtimeMin / 60;
-  const otMultiplier = 1 + (parseFloat(overtimePercent) || 50) / 100;
+  const otMultiplier = 1 + (nonNegative(overtimePercent, 50)) / 100;
   const normalEarned = normalHoursCount * wageVal;
   const overtimeEarned = overtimeHoursCount * wageVal * otMultiplier;
   const totalEarned = normalEarned + overtimeEarned;
 
-  const copyResult = () => {
+  const copyResult = async () => {
+    if (!validInputs) { notify('Confira a sequência dos horários antes de copiar.'); return; }
     let text = `Cálculo de Horas Trabalhadas (CLT):\nTotal de Horas: ${totalFormatted}\nIntervalo: ${intervalFormatted}\nHoras Extras: ${overtimeFormatted}`;
     if (wageVal > 0) {
       text += `\nValor Estimado do Dia: R$ ${totalEarned.toFixed(2)} (Normal: R$ ${normalEarned.toFixed(2)} | Extra: R$ ${overtimeEarned.toFixed(2)})`;
     }
     text += `\nCalculado via calculadoradehorastrabalhadas.org`;
-    navigator.clipboard.writeText(text);
+    if (!await writeClipboard(text)) return;
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
@@ -115,7 +110,7 @@ export default function DailyCalculator({ onSelectTab }: DailyCalculatorProps) {
 
   return (
     <div className="animate-in fade-in duration-500">
-      <div className="flex flex-wrap items-center justify-between gap-3 bg-blue-50/70 dark:bg-blue-950/40 border border-blue-200/90 dark:border-blue-800/60 p-3 rounded-xl mb-5 no-print">
+      <div className="hidden sm:flex flex-wrap items-center justify-between gap-3 bg-blue-50/70 dark:bg-blue-950/40 border border-blue-200/90 dark:border-blue-800/60 p-3 rounded-xl mb-5 no-print">
         <div className="flex items-center gap-2 text-xs font-semibold text-blue-900 dark:text-blue-200">
           <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
           <span>💾 Salvamento automático ativo em tempo real</span>
@@ -183,6 +178,91 @@ export default function DailyCalculator({ onSelectTab }: DailyCalculatorProps) {
           </button>
         </div>
       </div>
+
+      {mode === '4points' ? (
+        <div id="daily-hours" className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
+          <div>
+            <label htmlFor="daily-in1" className="block text-xs font-semibold text-neutral-600 dark:text-neutral-300 mb-1">Entrada 1 (Manhã)</label>
+            <input
+              id="daily-in1"
+              aria-label="Entrada 1 (Manhã)"
+              type="time"
+              value={in1}
+              onChange={(e) => setIn1(e.target.value)}
+              className="w-full bg-white dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-700 text-neutral-900 dark:text-white rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 outline-none"
+            />
+          </div>
+          <div>
+            <label htmlFor="daily-out1" className="block text-xs font-semibold text-neutral-600 dark:text-neutral-300 mb-1">Saída 1 (Almoço)</label>
+            <input
+              id="daily-out1"
+              aria-label="Saída 1 (Almoço)"
+              type="time"
+              value={out1}
+              onChange={(e) => setOut1(e.target.value)}
+              className="w-full bg-white dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-700 text-neutral-900 dark:text-white rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 outline-none"
+            />
+          </div>
+          <div>
+            <label htmlFor="daily-in2" className="block text-xs font-semibold text-neutral-600 dark:text-neutral-300 mb-1">Entrada 2 (Retorno)</label>
+            <input
+              id="daily-in2"
+              aria-label="Entrada 2 (Retorno)"
+              type="time"
+              value={in2}
+              onChange={(e) => setIn2(e.target.value)}
+              className="w-full bg-white dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-700 text-neutral-900 dark:text-white rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 outline-none"
+            />
+          </div>
+          <div>
+            <label htmlFor="daily-out2" className="block text-xs font-semibold text-neutral-600 dark:text-neutral-300 mb-1">Saída 2 (Fim)</label>
+            <input
+              id="daily-out2"
+              aria-label="Saída 2 (Fim)"
+              type="time"
+              value={out2}
+              onChange={(e) => setOut2(e.target.value)}
+              className="w-full bg-white dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-700 text-neutral-900 dark:text-white rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 outline-none"
+            />
+          </div>
+        </div>
+      ) : (
+        <div id="daily-hours" className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+          <div>
+            <label htmlFor="daily-start-simple" className="block text-xs font-semibold text-neutral-600 dark:text-neutral-300 mb-1">Hora de Entrada</label>
+            <input
+              id="daily-start-simple"
+              aria-label="Hora de Entrada"
+              type="time"
+              value={startSimple}
+              onChange={(e) => setStartSimple(e.target.value)}
+              className="w-full bg-white dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-700 text-neutral-900 dark:text-white rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 outline-none"
+            />
+          </div>
+          <div>
+            <label htmlFor="daily-end-simple" className="block text-xs font-semibold text-neutral-600 dark:text-neutral-300 mb-1">Hora de Saída</label>
+            <input
+              id="daily-end-simple"
+              aria-label="Hora de Saída"
+              type="time"
+              value={endSimple}
+              onChange={(e) => setEndSimple(e.target.value)}
+              className="w-full bg-white dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-700 text-neutral-900 dark:text-white rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 outline-none"
+            />
+          </div>
+          <div>
+            <label htmlFor="daily-break-simple" className="block text-xs font-semibold text-neutral-600 dark:text-neutral-300 mb-1">Duração do Intervalo</label>
+            <input
+              id="daily-break-simple"
+              aria-label="Duração do Intervalo"
+              type="time"
+              value={breakTimeSimple}
+              onChange={(e) => setBreakTimeSimple(e.target.value)}
+              className="w-full bg-white dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-700 text-neutral-900 dark:text-white rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 outline-none"
+            />
+          </div>
+        </div>
+      )}
 
       {/* Quick presets for common shifts */}
       <div className="mb-6 flex flex-wrap items-center gap-2 text-xs no-print">
@@ -270,7 +350,7 @@ export default function DailyCalculator({ onSelectTab }: DailyCalculatorProps) {
               <input
                 id="daily-hourly-wage"
                 aria-label="Valor da hora trabalhada em reais"
-                type="number"
+                type="number" min="0"
                 inputMode="decimal"
                 step="0.5"
                 value={hourlyWage}
@@ -293,93 +373,10 @@ export default function DailyCalculator({ onSelectTab }: DailyCalculatorProps) {
         </div>
       </div>
 
-      {mode === '4points' ? (
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
-          <div>
-            <label htmlFor="daily-in1" className="block text-xs font-semibold text-neutral-600 dark:text-neutral-300 mb-1">Entrada 1 (Manhã)</label>
-            <input
-              id="daily-in1"
-              aria-label="Entrada 1 (Manhã)"
-              type="time"
-              value={in1}
-              onChange={(e) => setIn1(e.target.value)}
-              className="w-full bg-white dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-700 text-neutral-900 dark:text-white rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 outline-none"
-            />
-          </div>
-          <div>
-            <label htmlFor="daily-out1" className="block text-xs font-semibold text-neutral-600 dark:text-neutral-300 mb-1">Saída 1 (Almoço)</label>
-            <input
-              id="daily-out1"
-              aria-label="Saída 1 (Almoço)"
-              type="time"
-              value={out1}
-              onChange={(e) => setOut1(e.target.value)}
-              className="w-full bg-white dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-700 text-neutral-900 dark:text-white rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 outline-none"
-            />
-          </div>
-          <div>
-            <label htmlFor="daily-in2" className="block text-xs font-semibold text-neutral-600 dark:text-neutral-300 mb-1">Entrada 2 (Retorno)</label>
-            <input
-              id="daily-in2"
-              aria-label="Entrada 2 (Retorno)"
-              type="time"
-              value={in2}
-              onChange={(e) => setIn2(e.target.value)}
-              className="w-full bg-white dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-700 text-neutral-900 dark:text-white rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 outline-none"
-            />
-          </div>
-          <div>
-            <label htmlFor="daily-out2" className="block text-xs font-semibold text-neutral-600 dark:text-neutral-300 mb-1">Saída 2 (Fim)</label>
-            <input
-              id="daily-out2"
-              aria-label="Saída 2 (Fim)"
-              type="time"
-              value={out2}
-              onChange={(e) => setOut2(e.target.value)}
-              className="w-full bg-white dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-700 text-neutral-900 dark:text-white rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 outline-none"
-            />
-          </div>
-        </div>
-      ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
-          <div>
-            <label htmlFor="daily-start-simple" className="block text-xs font-semibold text-neutral-600 dark:text-neutral-300 mb-1">Hora de Entrada</label>
-            <input
-              id="daily-start-simple"
-              aria-label="Hora de Entrada"
-              type="time"
-              value={startSimple}
-              onChange={(e) => setStartSimple(e.target.value)}
-              className="w-full bg-white dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-700 text-neutral-900 dark:text-white rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 outline-none"
-            />
-          </div>
-          <div>
-            <label htmlFor="daily-end-simple" className="block text-xs font-semibold text-neutral-600 dark:text-neutral-300 mb-1">Hora de Saída</label>
-            <input
-              id="daily-end-simple"
-              aria-label="Hora de Saída"
-              type="time"
-              value={endSimple}
-              onChange={(e) => setEndSimple(e.target.value)}
-              className="w-full bg-white dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-700 text-neutral-900 dark:text-white rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 outline-none"
-            />
-          </div>
-          <div>
-            <label htmlFor="daily-break-simple" className="block text-xs font-semibold text-neutral-600 dark:text-neutral-300 mb-1">Duração do Intervalo</label>
-            <input
-              id="daily-break-simple"
-              aria-label="Duração do Intervalo"
-              type="time"
-              value={breakTimeSimple}
-              onChange={(e) => setBreakTimeSimple(e.target.value)}
-              className="w-full bg-white dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-700 text-neutral-900 dark:text-white rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 outline-none"
-            />
-          </div>
-        </div>
-      )}
-
       {/* CLT Legal Compliance Check Banner */}
+      {!validInputs && <p role="alert" className="text-sm font-semibold text-red-700 dark:text-red-300">Preencha os horários em sequência. A jornada deve terminar em menos de 24 horas; o intervalo deve estar dentro do turno.</p>}
       <CLTAlertBanner
+        breakMinutes={intervalMin}
         totalMinutes={totalMin}
         overtimeMinutes={overtimeMin}
       />
@@ -389,7 +386,7 @@ export default function DailyCalculator({ onSelectTab }: DailyCalculatorProps) {
         <div className="mb-6 bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800/60 text-amber-800 dark:text-amber-200 p-3.5 rounded-xl text-xs flex items-center gap-2">
           <AlertCircle className="w-4 h-4 text-amber-600 dark:text-amber-400 shrink-0" />
           <span>
-            <strong>Atenção CLT (Art. 71):</strong> Para jornadas superiores a 6 horas diárias, é obrigatória a concessão de um intervalo de no mínimo 1 hora.
+            <strong>Atenção CLT (Art. 71):</strong> Para jornadas superiores a 6 horas diárias, o intervalo geral é de no mínimo 1 hora, salvo redução válida por acordo coletivo.
           </span>
         </div>
       )}

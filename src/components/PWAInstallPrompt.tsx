@@ -1,3 +1,4 @@
+import { storage } from '../utils/browser';
 import React, { useState, useEffect } from 'react';
 import { Download, X, Smartphone, Check } from 'lucide-react';
 
@@ -5,17 +6,15 @@ export default function PWAInstallPrompt() {
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
   const [isInstalled, setIsInstalled] = useState(false);
   const [dismissed, setDismissed] = useState(() => {
-    return localStorage.getItem('pwa_prompt_dismissed') === 'true';
+    return storage.getItem('pwa_prompt_dismissed') === 'true';
   });
 
   useEffect(() => {
     // Register service worker
-    if ('serviceWorker' in navigator && process.env.NODE_ENV === 'production') {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/sw.js').catch((err) => {
-          console.warn('Service worker registration failed:', err);
-        });
-      });
+    const register = () => { navigator.serviceWorker.register('/sw.js').catch(() => {}); };
+    if ('serviceWorker' in navigator && import.meta.env.PROD) {
+      if (document.readyState === 'complete') register();
+      else window.addEventListener('load', register, { once: true });
     }
 
     const handleBeforeInstallPrompt = (e: Event) => {
@@ -32,6 +31,7 @@ export default function PWAInstallPrompt() {
     window.addEventListener('appinstalled', handleAppInstalled);
 
     return () => {
+      window.removeEventListener('load', register);
       window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
       window.removeEventListener('appinstalled', handleAppInstalled);
     };
@@ -49,7 +49,7 @@ export default function PWAInstallPrompt() {
 
   const handleDismiss = () => {
     setDismissed(true);
-    localStorage.setItem('pwa_prompt_dismissed', 'true');
+    storage.setItem('pwa_prompt_dismissed', 'true');
   };
 
   if (dismissed || isInstalled || !deferredPrompt) {
@@ -57,7 +57,7 @@ export default function PWAInstallPrompt() {
   }
 
   return (
-    <div className="fixed bottom-4 right-4 left-4 sm:left-auto sm:max-w-md bg-neutral-900 text-white p-4 rounded-2xl shadow-2xl z-50 border border-neutral-700 flex items-center justify-between gap-3 animate-in slide-in-from-bottom-5 duration-300 no-print">
+    <div className="mx-4 my-3 sm:mx-auto sm:max-w-md bg-neutral-900 text-white p-4 rounded-2xl shadow-2xl z-20 border border-neutral-700 flex items-center justify-between gap-3 animate-in slide-in-from-bottom-5 duration-300 no-print">
       <div className="flex items-center gap-3">
         <div className="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center shrink-0 shadow-sm">
           <Smartphone className="w-5 h-5 text-white" />

@@ -1,3 +1,5 @@
+import { copyText as writeClipboard, nonNegative } from '../utils/browser';
+import { MINIMUM_WAGE_2026 } from '../utils/taxCalculations';
 import React, { useState } from 'react';
 import { Clock, DollarSign, AlertCircle, Copy, Check, Printer, Sparkles, HelpCircle, ArrowRight, ShieldCheck, Sun, Moon } from 'lucide-react';
 import InternalLinkCTA from './InternalLinkCTA';
@@ -11,18 +13,20 @@ export default function Escala12x36Calculator({ onSelectTab }: Escala12x36Calcul
   const [shiftsCount, setShiftsCount] = useState<string>('15'); // 15 plantões no mês
   const [shiftType, setShiftType] = useState<'day' | 'night'>('day'); // Diurno (07h-19h) ou Noturno (19h-07h)
   const [holidaysWorked, setHolidaysWorked] = useState<string>('1'); // Feriados trabalhados
-  const [holidayRate, setHolidayRate] = useState<'100' | '0'>('100'); // 100% ou já compensado
+  const [holidayRate, setHolidayRate] = useState<'100' | '0'>('0'); // 100% ou já compensado
   const [insalubridade, setInsalubridade] = useState<'0' | '10' | '20' | '40'>('0');
+  const [includeNightExtension, setIncludeNightExtension] = useState(false);
+  const [contractDivisor, setContractDivisor] = useState('220');
   const [copied, setCopied] = useState(false);
 
-  const baseSalary = parseFloat(salary) || 0;
-  const shifts = parseInt(shiftsCount) || 15;
-  const holidays = parseInt(holidaysWorked) || 0;
-  const divisor = 220; // Divisor padrão CLT
-  const hourlyRate = baseSalary > 0 ? baseSalary / divisor : 0;
+  const baseSalary = nonNegative(salary, 0);
+  const shifts = nonNegative(shiftsCount, 15);
+  const holidays = nonNegative(holidaysWorked, 0);
+  const divisor = nonNegative(contractDivisor); // Divisor padrão CLT
+  const hourlyRate = divisor > 0 ? (baseSalary + MINIMUM_WAGE_2026 * Number(insalubridade) / 100) / divisor : 0;
 
   // Insalubridade
-  const minWage = 1518; // Salário mínimo 2026
+  const minWage = MINIMUM_WAGE_2026; // Salário mínimo 2026
   const insalubridadeVal = (minWage * (parseFloat(insalubridade) / 100));
 
   // Total Hours
@@ -30,26 +34,27 @@ export default function Escala12x36Calculator({ onSelectTab }: Escala12x36Calcul
 
   // Night shift calculations (19h às 07h: 22h às 05h = 7h relógio + 2h prorrogação = 9h noturnas com hora ficta 52m30s)
   // Fator noturno: 7h relógio * 1.142857 = 8h + 2h prorrogação = 10h noturnas pagas por plantão
-  const nightHoursPerShift = shiftType === 'night' ? 10 : 0;
+  const nightHoursPerShift = shiftType === 'night' ? (7 + (includeNightExtension ? 2 : 0)) * 60 / 52.5 : 0;
   const totalNightHours = shifts * nightHoursPerShift;
   const nightBonusPerShift = shiftType === 'night' ? (nightHoursPerShift * hourlyRate * 0.20) : 0;
   const totalNightBonus = totalNightHours * hourlyRate * 0.20;
 
   // Holiday bonus (100% sobre as 12h do plantão)
-  const holidayPay = holidayRate === '100' ? (holidays * 12 * hourlyRate * 2.0) : 0;
+  const holidayPay = holidayRate === '100' ? (Math.min(holidays, shifts) * 12 * hourlyRate) : 0;
 
   // Gross total
   const estimatedGross = baseSalary + insalubridadeVal + totalNightBonus + holidayPay;
 
-  const copyResults = () => {
+  const copyResults = async () => {
     const text = `=== Resumo Escala 12x36 (CLT) ===\nSalário Base: R$ ${baseSalary.toFixed(2)}\nPlantões no Mês: ${shifts} plantões (${totalPhysicalHours}h)\nTipo de Turno: ${shiftType === 'night' ? 'Noturno (19h-07h)' : 'Diurno (07h-19h)'}\nAdicional Noturno: R$ ${totalNightBonus.toFixed(2)}\nFeriados Trabalhados (${holidays}): R$ ${holidayPay.toFixed(2)}\nTotal Bruto Estimado: R$ ${estimatedGross.toFixed(2)}\nCalculado em: https://calculadoradehorastrabalhadas.org/escala-12x36`;
-    navigator.clipboard.writeText(text);
+    if (!await writeClipboard(text)) return;
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
 
   return (
     <div className="space-y-6">
+      <p className="text-xs text-neutral-600 dark:text-neutral-300">Na escala 12x36 válida, o Art. 59-A considera feriados e prorrogações noturnas compensados. Selecione adicional de feriado somente quando previsto no acordo aplicável; ele complementa a remuneração mensal. A estimativa noturna considera 22h–05h, sem intervalo deduzido.</p>
       {/* Header Info */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-b border-neutral-200 dark:border-neutral-800 pb-4">
         <div>
@@ -82,7 +87,7 @@ export default function Escala12x36Calculator({ onSelectTab }: Escala12x36Calcul
             <span className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400 text-xs font-bold">R$</span>
             <input
               id="e12-sal"
-              type="number"
+              type="number" min="0"
               value={salary}
               onChange={(e) => setSalary(e.target.value)}
               className="w-full bg-white dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-700 rounded-xl py-2.5 pl-9 pr-3 text-sm font-bold text-neutral-900 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none"
@@ -169,7 +174,7 @@ export default function Escala12x36Calculator({ onSelectTab }: Escala12x36Calcul
           </label>
           <input
             id="e12-holidays"
-            type="number"
+            type="number" min="0"
             value={holidaysWorked}
             onChange={(e) => setHolidaysWorked(e.target.value)}
             className="w-full bg-white dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-700 rounded-xl py-2 px-3 text-sm font-bold text-neutral-900 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none"
@@ -185,7 +190,7 @@ export default function Escala12x36Calculator({ onSelectTab }: Escala12x36Calcul
           <label className="block text-xs font-bold text-neutral-700 dark:text-neutral-300">
             Regra de Feriado (CCT / Súmula 444 TST)
           </label>
-          <select
+          <select aria-label="Regra de Feriado (CCT / Súmula 444 TST)"
             value={holidayRate}
             onChange={(e) => setHolidayRate(e.target.value as any)}
             className="w-full bg-white dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-700 rounded-xl py-2 px-3 text-xs font-bold text-neutral-900 dark:text-white outline-none focus:ring-2 focus:ring-blue-500"
@@ -203,18 +208,18 @@ export default function Escala12x36Calculator({ onSelectTab }: Escala12x36Calcul
           <label className="block text-xs font-bold text-neutral-700 dark:text-neutral-300">
             Insalubridade (Hospital / Vigilância)
           </label>
-          <select
+          <select aria-label="Insalubridade (Hospital / Vigilância)"
             value={insalubridade}
             onChange={(e) => setInsalubridade(e.target.value as any)}
             className="w-full bg-white dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-700 rounded-xl py-2 px-3 text-xs font-bold text-neutral-900 dark:text-white outline-none focus:ring-2 focus:ring-blue-500"
           >
             <option value="0">Sem Insalubridade</option>
-            <option value="10">Grau Mínimo (10% = R$ 151,80)</option>
-            <option value="20">Grau Médio (20% = R$ 303,60)</option>
-            <option value="40">Grau Máximo (40% = R$ 607,20)</option>
+            <option value="10">Grau Mínimo (10% = R$ 162,10)</option>
+            <option value="20">Grau Médio (20% = R$ 324,20)</option>
+            <option value="40">Grau Máximo (40% = R$ 648,40)</option>
           </select>
           <span className="text-[11px] text-neutral-500 dark:text-neutral-400 block">
-            Calculado sobre o salário mínimo de R$ 1.518,00
+            Calculado sobre o salário mínimo de R$ 1.621,00
           </span>
         </div>
       </div>

@@ -1,3 +1,6 @@
+import { storage, copyText as writeClipboard, nonNegative, notify } from '../utils/browser';
+import { calculateNightShift, isValidTime } from '../utils/time';
+import { MINIMUM_WAGE_2026 } from '../utils/taxCalculations';
 import React, { useState, useEffect } from 'react';
 import { Moon, Clock, Copy, Check, Download, Printer, HelpCircle, ShieldAlert, Sparkles, Calculator, AlertCircle } from 'lucide-react';
 import { generateTimesheetCSV } from '../utils/excelGenerator';
@@ -10,11 +13,11 @@ interface NightHoursCalculatorProps {
 }
 
 export default function NightHoursCalculator({ onSelectTab }: NightHoursCalculatorProps) {
-  const [salary, setSalary] = useState(() => localStorage.getItem('calc_night_salary') || '3000');
-  const [weeklyHours, setWeeklyHours] = useState(() => localStorage.getItem('calc_night_hours') || '44');
-  const [sector, setSector] = useState<WorkerSector>(() => (localStorage.getItem('calc_night_sector') as WorkerSector) || 'urban');
-  const [customRate, setCustomRate] = useState(() => localStorage.getItem('calc_night_custom') || '20');
-  const [nightClockHours, setNightClockHours] = useState(() => localStorage.getItem('calc_night_clock') || '40');
+  const [salary, setSalary] = useState(() => storage.getItem('calc_night_salary') || '3000');
+  const [weeklyHours, setWeeklyHours] = useState(() => storage.getItem('calc_night_hours') || '44');
+  const [sector, setSector] = useState<WorkerSector>(() => (storage.getItem('calc_night_sector') as WorkerSector) || 'urban');
+  const [customRate, setCustomRate] = useState(() => storage.getItem('calc_night_custom') || '20');
+  const [nightClockHours, setNightClockHours] = useState(() => storage.getItem('calc_night_clock') || '40');
 
   // Additional Hazard Allowances in Base Rate (OJ 259 SDI-1 TST)
   const [hasPericulosidade, setHasPericulosidade] = useState(false);
@@ -25,13 +28,13 @@ export default function NightHoursCalculator({ onSelectTab }: NightHoursCalculat
   const [overtimePct, setOvertimePct] = useState('50');
   
   // Prorrogação Súmula 60 TST
-  const [includeExtension, setIncludeExtension] = useState(() => localStorage.getItem('calc_night_ext') === 'true');
-  const [extensionHours, setExtensionHours] = useState(() => localStorage.getItem('calc_night_ext_h') || '10');
+  const [includeExtension, setIncludeExtension] = useState(() => storage.getItem('calc_night_ext') === 'true');
+  const [extensionHours, setExtensionHours] = useState(() => storage.getItem('calc_night_ext_h') || '10');
 
   // DSR (Descanso Semanal Remunerado)
-  const [includeDSR, setIncludeDSR] = useState(() => localStorage.getItem('calc_night_dsr') !== 'false');
-  const [workingDaysMonth, setWorkingDaysMonth] = useState(() => localStorage.getItem('calc_night_wdays') || '25');
-  const [sundaysHolidaysMonth, setSundaysHolidaysMonth] = useState(() => localStorage.getItem('calc_night_sdays') || '5');
+  const [includeDSR, setIncludeDSR] = useState(() => storage.getItem('calc_night_dsr') !== 'false');
+  const [workingDaysMonth, setWorkingDaysMonth] = useState(() => storage.getItem('calc_night_wdays') || '25');
+  const [sundaysHolidaysMonth, setSundaysHolidaysMonth] = useState(() => storage.getItem('calc_night_sdays') || '5');
 
   // Shift Helper Input
   const [startTime, setStartTime] = useState('22:00');
@@ -42,50 +45,36 @@ export default function NightHoursCalculator({ onSelectTab }: NightHoursCalculat
   const [copied, setCopied] = useState(false);
 
   useEffect(() => {
-    localStorage.setItem('calc_night_salary', salary);
-    localStorage.setItem('calc_night_hours', weeklyHours);
-    localStorage.setItem('calc_night_sector', sector);
-    localStorage.setItem('calc_night_custom', customRate);
-    localStorage.setItem('calc_night_clock', nightClockHours);
-    localStorage.setItem('calc_night_ext', String(includeExtension));
-    localStorage.setItem('calc_night_ext_h', extensionHours);
-    localStorage.setItem('calc_night_dsr', String(includeDSR));
-    localStorage.setItem('calc_night_wdays', workingDaysMonth);
-    localStorage.setItem('calc_night_sdays', sundaysHolidaysMonth);
+    storage.setItem('calc_night_salary', salary);
+    storage.setItem('calc_night_hours', weeklyHours);
+    storage.setItem('calc_night_sector', sector);
+    storage.setItem('calc_night_custom', customRate);
+    storage.setItem('calc_night_clock', nightClockHours);
+    storage.setItem('calc_night_ext', String(includeExtension));
+    storage.setItem('calc_night_ext_h', extensionHours);
+    storage.setItem('calc_night_dsr', String(includeDSR));
+    storage.setItem('calc_night_wdays', workingDaysMonth);
+    storage.setItem('calc_night_sdays', sundaysHolidaysMonth);
   }, [salary, weeklyHours, sector, customRate, nightClockHours, includeExtension, extensionHours, includeDSR, workingDaysMonth, sundaysHolidaysMonth]);
 
   // Auto-calculate night hours from Shift Assistant
   const applyShiftAssistant = () => {
-    const [startH] = startTime.split(':').map(Number);
-    const [endH] = endTime.split(':').map(Number);
-    const days = parseFloat(shiftDays) || 1;
-
-    // Standard Urban Night: 22:00 to 05:00 (7 hours per shift)
-    let nightH = 0;
-    let extH = 0;
-
-    if (startH === 22 && endH === 6) {
-      nightH = 7 * days; // 22h to 05h = 7 clock hours
-      extH = 1 * days;  // 05h to 06h = 1 hour extension
-    } else if (startH === 22 && endH === 5) {
-      nightH = 7 * days;
-      extH = 0;
-    } else {
-      // General estimate
-      nightH = 7 * days;
-      extH = 0;
+    if (!isValidTime(startTime) || !isValidTime(endTime) || sector === 'custom') {
+      notify('Informe horários válidos. Para convenção personalizada, informe as horas noturnas conforme o acordo.');
+      return;
     }
+    const days = nonNegative(shiftDays);
+    const result = calculateNightShift(startTime, endTime, sector);
+    setNightClockHours(String(Number((result.night * days).toFixed(4))));
+    setExtensionHours(String(Number((result.extension * days).toFixed(4))));
+    setIncludeExtension(result.extension > 0);
 
-    setNightClockHours(String(nightH));
-    if (extH > 0) {
-      setIncludeExtension(true);
-      setExtensionHours(String(extH));
-    }
   };
 
   // Sector Rules Setup
   const getSectorRules = () => {
     switch (sector) {
+      default:
       case 'urban':
         return {
           name: 'Trabalhador Urbano (CLT Art. 73)',
@@ -113,7 +102,7 @@ export default function NightHoursCalculator({ onSelectTab }: NightHoursCalculat
       case 'custom':
         return {
           name: 'Convenção Coletiva / Acordo Específico',
-          rate: (parseFloat(customRate) || 20) / 100,
+          rate: (nonNegative(customRate, 20)) / 100,
           period: 'Personalizado',
           fictaFactor: 60 / 52.5,
           hasFicta: true,
@@ -124,18 +113,18 @@ export default function NightHoursCalculator({ onSelectTab }: NightHoursCalculat
   const rules = getSectorRules();
 
   // Base Hourly Rate (including Insalubridade & Periculosidade per OJ 259 SDI-1 TST)
-  const s = parseFloat(salary) || 0;
-  const minimumWage = 1518.00;
-  const insalubridadeAddition = minimumWage * ((parseFloat(insalubridadeGrade) || 0) / 100);
+  const s = nonNegative(salary, 0);
+  const minimumWage = MINIMUM_WAGE_2026;
+  const insalubridadeAddition = minimumWage * ((nonNegative(insalubridadeGrade, 0)) / 100);
   const periculosidadeAddition = hasPericulosidade ? s * 0.30 : 0;
   const totalRemunerationBase = s + insalubridadeAddition + periculosidadeAddition;
 
-  const w = parseFloat(weeklyHours) || 44;
+  const w = nonNegative(weeklyHours, 44);
   const divisor = w * 5; // CLT standard divisor
   const baseHourlyRate = divisor > 0 ? totalRemunerationBase / divisor : 0;
 
-  const clockHoursVal = parseFloat(nightClockHours) || 0;
-  const extHoursVal = includeExtension ? (parseFloat(extensionHours) || 0) : 0;
+  const clockHoursVal = nonNegative(nightClockHours, 0);
+  const extHoursVal = includeExtension ? (nonNegative(extensionHours, 0)) : 0;
   const totalClockHours = clockHoursVal + extHoursVal;
 
   // Fictional hours conversion
@@ -146,8 +135,8 @@ export default function NightHoursCalculator({ onSelectTab }: NightHoursCalculat
   const nightBonusTotal = nightBonusRate * fictaHours;
 
   // Overtime Night Shift Combination: (Base Rate + Night Bonus) * Overtime Multiplier
-  const nightOtHoursVal = parseFloat(nightOvertimeHours) || 0;
-  const otMult = (parseFloat(overtimePct) || 50) / 100;
+  const nightOtHoursVal = nonNegative(nightOvertimeHours, 0);
+  const otMult = (nonNegative(overtimePct, 50)) / 100;
   const nightOtFictaHours = nightOtHoursVal * rules.fictaFactor;
   // HE Noturna Rate = BaseRate * (1 + rules.rate) * (1 + otMult) or BaseRate * (1 + rules.rate + otMult)
   // Legal standard (Súmula 264 TST): Hora Extra Noturna = (Hora Normal + Adicional Noturno) * Adicional de Hora Extra
@@ -157,13 +146,13 @@ export default function NightHoursCalculator({ onSelectTab }: NightHoursCalculat
   const totalNightIncomeWithoutDSR = nightBonusTotal + nightOtTotal;
 
   // DSR calculation: (Total Night Income / Working Days) * Sundays & Holidays
-  const workDays = parseFloat(workingDaysMonth) || 25;
-  const restDays = parseFloat(sundaysHolidaysMonth) || 5;
+  const workDays = nonNegative(workingDaysMonth, 25);
+  const restDays = nonNegative(sundaysHolidaysMonth, 5);
   const dsrValue = (includeDSR && workDays > 0) ? (totalNightIncomeWithoutDSR / workDays) * restDays : 0;
 
   const grandTotal = totalNightIncomeWithoutDSR + dsrValue;
 
-  const copySummary = () => {
+  const copySummary = async () => {
     const text = `CÁLCULO DE ADICIONAL NOTURNO:
 • Categoria: ${rules.name}
 • Salário Base: R$ ${s.toFixed(2)} (Remuneração Base com adicionais: R$ ${totalRemunerationBase.toFixed(2)})
@@ -175,7 +164,7 @@ TOTAL A RECEBER: R$ ${grandTotal.toFixed(2)}
 
 Calculado em calculadoradehorastrabalhadas.org`;
 
-    navigator.clipboard.writeText(text);
+    if (!await writeClipboard(text)) return;
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
@@ -200,28 +189,28 @@ Calculado em calculadoradehorastrabalhadas.org`;
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h2 className="text-2xl font-bold text-neutral-900">Calculadora de Adicional Noturno</h2>
-          <p className="text-neutral-600 text-sm mt-1">
+          <h2 className="text-2xl font-bold text-neutral-900 dark:text-neutral-100">Calculadora de Adicional Noturno</h2>
+          <p className="text-neutral-600 dark:text-neutral-400 text-sm mt-1">
             Calcule o adicional noturno com hora ficta reduzida (52min 30seg), prorrogação de jornada (Súmula 60 TST) e reflexo no DSR.
           </p>
         </div>
 
         <div className="flex items-center gap-2 self-start md:self-auto">
-          <button onClick={exportCSV} className="flex items-center gap-1.5 text-xs font-semibold text-neutral-700 bg-neutral-100 hover:bg-neutral-200 px-3 py-2 rounded-xl transition-colors cursor-pointer">
+          <button onClick={exportCSV} className="flex items-center gap-1.5 text-xs font-semibold text-neutral-700 dark:text-neutral-300 bg-neutral-100 hover:bg-neutral-200 px-3 py-2 rounded-xl transition-colors cursor-pointer">
             <Download className="w-3.5 h-3.5 text-emerald-600" /> Exportar CSV
           </button>
-          <button onClick={copySummary} className="flex items-center gap-1.5 text-xs font-semibold text-neutral-700 bg-neutral-100 hover:bg-neutral-200 px-3 py-2 rounded-xl transition-colors cursor-pointer">
+          <button onClick={copySummary} className="flex items-center gap-1.5 text-xs font-semibold text-neutral-700 dark:text-neutral-300 bg-neutral-100 hover:bg-neutral-200 px-3 py-2 rounded-xl transition-colors cursor-pointer">
             {copied ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5 text-indigo-600" />} Copiar Resumo
           </button>
-          <button onClick={() => window.print()} className="flex items-center gap-1.5 text-xs font-semibold text-neutral-700 bg-neutral-100 hover:bg-neutral-200 px-3 py-2 rounded-xl transition-colors cursor-pointer">
-            <Printer className="w-3.5 h-3.5 text-neutral-600" /> Imprimir
+          <button onClick={() => window.print()} className="flex items-center gap-1.5 text-xs font-semibold text-neutral-700 dark:text-neutral-300 bg-neutral-100 hover:bg-neutral-200 px-3 py-2 rounded-xl transition-colors cursor-pointer">
+            <Printer className="w-3.5 h-3.5 text-neutral-600 dark:text-neutral-400" /> Imprimir
           </button>
         </div>
       </div>
 
       {/* Sector Selection */}
       <div>
-        <label className="block text-xs font-bold text-neutral-700 uppercase tracking-wider mb-2">
+        <label className="block text-xs font-bold text-neutral-700 dark:text-neutral-300 uppercase tracking-wider mb-2">
           Selecione o Tipo de Trabalhador / Atividade:
         </label>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
@@ -241,7 +230,7 @@ Calculado em calculadoradehorastrabalhadas.org`;
               }`}
             >
               <div className="flex justify-between items-center mb-1">
-                <span className="font-bold text-xs text-neutral-900">{sec.name}</span>
+                <span className="font-bold text-xs text-neutral-900 dark:text-neutral-100">{sec.name}</span>
                 <span className="bg-indigo-100 text-indigo-800 text-[10px] font-bold px-1.5 py-0.5 rounded-full">{sec.rate}</span>
               </div>
               <span className="text-[11px] text-neutral-500 block">{sec.time}</span>
@@ -252,33 +241,33 @@ Calculado em calculadoradehorastrabalhadas.org`;
       </div>
 
       {/* Form Inputs & Additional Hazard Allowances */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 bg-neutral-50 p-5 rounded-2xl border border-neutral-200">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 bg-neutral-50 dark:bg-neutral-800 p-5 rounded-2xl border border-neutral-200 dark:border-neutral-700">
         <div>
-          <label htmlFor="nighthours-salary" className="block text-xs font-semibold text-neutral-700 mb-1">Salário Mensal Bruto (R$)</label>
+          <label htmlFor="nighthours-salary" className="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 mb-1">Salário Mensal Bruto (R$)</label>
           <div className="relative">
             <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-neutral-500 font-bold">R$</span>
             <input
               id="nighthours-salary"
               aria-label="Salário Mensal Bruto em Reais"
-              type="number" inputMode="decimal"
+              type="number" min="0" inputMode="decimal"
               value={salary}
               onChange={e => setSalary(e.target.value)}
-              className="w-full border border-neutral-300 bg-white rounded-xl p-2.5 pl-10 text-sm font-mono font-bold outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-900 rounded-xl p-2.5 pl-10 text-sm font-mono font-bold outline-none focus:ring-2 focus:ring-indigo-500"
               placeholder="Ex: 3000"
             />
           </div>
         </div>
 
         <div>
-          <label htmlFor="nighthours-weekly-hours" className="block text-xs font-semibold text-neutral-700 mb-1">Jornada Semanal (hs)</label>
+          <label htmlFor="nighthours-weekly-hours" className="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 mb-1">Jornada Semanal (hs)</label>
           <div className="relative">
             <input
               id="nighthours-weekly-hours"
               aria-label="Jornada Semanal em horas"
-              type="number" inputMode="decimal"
+              type="number" min="0" inputMode="decimal"
               value={weeklyHours}
               onChange={e => setWeeklyHours(e.target.value)}
-              className="w-full border border-neutral-300 bg-white rounded-xl p-2.5 pr-10 text-sm font-mono font-bold outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-900 rounded-xl p-2.5 pr-10 text-sm font-mono font-bold outline-none focus:ring-2 focus:ring-indigo-500"
               placeholder="Ex: 44"
             />
             <span className="absolute right-3.5 top-1/2 -translate-y-1/2 text-neutral-500 text-xs">h / sem</span>
@@ -286,23 +275,23 @@ Calculado em calculadoradehorastrabalhadas.org`;
         </div>
 
         <div>
-          <label htmlFor="nighthours-insalubridade" className="block text-xs font-semibold text-neutral-700 mb-1">Insalubridade na Base (TST)</label>
+          <label htmlFor="nighthours-insalubridade" className="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 mb-1">Insalubridade na Base (TST)</label>
           <select
             id="nighthours-insalubridade"
             aria-label="Insalubridade na Base"
             value={insalubridadeGrade}
             onChange={e => setInsalubridadeGrade(e.target.value as any)}
-            className="w-full border border-neutral-300 bg-white rounded-xl p-2.5 text-xs outline-none focus:ring-2 focus:ring-indigo-500"
+            className="w-full border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-900 rounded-xl p-2.5 text-xs outline-none focus:ring-2 focus:ring-indigo-500"
           >
             <option value="0">Não possui</option>
-            <option value="10">Mínimo (10% = R$ 151,80)</option>
-            <option value="20">Médio (20% = R$ 303,60)</option>
-            <option value="40">Máximo (40% = R$ 607,20)</option>
+            <option value="10">Mínimo (10% = R$ 162,10)</option>
+            <option value="20">Médio (20% = R$ 324,20)</option>
+            <option value="40">Máximo (40% = R$ 648,40)</option>
           </select>
         </div>
 
         <div>
-          <label className="block text-xs font-semibold text-neutral-700 mb-1">Periculosidade na Base (TST)</label>
+          <label className="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 mb-1">Periculosidade na Base (TST)</label>
           <button
             type="button"
             onClick={() => setHasPericulosidade(!hasPericulosidade)}
@@ -318,10 +307,10 @@ Calculado em calculadoradehorastrabalhadas.org`;
       </div>
 
       {/* Night Hours & Shift Assistant */}
-      <div className="bg-white border border-neutral-200 p-5 rounded-2xl space-y-4 shadow-xs">
+      <div className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700 p-5 rounded-2xl space-y-4 shadow-xs">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div>
-            <h3 className="text-xs font-extrabold text-neutral-800 uppercase tracking-wider flex items-center gap-1.5">
+            <h3 className="text-xs font-extrabold text-neutral-800 dark:text-neutral-200 uppercase tracking-wider flex items-center gap-1.5">
               <Clock className="w-4 h-4 text-indigo-600" /> Horas Noturnas Trabalhadas no Mês
             </h3>
             <p className="text-xs text-neutral-500">Informe a quantidade total de horas de relógio ou use o assistente de turno.</p>
@@ -341,27 +330,27 @@ Calculado em calculadoradehorastrabalhadas.org`;
               <label className="block text-[11px] font-bold text-indigo-900 mb-1">Horário Entrada</label>
               <input
                 type="time"
-                value={startTime}
+                aria-label="Início do turno" value={startTime}
                 onChange={e => setStartTime(e.target.value)}
-                className="w-full bg-white border border-indigo-300 rounded-lg p-2 text-xs font-bold text-center"
+                className="w-full bg-white dark:bg-neutral-900 border border-indigo-300 rounded-lg p-2 text-xs font-bold text-center"
               />
             </div>
             <div>
               <label className="block text-[11px] font-bold text-indigo-900 mb-1">Horário Saída</label>
               <input
                 type="time"
-                value={endTime}
+                aria-label="Fim do turno" value={endTime}
                 onChange={e => setEndTime(e.target.value)}
-                className="w-full bg-white border border-indigo-300 rounded-lg p-2 text-xs font-bold text-center"
+                className="w-full bg-white dark:bg-neutral-900 border border-indigo-300 rounded-lg p-2 text-xs font-bold text-center"
               />
             </div>
             <div>
               <label className="block text-[11px] font-bold text-indigo-900 mb-1">Dias no Mês</label>
-              <input
-                type="number" inputMode="decimal"
+              <input aria-label="Dias no Mês"
+                type="number" min="0" inputMode="decimal"
                 value={shiftDays}
                 onChange={e => setShiftDays(e.target.value)}
-                className="w-full bg-white border border-indigo-300 rounded-lg p-2 text-xs font-bold text-center"
+                className="w-full bg-white dark:bg-neutral-900 border border-indigo-300 rounded-lg p-2 text-xs font-bold text-center"
                 placeholder="Ex: 22"
               />
             </div>
@@ -377,13 +366,13 @@ Calculado em calculadoradehorastrabalhadas.org`;
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <label className="block text-xs font-bold text-neutral-700 mb-1">Horas Noturnas Normais no Mês (Relógio)</label>
+            <label className="block text-xs font-bold text-neutral-700 dark:text-neutral-300 mb-1">Horas Noturnas Normais no Mês (Relógio)</label>
             <div className="relative">
-              <input
-                type="number" inputMode="decimal"
+              <input aria-label="Horas Noturnas Normais no Mês (Relógio)"
+                type="number" min="0" inputMode="decimal"
                 value={nightClockHours}
                 onChange={e => setNightClockHours(e.target.value)}
-                className="w-full border border-neutral-300 bg-white rounded-xl p-2.5 pr-10 text-sm font-mono font-bold outline-none focus:ring-2 focus:ring-indigo-500"
+                className="w-full border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-900 rounded-xl p-2.5 pr-10 text-sm font-mono font-bold outline-none focus:ring-2 focus:ring-indigo-500"
                 placeholder="Ex: 40"
               />
               <span className="absolute right-3.5 top-1/2 -translate-y-1/2 text-neutral-500 font-bold text-xs">h</span>
@@ -391,23 +380,23 @@ Calculado em calculadoradehorastrabalhadas.org`;
           </div>
 
           <div>
-            <label className="block text-xs font-bold text-neutral-700 mb-1">Horas Extras Noturnas (HE + Noturno)</label>
+            <label className="block text-xs font-bold text-neutral-700 dark:text-neutral-300 mb-1">Horas Extras Noturnas (HE + Noturno)</label>
             <div className="flex gap-2">
               <div className="relative flex-1">
-                <input
-                  type="number" inputMode="decimal"
+                <input aria-label="Horas Extras Noturnas (HE + Noturno)"
+                  type="number" min="0" inputMode="decimal"
                   value={nightOvertimeHours}
                   onChange={e => setNightOvertimeHours(e.target.value)}
-                  className="w-full border border-neutral-300 bg-white rounded-xl p-2.5 pr-10 text-sm font-mono font-bold outline-none focus:ring-2 focus:ring-indigo-500"
+                  className="w-full border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-900 rounded-xl p-2.5 pr-10 text-sm font-mono font-bold outline-none focus:ring-2 focus:ring-indigo-500"
                   placeholder="Ex: 0"
                 />
                 <span className="absolute right-3.5 top-1/2 -translate-y-1/2 text-neutral-500 font-bold text-xs">h</span>
               </div>
               <div className="w-28">
                 <select
-                  value={overtimePct}
+                  aria-label="Percentual de horas extras noturnas" value={overtimePct}
                   onChange={e => setOvertimePct(e.target.value)}
-                  className="w-full border border-neutral-300 bg-white rounded-xl p-2.5 text-xs font-bold outline-none focus:ring-2 focus:ring-indigo-500"
+                  className="w-full border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-900 rounded-xl p-2.5 text-xs font-bold outline-none focus:ring-2 focus:ring-indigo-500"
                 >
                   <option value="50">+50% HE</option>
                   <option value="100">+100% HE</option>
@@ -422,11 +411,11 @@ Calculado em calculadoradehorastrabalhadas.org`;
       {sector === 'custom' && (
         <div className="bg-amber-50 border border-amber-200 p-4 rounded-xl flex items-center gap-4 text-xs">
           <label className="font-bold text-amber-900 whitespace-nowrap">Porcentagem do Adicional Noturno CCT (%):</label>
-          <input
-            type="number" inputMode="decimal"
+          <input aria-label="Porcentagem do Adicional Noturno CCT (%):"
+            type="number" min="0" inputMode="decimal"
             value={customRate}
             onChange={e => setCustomRate(e.target.value)}
-            className="w-24 border border-amber-300 bg-white rounded-lg p-2 text-sm font-bold text-center outline-none"
+            className="w-24 border border-amber-300 bg-white dark:bg-neutral-900 rounded-lg p-2 text-sm font-bold text-center outline-none"
             placeholder="20"
           />
         </div>
@@ -435,7 +424,7 @@ Calculado em calculadoradehorastrabalhadas.org`;
       {/* Advanced Rules: Súmula 60 & DSR */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {/* Súmula 60 TST Extension */}
-        <div className="bg-white border border-neutral-200 p-4 rounded-xl space-y-3">
+        <div className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700 p-4 rounded-xl space-y-3">
           <div className="flex items-center gap-2">
             <input
               type="checkbox"
@@ -444,7 +433,7 @@ Calculado em calculadoradehorastrabalhadas.org`;
               onChange={e => setIncludeExtension(e.target.checked)}
               className="w-4 h-4 text-indigo-600 rounded cursor-pointer"
             />
-            <label htmlFor="sumula60" className="cursor-pointer font-bold text-xs text-neutral-800">
+            <label htmlFor="sumula60" className="cursor-pointer font-bold text-xs text-neutral-800 dark:text-neutral-200">
               Prorrogação de Jornada (Súmula 60 do TST)
             </label>
           </div>
@@ -454,12 +443,12 @@ Calculado em calculadoradehorastrabalhadas.org`;
 
           {includeExtension && (
             <div className="pt-2 border-t border-neutral-100">
-              <label className="block text-xs font-semibold text-neutral-700 mb-1">Horas Prorrogadas no Mês (após 05h)</label>
-              <input
-                type="number" inputMode="decimal"
+              <label className="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 mb-1">Horas Prorrogadas no Mês (após 05h)</label>
+              <input aria-label="Horas Prorrogadas no Mês (após 05h)"
+                type="number" min="0" inputMode="decimal"
                 value={extensionHours}
                 onChange={e => setExtensionHours(e.target.value)}
-                className="w-full border border-neutral-300 bg-neutral-50 rounded-lg p-2 text-xs font-mono font-bold outline-none"
+                className="w-full border border-neutral-300 dark:border-neutral-600 bg-neutral-50 dark:bg-neutral-800 rounded-lg p-2 text-xs font-mono font-bold outline-none"
                 placeholder="Ex: 10"
               />
             </div>
@@ -467,7 +456,7 @@ Calculado em calculadoradehorastrabalhadas.org`;
         </div>
 
         {/* DSR Reflection */}
-        <div className="bg-white border border-neutral-200 p-4 rounded-xl space-y-3">
+        <div className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700 p-4 rounded-xl space-y-3">
           <div className="flex items-center gap-2">
             <input
               type="checkbox"
@@ -476,7 +465,7 @@ Calculado em calculadoradehorastrabalhadas.org`;
               onChange={e => setIncludeDSR(e.target.checked)}
               className="w-4 h-4 text-indigo-600 rounded cursor-pointer"
             />
-            <label htmlFor="dsrCheck" className="cursor-pointer font-bold text-xs text-neutral-800">
+            <label htmlFor="dsrCheck" className="cursor-pointer font-bold text-xs text-neutral-800 dark:text-neutral-200">
               Calcular Reflexo no DSR (Descanso Semanal Remunerado)
             </label>
           </div>
@@ -487,22 +476,22 @@ Calculado em calculadoradehorastrabalhadas.org`;
           {includeDSR && (
             <div className="grid grid-cols-2 gap-2 pt-2 border-t border-neutral-100">
               <div>
-                <label className="block text-[11px] font-semibold text-neutral-700 mb-1">Dias Úteis Mês</label>
-                <input
-                  type="number" inputMode="decimal"
+                <label className="block text-[11px] font-semibold text-neutral-700 dark:text-neutral-300 mb-1">Dias Úteis Mês</label>
+                <input aria-label="Dias Úteis Mês"
+                  type="number" min="0" inputMode="decimal"
                   value={workingDaysMonth}
                   onChange={e => setWorkingDaysMonth(e.target.value)}
-                  className="w-full border border-neutral-300 bg-neutral-50 rounded-lg p-2 text-xs font-mono font-bold outline-none"
+                  className="w-full border border-neutral-300 dark:border-neutral-600 bg-neutral-50 dark:bg-neutral-800 rounded-lg p-2 text-xs font-mono font-bold outline-none"
                   placeholder="25"
                 />
               </div>
               <div>
-                <label className="block text-[11px] font-semibold text-neutral-700 mb-1">Dom / Feriados</label>
-                <input
-                  type="number" inputMode="decimal"
+                <label className="block text-[11px] font-semibold text-neutral-700 dark:text-neutral-300 mb-1">Dom / Feriados</label>
+                <input aria-label="Dom / Feriados"
+                  type="number" min="0" inputMode="decimal"
                   value={sundaysHolidaysMonth}
                   onChange={e => setSundaysHolidaysMonth(e.target.value)}
-                  className="w-full border border-neutral-300 bg-neutral-50 rounded-lg p-2 text-xs font-mono font-bold outline-none"
+                  className="w-full border border-neutral-300 dark:border-neutral-600 bg-neutral-50 dark:bg-neutral-800 rounded-lg p-2 text-xs font-mono font-bold outline-none"
                   placeholder="5"
                 />
               </div>
@@ -513,11 +502,11 @@ Calculado em calculadoradehorastrabalhadas.org`;
 
       {/* Results Cards Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="bg-neutral-50 p-4 rounded-xl border border-neutral-200">
+        <div className="bg-neutral-50 dark:bg-neutral-800 p-4 rounded-xl border border-neutral-200 dark:border-neutral-700">
           <span className="text-[11px] text-neutral-500 uppercase tracking-wider font-semibold block mb-1">
             {rules.hasFicta ? 'Horas Fictas Noturnas' : 'Horas Totais Noturnas'}
           </span>
-          <span className="text-2xl font-bold font-mono text-neutral-800">
+          <span className="text-2xl font-bold font-mono text-neutral-800 dark:text-neutral-200">
             {fictaHours.toFixed(2)} h
           </span>
           {rules.hasFicta && (
@@ -525,7 +514,7 @@ Calculado em calculadoradehorastrabalhadas.org`;
           )}
         </div>
 
-        <div className="bg-neutral-50 p-4 rounded-xl border border-neutral-200">
+        <div className="bg-neutral-50 dark:bg-neutral-800 p-4 rounded-xl border border-neutral-200 dark:border-neutral-700">
           <span className="text-[11px] text-neutral-500 uppercase tracking-wider font-semibold block mb-1">
             Adicional Noturno
           </span>
@@ -537,7 +526,7 @@ Calculado em calculadoradehorastrabalhadas.org`;
           </span>
         </div>
 
-        <div className="bg-neutral-50 p-4 rounded-xl border border-neutral-200">
+        <div className="bg-neutral-50 dark:bg-neutral-800 p-4 rounded-xl border border-neutral-200 dark:border-neutral-700">
           <span className="text-[11px] text-neutral-500 uppercase tracking-wider font-semibold block mb-1">
             Horas Extras Noturnas
           </span>
@@ -549,7 +538,7 @@ Calculado em calculadoradehorastrabalhadas.org`;
           </span>
         </div>
 
-        <div className="bg-neutral-50 p-4 rounded-xl border border-neutral-200">
+        <div className="bg-neutral-50 dark:bg-neutral-800 p-4 rounded-xl border border-neutral-200 dark:border-neutral-700">
           <span className="text-[11px] text-neutral-500 uppercase tracking-wider font-semibold block mb-1">
             Reflexo no DSR
           </span>
@@ -595,15 +584,15 @@ Calculado em calculadoradehorastrabalhadas.org`;
       </div>
 
       {/* Educational Legal Box */}
-      <div className="bg-neutral-50 border border-neutral-200 p-5 rounded-2xl space-y-3 text-xs">
-        <h4 className="font-bold text-neutral-900 flex items-center gap-2 text-sm">
+      <div className="bg-neutral-50 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 p-5 rounded-2xl space-y-3 text-xs">
+        <h4 className="font-bold text-neutral-900 dark:text-neutral-100 flex items-center gap-2 text-sm">
           <HelpCircle className="w-4 h-4 text-indigo-600" />
           Como funciona a Hora Ficta e a Súmula 60 do TST?
         </h4>
-        <p className="text-neutral-600 leading-relaxed">
+        <p className="text-neutral-600 dark:text-neutral-400 leading-relaxed">
           Na CLT urbana (Art. 73), a hora trabalhada no período noturno (22:00 às 05:00) dura <strong>52 minutos e 30 segundos</strong> (e não 60 minutos). Isso significa que 7 horas de relógio equivalem a <strong>8 horas noturnas remuneradas</strong> (fator de 1,142857).
         </p>
-        <p className="text-neutral-600 leading-relaxed">
+        <p className="text-neutral-600 dark:text-neutral-400 leading-relaxed">
           <strong>Súmula 60, II do TST:</strong> Quando o empregado cumpre integralmente a jornada no período noturno e prorroga o trabalho após as 05:00 da manhã, o adicional noturno também é devido sobre essas horas diurnas de prorrogação.
         </p>
       </div>

@@ -1,0 +1,235 @@
+{
+  "redirects": [
+    {
+      "source": "/timesheet",
+      "destination": "/calculadora-semanal",
+      "permanent": true
+    },
+    {
+      "source": "/monthly",
+      "destination": "/calculadora-mensal",
+      "permanent": true
+    },
+    {
+      "source": "/12x36",
+      "destination": "/escala-12x36",
+      "permanent": true
+    },
+    {
+      "source": "/escala12x36",
+      "destination": "/escala-12x36",
+      "permanent": true
+    },
+    {
+      "source": "/faltas",
+      "destination": "/atrasos-e-faltas",
+      "permanent": true
+    },
+    {
+      "source": "/ferias",
+      "destination": "/calculadora-de-ferias",
+      "permanent": true
+    },
+    {
+      "source": "/decimo",
+      "destination": "/decimo-terceiro",
+      "permanent": true
+    },
+    {
+      "source": "/13",
+      "destination": "/decimo-terceiro",
+      "permanent": true
+    },
+    {
+      "source": "/seguro",
+      "destination": "/seguro-desemprego",
+      "permanent": true
+    },
+    {
+      "source": "/insalubridade",
+      "destination": "/insalubridade-e-periculosidade",
+      "permanent": true
+    },
+    {
+      "source": "/cltpj",
+      "destination": "/calculadora-clt-pj",
+      "permanent": true
+    },
+    {
+      "source": "/clt-pj",
+      "destination": "/calculadora-clt-pj",
+      "permanent": true
+    },
+    {
+      "source": "/banco",
+      "destination": "/banco-de-horas",
+      "permanent": true
+    },
+    {
+      "source": "/sum",
+      "destination": "/somador-de-horas",
+      "permanent": true
+    },
+    {
+      "source": "/holerite",
+      "destination": "/simulador-de-holerite",
+      "permanent": true
+    },
+    {
+      "source": "/rescisao",
+      "destination": "/calculadora-de-rescisao",
+      "permanent": true
+    },
+    {
+      "source": "/rate",
+      "destination": "/valor-da-hora",
+      "permanent": true
+    },
+    {
+      "source": "/overtime",
+      "destination": "/horas-extras",
+      "permanent": true
+    },
+    {
+      "source": "/night",
+      "destination": "/adicional-noturno",
+      "permanent": true
+    },
+    {
+      "source": "/excel",
+      "destination": "/planilha-excel-ponto",
+      "permanent": true
+    },
+    {
+      "source": "/blog",
+      "destination": "/guia-clt",
+      "permanent": true
+    },
+    {
+      "source": "/about",
+      "destination": "/sobre",
+      "permanent": true
+    },
+    {
+      "source": "/contact",
+      "destination": "/contato",
+      "permanent": true
+    },
+    {
+      "source": "/terms",
+      "destination": "/termos",
+      "permanent": true
+    },
+    {
+      "source": "/privacy",
+      "destination": "/privacidade",
+      "permanent": true
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/calculadora-semanal",
+      "destination": "/calculadora-semanal/index.html"
+    },
+    {
+      "source": "/calculadora-mensal",
+      "destination": "/calculadora-mensal/index.html"
+    },
+    {
+      "source": "/escala-12x36",
+      "destination": "/escala-12x36/index.html"
+    },
+    {
+      "source": "/atrasos-e-faltas",
+      "destination": "/atrasos-e-faltas/index.html"
+    },
+    {
+      "source": "/calculadora-de-ferias",
+      "destination": "/calculadora-de-ferias/index.html"
+    },
+    {
+      "source": "/decimo-terceiro",
+      "destination": "/decimo-terceiro/index.html"
+    },
+    {
+      "source": "/seguro-desemprego",
+      "destination": "/seguro-desemprego/index.html"
+    },
+    {
+      "source": "/insalubridade-e-periculosidade",
+      "destination": "/insalubridade-e-periculosidade/index.html"
+    },
+    {
+      "source": "/calculadora-clt-pj",
+      "destination": "/calculadora-clt-pj/index.html"
+    },
+    {
+      "source": "/banco-de-horas",
+      "destination": "/banco-de-horas/index.html"
+    },
+    {
+      "source": "/somador-de-horas",
+      "destination": "/somador-de-horas/index.html"
+    },
+    {
+      "source": "/simulador-de-holerite",
+      "destination": "/simulador-de-holerite/index.html"
+    },
+    {
+      "source": "/calculadora-de-rescisao",
+      "destination": "/calculadora-de-rescisao/index.html"
+    },
+    {
+      "source": "/valor-da-hora",
+      "destination": "/valor-da-hora/index.html"
+    },
+    {
+      "source": "/horas-extras",
+      "destination": "/horas-extras/index.html"
+    },
+    {
+      "source": "/adicional-noturno",
+      "destination": "/adicional-noturno/index.html"
+    },
+    {
+      "source": "/planilha-excel-ponto",
+      "destination": "/planilha-excel-ponto/index.html"
+    },
+    {
+      "source": "/guia-clt",
+      "destination": "/guia-clt/index.html"
+    },
+    {
+      "source": "/sobre",
+      "destination": "/sobre/index.html"
+    },
+    {
+      "source": "/contato",
+      "destination": "/contato/index.html"
+    },
+    {
+      "source": "/termos",
+      "destination": "/termos/index.html"
+    },
+    {
+      "source": "/privacidade",
+      "destination": "/privacidade/index.html"
+    },
+    {
+      "source": "/guia-clt/como-calcular-hora-de-trabalho",
+      "destination": "/guia-clt/como-calcular-hora-de-trabalho/index.html"
+    },
+    {
+      "source": "/guia-clt/como-calcular-44-horas-trabalhadas-de-segunda-a-sexta",
+      "destination": "/guia-clt/como-calcular-44-horas-trabalhadas-de-segunda-a-sexta/index.html"
+    },
+    {
+      "source": "/guia-clt/como-calcular-o-valor-da-hora-de-trabalho",
+      "destination": "/guia-clt/como-calcular-o-valor-da-hora-de-trabalho/index.html"
+    },
+    {
+      "source": "/guia-clt/como-calcular-hora-extra-e-adicional-noturno",
+      "destination": "/guia-clt/como-calcular-hora-extra-e-adicional-noturno/index.html"
+    }
+  ]
+}

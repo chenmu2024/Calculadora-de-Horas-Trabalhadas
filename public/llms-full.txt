@@ -1,26 +1,1733 @@
-# Calculadora de Horas Trabalhadas - Documentação Completa para IAs
+# Calculadora de Horas Trabalhadas
 
-> O portal Calculadora de Horas Trabalhadas (https://calculadoradehorastrabalhadas.org/) é uma plataforma gratuita de utilidade pública para trabalhadores, profissionais de RH, contadores e advogados trabalhistas no Brasil.
+> Ferramentas gratuitas de cálculo de jornada e simulações trabalhistas no Brasil. Resultados dependem das premissas, categoria e convenção coletiva. Não representam parecer jurídico ou concessão de benefício.
 
-## Resumo das Principais Regras CLT Implementadas (Legislação 2026)
+Revisão do conteúdo: 2026-10-04. Tabelas fiscais: 2026.
 
-1. **Jornada Padrão de Trabalho (Artigo 58 da CLT)**:
-   - A duração normal do trabalho não excederá 8 horas diárias e 44 horas semanais, desde que não seja fixado outro limite.
-   - Tolerância de Ponto: Não serão descontadas nem computadas como jornada extraordinária as variações de horário no registro de ponto não excedentes de 5 minutos, observado o limite máximo de 10 minutos diários (§ 1º do Art. 58).
+## Calculadoras e páginas
 
-2. **Intervalo Intrajornada / Almoço (Artigo 71 da CLT)**:
-   - Em qualquer trabalho contínuo, cuja duração exceda de 6 horas, é obrigatória a concessão de um intervalo para repouso ou alimentação de, no mínimo, 1 hora.
-   - Para jornadas entre 4 e 6 horas, o intervalo obrigatório é de 15 minutos.
+- [Calculadora de Horas Trabalhadas Diária - CLT](https://calculadoradehorastrabalhadas.org/): Some os períodos entre entrada e saída e desconte os intervalos. Converta minutos para decimal dividindo por 60. O saldo depende da meta contratual; tolerâncias devem ser verificadas por registro.
+- [Cartão de Ponto Semanal e Apuração de Horas CLT](https://calculadoradehorastrabalhadas.org/calculadora-semanal): Some as horas líquidas de cada dia e compare com a carga semanal contratada. O saldo semanal não define sozinho a forma de pagamento: confira limites diários e o acordo de compensação.
+- [Calculadora de Horas Trabalhadas Mensal - CLT](https://calculadoradehorastrabalhadas.org/calculadora-mensal): Some as horas efetivamente registradas no mês. O divisor salarial serve para apurar o valor da hora e não representa automaticamente a quantidade de horas físicas trabalhadas.
+- [Calculadora de Escala 12x36 CLT - Plantões, Noturno e Feriados](https://calculadoradehorastrabalhadas.org/escala-12x36): Na escala 12x36, registre os plantões e intervalos. Feriados em dobro e prorrogação noturna dependem do regime e do acordo aplicáveis; não são acréscimos automáticos para toda escala.
+- [Calculadora de Desconto de Faltas, Atrasos e Perda do DSR CLT](https://calculadoradehorastrabalhadas.org/atrasos-e-faltas): Apure atrasos em minutos e faltas injustificadas separadamente. A perda do DSR depende da justificativa e da semana afetada; confirme a convenção coletiva e não desconte duas vezes o mesmo evento.
+- [Calculadora de Férias CLT 2026 - 1/3 Constitucional, Venda e Impostos](https://calculadoradehorastrabalhadas.org/calculadora-de-ferias): O cálculo de férias inclui a remuneração correspondente e o terço constitucional. O abono pecuniário é limitado a um terço do período de férias devido; venda de 10 dias pressupõe direito a 30 dias.
+- [Calculadora de 13º Salário 2026 - 1ª e 2ª Parcelas CLT](https://calculadoradehorastrabalhadas.org/decimo-terceiro): O 13º proporcional considera os meses com pelo menos 15 dias computáveis. Confira remuneração, médias e parcelas já pagas; os descontos da segunda parcela devem considerar o total devido.
+- [Calculadora de Seguro-Desemprego 2026 - Valor e Parcelas MTE](https://calculadoradehorastrabalhadas.org/seguro-desemprego): Use a média salarial e a tabela do MTE de 2026 para estimar o benefício. A quantidade de parcelas e a elegibilidade dependem do histórico e dos requisitos oficiais; a simulação não concede o benefício.
+- [Calculadora de Insalubridade e Periculosidade CLT 2026](https://calculadoradehorastrabalhadas.org/insalubridade-e-periculosidade): Insalubridade e periculosidade dependem de enquadramento e das condições de trabalho. A calculadora aplica o percentual à base selecionada; não comprova exposição nem substitui laudo ou análise do acordo.
+- [Calculadora CLT x PJ 2026 - Comparador Salarial e Benefícios](https://calculadoradehorastrabalhadas.org/calculadora-clt-pj): Compare remuneração CLT e receita PJ incluindo férias, 13º, benefícios, impostos, custos e horas faturáveis. A equivalência financeira depende das premissas e não determina a legalidade da contratação.
+- [Calculadora de Banco de Horas e Saldo - CLT](https://calculadoradehorastrabalhadas.org/banco-de-horas): O saldo do banco de horas é a diferença entre horas registradas e a meta informada. Prazos, compensação e pagamento dependem do acordo aplicável; o saldo positivo não equivale automaticamente a horas extras pagas.
+- [Somador de Horas Online Grátis - Somar Minutos](https://calculadoradehorastrabalhadas.org/somador-de-horas): Some ou subtraia durações em horas e minutos. Minutos são uma base de 60, portanto 1h30 não corresponde a 1,30 hora decimal.
+- [Simulador de Holerite e Salário Líquido CLT](https://calculadoradehorastrabalhadas.org/simulador-de-holerite): O salário líquido é o total de proventos menos os descontos aplicáveis. INSS é progressivo; no IRRF de 2026, o desconto simplificado substitui as deduções legais e a redução depende do rendimento.
+- [Calculadora de Rescisão Contratual CLT 2026](https://calculadoradehorastrabalhadas.org/calculadora-de-rescisao): A rescisão depende da modalidade, datas, aviso prévio, parcelas já pagas e férias adquiridas. A projeção do aviso pode alterar os avos; informe valores e períodos pendentes sem duplicar pagamentos.
+- [Calculadora de Valor da Hora Trabalhada - CLT](https://calculadoradehorastrabalhadas.org/valor-da-hora): Para mensalistas, divida o salário pela base de horas aplicável à jornada. Para PJ e freelancers, considere apenas horas faturáveis, custos e impostos; divisores CLT não devem ser usados automaticamente.
+- [Calculadora de Horas Extras 50% e 100% - CLT](https://calculadoradehorastrabalhadas.org/horas-extras): Multiplique o valor da hora normal pelas horas extras e pelo fator do adicional. Domingos e feriados não compensados podem exigir pagamento em dobro; confira a escala e o acordo aplicáveis.
+- [Calculadora de Adicional Noturno e Hora Ficta](https://calculadoradehorastrabalhadas.org/adicional-noturno): No trabalho noturno urbano, o período de referência é 22h–05h, com adicional mínimo de 20% e hora reduzida de 52min30s. Intervalos são descontados; prorrogação exige análise dos requisitos aplicáveis.
+- [Planilha de Controle de Ponto Excel Grátis](https://calculadoradehorastrabalhadas.org/planilha-excel-ponto): A planilha de ponto em Excel permite registrar entradas, saídas e intervalos, com fórmulas de duração e saldo. Confira a meta e os adicionais configurados antes de usar o relatório em folha.
+- [Guia Completo da CLT e Horas Trabalhadas 2026](https://calculadoradehorastrabalhadas.org/guia-clt): Aprenda tudo sobre regras de ponto, tolerância de 10 minutos, intervalo intrajornada, adicional noturno e divisor 220 da CLT.
+- [Sobre Nós - Calculadora de Horas Trabalhadas](https://calculadoradehorastrabalhadas.org/sobre): Conheça nossa missão, transparência, precisão dos cálculos e compromisso com os direitos trabalhistas no Brasil.
+- [Fale Conosco - Atendimento e Suporte CLT](https://calculadoradehorastrabalhadas.org/contato): Página de contato; o formulário abre o aplicativo de e-mail, sem envio direto pelo servidor.
+- [Termos de Uso e Condições de Serviço - CLT](https://calculadoradehorastrabalhadas.org/termos): Aviso legal e termos de utilização das ferramentas de cálculo de horas trabalhadas do portal calculadoradehorastrabalhadas.org.
+- [Política de Privacidade e Conformidade LGPD](https://calculadoradehorastrabalhadas.org/privacidade): Entenda como garantimos a total privacidade dos seus dados. Processamento 100% no seu navegador sem armazenamento em servidores.
 
-3. **Horas Extras e Adicional (Artigo 59 da CLT e Constituição Federal Art. 7º XVI)**:
-   - O valor da hora extraordinária será pelo menos 50% superior ao da hora normal em dias úteis.
-   - Domingos e feriados não compensados possuem adicional de 100%.
+## Artigos completos
 
-4. **Adicional Noturno e Hora Ficta (Artigo 73 da CLT)**:
-   - O trabalho noturno urbano (entre 22h e 5h) tem remuneração superior à do diurno em no mínimo 20%.
-   - A hora de trabalho noturno é computada como de 52 minutos e 30 segundos (redução da hora ficta noturna).
+- [Como Calcular Hora de Trabalho? Guia Completo de Jornada CLT (Diárias, Almoço e Ponto)](https://calculadoradehorastrabalhadas.org/guia-clt/como-calcular-hora-de-trabalho): Aprenda a fórmula oficial para calcular horas trabalhadas no dia, intervalo intrajornada, conversão de minutos para formato decimal e regras de controle de ponto segundo a CLT.
+- [Como Calcular 44 Horas Trabalhadas de Segunda a Sexta? (Compensação e Escalas 5x2)](https://calculadoradehorastrabalhadas.org/guia-clt/como-calcular-44-horas-trabalhadas-de-segunda-a-sexta): Entenda como funciona a distribuição das 44 horas semanais da CLT em 5 dias úteis com jornada de 8h48min por dia, regras do acordo de compensação e modelos de escala.
+- [Como Calcular o Valor da Hora de Trabalho? (Divisores CLT 220, 200, 180 e 150)](https://calculadoradehorastrabalhadas.org/guia-clt/como-calcular-o-valor-da-hora-de-trabalho): Descubra como apurar o valor do seu salário hora com base na tabela oficial de divisores da CLT fixada pelo TST. Entenda a diferença entre mensalistas e horistas.
+- [Como Calcular Hora Extra e Adicional Noturno? (50%, 100%, Hora Ficta e Reflexo DSR)](https://calculadoradehorastrabalhadas.org/guia-clt/como-calcular-hora-extra-e-adicional-noturno): Guia definitivo de cálculo de horas suplementares e adicionais noturnos com redução ficta de hora urbana, prorrogação de jornada (Súmula 60 TST) e integração no Descanso Semanal Remunerado.
 
-5. **Divisores Salariais Oficiais**:
-   - Jornada de 44 horas semanais = Divisor 220.
-   - Jornada de 40 horas semanais = Divisor 200.
-   - Jornada de 36 horas semanais = Divisor 180.
+## Fontes e método
+
+- [CLT — texto compilado, arts. 58, 59-A, 71, 73 e 143](https://www.planalto.gov.br/ccivil_03/decreto-lei/del5452compilado.htm)
+- [Receita Federal — tributação de 2026](https://www.gov.br/receitafederal/pt-br/assuntos/meu-imposto-de-renda/tabelas/2026)
+- [eSocial — valores previdenciários de 2026](https://www.gov.br/esocial/pt-br/noticias/liberado-o-envio-de-eventos-de-folha-para-o-esocial-apos-publicacao-de-portaria-que-reajusta-valores-previdenciarios-em-2026-1)
+- [MTE — Seguro-Desemprego de 2026, vigente desde 11/01/2026](https://www.gov.br/trabalho-e-emprego/pt-br/noticias-e-conteudo/2026/janeiro/mte-reajusta-valores-do-beneficio-seguro-desemprego)
+- [Autoria editorial, limites e correções](https://calculadoradehorastrabalhadas.org/sobre#metodologia-editorial)
+- [Documentação completa](https://calculadoradehorastrabalhadas.org/llms-full.txt)
+
+Este arquivo auxilia a leitura; não garante inclusão, classificação ou citação em mecanismos de busca ou respostas de IA.
+
+## Conteúdo das páginas
+
+### Calculadora de Horas Trabalhadas Diária - CLT
+
+URL: https://calculadoradehorastrabalhadas.org/
+Revisão: 2026-10-04
+
+Resposta rápida e método de cálculo
+Some os períodos entre entrada e saída e desconte os intervalos. Converta minutos para decimal dividindo por 60. O saldo depende da meta contratual; tolerâncias devem ser verificadas por registro.
+Exemplo com as premissas informadas
+08:00–12:00 e 13:00–17:00 = 8 horas líquidas; 8h30 = 8,5 horas.
+Simulação informativa. Confira contrato, categoria e convenção coletiva. Revisão do conteúdo: 4 de outubro de 2026 . Tabelas fiscais: ano de 2026.
+Fontes oficiais e limites
+CLT — texto compilado, arts. 58, 59-A, 71, 73 e 143 (https://www.planalto.gov.br/ccivil_03/decreto-lei/del5452compilado.htm)
+Método editorial e correção de divergências (https://calculadoradehorastrabalhadas.org/sobre#metodologia-editorial)
+Como Calcular Hora de Trabalho? Guia Completo de Jornada CLT (Diárias, Almoço e Ponto) (https://calculadoradehorastrabalhadas.org/guia-clt/como-calcular-hora-de-trabalho)calculadora semanal (https://calculadoradehorastrabalhadas.org/calculadora-semanal)somador de horas (https://calculadoradehorastrabalhadas.org/somador-de-horas)horas extras (https://calculadoradehorastrabalhadas.org/horas-extras)
+
+Referências de Cálculo Trabalhista CLT 2026
+Referências: TST, Art. 58 e Art. 73 da CLT • Tabelas fiscais 2026 • Confirme o acordo aplicável
+
+100% Privado (Sem Banco de Dados)
+
+Conteúdo revisado em 4 de outubro de 2026 • Confira a legislação e o acordo aplicáveis
+Guia Oficial CLT 2026
+Como Calcular Horas Trabalhadas no Dia? (Guia Completo de Ponto CLT)
+Aprenda o passo a passo exato para calcular horas trabalhadas com 4 batidas de ponto, desconto do intervalo intrajornada (almoço), conversão de minutos para decimal e a regra da tolerância legal de 10 minutos conforme o Art. 58, § 1º da CLT e Súmula 366 do TST .
+
+1. Fórmula Oficial de Cálculo da Jornada Diária
+Para apurar o total de horas líquidas trabalhadas no dia com intervalo de almoço, divide-se o dia em dois turnos e soma-se o tempo de cada um:
+Total de Horas = (Saída 1 - Entrada 1) + (Saída 2 - Entrada 2) Copiar
+Exemplo Prático de Batida de Ponto:
+Entrada 1: 08:00 | Saída Almoço (Saída 1): 12:00 → 1º Turno: 4 horas
+Volta Almoço (Entrada 2): 13:00 | Saída Final (Saída 2): 17:00 → 2º Turno: 4 horas
+Total Líquido: 4h + 4h = 8 horas trabalhadas (1 hora de almoço desconsiderada).
+
+2. Regras Essenciais da CLT para Horas Diárias
+Tolerância Legal de 10 Minutos O Art. 58, § 1º da CLT estabelece que variações de até 5 minutos na entrada/saída (máximo 10 min diários) não são descontadas nem pagas como hora extra. Se ultrapassar 10 minutos, o valor integral é apurado (Súmula 366 do TST).
+
+Intervalo Intrajornada (Art. 71) Jornadas acima de 6 horas diárias exigem no mínimo 1 hora de intervalo para repouso e alimentação. Jornadas entre 4h e 6h exigem 15 minutos obrigatórios.
+
+3. Tabela de Conversão: Minutos para Horas Decimais (Centesimais)
+Para multiplicar as horas pelo valor do salário, é obrigatório converter os minutos sexagesimais (base 60) em números decimais (Minutos ÷ 60):
+15 minutos
+= 0,25h
+
+30 minutos
+= 0,50h
+
+45 minutos
+= 0,75h
+
+48 minutos
+= 0,80h
+
+— / 5.0
+Avaliação da ferramenta: sua opinião é salva apenas neste navegador, sem pontuação agregada.
+
+Clique nas estrelas para avaliar
+
+Outras Calculadoras Trabalhistas CLT Disponíveis Gratuitamente
+Horas Diárias (https://calculadoradehorastrabalhadas.org/)Semanal 44h (https://calculadoradehorastrabalhadas.org/calculadora-semanal)Horas Extras (https://calculadoradehorastrabalhadas.org/horas-extras)Simular Holerite (https://calculadoradehorastrabalhadas.org/simulador-de-holerite)
+
+Perguntas Frequentes (FAQ CLT 2026) Atualizado 2026
+Tire suas dúvidas trabalhistas com respostas fundamentadas na CLT e Súmulas do TST.
+
+Filtrar por tema: Recomendado para esta calculadora
+Todas as Dúvidas Jornada & Ponto Horas Extras & Noturno Holerite & Descontos Rescisão & FGTS Banco de Horas & DSR
+
+Jornada & Ponto Como calcular as horas trabalhadas em um dia de trabalho? Para calcular as horas trabalhadas no dia, subtraia a hora de entrada do horário de saída. Se houver intervalo intrajornada (almoço), desconte a duração total da pausa. Exemplo: Entrada 08:00, Almoço 12:00 às 13:00, Saída Final 18:00. Total do dia = (12h - 8h) + (18h - 13h) = 9 horas efetivas.
+
+Esta resposta foi útil?
+
+Jornada & Ponto Qual é a tolerância legal do cartão de ponto no Brasil em 2026?
+Jornada & Ponto Como funciona a jornada de 44 horas semanais de segunda a sexta?
+Jornada & Ponto Qual é o tempo mínimo obrigatório de intervalo de almoço?
+Jornada & Ponto Qual é o divisor oficial da CLT para calcular o valor da hora de trabalho?
+Horas Extras & Noturno Qual é o valor mínimo do adicional de hora extra pela CLT?
+Horas Extras & Noturno O que é a hora ficta noturna e como funciona o adicional noturno urbano?
+Horas Extras & Noturno O adicional noturno integra a base de cálculo de horas extras e DSR?
+Holerite & Descontos Como é calculado o desconto de INSS no holerite em 2026?
+Holerite & Descontos Como calcular a retenção de IRRF no contracheque?
+Holerite & Descontos Qual o limite máximo de desconto de Vale Transporte (VT)?
+Rescisão & FGTS Qual é o prazo legal para pagamento do acerto trabalhista na rescisão?
+Rescisão & FGTS Como funciona o aviso prévio proporcional por tempo de serviço?
+Rescisão & FGTS Quem pede demissão tem direito ao saque do FGTS e à multa de 40%?
+Rescisão & FGTS Como funciona a demissão por acordo mútuo (Art. 484-A da CLT)?
+Banco de Horas & DSR Qual o prazo legal para compensar ou zerar o saldo do banco de horas?
+Banco de Horas & DSR Como calcular o reflexo das horas extras habituais no DSR?
+Banco de Horas & DSR O que acontece com o saldo do banco de horas no momento da rescisão?
+
+### Cartão de Ponto Semanal e Apuração de Horas CLT
+
+URL: https://calculadoradehorastrabalhadas.org/calculadora-semanal
+Revisão: 2026-10-04
+
+Resposta rápida e método de cálculo
+Some as horas líquidas de cada dia e compare com a carga semanal contratada. O saldo semanal não define sozinho a forma de pagamento: confira limites diários e o acordo de compensação.
+Exemplo com as premissas informadas
+8h48 por dia × 5 dias = 44 horas semanais, quando a compensação aplicável permite essa distribuição.
+Simulação informativa. Confira contrato, categoria e convenção coletiva. Revisão do conteúdo: 4 de outubro de 2026 . Tabelas fiscais: ano de 2026.
+Fontes oficiais e limites
+CLT — texto compilado, arts. 58, 59-A, 71, 73 e 143 (https://www.planalto.gov.br/ccivil_03/decreto-lei/del5452compilado.htm)
+Método editorial e correção de divergências (https://calculadoradehorastrabalhadas.org/sobre#metodologia-editorial)
+Como Calcular Hora de Trabalho? Guia Completo de Jornada CLT (Diárias, Almoço e Ponto) (https://calculadoradehorastrabalhadas.org/guia-clt/como-calcular-hora-de-trabalho)Como Calcular 44 Horas Trabalhadas de Segunda a Sexta? (Compensação e Escalas 5x2) (https://calculadoradehorastrabalhadas.org/guia-clt/como-calcular-44-horas-trabalhadas-de-segunda-a-sexta) (https://calculadoradehorastrabalhadas.org/)banco de horas (https://calculadoradehorastrabalhadas.org/banco-de-horas)calculadora mensal (https://calculadoradehorastrabalhadas.org/calculadora-mensal)
+
+Perguntas Frequentes (FAQ CLT 2026) Atualizado 2026
+Tire suas dúvidas trabalhistas com respostas fundamentadas na CLT e Súmulas do TST.
+
+Filtrar por tema: Recomendado para esta calculadora
+Todas as Dúvidas Jornada & Ponto Horas Extras & Noturno Holerite & Descontos Rescisão & FGTS Banco de Horas & DSR
+
+Jornada & Ponto Como calcular as horas trabalhadas em um dia de trabalho? Para calcular as horas trabalhadas no dia, subtraia a hora de entrada do horário de saída. Se houver intervalo intrajornada (almoço), desconte a duração total da pausa. Exemplo: Entrada 08:00, Almoço 12:00 às 13:00, Saída Final 18:00. Total do dia = (12h - 8h) + (18h - 13h) = 9 horas efetivas.
+
+Esta resposta foi útil?
+
+Jornada & Ponto Qual é a tolerância legal do cartão de ponto no Brasil em 2026?
+Jornada & Ponto Como funciona a jornada de 44 horas semanais de segunda a sexta?
+Jornada & Ponto Qual é o tempo mínimo obrigatório de intervalo de almoço?
+Jornada & Ponto Qual é o divisor oficial da CLT para calcular o valor da hora de trabalho?
+Horas Extras & Noturno Qual é o valor mínimo do adicional de hora extra pela CLT?
+Horas Extras & Noturno O que é a hora ficta noturna e como funciona o adicional noturno urbano?
+Horas Extras & Noturno O adicional noturno integra a base de cálculo de horas extras e DSR?
+Holerite & Descontos Como é calculado o desconto de INSS no holerite em 2026?
+Holerite & Descontos Como calcular a retenção de IRRF no contracheque?
+Holerite & Descontos Qual o limite máximo de desconto de Vale Transporte (VT)?
+Rescisão & FGTS Qual é o prazo legal para pagamento do acerto trabalhista na rescisão?
+Rescisão & FGTS Como funciona o aviso prévio proporcional por tempo de serviço?
+Rescisão & FGTS Quem pede demissão tem direito ao saque do FGTS e à multa de 40%?
+Rescisão & FGTS Como funciona a demissão por acordo mútuo (Art. 484-A da CLT)?
+Banco de Horas & DSR Qual o prazo legal para compensar ou zerar o saldo do banco de horas?
+Banco de Horas & DSR Como calcular o reflexo das horas extras habituais no DSR?
+Banco de Horas & DSR O que acontece com o saldo do banco de horas no momento da rescisão?
+
+### Calculadora de Horas Trabalhadas Mensal - CLT
+
+URL: https://calculadoradehorastrabalhadas.org/calculadora-mensal
+Revisão: 2026-10-04
+
+Resposta rápida e método de cálculo
+Some as horas efetivamente registradas no mês. O divisor salarial serve para apurar o valor da hora e não representa automaticamente a quantidade de horas físicas trabalhadas.
+Exemplo com as premissas informadas
+Salário de R$ 2.200 ÷ divisor 220 = R$ 10 por hora; compare a soma dos registros com a meta informada.
+Simulação informativa. Confira contrato, categoria e convenção coletiva. Revisão do conteúdo: 4 de outubro de 2026 . Tabelas fiscais: ano de 2026.
+Fontes oficiais e limites
+CLT — texto compilado, arts. 58, 59-A, 71, 73 e 143 (https://www.planalto.gov.br/ccivil_03/decreto-lei/del5452compilado.htm)
+Método editorial e correção de divergências (https://calculadoradehorastrabalhadas.org/sobre#metodologia-editorial)
+Como Calcular Hora de Trabalho? Guia Completo de Jornada CLT (Diárias, Almoço e Ponto) (https://calculadoradehorastrabalhadas.org/guia-clt/como-calcular-hora-de-trabalho)Como Calcular 44 Horas Trabalhadas de Segunda a Sexta? (Compensação e Escalas 5x2) (https://calculadoradehorastrabalhadas.org/guia-clt/como-calcular-44-horas-trabalhadas-de-segunda-a-sexta)calculadora semanal (https://calculadoradehorastrabalhadas.org/calculadora-semanal)valor da hora (https://calculadoradehorastrabalhadas.org/valor-da-hora)simulador de holerite (https://calculadoradehorastrabalhadas.org/simulador-de-holerite)
+
+Perguntas Frequentes (FAQ CLT 2026) Atualizado 2026
+Tire suas dúvidas trabalhistas com respostas fundamentadas na CLT e Súmulas do TST.
+
+Filtrar por tema: Recomendado para esta calculadora
+Todas as Dúvidas Jornada & Ponto Horas Extras & Noturno Holerite & Descontos Rescisão & FGTS Banco de Horas & DSR
+
+Jornada & Ponto Como calcular as horas trabalhadas em um dia de trabalho? Para calcular as horas trabalhadas no dia, subtraia a hora de entrada do horário de saída. Se houver intervalo intrajornada (almoço), desconte a duração total da pausa. Exemplo: Entrada 08:00, Almoço 12:00 às 13:00, Saída Final 18:00. Total do dia = (12h - 8h) + (18h - 13h) = 9 horas efetivas.
+
+Esta resposta foi útil?
+
+Jornada & Ponto Qual é a tolerância legal do cartão de ponto no Brasil em 2026?
+Jornada & Ponto Como funciona a jornada de 44 horas semanais de segunda a sexta?
+Jornada & Ponto Qual é o tempo mínimo obrigatório de intervalo de almoço?
+Jornada & Ponto Qual é o divisor oficial da CLT para calcular o valor da hora de trabalho?
+Horas Extras & Noturno Qual é o valor mínimo do adicional de hora extra pela CLT?
+Horas Extras & Noturno O que é a hora ficta noturna e como funciona o adicional noturno urbano?
+Horas Extras & Noturno O adicional noturno integra a base de cálculo de horas extras e DSR?
+Holerite & Descontos Como é calculado o desconto de INSS no holerite em 2026?
+Holerite & Descontos Como calcular a retenção de IRRF no contracheque?
+Holerite & Descontos Qual o limite máximo de desconto de Vale Transporte (VT)?
+Rescisão & FGTS Qual é o prazo legal para pagamento do acerto trabalhista na rescisão?
+Rescisão & FGTS Como funciona o aviso prévio proporcional por tempo de serviço?
+Rescisão & FGTS Quem pede demissão tem direito ao saque do FGTS e à multa de 40%?
+Rescisão & FGTS Como funciona a demissão por acordo mútuo (Art. 484-A da CLT)?
+Banco de Horas & DSR Qual o prazo legal para compensar ou zerar o saldo do banco de horas?
+Banco de Horas & DSR Como calcular o reflexo das horas extras habituais no DSR?
+Banco de Horas & DSR O que acontece com o saldo do banco de horas no momento da rescisão?
+
+### Calculadora de Escala 12x36 CLT - Plantões, Noturno e Feriados
+
+URL: https://calculadoradehorastrabalhadas.org/escala-12x36
+Revisão: 2026-10-04
+
+Resposta rápida e método de cálculo
+Na escala 12x36, registre os plantões e intervalos. Feriados em dobro e prorrogação noturna dependem do regime e do acordo aplicáveis; não são acréscimos automáticos para toda escala.
+Exemplo com as premissas informadas
+Plantão 19:00–07:00 com 1 hora de intervalo = 11 horas físicas. A hora noturna reduzida é uma contagem distinta.
+Simulação informativa. Confira contrato, categoria e convenção coletiva. Revisão do conteúdo: 4 de outubro de 2026 . Tabelas fiscais: ano de 2026.
+Fontes oficiais e limites
+CLT — texto compilado, arts. 58, 59-A, 71, 73 e 143 (https://www.planalto.gov.br/ccivil_03/decreto-lei/del5452compilado.htm)
+Método editorial e correção de divergências (https://calculadoradehorastrabalhadas.org/sobre#metodologia-editorial)
+Como Calcular Hora Extra e Adicional Noturno? (50%, 100%, Hora Ficta e Reflexo DSR) (https://calculadoradehorastrabalhadas.org/guia-clt/como-calcular-hora-extra-e-adicional-noturno)adicional noturno (https://calculadoradehorastrabalhadas.org/adicional-noturno)horas extras (https://calculadoradehorastrabalhadas.org/horas-extras)calculadora mensal (https://calculadoradehorastrabalhadas.org/calculadora-mensal)
+
+Referências de Cálculo Trabalhista CLT 2026
+Referências: TST, Art. 58 e Art. 73 da CLT • Tabelas fiscais 2026 • Confirme o acordo aplicável
+
+100% Privado (Sem Banco de Dados)
+
+Conteúdo revisado em 4 de outubro de 2026 • Confira a legislação e o acordo aplicáveis
+Guia Completo da Escala 12x36 CLT 2026
+Como Funciona a Escala 12x36 na Legislação Trabalhista (Art. 59-A CLT)
+A jornada de 12 horas de trabalho seguidas de 36 horas ininterruptas de descanso (escala 12x36) é amplamente utilizada em hospitais, segurança privada, portarias e indústria contínua. Regularizada pela Reforma Trabalhista, ela possui regras específicas quanto ao divisor de horas, adicional noturno e feriados.
+
+Plantões e Carga Horária Mensal
+Em um mês padrão de 30 dias, o trabalhador cumpre 15 plantões de 12 horas , totalizando 180 horas de duração dos plantões antes dos intervalos não computáveis. Em meses de 31 dias, podem ser cumpridos até 16 plantões (192 horas). O divisor legal padrão para cálculo do salário-hora continua sendo 220 (ou 210/180 conforme CCT).
+
+Adicional Noturno e Prorrogação (Súmula 60 TST)
+No plantão noturno (19h às 07h), o trabalhador tem direito ao adicional de 20% com a hora ficta reduzida de 52m30s das 22h às 05h. A prorrogação das 05h às 07h exige confirmação dos requisitos aplicáveis; na escala 12x36, confira também o Art. 59-A da CLT e o acordo ou convenção coletiva antes de aplicar o adicional.
+
+— / 5.0
+Avaliação da ferramenta: sua opinião é salva apenas neste navegador, sem pontuação agregada.
+
+Clique nas estrelas para avaliar
+
+Outras Calculadoras Trabalhistas CLT Disponíveis Gratuitamente
+Horas Diárias (https://calculadoradehorastrabalhadas.org/)Semanal 44h (https://calculadoradehorastrabalhadas.org/calculadora-semanal)Horas Extras (https://calculadoradehorastrabalhadas.org/horas-extras)Simular Holerite (https://calculadoradehorastrabalhadas.org/simulador-de-holerite)
+
+Perguntas Frequentes (FAQ CLT 2026) Atualizado 2026
+Tire suas dúvidas trabalhistas com respostas fundamentadas na CLT e Súmulas do TST.
+
+Filtrar por tema:
+Todas as Dúvidas Jornada & Ponto Horas Extras & Noturno Holerite & Descontos Rescisão & FGTS Banco de Horas & DSR
+
+Jornada & Ponto Como calcular as horas trabalhadas em um dia de trabalho? Para calcular as horas trabalhadas no dia, subtraia a hora de entrada do horário de saída. Se houver intervalo intrajornada (almoço), desconte a duração total da pausa. Exemplo: Entrada 08:00, Almoço 12:00 às 13:00, Saída Final 18:00. Total do dia = (12h - 8h) + (18h - 13h) = 9 horas efetivas.
+
+Esta resposta foi útil?
+
+Jornada & Ponto Qual é a tolerância legal do cartão de ponto no Brasil em 2026?
+Jornada & Ponto Como funciona a jornada de 44 horas semanais de segunda a sexta?
+Jornada & Ponto Qual é o tempo mínimo obrigatório de intervalo de almoço?
+Jornada & Ponto Qual é o divisor oficial da CLT para calcular o valor da hora de trabalho?
+Horas Extras & Noturno Qual é o valor mínimo do adicional de hora extra pela CLT?
+Horas Extras & Noturno O que é a hora ficta noturna e como funciona o adicional noturno urbano?
+Horas Extras & Noturno O adicional noturno integra a base de cálculo de horas extras e DSR?
+Holerite & Descontos Como é calculado o desconto de INSS no holerite em 2026?
+Holerite & Descontos Como calcular a retenção de IRRF no contracheque?
+Holerite & Descontos Qual o limite máximo de desconto de Vale Transporte (VT)?
+Rescisão & FGTS Qual é o prazo legal para pagamento do acerto trabalhista na rescisão?
+Rescisão & FGTS Como funciona o aviso prévio proporcional por tempo de serviço?
+Rescisão & FGTS Quem pede demissão tem direito ao saque do FGTS e à multa de 40%?
+Rescisão & FGTS Como funciona a demissão por acordo mútuo (Art. 484-A da CLT)?
+Banco de Horas & DSR Qual o prazo legal para compensar ou zerar o saldo do banco de horas?
+Banco de Horas & DSR Como calcular o reflexo das horas extras habituais no DSR?
+Banco de Horas & DSR O que acontece com o saldo do banco de horas no momento da rescisão?
+
+### Calculadora de Desconto de Faltas, Atrasos e Perda do DSR CLT
+
+URL: https://calculadoradehorastrabalhadas.org/atrasos-e-faltas
+Revisão: 2026-10-04
+
+Resposta rápida e método de cálculo
+Apure atrasos em minutos e faltas injustificadas separadamente. A perda do DSR depende da justificativa e da semana afetada; confirme a convenção coletiva e não desconte duas vezes o mesmo evento.
+Exemplo com as premissas informadas
+30 minutos de atraso × R$ 10 por hora = R$ 5, antes da análise de tolerância e DSR.
+Simulação informativa. Confira contrato, categoria e convenção coletiva. Revisão do conteúdo: 4 de outubro de 2026 . Tabelas fiscais: ano de 2026.
+Fontes oficiais e limites
+CLT — texto compilado, arts. 58, 59-A, 71, 73 e 143 (https://www.planalto.gov.br/ccivil_03/decreto-lei/del5452compilado.htm)
+Método editorial e correção de divergências (https://calculadoradehorastrabalhadas.org/sobre#metodologia-editorial)
+Como Calcular Hora de Trabalho? Guia Completo de Jornada CLT (Diárias, Almoço e Ponto) (https://calculadoradehorastrabalhadas.org/guia-clt/como-calcular-hora-de-trabalho) (https://calculadoradehorastrabalhadas.org/)simulador de holerite (https://calculadoradehorastrabalhadas.org/simulador-de-holerite)calculadora semanal (https://calculadoradehorastrabalhadas.org/calculadora-semanal)
+
+Referências de Cálculo Trabalhista CLT 2026
+Referências: TST, Art. 58 e Art. 73 da CLT • Tabelas fiscais 2026 • Confirme o acordo aplicável
+
+100% Privado (Sem Banco de Dados)
+
+Conteúdo revisado em 4 de outubro de 2026 • Confira a legislação e o acordo aplicáveis
+Guia de Atrasos, Faltas e Perda de DSR
+Como Calcular Descontos de Atrasos, Faltas Injustificadas e DSR (Lei 605/49)
+Entenda os limites legais da tolerância de ponto (Art. 58 § 1º CLT), o cálculo do valor do dia e do minuto de trabalho, e quando a empresa pode descontar o domingo (Descanso Semanal Remunerado).
+
+Tolerância Legal de 10 Minutos
+Variações de até 5 minutos na entrada ou saída (máximo de 10 minutos diários) não podem ser descontadas nem computadas como jornada extraordinária (Súmula 366 do TST). Se ultrapassar 10 minutos no total do dia, o desconto é integral.
+
+Perda do DSR por Falta na Semana
+De acordo com o Art. 6º da Lei 605/1949, a falta sem justificativa legal durante a semana retira a assiduidade integral, autorizando a empresa a descontar 1 dia referente ao repouso semanal remunerado (domingo).
+
+— / 5.0
+Avaliação da ferramenta: sua opinião é salva apenas neste navegador, sem pontuação agregada.
+
+Clique nas estrelas para avaliar
+
+Outras Calculadoras Trabalhistas CLT Disponíveis Gratuitamente
+Horas Diárias (https://calculadoradehorastrabalhadas.org/)Semanal 44h (https://calculadoradehorastrabalhadas.org/calculadora-semanal)Horas Extras (https://calculadoradehorastrabalhadas.org/horas-extras)Simular Holerite (https://calculadoradehorastrabalhadas.org/simulador-de-holerite)
+
+Perguntas Frequentes (FAQ CLT 2026) Atualizado 2026
+Tire suas dúvidas trabalhistas com respostas fundamentadas na CLT e Súmulas do TST.
+
+Filtrar por tema:
+Todas as Dúvidas Jornada & Ponto Horas Extras & Noturno Holerite & Descontos Rescisão & FGTS Banco de Horas & DSR
+
+Jornada & Ponto Como calcular as horas trabalhadas em um dia de trabalho? Para calcular as horas trabalhadas no dia, subtraia a hora de entrada do horário de saída. Se houver intervalo intrajornada (almoço), desconte a duração total da pausa. Exemplo: Entrada 08:00, Almoço 12:00 às 13:00, Saída Final 18:00. Total do dia = (12h - 8h) + (18h - 13h) = 9 horas efetivas.
+
+Esta resposta foi útil?
+
+Jornada & Ponto Qual é a tolerância legal do cartão de ponto no Brasil em 2026?
+Jornada & Ponto Como funciona a jornada de 44 horas semanais de segunda a sexta?
+Jornada & Ponto Qual é o tempo mínimo obrigatório de intervalo de almoço?
+Jornada & Ponto Qual é o divisor oficial da CLT para calcular o valor da hora de trabalho?
+Horas Extras & Noturno Qual é o valor mínimo do adicional de hora extra pela CLT?
+Horas Extras & Noturno O que é a hora ficta noturna e como funciona o adicional noturno urbano?
+Horas Extras & Noturno O adicional noturno integra a base de cálculo de horas extras e DSR?
+Holerite & Descontos Como é calculado o desconto de INSS no holerite em 2026?
+Holerite & Descontos Como calcular a retenção de IRRF no contracheque?
+Holerite & Descontos Qual o limite máximo de desconto de Vale Transporte (VT)?
+Rescisão & FGTS Qual é o prazo legal para pagamento do acerto trabalhista na rescisão?
+Rescisão & FGTS Como funciona o aviso prévio proporcional por tempo de serviço?
+Rescisão & FGTS Quem pede demissão tem direito ao saque do FGTS e à multa de 40%?
+Rescisão & FGTS Como funciona a demissão por acordo mútuo (Art. 484-A da CLT)?
+Banco de Horas & DSR Qual o prazo legal para compensar ou zerar o saldo do banco de horas?
+Banco de Horas & DSR Como calcular o reflexo das horas extras habituais no DSR?
+Banco de Horas & DSR O que acontece com o saldo do banco de horas no momento da rescisão?
+
+### Calculadora de Férias CLT 2026 - 1/3 Constitucional, Venda e Impostos
+
+URL: https://calculadoradehorastrabalhadas.org/calculadora-de-ferias
+Revisão: 2026-10-04
+
+Resposta rápida e método de cálculo
+O cálculo de férias inclui a remuneração correspondente e o terço constitucional. O abono pecuniário é limitado a um terço do período de férias devido; venda de 10 dias pressupõe direito a 30 dias.
+Exemplo com as premissas informadas
+30 dias sobre R$ 3.000 + 1/3 = R$ 4.000 brutos, sem abono, médias ou antecipação do 13º.
+Simulação informativa. Confira contrato, categoria e convenção coletiva. Revisão do conteúdo: 4 de outubro de 2026 . Tabelas fiscais: ano de 2026.
+Fontes oficiais e limites
+CLT — texto compilado, arts. 58, 59-A, 71, 73 e 143 (https://www.planalto.gov.br/ccivil_03/decreto-lei/del5452compilado.htm)
+Receita Federal — tributação de 2026 (https://www.gov.br/receitafederal/pt-br/assuntos/meu-imposto-de-renda/tabelas/2026)
+eSocial — valores previdenciários de 2026 (https://www.gov.br/esocial/pt-br/noticias/liberado-o-envio-de-eventos-de-folha-para-o-esocial-apos-publicacao-de-portaria-que-reajusta-valores-previdenciarios-em-2026-1)
+Método editorial e correção de divergências (https://calculadoradehorastrabalhadas.org/sobre#metodologia-editorial)
+Como Calcular Hora de Trabalho? Guia Completo de Jornada CLT (Diárias, Almoço e Ponto) (https://calculadoradehorastrabalhadas.org/guia-clt/como-calcular-hora-de-trabalho)decimo terceiro (https://calculadoradehorastrabalhadas.org/decimo-terceiro)simulador de holerite (https://calculadoradehorastrabalhadas.org/simulador-de-holerite)calculadora de rescisao (https://calculadoradehorastrabalhadas.org/calculadora-de-rescisao)
+
+Referências de Cálculo Trabalhista CLT 2026
+Referências: TST, Art. 58 e Art. 73 da CLT • Tabelas fiscais 2026 • Confirme o acordo aplicável
+
+100% Privado (Sem Banco de Dados)
+
+Conteúdo revisado em 4 de outubro de 2026 • Confira a legislação e o acordo aplicáveis
+Guia Oficial de Férias CLT 2026
+Como Calcular Férias CLT: 1/3 Constitucional, Venda e Prazo de Pagamento
+O cálculo de férias pela CLT garante a remuneração normal acrescida de no mínimo um terço constitucional (Art. 7º, XVII da CF/88). Além disso, o trabalhador pode optar pelo abono pecuniário, limitado a um terço do período devido (vender 10 dias pressupõe direito a 30 dias). Confira o tratamento tributário de cada verba e dos reflexos, sem presumir isenção de toda a remuneração de férias.
+
+Abono Pecuniário (Venda de 10 Dias)
+Pelo Art. 143 da CLT, o empregado pode converter 1/3 do seu período de férias em abono pecuniário. Esse valor indenizatório, juntamente com o seu terço constitucional, é 100% isento de INSS e IRRF .
+
+Prazo Limite de Pagamento (Art. 145 CLT)
+O valor total líquido das férias deve ser depositado pelo empregador até 2 dias antes do início do gozo . O atraso no pagamento pode gerar o direito à remuneração em dobro (Art. 137 CLT / Súmula 450 STF).
+
+— / 5.0
+Avaliação da ferramenta: sua opinião é salva apenas neste navegador, sem pontuação agregada.
+
+Clique nas estrelas para avaliar
+
+Outras Calculadoras Trabalhistas CLT Disponíveis Gratuitamente
+Horas Diárias (https://calculadoradehorastrabalhadas.org/)Semanal 44h (https://calculadoradehorastrabalhadas.org/calculadora-semanal)Horas Extras (https://calculadoradehorastrabalhadas.org/horas-extras)Simular Holerite (https://calculadoradehorastrabalhadas.org/simulador-de-holerite)
+
+Perguntas Frequentes (FAQ CLT 2026) Atualizado 2026
+Tire suas dúvidas trabalhistas com respostas fundamentadas na CLT e Súmulas do TST.
+
+Filtrar por tema:
+Todas as Dúvidas Jornada & Ponto Horas Extras & Noturno Holerite & Descontos Rescisão & FGTS Banco de Horas & DSR
+
+Jornada & Ponto Como calcular as horas trabalhadas em um dia de trabalho? Para calcular as horas trabalhadas no dia, subtraia a hora de entrada do horário de saída. Se houver intervalo intrajornada (almoço), desconte a duração total da pausa. Exemplo: Entrada 08:00, Almoço 12:00 às 13:00, Saída Final 18:00. Total do dia = (12h - 8h) + (18h - 13h) = 9 horas efetivas.
+
+Esta resposta foi útil?
+
+Jornada & Ponto Qual é a tolerância legal do cartão de ponto no Brasil em 2026?
+Jornada & Ponto Como funciona a jornada de 44 horas semanais de segunda a sexta?
+Jornada & Ponto Qual é o tempo mínimo obrigatório de intervalo de almoço?
+Jornada & Ponto Qual é o divisor oficial da CLT para calcular o valor da hora de trabalho?
+Horas Extras & Noturno Qual é o valor mínimo do adicional de hora extra pela CLT?
+Horas Extras & Noturno O que é a hora ficta noturna e como funciona o adicional noturno urbano?
+Horas Extras & Noturno O adicional noturno integra a base de cálculo de horas extras e DSR?
+Holerite & Descontos Como é calculado o desconto de INSS no holerite em 2026?
+Holerite & Descontos Como calcular a retenção de IRRF no contracheque?
+Holerite & Descontos Qual o limite máximo de desconto de Vale Transporte (VT)?
+Rescisão & FGTS Qual é o prazo legal para pagamento do acerto trabalhista na rescisão?
+Rescisão & FGTS Como funciona o aviso prévio proporcional por tempo de serviço?
+Rescisão & FGTS Quem pede demissão tem direito ao saque do FGTS e à multa de 40%?
+Rescisão & FGTS Como funciona a demissão por acordo mútuo (Art. 484-A da CLT)?
+Banco de Horas & DSR Qual o prazo legal para compensar ou zerar o saldo do banco de horas?
+Banco de Horas & DSR Como calcular o reflexo das horas extras habituais no DSR?
+Banco de Horas & DSR O que acontece com o saldo do banco de horas no momento da rescisão?
+
+### Calculadora de 13º Salário 2026 - 1ª e 2ª Parcelas CLT
+
+URL: https://calculadoradehorastrabalhadas.org/decimo-terceiro
+Revisão: 2026-10-04
+
+Resposta rápida e método de cálculo
+O 13º proporcional considera os meses com pelo menos 15 dias computáveis. Confira remuneração, médias e parcelas já pagas; os descontos da segunda parcela devem considerar o total devido.
+Exemplo com as premissas informadas
+R$ 3.000 × 6/12 = R$ 1.500 de 13º bruto, antes de descontos e adiantamentos.
+Simulação informativa. Confira contrato, categoria e convenção coletiva. Revisão do conteúdo: 4 de outubro de 2026 . Tabelas fiscais: ano de 2026.
+Fontes oficiais e limites
+CLT — texto compilado, arts. 58, 59-A, 71, 73 e 143 (https://www.planalto.gov.br/ccivil_03/decreto-lei/del5452compilado.htm)
+Receita Federal — tributação de 2026 (https://www.gov.br/receitafederal/pt-br/assuntos/meu-imposto-de-renda/tabelas/2026)
+eSocial — valores previdenciários de 2026 (https://www.gov.br/esocial/pt-br/noticias/liberado-o-envio-de-eventos-de-folha-para-o-esocial-apos-publicacao-de-portaria-que-reajusta-valores-previdenciarios-em-2026-1)
+Método editorial e correção de divergências (https://calculadoradehorastrabalhadas.org/sobre#metodologia-editorial)
+Como Calcular Hora de Trabalho? Guia Completo de Jornada CLT (Diárias, Almoço e Ponto) (https://calculadoradehorastrabalhadas.org/guia-clt/como-calcular-hora-de-trabalho)simulador de holerite (https://calculadoradehorastrabalhadas.org/simulador-de-holerite)calculadora de ferias (https://calculadoradehorastrabalhadas.org/calculadora-de-ferias)calculadora de rescisao (https://calculadoradehorastrabalhadas.org/calculadora-de-rescisao)
+
+Referências de Cálculo Trabalhista CLT 2026
+Referências: TST, Art. 58 e Art. 73 da CLT • Tabelas fiscais 2026 • Confirme o acordo aplicável
+
+100% Privado (Sem Banco de Dados)
+
+Conteúdo revisado em 4 de outubro de 2026 • Confira a legislação e o acordo aplicáveis
+Guia Oficial CLT • Lei nº 4.090/1962 e Lei nº 4.749/1965
+Como Calcular o 13º Salário em 2026: Prazos, Parcelas e Deduções
+A Gratificação Natalina (13º Salário) é garantida pelo Artigo 7º, inciso VIII da Constituição Federal. O pagamento é dividido em duas parcelas obrigatórias, com regras fiscais distintas em cada uma.
+
+1ª Parcela (Adiantamento) De 1º de Fevereiro até 30 de Novembro
+Equivale exatamente a 50% do salário bruto devido no ano (ou proporcional aos meses trabalhados). Não sofre nenhum desconto de INSS ou Imposto de Renda.
+
+2ª Parcela (Quitação Final) Até 20 de Dezembro
+Calcula-se o valor integral do 13º salário com base na remuneração de dezembro, deduz-se o valor adiantado na 1ª parcela e aplicam-se os descontos progressivos de INSS e IRRF .
+
+Fórmula de Fração Proporcional (1/12 avos) Copiar Fórmula
+13º Devido = (Salário Bruto / 12) × Meses Trabalhados (≥15 dias)
+
+— / 5.0
+Avaliação da ferramenta: sua opinião é salva apenas neste navegador, sem pontuação agregada.
+
+Clique nas estrelas para avaliar
+
+Outras Calculadoras Trabalhistas CLT Disponíveis Gratuitamente
+Horas Diárias (https://calculadoradehorastrabalhadas.org/)Semanal 44h (https://calculadoradehorastrabalhadas.org/calculadora-semanal)Horas Extras (https://calculadoradehorastrabalhadas.org/horas-extras)Simular Holerite (https://calculadoradehorastrabalhadas.org/simulador-de-holerite)
+
+Perguntas Frequentes (FAQ CLT 2026) Atualizado 2026
+Tire suas dúvidas trabalhistas com respostas fundamentadas na CLT e Súmulas do TST.
+
+Filtrar por tema:
+Todas as Dúvidas Jornada & Ponto Horas Extras & Noturno Holerite & Descontos Rescisão & FGTS Banco de Horas & DSR
+
+Jornada & Ponto Como calcular as horas trabalhadas em um dia de trabalho? Para calcular as horas trabalhadas no dia, subtraia a hora de entrada do horário de saída. Se houver intervalo intrajornada (almoço), desconte a duração total da pausa. Exemplo: Entrada 08:00, Almoço 12:00 às 13:00, Saída Final 18:00. Total do dia = (12h - 8h) + (18h - 13h) = 9 horas efetivas.
+
+Esta resposta foi útil?
+
+Jornada & Ponto Qual é a tolerância legal do cartão de ponto no Brasil em 2026?
+Jornada & Ponto Como funciona a jornada de 44 horas semanais de segunda a sexta?
+Jornada & Ponto Qual é o tempo mínimo obrigatório de intervalo de almoço?
+Jornada & Ponto Qual é o divisor oficial da CLT para calcular o valor da hora de trabalho?
+Horas Extras & Noturno Qual é o valor mínimo do adicional de hora extra pela CLT?
+Horas Extras & Noturno O que é a hora ficta noturna e como funciona o adicional noturno urbano?
+Horas Extras & Noturno O adicional noturno integra a base de cálculo de horas extras e DSR?
+Holerite & Descontos Como é calculado o desconto de INSS no holerite em 2026?
+Holerite & Descontos Como calcular a retenção de IRRF no contracheque?
+Holerite & Descontos Qual o limite máximo de desconto de Vale Transporte (VT)?
+Rescisão & FGTS Qual é o prazo legal para pagamento do acerto trabalhista na rescisão?
+Rescisão & FGTS Como funciona o aviso prévio proporcional por tempo de serviço?
+Rescisão & FGTS Quem pede demissão tem direito ao saque do FGTS e à multa de 40%?
+Rescisão & FGTS Como funciona a demissão por acordo mútuo (Art. 484-A da CLT)?
+Banco de Horas & DSR Qual o prazo legal para compensar ou zerar o saldo do banco de horas?
+Banco de Horas & DSR Como calcular o reflexo das horas extras habituais no DSR?
+Banco de Horas & DSR O que acontece com o saldo do banco de horas no momento da rescisão?
+
+### Calculadora de Seguro-Desemprego 2026 - Valor e Parcelas MTE
+
+URL: https://calculadoradehorastrabalhadas.org/seguro-desemprego
+Revisão: 2026-10-04
+
+Resposta rápida e método de cálculo
+Use a média salarial e a tabela do MTE de 2026 para estimar o benefício. A quantidade de parcelas e a elegibilidade dependem do histórico e dos requisitos oficiais; a simulação não concede o benefício.
+Exemplo com as premissas informadas
+Uma estimativa inferior ao piso é ajustada ao salário mínimo de 2026, R$ 1.621; existe também um teto.
+Simulação informativa. Confira contrato, categoria e convenção coletiva. Revisão do conteúdo: 4 de outubro de 2026 . Tabelas fiscais: ano de 2026.
+Fontes oficiais e limites
+CLT — texto compilado, arts. 58, 59-A, 71, 73 e 143 (https://www.planalto.gov.br/ccivil_03/decreto-lei/del5452compilado.htm)
+Receita Federal — tributação de 2026 (https://www.gov.br/receitafederal/pt-br/assuntos/meu-imposto-de-renda/tabelas/2026)
+eSocial — valores previdenciários de 2026 (https://www.gov.br/esocial/pt-br/noticias/liberado-o-envio-de-eventos-de-folha-para-o-esocial-apos-publicacao-de-portaria-que-reajusta-valores-previdenciarios-em-2026-1)
+MTE — Seguro-Desemprego de 2026, vigente desde 11/01/2026 (https://www.gov.br/trabalho-e-emprego/pt-br/noticias-e-conteudo/2026/janeiro/mte-reajusta-valores-do-beneficio-seguro-desemprego)
+Método editorial e correção de divergências (https://calculadoradehorastrabalhadas.org/sobre#metodologia-editorial)
+Como Calcular Hora de Trabalho? Guia Completo de Jornada CLT (Diárias, Almoço e Ponto) (https://calculadoradehorastrabalhadas.org/guia-clt/como-calcular-hora-de-trabalho)calculadora de rescisao (https://calculadoradehorastrabalhadas.org/calculadora-de-rescisao)simulador de holerite (https://calculadoradehorastrabalhadas.org/simulador-de-holerite)
+
+Referências de Cálculo Trabalhista CLT 2026
+Referências: TST, Art. 58 e Art. 73 da CLT • Tabelas fiscais 2026 • Confirme o acordo aplicável
+
+100% Privado (Sem Banco de Dados)
+
+Conteúdo revisado em 4 de outubro de 2026 • Confira a legislação e o acordo aplicáveis
+Guia MTE • Lei nº 7.998/1990 e Resolução CODEFAT
+Como Funciona o Cálculo do Seguro-Desemprego em 2026
+O seguro-desemprego é um benefício de assistência financeira temporária concedido ao trabalhador dispensado sem justa causa ou por rescisão indireta. O valor mensal é calculado com base na média dos últimos 3 salários.
+
+1ª Solicitação • 12 a 23 meses de carteira: 4 parcelas • 24 meses ou mais: 5 parcelas
+
+2ª Solicitação • 9 a 11 meses de carteira: 3 parcelas • 12 a 23 meses: 4 parcelas • 24 meses ou mais: 5 parcelas
+
+3ª Solicitação em Diante • 6 a 11 meses de carteira: 3 parcelas • 12 a 23 meses: 4 parcelas • 24 meses ou mais: 5 parcelas
+
+— / 5.0
+Avaliação da ferramenta: sua opinião é salva apenas neste navegador, sem pontuação agregada.
+
+Clique nas estrelas para avaliar
+
+Outras Calculadoras Trabalhistas CLT Disponíveis Gratuitamente
+Horas Diárias (https://calculadoradehorastrabalhadas.org/)Semanal 44h (https://calculadoradehorastrabalhadas.org/calculadora-semanal)Horas Extras (https://calculadoradehorastrabalhadas.org/horas-extras)Simular Holerite (https://calculadoradehorastrabalhadas.org/simulador-de-holerite)
+
+Perguntas Frequentes (FAQ CLT 2026) Atualizado 2026
+Tire suas dúvidas trabalhistas com respostas fundamentadas na CLT e Súmulas do TST.
+
+Filtrar por tema:
+Todas as Dúvidas Jornada & Ponto Horas Extras & Noturno Holerite & Descontos Rescisão & FGTS Banco de Horas & DSR
+
+Jornada & Ponto Como calcular as horas trabalhadas em um dia de trabalho? Para calcular as horas trabalhadas no dia, subtraia a hora de entrada do horário de saída. Se houver intervalo intrajornada (almoço), desconte a duração total da pausa. Exemplo: Entrada 08:00, Almoço 12:00 às 13:00, Saída Final 18:00. Total do dia = (12h - 8h) + (18h - 13h) = 9 horas efetivas.
+
+Esta resposta foi útil?
+
+Jornada & Ponto Qual é a tolerância legal do cartão de ponto no Brasil em 2026?
+Jornada & Ponto Como funciona a jornada de 44 horas semanais de segunda a sexta?
+Jornada & Ponto Qual é o tempo mínimo obrigatório de intervalo de almoço?
+Jornada & Ponto Qual é o divisor oficial da CLT para calcular o valor da hora de trabalho?
+Horas Extras & Noturno Qual é o valor mínimo do adicional de hora extra pela CLT?
+Horas Extras & Noturno O que é a hora ficta noturna e como funciona o adicional noturno urbano?
+Horas Extras & Noturno O adicional noturno integra a base de cálculo de horas extras e DSR?
+Holerite & Descontos Como é calculado o desconto de INSS no holerite em 2026?
+Holerite & Descontos Como calcular a retenção de IRRF no contracheque?
+Holerite & Descontos Qual o limite máximo de desconto de Vale Transporte (VT)?
+Rescisão & FGTS Qual é o prazo legal para pagamento do acerto trabalhista na rescisão?
+Rescisão & FGTS Como funciona o aviso prévio proporcional por tempo de serviço?
+Rescisão & FGTS Quem pede demissão tem direito ao saque do FGTS e à multa de 40%?
+Rescisão & FGTS Como funciona a demissão por acordo mútuo (Art. 484-A da CLT)?
+Banco de Horas & DSR Qual o prazo legal para compensar ou zerar o saldo do banco de horas?
+Banco de Horas & DSR Como calcular o reflexo das horas extras habituais no DSR?
+Banco de Horas & DSR O que acontece com o saldo do banco de horas no momento da rescisão?
+
+### Calculadora de Insalubridade e Periculosidade CLT 2026
+
+URL: https://calculadoradehorastrabalhadas.org/insalubridade-e-periculosidade
+Revisão: 2026-10-04
+
+Resposta rápida e método de cálculo
+Insalubridade e periculosidade dependem de enquadramento e das condições de trabalho. A calculadora aplica o percentual à base selecionada; não comprova exposição nem substitui laudo ou análise do acordo.
+Exemplo com as premissas informadas
+20% sobre uma base de R$ 1.621 = R$ 324,20. Confirme a base legal aplicável antes de usar o resultado.
+Simulação informativa. Confira contrato, categoria e convenção coletiva. Revisão do conteúdo: 4 de outubro de 2026 . Tabelas fiscais: ano de 2026.
+Fontes oficiais e limites
+CLT — texto compilado, arts. 58, 59-A, 71, 73 e 143 (https://www.planalto.gov.br/ccivil_03/decreto-lei/del5452compilado.htm)
+Receita Federal — tributação de 2026 (https://www.gov.br/receitafederal/pt-br/assuntos/meu-imposto-de-renda/tabelas/2026)
+eSocial — valores previdenciários de 2026 (https://www.gov.br/esocial/pt-br/noticias/liberado-o-envio-de-eventos-de-folha-para-o-esocial-apos-publicacao-de-portaria-que-reajusta-valores-previdenciarios-em-2026-1)
+Método editorial e correção de divergências (https://calculadoradehorastrabalhadas.org/sobre#metodologia-editorial)
+Como Calcular Hora de Trabalho? Guia Completo de Jornada CLT (Diárias, Almoço e Ponto) (https://calculadoradehorastrabalhadas.org/guia-clt/como-calcular-hora-de-trabalho)simulador de holerite (https://calculadoradehorastrabalhadas.org/simulador-de-holerite)horas extras (https://calculadoradehorastrabalhadas.org/horas-extras)
+
+Referências de Cálculo Trabalhista CLT 2026
+Referências: TST, Art. 58 e Art. 73 da CLT • Tabelas fiscais 2026 • Confirme o acordo aplicável
+
+100% Privado (Sem Banco de Dados)
+
+Conteúdo revisado em 4 de outubro de 2026 • Confira a legislação e o acordo aplicáveis
+Normas Regulamentadoras NR-15 e NR-16 • CLT Art. 192 e 193
+Adicional de Insalubridade e Periculosidade: Regras e Diferenças
+Entenda as diferenças jurídicas fundamentais entre insalubridade (exposição contínua a agentes nocivos) e periculosidade (risco fatal imediato).
+
+Insalubridade (NR-15)
+• Grau Mínimo (10%): R$ 162,10/mês
+• Grau Médio (20%): R$ 324,20/mês
+• Grau Máximo (40%): R$ 648,40/mês
+• Base de cálculo: Salário Mínimo Nacional (R$ 1.621,00).
+
+Periculosidade (NR-16)
+• Alíquota Fixa de 30% sobre o Salário Base.
+• Atividades com eletricidade, explosivos, inflamáveis, segurança armada e motoboys.
+• Não se calcula sobre gratificações ou adicionais.
+
+— / 5.0
+Avaliação da ferramenta: sua opinião é salva apenas neste navegador, sem pontuação agregada.
+
+Clique nas estrelas para avaliar
+
+Outras Calculadoras Trabalhistas CLT Disponíveis Gratuitamente
+Horas Diárias (https://calculadoradehorastrabalhadas.org/)Semanal 44h (https://calculadoradehorastrabalhadas.org/calculadora-semanal)Horas Extras (https://calculadoradehorastrabalhadas.org/horas-extras)Simular Holerite (https://calculadoradehorastrabalhadas.org/simulador-de-holerite)
+
+Perguntas Frequentes (FAQ CLT 2026) Atualizado 2026
+Tire suas dúvidas trabalhistas com respostas fundamentadas na CLT e Súmulas do TST.
+
+Filtrar por tema:
+Todas as Dúvidas Jornada & Ponto Horas Extras & Noturno Holerite & Descontos Rescisão & FGTS Banco de Horas & DSR
+
+Jornada & Ponto Como calcular as horas trabalhadas em um dia de trabalho? Para calcular as horas trabalhadas no dia, subtraia a hora de entrada do horário de saída. Se houver intervalo intrajornada (almoço), desconte a duração total da pausa. Exemplo: Entrada 08:00, Almoço 12:00 às 13:00, Saída Final 18:00. Total do dia = (12h - 8h) + (18h - 13h) = 9 horas efetivas.
+
+Esta resposta foi útil?
+
+Jornada & Ponto Qual é a tolerância legal do cartão de ponto no Brasil em 2026?
+Jornada & Ponto Como funciona a jornada de 44 horas semanais de segunda a sexta?
+Jornada & Ponto Qual é o tempo mínimo obrigatório de intervalo de almoço?
+Jornada & Ponto Qual é o divisor oficial da CLT para calcular o valor da hora de trabalho?
+Horas Extras & Noturno Qual é o valor mínimo do adicional de hora extra pela CLT?
+Horas Extras & Noturno O que é a hora ficta noturna e como funciona o adicional noturno urbano?
+Horas Extras & Noturno O adicional noturno integra a base de cálculo de horas extras e DSR?
+Holerite & Descontos Como é calculado o desconto de INSS no holerite em 2026?
+Holerite & Descontos Como calcular a retenção de IRRF no contracheque?
+Holerite & Descontos Qual o limite máximo de desconto de Vale Transporte (VT)?
+Rescisão & FGTS Qual é o prazo legal para pagamento do acerto trabalhista na rescisão?
+Rescisão & FGTS Como funciona o aviso prévio proporcional por tempo de serviço?
+Rescisão & FGTS Quem pede demissão tem direito ao saque do FGTS e à multa de 40%?
+Rescisão & FGTS Como funciona a demissão por acordo mútuo (Art. 484-A da CLT)?
+Banco de Horas & DSR Qual o prazo legal para compensar ou zerar o saldo do banco de horas?
+Banco de Horas & DSR Como calcular o reflexo das horas extras habituais no DSR?
+Banco de Horas & DSR O que acontece com o saldo do banco de horas no momento da rescisão?
+
+### Calculadora CLT x PJ 2026 - Comparador Salarial e Benefícios
+
+URL: https://calculadoradehorastrabalhadas.org/calculadora-clt-pj
+Revisão: 2026-10-04
+
+Resposta rápida e método de cálculo
+Compare remuneração CLT e receita PJ incluindo férias, 13º, benefícios, impostos, custos e horas faturáveis. A equivalência financeira depende das premissas e não determina a legalidade da contratação.
+Exemplo com as premissas informadas
+Uma meta de R$ 6.000 em 120 horas faturáveis exige R$ 50/h antes dos impostos e demais custos.
+Simulação informativa. Confira contrato, categoria e convenção coletiva. Revisão do conteúdo: 4 de outubro de 2026 . Tabelas fiscais: ano de 2026.
+Fontes oficiais e limites
+CLT — texto compilado, arts. 58, 59-A, 71, 73 e 143 (https://www.planalto.gov.br/ccivil_03/decreto-lei/del5452compilado.htm)
+Receita Federal — tributação de 2026 (https://www.gov.br/receitafederal/pt-br/assuntos/meu-imposto-de-renda/tabelas/2026)
+eSocial — valores previdenciários de 2026 (https://www.gov.br/esocial/pt-br/noticias/liberado-o-envio-de-eventos-de-folha-para-o-esocial-apos-publicacao-de-portaria-que-reajusta-valores-previdenciarios-em-2026-1)
+Método editorial e correção de divergências (https://calculadoradehorastrabalhadas.org/sobre#metodologia-editorial)
+Como Calcular o Valor da Hora de Trabalho? (Divisores CLT 220, 200, 180 e 150) (https://calculadoradehorastrabalhadas.org/guia-clt/como-calcular-o-valor-da-hora-de-trabalho)valor da hora (https://calculadoradehorastrabalhadas.org/valor-da-hora)simulador de holerite (https://calculadoradehorastrabalhadas.org/simulador-de-holerite)calculadora de ferias (https://calculadoradehorastrabalhadas.org/calculadora-de-ferias)
+
+Referências de Cálculo Trabalhista CLT 2026
+Referências: TST, Art. 58 e Art. 73 da CLT • Tabelas fiscais 2026 • Confirme o acordo aplicável
+
+100% Privado (Sem Banco de Dados)
+
+Conteúdo revisado em 4 de outubro de 2026 • Confira a legislação e o acordo aplicáveis
+Planejamento de Carreira e Tributário • Simples Nacional & CLT
+Comparativo Salarial CLT x PJ: Quanto Cobrar como Prestador de Serviços?
+Ao migrar de CLT para PJ, você abre mão de direitos garantidos em lei (férias remuneradas + 1/3, 13º salário, 8% de FGTS mensal e aviso prévio indenizado). Para manter o mesmo padrão financeiro, a remuneração PJ deve ser significativamente maior.
+
+A Regra de Ouro do Mercado (Multiplicador 1.55x a 1.80x)
+Especialistas em remuneração recomendam que o valor bruto da nota fiscal PJ seja de 55% a 80% superior ao salário bruto CLT anterior, além de somar os benefícios diretos (vale refeição e plano de saúde corporativo).
+
+— / 5.0
+Avaliação da ferramenta: sua opinião é salva apenas neste navegador, sem pontuação agregada.
+
+Clique nas estrelas para avaliar
+
+Outras Calculadoras Trabalhistas CLT Disponíveis Gratuitamente
+Horas Diárias (https://calculadoradehorastrabalhadas.org/)Semanal 44h (https://calculadoradehorastrabalhadas.org/calculadora-semanal)Horas Extras (https://calculadoradehorastrabalhadas.org/horas-extras)Simular Holerite (https://calculadoradehorastrabalhadas.org/simulador-de-holerite)
+
+Perguntas Frequentes (FAQ CLT 2026) Atualizado 2026
+Tire suas dúvidas trabalhistas com respostas fundamentadas na CLT e Súmulas do TST.
+
+Filtrar por tema:
+Todas as Dúvidas Jornada & Ponto Horas Extras & Noturno Holerite & Descontos Rescisão & FGTS Banco de Horas & DSR
+
+Jornada & Ponto Como calcular as horas trabalhadas em um dia de trabalho? Para calcular as horas trabalhadas no dia, subtraia a hora de entrada do horário de saída. Se houver intervalo intrajornada (almoço), desconte a duração total da pausa. Exemplo: Entrada 08:00, Almoço 12:00 às 13:00, Saída Final 18:00. Total do dia = (12h - 8h) + (18h - 13h) = 9 horas efetivas.
+
+Esta resposta foi útil?
+
+Jornada & Ponto Qual é a tolerância legal do cartão de ponto no Brasil em 2026?
+Jornada & Ponto Como funciona a jornada de 44 horas semanais de segunda a sexta?
+Jornada & Ponto Qual é o tempo mínimo obrigatório de intervalo de almoço?
+Jornada & Ponto Qual é o divisor oficial da CLT para calcular o valor da hora de trabalho?
+Horas Extras & Noturno Qual é o valor mínimo do adicional de hora extra pela CLT?
+Horas Extras & Noturno O que é a hora ficta noturna e como funciona o adicional noturno urbano?
+Horas Extras & Noturno O adicional noturno integra a base de cálculo de horas extras e DSR?
+Holerite & Descontos Como é calculado o desconto de INSS no holerite em 2026?
+Holerite & Descontos Como calcular a retenção de IRRF no contracheque?
+Holerite & Descontos Qual o limite máximo de desconto de Vale Transporte (VT)?
+Rescisão & FGTS Qual é o prazo legal para pagamento do acerto trabalhista na rescisão?
+Rescisão & FGTS Como funciona o aviso prévio proporcional por tempo de serviço?
+Rescisão & FGTS Quem pede demissão tem direito ao saque do FGTS e à multa de 40%?
+Rescisão & FGTS Como funciona a demissão por acordo mútuo (Art. 484-A da CLT)?
+Banco de Horas & DSR Qual o prazo legal para compensar ou zerar o saldo do banco de horas?
+Banco de Horas & DSR Como calcular o reflexo das horas extras habituais no DSR?
+Banco de Horas & DSR O que acontece com o saldo do banco de horas no momento da rescisão?
+
+### Calculadora de Banco de Horas e Saldo - CLT
+
+URL: https://calculadoradehorastrabalhadas.org/banco-de-horas
+Revisão: 2026-10-04
+
+Resposta rápida e método de cálculo
+O saldo do banco de horas é a diferença entre horas registradas e a meta informada. Prazos, compensação e pagamento dependem do acordo aplicável; o saldo positivo não equivale automaticamente a horas extras pagas.
+Exemplo com as premissas informadas
+42 horas registradas − meta de 40 horas = saldo de +2 horas.
+Simulação informativa. Confira contrato, categoria e convenção coletiva. Revisão do conteúdo: 4 de outubro de 2026 . Tabelas fiscais: ano de 2026.
+Fontes oficiais e limites
+CLT — texto compilado, arts. 58, 59-A, 71, 73 e 143 (https://www.planalto.gov.br/ccivil_03/decreto-lei/del5452compilado.htm)
+Método editorial e correção de divergências (https://calculadoradehorastrabalhadas.org/sobre#metodologia-editorial)
+Como Calcular Hora de Trabalho? Guia Completo de Jornada CLT (Diárias, Almoço e Ponto) (https://calculadoradehorastrabalhadas.org/guia-clt/como-calcular-hora-de-trabalho)Como Calcular 44 Horas Trabalhadas de Segunda a Sexta? (Compensação e Escalas 5x2) (https://calculadoradehorastrabalhadas.org/guia-clt/como-calcular-44-horas-trabalhadas-de-segunda-a-sexta)calculadora semanal (https://calculadoradehorastrabalhadas.org/calculadora-semanal)horas extras (https://calculadoradehorastrabalhadas.org/horas-extras) (https://calculadoradehorastrabalhadas.org/)
+
+Referências de Cálculo Trabalhista CLT 2026
+Referências: TST, Art. 58 e Art. 73 da CLT • Tabelas fiscais 2026 • Confirme o acordo aplicável
+
+100% Privado (Sem Banco de Dados)
+
+Conteúdo revisado em 4 de outubro de 2026 • Confira a legislação e o acordo aplicáveis
+Reforma Trabalhista - Art. 59 §§ 2º e 5º
+Banco de Horas CLT: Prazos de Validade, Compensação e Rescisão
+Tudo o que você precisa saber sobre as regras do Banco de Horas positivo e negativo, prazos legais de compensação (6 meses ou 1 ano) e o que acontece com as horas restantes na rescisão do contrato de trabalho.
+
+Acordo Individual (Até 6 Meses) Desde a Reforma Trabalhista (Lei 13.467/17), o banco de horas pode ser pactuado por acordo individual escrito direto entre empresa e empregado, desde que a compensação ocorra no período máximo de 6 meses (Art. 59, § 5º).
+
+Acordo Coletivo (Até 1 Ano) Se for estabelecido via Acordo ou Convenção Coletiva de Trabalho com o Sindicato da categoria, a validade do banco de horas pode ser de até 1 ano (Art. 59, § 2º).
+
+Quitação Obrigatória na Rescisão (Art. 59, § 3º da CLT)
+Na hipótese de rescisão do contrato de trabalho sem que tenha havido a compensação integral da jornada extraordinária, o trabalhador terá direito ao pagamento das horas extras não compensadas calculadas sobre o valor da remuneração na data da rescisão (com acréscimo mínimo de 50%).
+
+— / 5.0
+Avaliação da ferramenta: sua opinião é salva apenas neste navegador, sem pontuação agregada.
+
+Clique nas estrelas para avaliar
+
+Outras Calculadoras Trabalhistas CLT Disponíveis Gratuitamente
+Horas Diárias (https://calculadoradehorastrabalhadas.org/)Semanal 44h (https://calculadoradehorastrabalhadas.org/calculadora-semanal)Horas Extras (https://calculadoradehorastrabalhadas.org/horas-extras)Simular Holerite (https://calculadoradehorastrabalhadas.org/simulador-de-holerite)
+
+Perguntas Frequentes (FAQ CLT 2026) Atualizado 2026
+Tire suas dúvidas trabalhistas com respostas fundamentadas na CLT e Súmulas do TST.
+
+Filtrar por tema: Recomendado para esta calculadora
+Todas as Dúvidas Jornada & Ponto Horas Extras & Noturno Holerite & Descontos Rescisão & FGTS Banco de Horas & DSR
+
+Jornada & Ponto Como calcular as horas trabalhadas em um dia de trabalho? Para calcular as horas trabalhadas no dia, subtraia a hora de entrada do horário de saída. Se houver intervalo intrajornada (almoço), desconte a duração total da pausa. Exemplo: Entrada 08:00, Almoço 12:00 às 13:00, Saída Final 18:00. Total do dia = (12h - 8h) + (18h - 13h) = 9 horas efetivas.
+
+Esta resposta foi útil?
+
+Jornada & Ponto Qual é a tolerância legal do cartão de ponto no Brasil em 2026?
+Jornada & Ponto Como funciona a jornada de 44 horas semanais de segunda a sexta?
+Jornada & Ponto Qual é o tempo mínimo obrigatório de intervalo de almoço?
+Jornada & Ponto Qual é o divisor oficial da CLT para calcular o valor da hora de trabalho?
+Horas Extras & Noturno Qual é o valor mínimo do adicional de hora extra pela CLT?
+Horas Extras & Noturno O que é a hora ficta noturna e como funciona o adicional noturno urbano?
+Horas Extras & Noturno O adicional noturno integra a base de cálculo de horas extras e DSR?
+Holerite & Descontos Como é calculado o desconto de INSS no holerite em 2026?
+Holerite & Descontos Como calcular a retenção de IRRF no contracheque?
+Holerite & Descontos Qual o limite máximo de desconto de Vale Transporte (VT)?
+Rescisão & FGTS Qual é o prazo legal para pagamento do acerto trabalhista na rescisão?
+Rescisão & FGTS Como funciona o aviso prévio proporcional por tempo de serviço?
+Rescisão & FGTS Quem pede demissão tem direito ao saque do FGTS e à multa de 40%?
+Rescisão & FGTS Como funciona a demissão por acordo mútuo (Art. 484-A da CLT)?
+Banco de Horas & DSR Qual o prazo legal para compensar ou zerar o saldo do banco de horas?
+Banco de Horas & DSR Como calcular o reflexo das horas extras habituais no DSR?
+Banco de Horas & DSR O que acontece com o saldo do banco de horas no momento da rescisão?
+
+### Somador de Horas Online Grátis - Somar Minutos
+
+URL: https://calculadoradehorastrabalhadas.org/somador-de-horas
+Revisão: 2026-10-04
+
+Resposta rápida e método de cálculo
+Some ou subtraia durações em horas e minutos. Minutos são uma base de 60, portanto 1h30 não corresponde a 1,30 hora decimal.
+Exemplo com as premissas informadas
+01:45 + 02:30 = 04:15, equivalentes a 4,25 horas decimais.
+Simulação informativa. Confira contrato, categoria e convenção coletiva. Revisão do conteúdo: 4 de outubro de 2026 . Tabelas fiscais: ano de 2026.
+Fontes oficiais e limites
+CLT — texto compilado, arts. 58, 59-A, 71, 73 e 143 (https://www.planalto.gov.br/ccivil_03/decreto-lei/del5452compilado.htm)
+Método editorial e correção de divergências (https://calculadoradehorastrabalhadas.org/sobre#metodologia-editorial)
+Como Calcular Hora de Trabalho? Guia Completo de Jornada CLT (Diárias, Almoço e Ponto) (https://calculadoradehorastrabalhadas.org/guia-clt/como-calcular-hora-de-trabalho) (https://calculadoradehorastrabalhadas.org/)calculadora semanal (https://calculadoradehorastrabalhadas.org/calculadora-semanal)valor da hora (https://calculadoradehorastrabalhadas.org/valor-da-hora)
+
+Perguntas Frequentes (FAQ CLT 2026) Atualizado 2026
+Tire suas dúvidas trabalhistas com respostas fundamentadas na CLT e Súmulas do TST.
+
+Filtrar por tema: Recomendado para esta calculadora
+Todas as Dúvidas Jornada & Ponto Horas Extras & Noturno Holerite & Descontos Rescisão & FGTS Banco de Horas & DSR
+
+Jornada & Ponto Como calcular as horas trabalhadas em um dia de trabalho? Para calcular as horas trabalhadas no dia, subtraia a hora de entrada do horário de saída. Se houver intervalo intrajornada (almoço), desconte a duração total da pausa. Exemplo: Entrada 08:00, Almoço 12:00 às 13:00, Saída Final 18:00. Total do dia = (12h - 8h) + (18h - 13h) = 9 horas efetivas.
+
+Esta resposta foi útil?
+
+Jornada & Ponto Qual é a tolerância legal do cartão de ponto no Brasil em 2026?
+Jornada & Ponto Como funciona a jornada de 44 horas semanais de segunda a sexta?
+Jornada & Ponto Qual é o tempo mínimo obrigatório de intervalo de almoço?
+Jornada & Ponto Qual é o divisor oficial da CLT para calcular o valor da hora de trabalho?
+Horas Extras & Noturno Qual é o valor mínimo do adicional de hora extra pela CLT?
+Horas Extras & Noturno O que é a hora ficta noturna e como funciona o adicional noturno urbano?
+Horas Extras & Noturno O adicional noturno integra a base de cálculo de horas extras e DSR?
+Holerite & Descontos Como é calculado o desconto de INSS no holerite em 2026?
+Holerite & Descontos Como calcular a retenção de IRRF no contracheque?
+Holerite & Descontos Qual o limite máximo de desconto de Vale Transporte (VT)?
+Rescisão & FGTS Qual é o prazo legal para pagamento do acerto trabalhista na rescisão?
+Rescisão & FGTS Como funciona o aviso prévio proporcional por tempo de serviço?
+Rescisão & FGTS Quem pede demissão tem direito ao saque do FGTS e à multa de 40%?
+Rescisão & FGTS Como funciona a demissão por acordo mútuo (Art. 484-A da CLT)?
+Banco de Horas & DSR Qual o prazo legal para compensar ou zerar o saldo do banco de horas?
+Banco de Horas & DSR Como calcular o reflexo das horas extras habituais no DSR?
+Banco de Horas & DSR O que acontece com o saldo do banco de horas no momento da rescisão?
+
+### Simulador de Holerite e Salário Líquido CLT
+
+URL: https://calculadoradehorastrabalhadas.org/simulador-de-holerite
+Revisão: 2026-10-04
+
+Resposta rápida e método de cálculo
+O salário líquido é o total de proventos menos os descontos aplicáveis. INSS é progressivo; no IRRF de 2026, o desconto simplificado substitui as deduções legais e a redução depende do rendimento.
+Exemplo com as premissas informadas
+R$ 3.000 de proventos − R$ 400 de descontos informados = R$ 2.600 líquidos; os descontos reais variam.
+Simulação informativa. Confira contrato, categoria e convenção coletiva. Revisão do conteúdo: 4 de outubro de 2026 . Tabelas fiscais: ano de 2026.
+Fontes oficiais e limites
+CLT — texto compilado, arts. 58, 59-A, 71, 73 e 143 (https://www.planalto.gov.br/ccivil_03/decreto-lei/del5452compilado.htm)
+Receita Federal — tributação de 2026 (https://www.gov.br/receitafederal/pt-br/assuntos/meu-imposto-de-renda/tabelas/2026)
+eSocial — valores previdenciários de 2026 (https://www.gov.br/esocial/pt-br/noticias/liberado-o-envio-de-eventos-de-folha-para-o-esocial-apos-publicacao-de-portaria-que-reajusta-valores-previdenciarios-em-2026-1)
+Método editorial e correção de divergências (https://calculadoradehorastrabalhadas.org/sobre#metodologia-editorial)
+Como Calcular Hora de Trabalho? Guia Completo de Jornada CLT (Diárias, Almoço e Ponto) (https://calculadoradehorastrabalhadas.org/guia-clt/como-calcular-hora-de-trabalho)valor da hora (https://calculadoradehorastrabalhadas.org/valor-da-hora)decimo terceiro (https://calculadoradehorastrabalhadas.org/decimo-terceiro)calculadora de rescisao (https://calculadoradehorastrabalhadas.org/calculadora-de-rescisao)
+
+Referências de Cálculo Trabalhista CLT 2026
+Referências: TST, Art. 58 e Art. 73 da CLT • Tabelas fiscais 2026 • Confirme o acordo aplicável
+
+100% Privado (Sem Banco de Dados)
+
+Conteúdo revisado em 4 de outubro de 2026 • Confira a legislação e o acordo aplicáveis
+Folha de Pagamento & Salário Líquido 2026
+Como Calcular Salário Líquido no Holerite (Tabelas INSS e IRRF 2026)
+Entenda passo a passo todas as deduções oficiais do contracheque: cálculo progressivo do INSS, alíquotas e faixas do Imposto de Renda (IRRF), desconto de Vale-Transporte (6%) e adicionais salariais.
+
+1. Tabela de Desconto Progressivo do INSS 2026
+O INSS é calculado por faixas salariais fatiadas (cada parte do salário é tributada na respectiva alíquota de 7,5%, 9%, 12% ou 14% até o teto previdenciário):
+1ª Faixa Até R$ 1.621,00
+Alíquota: 7,5%
+
+2ª Faixa De R$ 1.621,01 a R$ 2.902,84
+Alíquota: 9,0%
+
+3ª Faixa De R$ 2.902,85 a R$ 4.354,27
+Alíquota: 12,0%
+
+4ª Faixa De R$ 4.354,28 a R$ 8.475,55
+Alíquota: 14,0%
+
+2. Cálculo do IRRF e Dedução por Dependente
+A base de cálculo do IRRF é obtida após deduzir o valor do INSS recolhido e o valor de R$ 189,59 por dependente legal (ou optando pelo desconto simplificado mensal).
+
+— / 5.0
+Avaliação da ferramenta: sua opinião é salva apenas neste navegador, sem pontuação agregada.
+
+Clique nas estrelas para avaliar
+
+Outras Calculadoras Trabalhistas CLT Disponíveis Gratuitamente
+Horas Diárias (https://calculadoradehorastrabalhadas.org/)Semanal 44h (https://calculadoradehorastrabalhadas.org/calculadora-semanal)Horas Extras (https://calculadoradehorastrabalhadas.org/horas-extras)Simular Holerite (https://calculadoradehorastrabalhadas.org/simulador-de-holerite)
+
+Perguntas Frequentes (FAQ CLT 2026) Atualizado 2026
+Tire suas dúvidas trabalhistas com respostas fundamentadas na CLT e Súmulas do TST.
+
+Filtrar por tema: Recomendado para esta calculadora
+Todas as Dúvidas Jornada & Ponto Horas Extras & Noturno Holerite & Descontos Rescisão & FGTS Banco de Horas & DSR
+
+Jornada & Ponto Como calcular as horas trabalhadas em um dia de trabalho? Para calcular as horas trabalhadas no dia, subtraia a hora de entrada do horário de saída. Se houver intervalo intrajornada (almoço), desconte a duração total da pausa. Exemplo: Entrada 08:00, Almoço 12:00 às 13:00, Saída Final 18:00. Total do dia = (12h - 8h) + (18h - 13h) = 9 horas efetivas.
+
+Esta resposta foi útil?
+
+Jornada & Ponto Qual é a tolerância legal do cartão de ponto no Brasil em 2026?
+Jornada & Ponto Como funciona a jornada de 44 horas semanais de segunda a sexta?
+Jornada & Ponto Qual é o tempo mínimo obrigatório de intervalo de almoço?
+Jornada & Ponto Qual é o divisor oficial da CLT para calcular o valor da hora de trabalho?
+Horas Extras & Noturno Qual é o valor mínimo do adicional de hora extra pela CLT?
+Horas Extras & Noturno O que é a hora ficta noturna e como funciona o adicional noturno urbano?
+Horas Extras & Noturno O adicional noturno integra a base de cálculo de horas extras e DSR?
+Holerite & Descontos Como é calculado o desconto de INSS no holerite em 2026?
+Holerite & Descontos Como calcular a retenção de IRRF no contracheque?
+Holerite & Descontos Qual o limite máximo de desconto de Vale Transporte (VT)?
+Rescisão & FGTS Qual é o prazo legal para pagamento do acerto trabalhista na rescisão?
+Rescisão & FGTS Como funciona o aviso prévio proporcional por tempo de serviço?
+Rescisão & FGTS Quem pede demissão tem direito ao saque do FGTS e à multa de 40%?
+Rescisão & FGTS Como funciona a demissão por acordo mútuo (Art. 484-A da CLT)?
+Banco de Horas & DSR Qual o prazo legal para compensar ou zerar o saldo do banco de horas?
+Banco de Horas & DSR Como calcular o reflexo das horas extras habituais no DSR?
+Banco de Horas & DSR O que acontece com o saldo do banco de horas no momento da rescisão?
+
+### Calculadora de Rescisão Contratual CLT 2026
+
+URL: https://calculadoradehorastrabalhadas.org/calculadora-de-rescisao
+Revisão: 2026-10-04
+
+Resposta rápida e método de cálculo
+A rescisão depende da modalidade, datas, aviso prévio, parcelas já pagas e férias adquiridas. A projeção do aviso pode alterar os avos; informe valores e períodos pendentes sem duplicar pagamentos.
+Exemplo com as premissas informadas
+Saldo de 10 dias em salário de R$ 3.000: R$ 3.000 ÷ 30 × 10 = R$ 1.000, antes das demais verbas.
+Simulação informativa. Confira contrato, categoria e convenção coletiva. Revisão do conteúdo: 4 de outubro de 2026 . Tabelas fiscais: ano de 2026.
+Fontes oficiais e limites
+CLT — texto compilado, arts. 58, 59-A, 71, 73 e 143 (https://www.planalto.gov.br/ccivil_03/decreto-lei/del5452compilado.htm)
+Receita Federal — tributação de 2026 (https://www.gov.br/receitafederal/pt-br/assuntos/meu-imposto-de-renda/tabelas/2026)
+eSocial — valores previdenciários de 2026 (https://www.gov.br/esocial/pt-br/noticias/liberado-o-envio-de-eventos-de-folha-para-o-esocial-apos-publicacao-de-portaria-que-reajusta-valores-previdenciarios-em-2026-1)
+Método editorial e correção de divergências (https://calculadoradehorastrabalhadas.org/sobre#metodologia-editorial)
+Como Calcular Hora de Trabalho? Guia Completo de Jornada CLT (Diárias, Almoço e Ponto) (https://calculadoradehorastrabalhadas.org/guia-clt/como-calcular-hora-de-trabalho)calculadora de ferias (https://calculadoradehorastrabalhadas.org/calculadora-de-ferias)decimo terceiro (https://calculadoradehorastrabalhadas.org/decimo-terceiro)seguro desemprego (https://calculadoradehorastrabalhadas.org/seguro-desemprego)
+
+Referências de Cálculo Trabalhista CLT 2026
+Referências: TST, Art. 58 e Art. 73 da CLT • Tabelas fiscais 2026 • Confirme o acordo aplicável
+
+100% Privado (Sem Banco de Dados)
+
+Conteúdo revisado em 4 de outubro de 2026 • Confira a legislação e o acordo aplicáveis
+Rescisão Contratual - Art. 477 da CLT
+Cálculo de Rescisão Contratual CLT 2026: Verbas, Multa FGTS e Prazos
+Guia completo de direitos rescisórios: Aviso Prévio Proporcional (Lei 12.506/11), 13º salário proporcional, férias com 1/3 constitucional, multa rescisória de 40% do FGTS e o prazo de pagamento legal de 10 dias corridos.
+
+Demissão Sem Justa Causa Garante todos os direitos: Saldo de salário, aviso prévio indenizado/trabalhado, 13º proporcional, férias vencidas + proporcionais + 1/3, saque do FGTS com multa de 40% e guias do seguro-desemprego.
+
+Acordo Mútuo (Art. 484-A CLT) Criado pela Reforma Trabalhista: O trabalhador recebe 50% do aviso prévio indenizado, 20% de multa do FGTS e pode movimentar até 80% da sua conta vinculada do FGTS (sem direito a seguro-desemprego).
+
+Aviso Prévio Proporcional (Lei 12.506/2011):
+Dias de Aviso = 30 dias + (3 dias × Anos Completos Trabalhados) [Máx: 90 dias]
+
+— / 5.0
+Avaliação da ferramenta: sua opinião é salva apenas neste navegador, sem pontuação agregada.
+
+Clique nas estrelas para avaliar
+
+Outras Calculadoras Trabalhistas CLT Disponíveis Gratuitamente
+Horas Diárias (https://calculadoradehorastrabalhadas.org/)Semanal 44h (https://calculadoradehorastrabalhadas.org/calculadora-semanal)Horas Extras (https://calculadoradehorastrabalhadas.org/horas-extras)Simular Holerite (https://calculadoradehorastrabalhadas.org/simulador-de-holerite)
+
+Perguntas Frequentes (FAQ CLT 2026) Atualizado 2026
+Tire suas dúvidas trabalhistas com respostas fundamentadas na CLT e Súmulas do TST.
+
+Filtrar por tema: Recomendado para esta calculadora
+Todas as Dúvidas Jornada & Ponto Horas Extras & Noturno Holerite & Descontos Rescisão & FGTS Banco de Horas & DSR
+
+Jornada & Ponto Como calcular as horas trabalhadas em um dia de trabalho? Para calcular as horas trabalhadas no dia, subtraia a hora de entrada do horário de saída. Se houver intervalo intrajornada (almoço), desconte a duração total da pausa. Exemplo: Entrada 08:00, Almoço 12:00 às 13:00, Saída Final 18:00. Total do dia = (12h - 8h) + (18h - 13h) = 9 horas efetivas.
+
+Esta resposta foi útil?
+
+Jornada & Ponto Qual é a tolerância legal do cartão de ponto no Brasil em 2026?
+Jornada & Ponto Como funciona a jornada de 44 horas semanais de segunda a sexta?
+Jornada & Ponto Qual é o tempo mínimo obrigatório de intervalo de almoço?
+Jornada & Ponto Qual é o divisor oficial da CLT para calcular o valor da hora de trabalho?
+Horas Extras & Noturno Qual é o valor mínimo do adicional de hora extra pela CLT?
+Horas Extras & Noturno O que é a hora ficta noturna e como funciona o adicional noturno urbano?
+Horas Extras & Noturno O adicional noturno integra a base de cálculo de horas extras e DSR?
+Holerite & Descontos Como é calculado o desconto de INSS no holerite em 2026?
+Holerite & Descontos Como calcular a retenção de IRRF no contracheque?
+Holerite & Descontos Qual o limite máximo de desconto de Vale Transporte (VT)?
+Rescisão & FGTS Qual é o prazo legal para pagamento do acerto trabalhista na rescisão?
+Rescisão & FGTS Como funciona o aviso prévio proporcional por tempo de serviço?
+Rescisão & FGTS Quem pede demissão tem direito ao saque do FGTS e à multa de 40%?
+Rescisão & FGTS Como funciona a demissão por acordo mútuo (Art. 484-A da CLT)?
+Banco de Horas & DSR Qual o prazo legal para compensar ou zerar o saldo do banco de horas?
+Banco de Horas & DSR Como calcular o reflexo das horas extras habituais no DSR?
+Banco de Horas & DSR O que acontece com o saldo do banco de horas no momento da rescisão?
+
+### Calculadora de Valor da Hora Trabalhada - CLT
+
+URL: https://calculadoradehorastrabalhadas.org/valor-da-hora
+Revisão: 2026-10-04
+
+Resposta rápida e método de cálculo
+Para mensalistas, divida o salário pela base de horas aplicável à jornada. Para PJ e freelancers, considere apenas horas faturáveis, custos e impostos; divisores CLT não devem ser usados automaticamente.
+Exemplo com as premissas informadas
+R$ 2.200 ÷ 220 = R$ 10 por hora normal.
+Simulação informativa. Confira contrato, categoria e convenção coletiva. Revisão do conteúdo: 4 de outubro de 2026 . Tabelas fiscais: ano de 2026.
+Fontes oficiais e limites
+CLT — texto compilado, arts. 58, 59-A, 71, 73 e 143 (https://www.planalto.gov.br/ccivil_03/decreto-lei/del5452compilado.htm)
+Método editorial e correção de divergências (https://calculadoradehorastrabalhadas.org/sobre#metodologia-editorial)
+Como Calcular o Valor da Hora de Trabalho? (Divisores CLT 220, 200, 180 e 150) (https://calculadoradehorastrabalhadas.org/guia-clt/como-calcular-o-valor-da-hora-de-trabalho)horas extras (https://calculadoradehorastrabalhadas.org/horas-extras)adicional noturno (https://calculadoradehorastrabalhadas.org/adicional-noturno)calculadora clt pj (https://calculadoradehorastrabalhadas.org/calculadora-clt-pj)
+
+Referências de Cálculo Trabalhista CLT 2026
+Referências: TST, Art. 58 e Art. 73 da CLT • Tabelas fiscais 2026 • Confirme o acordo aplicável
+
+100% Privado (Sem Banco de Dados)
+
+Conteúdo revisado em 4 de outubro de 2026 • Confira a legislação e o acordo aplicáveis
+Divisores Oficiais da CLT
+Como Calcular o Valor da Hora de Trabalho CLT (Divisores 220, 200 e 180)
+Descubra como encontrar o valor da sua hora normal e do seu minuto trabalhado com base na jornada semanal contratual.
+
+Escala 44h / semana
+Divisor = 220
+Padrão da maioria das indústrias e comércios no Brasil.
+
+Escala 40h / semana
+Divisor = 200
+Jornada de 8h diárias de segunda a sexta sem trabalho ao sábado.
+
+Escala 36h / semana
+Divisor = 180
+Típico para atendentes de telemarketing, bancários e operadores.
+
+— / 5.0
+Avaliação da ferramenta: sua opinião é salva apenas neste navegador, sem pontuação agregada.
+
+Clique nas estrelas para avaliar
+
+Outras Calculadoras Trabalhistas CLT Disponíveis Gratuitamente
+Horas Diárias (https://calculadoradehorastrabalhadas.org/)Semanal 44h (https://calculadoradehorastrabalhadas.org/calculadora-semanal)Horas Extras (https://calculadoradehorastrabalhadas.org/horas-extras)Simular Holerite (https://calculadoradehorastrabalhadas.org/simulador-de-holerite)
+
+Perguntas Frequentes (FAQ CLT 2026) Atualizado 2026
+Tire suas dúvidas trabalhistas com respostas fundamentadas na CLT e Súmulas do TST.
+
+Filtrar por tema: Recomendado para esta calculadora
+Todas as Dúvidas Jornada & Ponto Horas Extras & Noturno Holerite & Descontos Rescisão & FGTS Banco de Horas & DSR
+
+Jornada & Ponto Como calcular as horas trabalhadas em um dia de trabalho? Para calcular as horas trabalhadas no dia, subtraia a hora de entrada do horário de saída. Se houver intervalo intrajornada (almoço), desconte a duração total da pausa. Exemplo: Entrada 08:00, Almoço 12:00 às 13:00, Saída Final 18:00. Total do dia = (12h - 8h) + (18h - 13h) = 9 horas efetivas.
+
+Esta resposta foi útil?
+
+Jornada & Ponto Qual é a tolerância legal do cartão de ponto no Brasil em 2026?
+Jornada & Ponto Como funciona a jornada de 44 horas semanais de segunda a sexta?
+Jornada & Ponto Qual é o tempo mínimo obrigatório de intervalo de almoço?
+Jornada & Ponto Qual é o divisor oficial da CLT para calcular o valor da hora de trabalho?
+Horas Extras & Noturno Qual é o valor mínimo do adicional de hora extra pela CLT?
+Horas Extras & Noturno O que é a hora ficta noturna e como funciona o adicional noturno urbano?
+Horas Extras & Noturno O adicional noturno integra a base de cálculo de horas extras e DSR?
+Holerite & Descontos Como é calculado o desconto de INSS no holerite em 2026?
+Holerite & Descontos Como calcular a retenção de IRRF no contracheque?
+Holerite & Descontos Qual o limite máximo de desconto de Vale Transporte (VT)?
+Rescisão & FGTS Qual é o prazo legal para pagamento do acerto trabalhista na rescisão?
+Rescisão & FGTS Como funciona o aviso prévio proporcional por tempo de serviço?
+Rescisão & FGTS Quem pede demissão tem direito ao saque do FGTS e à multa de 40%?
+Rescisão & FGTS Como funciona a demissão por acordo mútuo (Art. 484-A da CLT)?
+Banco de Horas & DSR Qual o prazo legal para compensar ou zerar o saldo do banco de horas?
+Banco de Horas & DSR Como calcular o reflexo das horas extras habituais no DSR?
+Banco de Horas & DSR O que acontece com o saldo do banco de horas no momento da rescisão?
+
+### Calculadora de Horas Extras 50% e 100% - CLT
+
+URL: https://calculadoradehorastrabalhadas.org/horas-extras
+Revisão: 2026-10-04
+
+Resposta rápida e método de cálculo
+Multiplique o valor da hora normal pelas horas extras e pelo fator do adicional. Domingos e feriados não compensados podem exigir pagamento em dobro; confira a escala e o acordo aplicáveis.
+Exemplo com as premissas informadas
+2 horas × R$ 10 × 1,5 = R$ 30 com adicional de 50%, antes de reflexos.
+Simulação informativa. Confira contrato, categoria e convenção coletiva. Revisão do conteúdo: 4 de outubro de 2026 . Tabelas fiscais: ano de 2026.
+Fontes oficiais e limites
+CLT — texto compilado, arts. 58, 59-A, 71, 73 e 143 (https://www.planalto.gov.br/ccivil_03/decreto-lei/del5452compilado.htm)
+Método editorial e correção de divergências (https://calculadoradehorastrabalhadas.org/sobre#metodologia-editorial)
+Como Calcular Hora Extra e Adicional Noturno? (50%, 100%, Hora Ficta e Reflexo DSR) (https://calculadoradehorastrabalhadas.org/guia-clt/como-calcular-hora-extra-e-adicional-noturno)valor da hora (https://calculadoradehorastrabalhadas.org/valor-da-hora)adicional noturno (https://calculadoradehorastrabalhadas.org/adicional-noturno)calculadora semanal (https://calculadoradehorastrabalhadas.org/calculadora-semanal)
+
+Referências de Cálculo Trabalhista CLT 2026
+Referências: TST, Art. 58 e Art. 73 da CLT • Tabelas fiscais 2026 • Confirme o acordo aplicável
+
+100% Privado (Sem Banco de Dados)
+
+Conteúdo revisado em 4 de outubro de 2026 • Confira a legislação e o acordo aplicáveis
+Legislação Trabalhista - Art. 59 da CLT
+Como Calcular Horas Extras de 50% e 100% e Reflexo no DSR
+Entenda a fórmula matemática oficial para apurar horas extras diárias, acréscimos legais de 50% (dias úteis), 100% (domingos e feriados não compensados, conforme o regime aplicável) e o cálculo do reflexo no Descanso Semanal Remunerado (DSR) conforme a Súmula 172 do TST .
+
+Fórmulas Oficiais de Hora Extra
+1. Hora Extra 50% (Dias Úteis e Sábados):
+Valor Hora Extra 50% = (Salário Base ÷ 220) × 1,50
+2. Hora Extra 100% (Domingos e Feriados - Súmula 146 TST):
+Valor Hora Extra 100% = (Salário Base ÷ 220) × 2,00
+3. Reflexo no DSR (Lei 605/49 e Súmula 172 TST):
+DSR = (Total R$ das Horas Extras do Mês ÷ Dias Úteis) × (Domingos e Feriados)
+
+Limite Máximo Diário de Horas Extras
+Pelo Art. 59 da CLT, o limite máximo de prorrogação de jornada é de 2 horas extras por dia , mediante acordo individual escrito, convenção ou acordo coletivo de trabalho. Horas extras habituais integram a base de cálculo de férias, 13º salário, FGTS e aviso prévio indenizado.
+
+— / 5.0
+Avaliação da ferramenta: sua opinião é salva apenas neste navegador, sem pontuação agregada.
+
+Clique nas estrelas para avaliar
+
+Outras Calculadoras Trabalhistas CLT Disponíveis Gratuitamente
+Horas Diárias (https://calculadoradehorastrabalhadas.org/)Semanal 44h (https://calculadoradehorastrabalhadas.org/calculadora-semanal)Horas Extras (https://calculadoradehorastrabalhadas.org/horas-extras)Simular Holerite (https://calculadoradehorastrabalhadas.org/simulador-de-holerite)
+
+Perguntas Frequentes (FAQ CLT 2026) Atualizado 2026
+Tire suas dúvidas trabalhistas com respostas fundamentadas na CLT e Súmulas do TST.
+
+Filtrar por tema: Recomendado para esta calculadora
+Todas as Dúvidas Jornada & Ponto Horas Extras & Noturno Holerite & Descontos Rescisão & FGTS Banco de Horas & DSR
+
+Jornada & Ponto Como calcular as horas trabalhadas em um dia de trabalho? Para calcular as horas trabalhadas no dia, subtraia a hora de entrada do horário de saída. Se houver intervalo intrajornada (almoço), desconte a duração total da pausa. Exemplo: Entrada 08:00, Almoço 12:00 às 13:00, Saída Final 18:00. Total do dia = (12h - 8h) + (18h - 13h) = 9 horas efetivas.
+
+Esta resposta foi útil?
+
+Jornada & Ponto Qual é a tolerância legal do cartão de ponto no Brasil em 2026?
+Jornada & Ponto Como funciona a jornada de 44 horas semanais de segunda a sexta?
+Jornada & Ponto Qual é o tempo mínimo obrigatório de intervalo de almoço?
+Jornada & Ponto Qual é o divisor oficial da CLT para calcular o valor da hora de trabalho?
+Horas Extras & Noturno Qual é o valor mínimo do adicional de hora extra pela CLT?
+Horas Extras & Noturno O que é a hora ficta noturna e como funciona o adicional noturno urbano?
+Horas Extras & Noturno O adicional noturno integra a base de cálculo de horas extras e DSR?
+Holerite & Descontos Como é calculado o desconto de INSS no holerite em 2026?
+Holerite & Descontos Como calcular a retenção de IRRF no contracheque?
+Holerite & Descontos Qual o limite máximo de desconto de Vale Transporte (VT)?
+Rescisão & FGTS Qual é o prazo legal para pagamento do acerto trabalhista na rescisão?
+Rescisão & FGTS Como funciona o aviso prévio proporcional por tempo de serviço?
+Rescisão & FGTS Quem pede demissão tem direito ao saque do FGTS e à multa de 40%?
+Rescisão & FGTS Como funciona a demissão por acordo mútuo (Art. 484-A da CLT)?
+Banco de Horas & DSR Qual o prazo legal para compensar ou zerar o saldo do banco de horas?
+Banco de Horas & DSR Como calcular o reflexo das horas extras habituais no DSR?
+Banco de Horas & DSR O que acontece com o saldo do banco de horas no momento da rescisão?
+
+### Calculadora de Adicional Noturno e Hora Ficta
+
+URL: https://calculadoradehorastrabalhadas.org/adicional-noturno
+Revisão: 2026-10-04
+
+Resposta rápida e método de cálculo
+No trabalho noturno urbano, o período de referência é 22h–05h, com adicional mínimo de 20% e hora reduzida de 52min30s. Intervalos são descontados; prorrogação exige análise dos requisitos aplicáveis.
+Exemplo com as premissas informadas
+7 horas físicas noturnas sem intervalo ÷ 0,875 = 8 horas reduzidas; R$ 10 × 20% × 8 = R$ 16 de adicional.
+Simulação informativa. Confira contrato, categoria e convenção coletiva. Revisão do conteúdo: 4 de outubro de 2026 . Tabelas fiscais: ano de 2026.
+Fontes oficiais e limites
+CLT — texto compilado, arts. 58, 59-A, 71, 73 e 143 (https://www.planalto.gov.br/ccivil_03/decreto-lei/del5452compilado.htm)
+Método editorial e correção de divergências (https://calculadoradehorastrabalhadas.org/sobre#metodologia-editorial)
+Como Calcular Hora Extra e Adicional Noturno? (50%, 100%, Hora Ficta e Reflexo DSR) (https://calculadoradehorastrabalhadas.org/guia-clt/como-calcular-hora-extra-e-adicional-noturno)horas extras (https://calculadoradehorastrabalhadas.org/horas-extras)valor da hora (https://calculadoradehorastrabalhadas.org/valor-da-hora)escala 12x36 (https://calculadoradehorastrabalhadas.org/escala-12x36)
+
+Referências de Cálculo Trabalhista CLT 2026
+Referências: TST, Art. 58 e Art. 73 da CLT • Tabelas fiscais 2026 • Confirme o acordo aplicável
+
+100% Privado (Sem Banco de Dados)
+
+Conteúdo revisado em 4 de outubro de 2026 • Confira a legislação e o acordo aplicáveis
+Jornada Noturna - Art. 73 da CLT
+Adicional Noturno Urbano e a Redução da Hora Ficta (52min30s)
+Entenda como funciona o trabalho no horário noturno urbano (das 22h às 05h), o adicional financeiro de no mínimo 20% e o benefício legal da hora noturna reduzida (hora ficta) .
+
+1. O Que É a Hora Noturna Reduzida (Hora Ficta)?
+Conforme o Art. 73, § 1º da CLT, para o trabalhador urbano, 1 hora noturna equivale a 52 minutos e 30 segundos (52,5 minutos). Isso significa que 7 horas de relógio trabalhadas no período das 22h às 05h equivalem a 8 horas computadas para pagamento (Fator de multiplicação 60 / 52,5 = 1,142857 ).
+Horas Computadas = Horas Noturnas Relógio × (60 ÷ 52,5) = Horas Relógio × 1,142857
+
+2. Prorrogação da Jornada Noturna (Súmula 60, II do TST)
+Se o colaborador cumpre integralmente a jornada no período noturno (das 22h às 05h) e continua trabalhando além das 05h da manhã, as horas prorrogadas continuam recebendo o adicional noturno de 20% conforme a jurisprudência pacífica do Tribunal Superior do Trabalho.
+
+— / 5.0
+Avaliação da ferramenta: sua opinião é salva apenas neste navegador, sem pontuação agregada.
+
+Clique nas estrelas para avaliar
+
+Outras Calculadoras Trabalhistas CLT Disponíveis Gratuitamente
+Horas Diárias (https://calculadoradehorastrabalhadas.org/)Semanal 44h (https://calculadoradehorastrabalhadas.org/calculadora-semanal)Horas Extras (https://calculadoradehorastrabalhadas.org/horas-extras)Simular Holerite (https://calculadoradehorastrabalhadas.org/simulador-de-holerite)
+
+Perguntas Frequentes (FAQ CLT 2026) Atualizado 2026
+Tire suas dúvidas trabalhistas com respostas fundamentadas na CLT e Súmulas do TST.
+
+Filtrar por tema: Recomendado para esta calculadora
+Todas as Dúvidas Jornada & Ponto Horas Extras & Noturno Holerite & Descontos Rescisão & FGTS Banco de Horas & DSR
+
+Jornada & Ponto Como calcular as horas trabalhadas em um dia de trabalho? Para calcular as horas trabalhadas no dia, subtraia a hora de entrada do horário de saída. Se houver intervalo intrajornada (almoço), desconte a duração total da pausa. Exemplo: Entrada 08:00, Almoço 12:00 às 13:00, Saída Final 18:00. Total do dia = (12h - 8h) + (18h - 13h) = 9 horas efetivas.
+
+Esta resposta foi útil?
+
+Jornada & Ponto Qual é a tolerância legal do cartão de ponto no Brasil em 2026?
+Jornada & Ponto Como funciona a jornada de 44 horas semanais de segunda a sexta?
+Jornada & Ponto Qual é o tempo mínimo obrigatório de intervalo de almoço?
+Jornada & Ponto Qual é o divisor oficial da CLT para calcular o valor da hora de trabalho?
+Horas Extras & Noturno Qual é o valor mínimo do adicional de hora extra pela CLT?
+Horas Extras & Noturno O que é a hora ficta noturna e como funciona o adicional noturno urbano?
+Horas Extras & Noturno O adicional noturno integra a base de cálculo de horas extras e DSR?
+Holerite & Descontos Como é calculado o desconto de INSS no holerite em 2026?
+Holerite & Descontos Como calcular a retenção de IRRF no contracheque?
+Holerite & Descontos Qual o limite máximo de desconto de Vale Transporte (VT)?
+Rescisão & FGTS Qual é o prazo legal para pagamento do acerto trabalhista na rescisão?
+Rescisão & FGTS Como funciona o aviso prévio proporcional por tempo de serviço?
+Rescisão & FGTS Quem pede demissão tem direito ao saque do FGTS e à multa de 40%?
+Rescisão & FGTS Como funciona a demissão por acordo mútuo (Art. 484-A da CLT)?
+Banco de Horas & DSR Qual o prazo legal para compensar ou zerar o saldo do banco de horas?
+Banco de Horas & DSR Como calcular o reflexo das horas extras habituais no DSR?
+Banco de Horas & DSR O que acontece com o saldo do banco de horas no momento da rescisão?
+
+### Planilha de Controle de Ponto Excel Grátis
+
+URL: https://calculadoradehorastrabalhadas.org/planilha-excel-ponto
+Revisão: 2026-10-04
+
+Resposta rápida e método de cálculo
+A planilha de ponto em Excel permite registrar entradas, saídas e intervalos, com fórmulas de duração e saldo. Confira a meta e os adicionais configurados antes de usar o relatório em folha.
+Exemplo com as premissas informadas
+08:00–18:00 com intervalo de 1 hora = 9 horas líquidas; meta de 8 horas produz saldo de +1 hora.
+Simulação informativa. Confira contrato, categoria e convenção coletiva. Revisão do conteúdo: 4 de outubro de 2026 . Tabelas fiscais: ano de 2026.
+Fontes oficiais e limites
+CLT — texto compilado, arts. 58, 59-A, 71, 73 e 143 (https://www.planalto.gov.br/ccivil_03/decreto-lei/del5452compilado.htm)
+Método editorial e correção de divergências (https://calculadoradehorastrabalhadas.org/sobre#metodologia-editorial)
+Como Calcular Hora de Trabalho? Guia Completo de Jornada CLT (Diárias, Almoço e Ponto) (https://calculadoradehorastrabalhadas.org/guia-clt/como-calcular-hora-de-trabalho)calculadora semanal (https://calculadoradehorastrabalhadas.org/calculadora-semanal)calculadora mensal (https://calculadoradehorastrabalhadas.org/calculadora-mensal)horas extras (https://calculadoradehorastrabalhadas.org/horas-extras)
+
+Perguntas Frequentes (FAQ CLT 2026) Atualizado 2026
+Tire suas dúvidas trabalhistas com respostas fundamentadas na CLT e Súmulas do TST.
+
+Filtrar por tema:
+Todas as Dúvidas Jornada & Ponto Horas Extras & Noturno Holerite & Descontos Rescisão & FGTS Banco de Horas & DSR
+
+Jornada & Ponto Como calcular as horas trabalhadas em um dia de trabalho? Para calcular as horas trabalhadas no dia, subtraia a hora de entrada do horário de saída. Se houver intervalo intrajornada (almoço), desconte a duração total da pausa. Exemplo: Entrada 08:00, Almoço 12:00 às 13:00, Saída Final 18:00. Total do dia = (12h - 8h) + (18h - 13h) = 9 horas efetivas.
+
+Esta resposta foi útil?
+
+Jornada & Ponto Qual é a tolerância legal do cartão de ponto no Brasil em 2026?
+Jornada & Ponto Como funciona a jornada de 44 horas semanais de segunda a sexta?
+Jornada & Ponto Qual é o tempo mínimo obrigatório de intervalo de almoço?
+Jornada & Ponto Qual é o divisor oficial da CLT para calcular o valor da hora de trabalho?
+Horas Extras & Noturno Qual é o valor mínimo do adicional de hora extra pela CLT?
+Horas Extras & Noturno O que é a hora ficta noturna e como funciona o adicional noturno urbano?
+Horas Extras & Noturno O adicional noturno integra a base de cálculo de horas extras e DSR?
+Holerite & Descontos Como é calculado o desconto de INSS no holerite em 2026?
+Holerite & Descontos Como calcular a retenção de IRRF no contracheque?
+Holerite & Descontos Qual o limite máximo de desconto de Vale Transporte (VT)?
+Rescisão & FGTS Qual é o prazo legal para pagamento do acerto trabalhista na rescisão?
+Rescisão & FGTS Como funciona o aviso prévio proporcional por tempo de serviço?
+Rescisão & FGTS Quem pede demissão tem direito ao saque do FGTS e à multa de 40%?
+Rescisão & FGTS Como funciona a demissão por acordo mútuo (Art. 484-A da CLT)?
+Banco de Horas & DSR Qual o prazo legal para compensar ou zerar o saldo do banco de horas?
+Banco de Horas & DSR Como calcular o reflexo das horas extras habituais no DSR?
+Banco de Horas & DSR O que acontece com o saldo do banco de horas no momento da rescisão?
+
+### Guia Completo da CLT e Horas Trabalhadas 2026
+
+URL: https://calculadoradehorastrabalhadas.org/guia-clt
+Revisão: 2026-10-04
+
+Base de Conhecimento Jurídico CLT 2026
+Guia Completo & Artigos de Cálculo de Horas (CLT)
+Artigos aprofundados com fundamentação legal em leis, súmulas do TST e jurisprudência trabalhista.
+
+Filtrar: Todos Jornada & Ponto Salário & Divisores Horas Extras & Noturno
+Jornada & Ponto 12 min de leitura Fórmulas e exemplos
+
+Como Calcular Hora de Trabalho? Guia Completo de Jornada CLT (Diárias, Almoço e Ponto) (https://calculadoradehorastrabalhadas.org/guia-clt/como-calcular-hora-de-trabalho)
+Aprenda a fórmula oficial para calcular horas trabalhadas no dia, intervalo intrajornada, conversão de minutos para formato decimal e regras de controle de ponto segundo a CLT.
+
+4 de outubro de 2026 Ler Artigo Completo
+
+Jornada & Ponto 10 min de leitura Fórmulas e exemplos
+
+Como Calcular 44 Horas Trabalhadas de Segunda a Sexta? (Compensação e Escalas 5x2) (https://calculadoradehorastrabalhadas.org/guia-clt/como-calcular-44-horas-trabalhadas-de-segunda-a-sexta)
+Entenda como funciona a distribuição das 44 horas semanais da CLT em 5 dias úteis com jornada de 8h48min por dia, regras do acordo de compensação e modelos de escala.
+
+4 de outubro de 2026 Ler Artigo Completo
+
+Salário & Divisores 11 min de leitura Fórmulas e exemplos
+
+Como Calcular o Valor da Hora de Trabalho? (Divisores CLT 220, 200, 180 e 150) (https://calculadoradehorastrabalhadas.org/guia-clt/como-calcular-o-valor-da-hora-de-trabalho)
+Descubra como apurar o valor do seu salário hora com base na tabela oficial de divisores da CLT fixada pelo TST. Entenda a diferença entre mensalistas e horistas.
+
+4 de outubro de 2026 Ler Artigo Completo
+
+Horas Extras & Noturno 15 min de leitura Fórmulas e exemplos
+
+Como Calcular Hora Extra e Adicional Noturno? (50%, 100%, Hora Ficta e Reflexo DSR) (https://calculadoradehorastrabalhadas.org/guia-clt/como-calcular-hora-extra-e-adicional-noturno)
+Guia definitivo de cálculo de horas suplementares e adicionais noturnos com redução ficta de hora urbana, prorrogação de jornada (Súmula 60 TST) e integração no Descanso Semanal Remunerado.
+
+4 de outubro de 2026 Ler Artigo Completo
+
+### Sobre Nós - Calculadora de Horas Trabalhadas
+
+URL: https://calculadoradehorastrabalhadas.org/sobre
+Revisão: 2026-10-04
+
+Sobre a Nossa Plataforma
+Transparência e Precisão no Cálculo de Horas Trabalhadas
+O calculadoradehorastrabalhadas.org nasceu com uma missão clara: descomplicar a apuração da jornada de trabalho para milhões de trabalhadores, profissionais de Recursos Humanos, contadores e advogados em todo o Brasil.
+
+Código aberto
+Método verificável
+
+100% Grátis
+Sem cadastro obrigatório
+
+100% Privado
+Dados no seu navegador
+
+Padrão CLT 2026
+Atualizado conforme TST
+
+Quem Somos
+Somos um portal especializado no desenvolvimento de ferramentas computacionais focadas em cálculos trabalhistas e gestão de ponto sob a Consolidação das Leis do Trabalho (CLT - Decreto-Lei nº 5.452/1943). Entendemos que a legislação brasileira possui nuances complexas — como a conversão de minutos em números decimais, as regras de tolerância do cartão de ponto (Art. 58 § 1º), a hora ficta noturna (Art. 73) e os divisores salariais oficiais (220, 200, 180 e 150).
+Para solucionar essa dor cotidiana, desenvolvemos algoritmos de alta precisão que realizam o somatório exato de turnos diários, semanais e mensais em milissegundos, sem que o usuário precise efetuar fórmulas complexas manualmente no Excel ou na calculadora comum.
+
+Responsabilidade editorial, fontes e correções
+O conteúdo é publicado pela Calculadora de Horas Trabalhadas, identificada pelo domínio deste portal. Não atribuímos a autoria a profissionais com credenciais não verificadas. A identificação não representa registro de pessoa jurídica ou certificação profissional.
+O repositório público (https://github.com/chenmu2024/Calculadora-de-Horas-Trabalhadas) permite consultar código, histórico de alterações e testes. As simulações dependem das premissas informadas e não substituem análise individual de contrato, categoria ou convenção coletiva.
+Ao corrigir uma regra, atualizamos os exemplos e resumos correspondentes e verificamos os casos afetados. A data de revisão indica alteração do conteúdo, não certificação jurídica: 4 de outubro de 2026 . Datas de primeira publicação não são inventadas.
+CLT — texto compilado, arts. 58, 59-A, 71, 73 e 143 (https://www.planalto.gov.br/ccivil_03/decreto-lei/del5452compilado.htm)
+Receita Federal — tributação de 2026 (https://www.gov.br/receitafederal/pt-br/assuntos/meu-imposto-de-renda/tabelas/2026)
+eSocial — valores previdenciários de 2026 (https://www.gov.br/esocial/pt-br/noticias/liberado-o-envio-de-eventos-de-folha-para-o-esocial-apos-publicacao-de-portaria-que-reajusta-valores-previdenciarios-em-2026-1)
+MTE — Seguro-Desemprego de 2026, vigente desde 11/01/2026 (https://www.gov.br/trabalho-e-emprego/pt-br/noticias-e-conteudo/2026/janeiro/mte-reajusta-valores-do-beneficio-seguro-desemprego)
+Para relatar uma divergência, use o registro público de problemas (https://github.com/chenmu2024/Calculadora-de-Horas-Trabalhadas/issues) ou a página de contato (https://calculadoradehorastrabalhadas.org/contato). Informe a ferramenta, premissas e resultado esperado sem publicar dados pessoais.
+
+Nossa Missão
+Garantir que todo trabalhador e empregador tenha acesso instantâneo e gratuito a cálculos de ponto com regras explícitas e resultados transparentes.
+
+Nossa Visão
+Ser a referência número um em simulação e educação sobre controle de ponto e jornada de trabalho em língua portuguesa.
+
+Nossos Valores
+Precisão matemática rigorosa, total respeito à privacidade dos dados (LGPD) e simplicidade de uso para qualquer dispositivo.
+
+Por Que Confiar no CalculadoraDeHorasTrabalhadas.org?
+Privacidade Total de Dados (Zero Servidor)
+Diferente de sistemas que exigem cadastro ou enviam suas horas para servidores remotos, todos os cálculos no calculadoradehorastrabalhadas.org acontecem 100% no seu navegador (client-side). Seus horários de entrada e saída nunca são salvos em nosso banco de dados.
+
+Referências Oficiais e Revisões do Conteúdo
+As referências de cada ferramenta estão disponíveis junto ao método de cálculo. Testes automatizados verificam casos definidos; não representam auditoria jurídica independente nem abrangem todos os contratos e categorias.
+
+Precisão Decimais-Minutos e Tolerância Automática
+A conversão matemática entre sexagesimal (horas/minutos) e sistema decimal é calculada com arredondamento de alta precisão (6 casas decimais), sem substituir a verificação por batida do Art. 58 § 1º da CLT (tolerância de 10 min/dia).
+
+Ferramentas Complementares Gratuitas
+Além das simuladoras online de horas diárias, semanais (44h), banco de horas e holerite, disponibilizamos modelos de planilhas prontas em Excel para download gratuito.
+
+Matriz de Metodologia e Embasamento Legal de Cálculo
+Confira a tabela metodológica utilizada por nossos motores de cálculo para apoiar a conferência em auditorias trabalhistas e folhas de pagamento:
+Módulo de Cálculo Fórmula / Regra Aplicada Legislação / Jurisprudência
+Tolerância do Cartão de Ponto Até 5 minutos por batida, limitado a 10 minutos no total do dia. Excedido o limite, calcula-se o total integral. Art. 58, § 1º CLT / Súmula 366 TST
+Hora Extra Padrão / CCT Adicional de no mínimo 50% em dias úteis e 100% em domingos e feriados trabalhados. Art. 59 CLT / Art. 7º XVI CF/88
+Hora Ficta Noturna Urbana Hora de 52 minutos e 30 segundos (Fator 1.142857x) + Adicional Noturno mínimo de 20%. Art. 73 CLT / Portaria MTE
+Reflexo no DSR (Valor Total das Horas Extras / Dias Úteis Trabalhados) x Dias de DSR (Domingos + Feriados). Súmula 172 TST / Lei 605/49
+Integração de Adicionais Insalubridade e Periculosidade integram a base de cálculo da hora normal e horas extras. Súmula 132 TST / OJ 259 SDI-1 TST
+
+Perguntas Frequentes sobre a Transparência dos Cálculos
+Como os minutos são convertidos em decimais?
+Dividimos a quantidade de minutos por 60. Por exemplo: 30 minutos correspondem a 0,5h (30/60). Assim, 8 horas e 30 minutos equivalem a 8,50 horas exatas para multiplicação salarial.
+
+Os cálculos podem ser usados como prova judicial?
+Nossos relatórios servem como excelente simulador e conferência prévia. Para instrução probatória em ações trabalhistas, recomendamos a conferência por um perito contador ou advogado especialista.
+
+Como funciona o cálculo em jornadas noturnas estendidas?
+Quando a jornada iniciada no período noturno (22h) se estende após as 05h da manhã, a prorrogação mantém o direito ao adicional noturno conforme a Súmula 60 do TST.
+
+Por que os dados não ficam salvos em servidor?
+Priorizamos a segurança e conformidade rigorosa com a LGPD. Os dados permanecem apenas na memória temporária ou LocalStorage do seu próprio navegador.
+
+Pronto para calcular sua jornada agora?
+Acesse qualquer uma das nossas calculadoras gratuitas em poucos cliques.
+
+Calculadora Diária Planilha Excel
+
+### Fale Conosco - Atendimento e Suporte CLT
+
+URL: https://calculadoradehorastrabalhadas.org/contato
+Revisão: 2026-10-04
+
+Fale Conosco
+Entre em Contato Conosco
+Tem alguma dúvida sobre os cálculos, sugestão de melhoria, report de erro ou proposta comercial? Nossa equipe está pronta para responder seu contato.
+
+Envie sua Mensagem
+Preencha o formulário abaixo para abrir uma mensagem no seu aplicativo de e-mail. Se ele não abrir, use o endereço de contato ao lado.
+
+Seu Nome Completo *
+Seu E-mail *
+
+Assunto Principal * Dúvida sobre Cálculos ou CLT Sugestão de Nova Funcionalidade Reportar Erro / Inconsistência Dúvida sobre a Planilha Excel Contato Comercial ou Parceria Outros Assuntos
+Sua Mensagem *
+Enviar Mensagem
+
+Canais Oficiais de Atendimento
+E-mail Direto: contato@calculadoradehorastrabalhadas.org (mailto:contato@calculadoradehorastrabalhadas.org)
+
+Atendimento & Prazo de Resposta (SLA): Atendimento em até 24 a 48 horas úteis (Segunda a Sexta, das 08h às 18h - Horário de Brasília)
+
+Abrangência e Localização: Atendimento a trabalhadores e empresas de todo o Brasil • São Paulo - SP, Brasil
+
+Compromisso com o Usuário: Recebemos mensagens enviadas por e-mail para relatórios de bugs e dúvidas de cálculo conforme a LGPD.
+
+Dúvida Rápida sobre Cálculo?
+Muitas dúvidas comuns sobre intervalo intrajornada, tolerância de ponto e hora ficta noturna já estão respondidas no nosso guia completo.
+
+### Termos de Uso e Condições de Serviço - CLT
+
+URL: https://calculadoradehorastrabalhadas.org/termos
+Revisão: 2026-10-04
+
+Documento Jurídico Oficial
+Termos de Uso e Condições de Serviço
+Plataforma calculadoradehorastrabalhadas.org — Última atualização: 25 de Julho de 2026
+
+Índice de Seções dos Termos de Uso
+1. Aceitação dos Termos de Uso (#term-1)
+2. Descrição e Natureza Informativa dos Serviços (#term-2)
+3. Isenção de Responsabilidade e Exatidão dos Cálculos (#term-3)
+4. Propriedade Intelectual e Direitos Autorais (#term-4)
+5. Regras de Uso Aceitável e Proibições (#term-5)
+6. Links para Terceiros e Anúncios Publicitários (#term-6)
+7. Modificações dos Termos e Atualizações (#term-7)
+8. Legislação Aplicável e Foro (#term-8)
+
+1. Aceitação dos Termos de Uso
+Ao acessar, navegar ou utilizar o portal calculadoradehorastrabalhadas.org ("Website"), o usuário declara ter lido, compreendido e concordado de forma irrestrita com todos os termos, condições e avisos legais aqui estabelecidos. Caso não concorde com qualquer disposição destes termos, o usuário deve descontinuar o acesso e uso das nossas ferramentas imediatamente.
+
+2. Descrição e Natureza Informativa dos Serviços
+O calculadoradehorastrabalhadas.org disponibiliza gratuitamente ferramentas e simuladores matemáticos online voltados para a apuração automatizada de jornadas de trabalho, intervalos de descanso, divisores salariais, horas extras e adicionais noturnos fundamentados na Consolidação das Leis do Trabalho (CLT).
+AVISO IMPORTANTE SOBRE CONSULTORIA JURÍDICA / CONTÁBIL: Os resultados gerados pelas nossas calculadoras possuem caráter estritamente educativo, de simulação e orientação informativa. Nossas ferramentas não substituem pareceres jurídicos formais, laudos periciais trabalhistas ou a validação por um profissional habilitado de Contabilidade ou Recursos Humanos .
+
+3. Isenção de Responsabilidade e Exatidão dos Cálculos
+Embora empreguemos os melhores esforços e rigor técnico para manter todas as fórmulas matemáticas perfeitamente alinhadas com a CLT e as Súmulas do Tribunal Superior do Trabalho (TST):
+Não nos responsabilizamos por divergências decorrentes de Convenções Coletivas de Trabalho (CCT) ou Acordos Coletivos específicos de categorias profissionais que fixem regras diferenciadas das normas gerais da CLT.
+Não nos responsabilizamos por decisões financeiras, trabalhistas ou judiciais tomadas com base unicamente nos resultados exibidos em nossas simuladoras.
+O usuário é inteiramente responsável por conferir a exatidão dos dados inseridos nos campos de entrada da calculadora.
+
+4. Propriedade Intelectual e Direitos Autorais
+Todo o conteúdo presente no calculadoradehorastrabalhadas.org — incluindo códigos de programação, algoritmos de cálculo, textos explicativos, layout visual, logotipos, tabelas e arquivos de planilhas para download — é protegido pelas leis de propriedade intelectual do Brasil (Lei de Direitos Autorais nº 9.610/1998).
+É proibida a reprodução, cópia, espelhamento, venda ou redistribuição não autorizada dos nossos sistemas sem o prévio consentimento por escrito dos administradores do portal.
+
+5. Regras de Uso Aceitável e Proibições
+Ao utilizar este site, o usuário se compromete a:
+Não utilizar robôs, crawlers ou scripts automatizados de extração maciça de dados (scraping) que sobrecarreguem nossa infraestrutura.
+Não tentar violar as medidas de segurança ou tentar injetar códigos maliciosos no Website.
+Utilizar os recursos de forma ética e exclusivamente legal.
+
+6. Links para Terceiros e Anúncios Publicitários
+Para manter o serviço 100% gratuito para os usuários, o calculadoradehorastrabalhadas.org pode exibir anúncios publicitários fornecidos por redes parceiras, como o Google AdSense. Além disso, nosso site pode conter links para sites de órgãos governamentais (como o Planalto ou TST). Não exercemos controle sobre o conteúdo ou práticas de privacidade desses sites terceiros.
+
+7. Modificações dos Termos e Atualizações
+Reservamo-nos o direito de alterar ou atualizar estes Termos de Uso a qualquer momento, sem aviso prévio individual. Quaisquer alterações entram em vigor imediatamente após sua publicação nesta página. A continuação do uso do site após a publicação de alterações constitui aceitação dos novos termos.
+
+8. Legislação Aplicável e Foro
+Estes Termos de Uso são regidos e interpretados em conformidade com as leis da República Federativa do Brasil. Para a solução de quaisquer controvérsias oriundas deste documento, fica eleito o Foro da Comarca competente sob a legislação brasileira.
+
+### Política de Privacidade e Conformidade LGPD
+
+URL: https://calculadoradehorastrabalhadas.org/privacidade
+Revisão: 2026-10-04
+
+Conformidade com a LGPD (Lei nº 13.709/2018)
+Política de Privacidade
+Plataforma calculadoradehorastrabalhadas.org — Última atualização: 25 de Julho de 2026
+
+Índice da Política de Privacidade
+1. Compromisso com a Privacidade e LGPD (#priv-1)
+2. Ausência de Armazenamento de Dados de Ponto em Servidores (#priv-2)
+3. Dados Coletados Automaticamente e Registro de Logs (#priv-3)
+4. Uso de Cookies e Redes de Anúncios (Google AdSense) (#priv-4)
+5. Seus Direitos como Titular de Dados (Art. 18 LGPD) (#priv-5)
+6. Criptografia e Segurança da Informação (#priv-6)
+7. Alterações nesta Política de Privacidade (#priv-7)
+8. Encarregado de Proteção de Dados (DPO) e Contato (#priv-8)
+
+RESUMO EXECUTIVO DE PRIVACIDADE:
+No calculadoradehorastrabalhadas.org , sua privacidade é prioridade absoluta. NÃO coletamos, NÃO salvamos e NÃO enviamos seus horários de entrada, saída, salários ou cartões de ponto para nenhum servidor externo . Todos os cálculos matemáticos ocorrem exclusivamente na memória temporária do seu próprio navegador de internet.
+
+1. Compromisso com a Privacidade e LGPD
+Esta Política de Privacidade descreve como o portal calculadoradehorastrabalhadas.org trata as informações de seus visitantes em estrita conformidade com a Lei Geral de Proteção de Dados Pessoais (LGPD - Lei Federal nº 13.709/2018) e com as diretrizes internacionais do Regulamento Geral sobre a Proteção de Dados (GDPR).
+
+2. Ausência de Armazenamento de Dados de Ponto em Servidores
+Queremos garantir total tranquilidade no uso das nossas calculadoras. Quando você digita seus horários de entrada, intervalo de almoço e saída, esses dados são processados localmente utilizando a linguagem JavaScript no seu próprio dispositivo.
+Não há banco de dados relacional armazenando seus registros de ponto.
+Não armazenamos nomes de empresas, salários informados ou identificadores de funcionários.
+Ao fechar ou recarregar a aba do navegador, os dados informados são limpos automaticamente, exceto se você optar por salvar preferências locais (localStorage).
+
+3. Dados Coletados Automaticamente e Registro de Logs
+Como padrão de infraestrutura de servidores web na internet, quando você acessa o site, dados técnicos não identificáveis são registrados em logs do servidor exclusivamente para fins estatísticos e de segurança cibernética:
+Endereço IP (Anonymized / Pseudonimizado).
+Tipo de navegador (Browser) e sistema operacional.
+Data, hora e página acessada.
+
+4. Uso de Cookies e Redes de Anúncios (Google AdSense)
+Utilizamos cookies essenciais para o funcionamento adequado da aplicação. Além disso, exibimos anúncios publicitários gerenciados pelo Google AdSense para financiar a gratuidade do portal.
+Declaração Oficial de Cookies do Google AdSense e Terceiros:
+"Terceiros, incluindo o Google, usam cookies para veicular anúncios com base em visitas anteriores do usuário a este e a outros sites. O uso de cookies de publicidade pelo Google permite que ele e seus parceiros veiculem anúncios aos usuários com base na visita a seus sites e/ou a outros sites na Internet. Os usuários podem optar por sair da publicidade personalizada acessando as Configurações de Anúncios do Google (https://www.google.com/settings/ads)."
+Alternativamente, você pode optar por desativar o uso de cookies de terceiros para publicidade personalizada acessando o site www.aboutads.info (https://www.aboutads.info/choices).
+Cookies de medição estatística (como Google Analytics) são utilizados para analisar o tráfego anonimizado e aprimorar as calculadoras.
+
+5. Seus Direitos como Titular de Dados (Art. 18 LGPD)
+Como titular dos seus dados pessoais, a LGPD garante a você os seguintes direitos perante qualquer controlador de dados:
+• Confirmação e Acesso: Direito de saber se tratamos dados seus.
+• Correção: Solicitar a atualização de dados incompletos ou inexatos.
+• Eliminação: Solicitar a exclusão de dados pessoais eventualmente fornecidos via formulário.
+• Revogação de Consentimento: Desativar cookies em seu navegador a qualquer momento.
+
+6. Criptografia e Segurança da Informação
+Todas as comunicações entre o seu navegador de internet e o portal calculadoradehorastrabalhadas.org são protegidas por criptografia HTTPS com certificado de segurança SSL de 256 bits, garantindo que ninguém possa interceptar sua conexão.
+
+7. Alterações nesta Política de Privacidade
+Esta política pode ser revisada periodicamente para refletir melhorias em nossas práticas de segurança ou adequações legislativas. Recomendamos a consulta regular desta página.
+
+8. Encarregado de Proteção de Dados (DPO) e Contato
+Se você tiver dúvidas sobre esta Política de Privacidade ou desejar exercer seus direitos previstos na LGPD, entre em contato com nosso encarregado de privacidade através do e-mail:
+contato@calculadoradehorastrabalhadas.org
+
+### Como Calcular Hora de Trabalho? Guia Completo de Jornada CLT (Diárias, Almoço e Ponto)
+
+URL: https://calculadoradehorastrabalhadas.org/guia-clt/como-calcular-hora-de-trabalho
+Revisão: 2026-10-04
+
+Base de Conhecimento Jurídico CLT 2026
+Guia Completo & Artigos de Cálculo de Horas (CLT)
+Artigos aprofundados com fundamentação legal em leis, súmulas do TST e jurisprudência trabalhista.
+
+Filtrar: Todos Jornada & Ponto Salário & Divisores Horas Extras & Noturno
+Jornada & Ponto • 12 min de leitura • Fórmulas e exemplos
+Fechar Artigo
+Como Calcular Hora de Trabalho? Guia Completo de Jornada CLT (Diárias, Almoço e Ponto)
+Calculadora de Horas Trabalhadas (https://calculadoradehorastrabalhadas.org/sobre#metodologia-editorial) Conteúdo revisado em 4 de outubro de 2026
+
+Índice do Conteúdo do Artigo: 1. Introdução à Jornada de Trabalho na CLT (#art1-intro) 2. Como Converter Minutos para Formato Decimal (#art1-formula) 3. Passo a Passo do Cálculo de Horas Diárias (#art1-passo-passo) 4. Regras do Intervalo de Almoço (Artigo 71 da CLT) (#art1-almoco) 5. Tolerância do Cartão de Ponto (Artigo 58 § 1º) (#art1-tolerancia) 6. Exemplo Prático Completo de Apuração Diária (#art1-exemplo) 7. Perguntas Frequentes (FAQ) (#art1-faq)
+
+Controle preciso da jornada de trabalho e cálculo de horas diárias pela CLT. Resumo Executivo e Pontos-Chave
+A jornada padrão limite na CLT é de 8 horas diárias e 44 horas semanais (CLT Artigo 58 (https://www.planalto.gov.br/ccivil_03/decreto-lei/del5452.htm)).
+Para calcular horas com minutos no relógio, converta os minutos dividindo por 60 (ex: 30 min = 0,5h).
+Jornadas acima de 6 horas exigem intervalo obrigatório de no mínimo 1 hora de repouso e alimentação.
+Tolerância legal no cartão de ponto: até 5 minutos por registro, não excedendo 10 minutos diários.
+Você pode calcular seus horários exatos usando a Calculadora de Horas Trabalhadas Online (https://calculadoradehorastrabalhadas.org/).
+
+1. Introdução à Jornada de Trabalho na CLT
+Entender como calcular horas trabalhadas de forma precisa é essencial tanto para empregados que desejam conferir seus contracheques quanto para gestores de RH e contadores encarregados da folha de pagamento. No Brasil, as relações trabalhistas sob o regime da Consolidação das Leis do Trabalho (Decreto-Lei nº 5.452/1943 (https://www.planalto.gov.br/ccivil_03/decreto-lei/del5452.htm)) estabelecem normas rígidas para a contagem do tempo à disposição do empregador.
+O cálculo correto do cartão de ponto influencia diretamente a apuração de adicionais como horas extras de 50% e 100% , adicional noturno e os reflexos no Descanso Semanal Remunerado (DSR) . Por isso, a utilização de ferramentas especializadas como a nossa calculadora de horas trabalhadas (https://calculadoradehorastrabalhadas.org/) evita divergências financeiras e previne passivos trabalhistas no Tribunal Superior do Trabalho (TST) (https://www.tst.jus.br/).
+2. Como Converter Minutos para Formato Decimal
+Um dos erros mais comuns ao calcular horas na calculadora tradicional é tratar minutos como se fossem números decimais comuns. Por exemplo, 8 horas e 30 minutos NÃO é igual a 8,30 horas, pois a hora é baseada no sistema sexagesimal (60 minutos) e não no sistema decimal (100 partes).
+Para converter minutos de relógio para números decimais, utiliza-se a seguinte fórmula matemática simples:
+Fórmula de Conversão Sexagesimal para Decimal Copiar Fórmula
+Valor Decimal das Horas = Horas Inteiras + (Minutos ÷ 60)
+
+Tabela Prática de Conversão de Minutos para Decimal:
+Minutos no Relógio Cálculo Decimal (÷ 60) Valor Decimal para Multiplicação
+15 minutos 15 / 60 0,25 hora
+30 minutos 30 / 60 0,50 hora
+45 minutos 45 / 60 0,75 hora
+48 minutos 48 / 60 0,80 hora (Jornada 8h48m)
+
+3. Passo a Passo do Cálculo de Horas Diárias
+O cálculo do total de horas trabalhadas em um dia individual exige 4 etapas sistemáticas:
+Calcular o Turno Matutino: Subtraia o horário de saída para o almoço do horário de entrada matutino ( Saída Almoço - Entrada Manhã ).
+Calcular o Turno Vespertino: Subtraia o horário de saída final do horário de retorno do almoço ( Saída Final - Retorno Almoço ).
+Calcular a Duração do Almoço: Subtraia o horário de retorno do almoço do horário de saída ( Retorno Almoço - Saída Almoço ).
+Somar os Turnos Efetivos: Some o tempo do turno matutino com o vespertino para encontrar o total de horas líquidas trabalhadas.
+4. Regras do Intervalo de Almoço (Artigo 71 da CLT)
+O intervalo intrajornada destina-se ao repouso e à alimentação do trabalhador. Conforme o Artigo 71 do Decreto-Lei nº 5.452/1943 (https://www.planalto.gov.br/ccivil_03/decreto-lei/del5452.htm), as regras aplicáveis são:
+Jornadas até 4 horas diárias: Não há obrigatoriedade legal de intervalo intrajornada.
+Jornadas de 4 a 6 horas diárias: Intervalo obrigatório de 15 minutos .
+Jornadas superiores a 6 horas diárias: Intervalo obrigatório de no mínimo 1 hora e no máximo 2 horas (podendo ser reduzido para até 30 minutos via Acordo Coletivo de Trabalho pela Reforma Trabalhista de 2017).
+5. Tolerância do Cartão de Ponto (Artigo 58 § 1º)
+O § 1º do Artigo 58 da CLT prevê que variações no registro de ponto que não excedam 5 minutos por batida , respeitado o limite máximo de 10 minutos diários , não serão descontadas nem computadas como jornada extraordinária. Se o limite de 10 minutos no dia for ultrapassado, todo o tempo de excesso será considerado para cálculo de horas extras ou desconto .
+6. Exemplo Prático Completo de Apuração Diária
+Cenário Real do Cartão de Ponto:
+• Entrada Matutina: 07:55 | Saída Almoço: 12:02 (Turno 1 = 4 horas e 07 minutos)
+• Retorno Almoço: 13:00 | Saída Final: 18:05 (Turno 2 = 5 horas e 05 minutos)
+• Total Bruto de Horas = 4h 07m + 5h 05m = 9 horas e 12 minutos
+→ Convertendo 12 min para decimal: 12 / 60 = 0,20 → Total = 9,20 horas.
+
+Testar na Calculadora Diária de Horas Trabalhadas (https://calculadoradehorastrabalhadas.org/)
+7. Perguntas Frequentes sobre Cálculo de Horas Trabalhadas (FAQ)
+O tempo de deslocamento até o trabalho conta como hora trabalhada?
+Desde a Reforma Trabalhista (Lei 13.467/2017), o tempo despendido pelo empregado desde a sua residência até a efetiva ocupação do posto de trabalho (horas in itinere ) não é considerado tempo à disposição da empresa.
+
+Onde posso fazer o cálculo automático das minhas horas semanais?
+Você pode utilizar gratuitamente a nossa ferramenta de apuração semanal no site calculadoradehorastrabalhadas.org (https://calculadoradehorastrabalhadas.org/calculadora-semanal) para somar os horários de segunda a domingo com exportação para Excel.
+
+Simulação informativa: confira contrato, categoria e convenção coletiva. O resumo não substitui a leitura das fontes oficiais nem uma análise individual.
+Como Calcular 44 Horas Trabalhadas de Segunda a Sexta? (Compensação e Escalas 5x2) (https://calculadoradehorastrabalhadas.org/guia-clt/como-calcular-44-horas-trabalhadas-de-segunda-a-sexta)Como Calcular o Valor da Hora de Trabalho? (Divisores CLT 220, 200, 180 e 150) (https://calculadoradehorastrabalhadas.org/guia-clt/como-calcular-o-valor-da-hora-de-trabalho)Como Calcular Hora Extra e Adicional Noturno? (50%, 100%, Hora Ficta e Reflexo DSR) (https://calculadoradehorastrabalhadas.org/guia-clt/como-calcular-hora-extra-e-adicional-noturno) Referência oficial: CLT — texto compilado (https://www.planalto.gov.br/ccivil_03/decreto-lei/del5452compilado.htm) • Método e correções (https://calculadoradehorastrabalhadas.org/sobre#metodologia-editorial) Voltar para Lista de Artigos ↑
+
+### Como Calcular 44 Horas Trabalhadas de Segunda a Sexta? (Compensação e Escalas 5x2)
+
+URL: https://calculadoradehorastrabalhadas.org/guia-clt/como-calcular-44-horas-trabalhadas-de-segunda-a-sexta
+Revisão: 2026-10-04
+
+Base de Conhecimento Jurídico CLT 2026
+Guia Completo & Artigos de Cálculo de Horas (CLT)
+Artigos aprofundados com fundamentação legal em leis, súmulas do TST e jurisprudência trabalhista.
+
+Filtrar: Todos Jornada & Ponto Salário & Divisores Horas Extras & Noturno
+Jornada & Ponto • 10 min de leitura • Fórmulas e exemplos
+Fechar Artigo
+Como Calcular 44 Horas Trabalhadas de Segunda a Sexta? (Compensação e Escalas 5x2)
+Calculadora de Horas Trabalhadas (https://calculadoradehorastrabalhadas.org/sobre#metodologia-editorial) Conteúdo revisado em 4 de outubro de 2026
+
+Índice do Conteúdo do Artigo: 1. A Regra Constitucional das 44 Horas Semanais (#art2-constituicao) 2. A Matemática das 8 Horas e 48 Minutos (#art2-compensacao) 3. Comparativo de Escalas: 5x2 vs 6x1 (#art2-escalas) 4. Acordo Individual e Convenção Coletiva (CCT) (#art2-acordo) 5. Exemplo de Preenchimento da Folha Semanal (#art2-exemplo-folha) 6. Dúvidas Frequentes sobre a Jornada 44h (#art2-faq)
+
+Planejamento de escalas de 44 horas semanais e compensação de sábados. Destaques da Jornada de 44 Horas
+A Constituição Federal (Art. 7º, XIII) fixa o limite máximo de 44 horas semanais normais.
+Para folgar aos sábados, a empresa compensa as 4 horas do sábado dividindo-as por 5 dias = 48 minutos adicionais por dia .
+A jornada diária de segunda a sexta fica fixada em 8 horas e 48 minutos (ou 8,80 horas decimais).
+Calculadores online como o calculadoradehorastrabalhadas.org (https://calculadoradehorastrabalhadas.org/calculadora-semanal) automatizam a conferência de horas excedentes.
+
+1. A Regra Constitucional das 44 Horas Semanais
+O artigo 7º, inciso XIII, da Constituição Federal de 1988 estabelece que é direito dos trabalhadores urbanos e rurais a duração do trabalho normal não superior a 8 horas diárias e 44 horas semanais , facultada a compensação de horários e a redução da jornada mediante acordo ou convenção coletiva de trabalho.
+2. A Matemática das 8 Horas e 48 Minutos
+Quando uma empresa adota a escala de 5 dias semanais (de segunda a sexta-feira) para dar folga no sábado e no domingo, é necessário redistribuir a carga horária que seria cumprida no sábado (4 horas) ao longo dos 5 dias úteis da semana:
+• 4 horas do Sábado = 240 minutos
+• Distribuição em 5 dias = 240 minutos ÷ 5 dias = 48 minutos por dia
+• Jornada diária de Segunda a Sexta = 8 horas + 48 minutos = 8h48min
+
+Atenção: Na hora de multiplicar pelo valor da hora no Excel ou na calculadora, 8h48min corresponde a 8,80 horas (pois 48 ÷ 60 = 0,80).
+3. Comparativo de Escalas: 5x2 vs 6x1
+Tipo de Escala Jornada Segunda a Sexta Jornada no Sábado Total Semanal
+Escala 5x2 (Com Compensação) 08 horas e 48 minutos FOLGA (0h) 44 horas exatas
+Escala 6x1 (Tradicional) 08 horas por dia (40h) 04 horas (ex: 08h às 12h) 44 horas exatas
+
+4. Acordo Individual e Convenção Coletiva (CCT)
+Segundo o Artigo 59, § 6º da CLT (https://www.planalto.gov.br/ccivil_03/decreto-lei/del5452.htm), a compensação de jornada de trabalho dentro do mesmo mês pode ser pactuada por acordo individual, tácito ou escrito. Caso o empregado trabalhe além das 8h48min no dia, as horas excedentes devem ser tratadas como horas extras ou lançadas no banco de horas.
+5. Exemplo de Preenchimento da Folha Semanal
+Confira o horário típico de uma jornada de 44 horas semanais de segunda a sexta com 1 hora de almoço:
+• Entrada: 08:00
+• Saída para Almoço: 12:00 (4 horas de trabalho)
+• Retorno do Almoço: 13:00
+• Saída Final: 17:48 (4 horas e 48 minutos de trabalho)
+→ Total diário = 4h + 4h48m = 8h48min (44h no final da semana).
+
+Acessar Calculadora Semanal 44h na Prática (https://calculadoradehorastrabalhadas.org/calculadora-semanal)
+6. Dúvidas Frequentes sobre a Jornada 44h
+Se houver feriado na semana, como fica o cálculo das 44 horas?
+Se um feriado cai de segunda a sexta-feira, o empregado é dispensado do trabalho no feriado e a carga horária daquele dia (8h48m) é abonada integralmente, sem necessidade de recuperação das horas em outros dias.
+
+Simulação informativa: confira contrato, categoria e convenção coletiva. O resumo não substitui a leitura das fontes oficiais nem uma análise individual.
+Como Calcular Hora de Trabalho? Guia Completo de Jornada CLT (Diárias, Almoço e Ponto) (https://calculadoradehorastrabalhadas.org/guia-clt/como-calcular-hora-de-trabalho)Como Calcular o Valor da Hora de Trabalho? (Divisores CLT 220, 200, 180 e 150) (https://calculadoradehorastrabalhadas.org/guia-clt/como-calcular-o-valor-da-hora-de-trabalho)Como Calcular Hora Extra e Adicional Noturno? (50%, 100%, Hora Ficta e Reflexo DSR) (https://calculadoradehorastrabalhadas.org/guia-clt/como-calcular-hora-extra-e-adicional-noturno) Referência oficial: CLT — texto compilado (https://www.planalto.gov.br/ccivil_03/decreto-lei/del5452compilado.htm) • Método e correções (https://calculadoradehorastrabalhadas.org/sobre#metodologia-editorial) Voltar para Lista de Artigos ↑
+
+### Como Calcular o Valor da Hora de Trabalho? (Divisores CLT 220, 200, 180 e 150)
+
+URL: https://calculadoradehorastrabalhadas.org/guia-clt/como-calcular-o-valor-da-hora-de-trabalho
+Revisão: 2026-10-04
+
+Base de Conhecimento Jurídico CLT 2026
+Guia Completo & Artigos de Cálculo de Horas (CLT)
+Artigos aprofundados com fundamentação legal em leis, súmulas do TST e jurisprudência trabalhista.
+
+Filtrar: Todos Jornada & Ponto Salário & Divisores Horas Extras & Noturno
+Salário & Divisores • 11 min de leitura • Fórmulas e exemplos
+Fechar Artigo
+Como Calcular o Valor da Hora de Trabalho? (Divisores CLT 220, 200, 180 e 150)
+Calculadora de Horas Trabalhadas (https://calculadoradehorastrabalhadas.org/sobre#metodologia-editorial) Conteúdo revisado em 4 de outubro de 2026
+
+Índice do Conteúdo do Artigo: 1. O Conceito do Valor da Hora Salarial (#art3-conceito) 2. A Tabela Oficial de Divisores CLT do TST (#art3-divisores) 3. A Fórmula Oficial do Salário Hora (#art3-formula) 4. Exemplos Práticos de Cálculo com Salários Reais (#art3-exemplos) 5. Como Calcular o Valor da Hora para PJ / Freelancers (#art3-pj) 6. Perguntas Frequentes sobre Divisores Salariais (#art3-faq)
+
+Entenda como utilizar a tabela oficial de divisores CLT (220, 200, 180). Resumo do Divisor Salarial CLT
+O valor da hora é a base fundamental para calcular qualquer hora extra, adicional noturno e rescisão.
+O divisor mensal oficial da CLT para 44h semanais é 220 (44h ÷ 6 dias úteis x 30 dias no mês).
+Para jornada de 40 horas semanais, utiliza-se o divisor 200 .
+Consulte gratuitamente a ferramenta do calculadoradehorastrabalhadas.org (https://calculadoradehorastrabalhadas.org/valor-da-hora) para simulação imediata.
+
+1. O Conceito do Valor da Hora Salarial
+O valor da hora de trabalho representa a fração monetária referente a 60 minutos de serviço prestado de acordo com a remuneração contratual estabelecida. Essa métrica é a espinha dorsal de toda a folha de pagamento sob a CLT no Brasil, pois serve de multiplicador para a remuneração de horas extraordinárias, adicionais de periculosidade, insalubridade, adicional noturno e descontos por faltas injustificadas.
+2. A Tabela Oficial de Divisores CLT do TST
+A definição do divisor mensal resulta do entendimento pacificado pelo Tribunal Superior do Trabalho (TST) (https://www.tst.jus.br/) (Súmulas 124 e 431). A regra matemática considera 30 dias no mês comercial e o descanso semanal remunerado:
+Carga Horária Semanal Cálculo Matemático da CLT Divisor Mensal Oficial
+44 horas semanais (44h ÷ 6 dias) x 30 dias Divisor 220
+40 horas semanais (40h ÷ 6 dias) x 30 dias Divisor 200
+36 horas semanais (36h ÷ 6 dias) x 30 dias Divisor 180
+30 horas semanais (30h ÷ 6 dias) x 30 dias Divisor 150
+
+3. A Fórmula Oficial do Salário Hora
+Fórmula Universal do Valor Hora CLT Copiar Fórmula
+Valor da Hora (R$) = Salário Mensal Bruto ÷ Divisor Mensal CLT
+
+4. Exemplos Práticos de Cálculo com Salários Reais
+Exemplo 1: Salário R$ 3.300,00 (44h/sem) • Divisor Aplicável: 220
+• Cálculo: R$ 3.300,00 ÷ 220 = R$ 15,00 por hora
+
+Exemplo 2: Salário R$ 4.000,00 (40h/sem) • Divisor Aplicável: 200
+• Cálculo: R$ 4.000,00 ÷ 200 = R$ 20,00 por hora
+
+5. Como Calcular o Valor da Hora para PJ / Freelancers
+Diferente do funcionário CLT que recebe 13º salário, férias remuneradas com +1/3 e FGTS, o profissional PJ (Pessoa Jurídica) precisa precificar sua hora incorporando custos fixos (MEI/Simples Nacional, contabilidade, software, internet) e a provisão para benefícios:
+• Meta de Renda Líquida Mensal: R$ 6.000,00
+• Provisão Férias + 13º (+20%): R$ 1.200,00
+• Despesas Fixas + Impostos MEI/Simples: R$ 800,00
+• Faturamento Mensal Necessário = R$ 8.000,00
+• Horas Faturáveis no Mês (120h/mês) = R$ 66,67 por hora PJ
+
+Calcular Meu Valor Hora CLT e PJ no Simulador (https://calculadoradehorastrabalhadas.org/valor-da-hora)
+6. Perguntas Frequentes sobre Divisores Salariais
+O mês que tem 28 ou 31 dias altera o divisor 220?
+Não. Para empregados mensalistas, a CLT fixa a apuração sempre sobre o mês comercial estipulado em 30 dias, independentemente do número real de dias corridos do mês civil.
+
+Simulação informativa: confira contrato, categoria e convenção coletiva. O resumo não substitui a leitura das fontes oficiais nem uma análise individual.
+Como Calcular Hora de Trabalho? Guia Completo de Jornada CLT (Diárias, Almoço e Ponto) (https://calculadoradehorastrabalhadas.org/guia-clt/como-calcular-hora-de-trabalho)Como Calcular 44 Horas Trabalhadas de Segunda a Sexta? (Compensação e Escalas 5x2) (https://calculadoradehorastrabalhadas.org/guia-clt/como-calcular-44-horas-trabalhadas-de-segunda-a-sexta)Como Calcular Hora Extra e Adicional Noturno? (50%, 100%, Hora Ficta e Reflexo DSR) (https://calculadoradehorastrabalhadas.org/guia-clt/como-calcular-hora-extra-e-adicional-noturno) Referência oficial: CLT — texto compilado (https://www.planalto.gov.br/ccivil_03/decreto-lei/del5452compilado.htm) • Método e correções (https://calculadoradehorastrabalhadas.org/sobre#metodologia-editorial) Voltar para Lista de Artigos ↑
+
+### Como Calcular Hora Extra e Adicional Noturno? (50%, 100%, Hora Ficta e Reflexo DSR)
+
+URL: https://calculadoradehorastrabalhadas.org/guia-clt/como-calcular-hora-extra-e-adicional-noturno
+Revisão: 2026-10-04
+
+Base de Conhecimento Jurídico CLT 2026
+Guia Completo & Artigos de Cálculo de Horas (CLT)
+Artigos aprofundados com fundamentação legal em leis, súmulas do TST e jurisprudência trabalhista.
+
+Filtrar: Todos Jornada & Ponto Salário & Divisores Horas Extras & Noturno
+Horas Extras & Noturno • 15 min de leitura • Fórmulas e exemplos
+Fechar Artigo
+Como Calcular Hora Extra e Adicional Noturno? (50%, 100%, Hora Ficta e Reflexo DSR)
+Calculadora de Horas Trabalhadas (https://calculadoradehorastrabalhadas.org/sobre#metodologia-editorial) Conteúdo revisado em 4 de outubro de 2026
+
+Índice do Conteúdo do Artigo: 1. Como Calcular Hora Extra de 50% (Dias Úteis) (#art4-he50) 2. Como Calcular Hora Extra de 100% (Domingos e Feriados) (#art4-he100) 3. Adicional Noturno Urbano e Rural (#art4-noturno) 4. A Hora Ficta Reduzida (52 minutos e 30 segundos) (#art4-ficta) 5. Prorrogação de Jornada Noturna (Súmula 60 do TST) (#art4-sumula60) 6. Cálculo do Reflexo no DSR (Lei 605/49) (#art4-dsr) 7. Exemplo Prático Integrado no Holerite (#art4-holerite-completo) 8. Dúvidas Frequentes (#art4-faq)
+
+O trabalho noturno exige compensação financeira pelo desgaste e cálculo da hora reduzida. Resumo do Adicional Noturno e Horas Extras
+Hora Extra 50%: Valor Hora Normal x 1,5. Hora Extra 100%: Valor Hora Normal x 2,0.
+Adicional Noturno Urbano: acréscimo de no mínimo 20% das 22h às 05h.
+Hora Ficta Noturna: 1 hora no relógio equivale a 52m30s (fator de conversão 1,142857).
+Súmula 60 do TST: Prorrogação após as 05h mantém o adicional noturno.
+Use os simuladores interativos do calculadoradehorastrabalhadas.org (https://calculadoradehorastrabalhadas.org/adicional-noturno) para simulação precisa.
+
+1. Como Calcular Hora Extra de 50% (Dias Úteis e Sábados)
+O artigo 59 da CLT (https://www.planalto.gov.br/ccivil_03/decreto-lei/del5452.htm) estabelece que a duração diária do trabalho poderá ser acrescida de horas suplementares, em número não excedente de duas, mediante acordo individual ou convenção coletiva. O acréscimo constitucional mínimo para dias úteis é de 50% sobre a hora normal.
+Valor da Hora Extra 50% = Valor da Hora Normal x 1,50
+Exemplo: Hora normal R$ 10,00 → Hora Extra 50% = R$ 10,00 x 1,50 = R$ 15,00 / hora
+
+2. Como Calcular Hora Extra de 100% (Domingos, Feriados e Folgas)
+Quando o trabalho é executado em dias destinados ao Repouso Semanal Remunerado (RSR/DSR) ou em feriados civis e religiosos sem a concessão de folga compensatória na mesma semana, a hora trabalhada deve ser paga em dobro (100% de adicional):
+Valor da Hora Extra 100% = Valor da Hora Normal x 2,00
+Exemplo: Hora normal R$ 10,00 → Hora Extra 100% = R$ 10,00 x 2,00 = R$ 20,00 / hora
+
+3. Adicional Noturno Urbano e Rural
+A legislação trabalhista brasileira confere proteção especial ao trabalho noturno devido ao desgaste físico e biológico do trabalhador. Conforme o Artigo 73 da CLT:
+Trabalho Urbano: Considerado das 22h às 05h do dia seguinte. Adicional mínimo de 20% .
+Trabalho Rural (Lavoura): Considerado das 21h às 05h. Adicional de 25% .
+Trabalho Rural (Pecuária): Considerado das 20h às 04h. Adicional de 25% .
+4. A Hora Ficta Reduzida (52 minutos e 30 segundos)
+Na jornada urbana noturna, a hora de relógio (60 minutos) é computada como de 52 minutos e 30 segundos (Art. 73, § 1º da CLT). Isso significa que 7 horas corridas no relógio das 22h às 05h correspondem a 8 horas noturnas pagas :
+Fator de Conversão = 60 minutos ÷ 52,5 minutos = 1,142857 Exemplo: Trabalhou 40 horas no relógio à noite → 40 x 1,142857 = 45,71 horas fictas remuneradas .
+5. Prorrogação de Jornada Noturna (Súmula 60 do TST)
+A Súmula nº 60, item II do TST (https://www.tst.jus.br/) estabelece que se a jornada for cumprida integralmente no período noturno e houver prorrogação após as 05:00 da manhã, o adicional noturno é devido também sobre as horas prorrogadas no período diurno.
+6. Cálculo do Reflexo no DSR (Lei 605/49 e Súmula 172 TST)
+As horas extras e o adicional noturno prestados com habitualidade integram a remuneração para o cálculo do Descanso Semanal Remunerado (Lei nº 605/1949). A fórmula oficial é:
+Reflexo DSR (R$) = (Total de Horas Extras e Noturnas no Mês ÷ Dias Úteis Trabalhados) x Domingos e Feriados no Mês
+Simular Horas Extras 50% / 100% (https://calculadoradehorastrabalhadas.org/horas-extras) Simular Adicional Noturno e DSR (https://calculadoradehorastrabalhadas.org/adicional-noturno)
+8. Perguntas Frequentes
+A hora extra realizada à noite acumula o adicional noturno com a hora extra?
+Sim! Denomina-se Hora Extra Noturna. Primeiro apura-se o valor da hora extra (ex: +50%) e sobre ela incide o adicional noturno de 20%, resultando em um acréscimo total de 80% sobre a hora normal.
+
+Simulação informativa: confira contrato, categoria e convenção coletiva. O resumo não substitui a leitura das fontes oficiais nem uma análise individual.
+Como Calcular Hora de Trabalho? Guia Completo de Jornada CLT (Diárias, Almoço e Ponto) (https://calculadoradehorastrabalhadas.org/guia-clt/como-calcular-hora-de-trabalho)Como Calcular 44 Horas Trabalhadas de Segunda a Sexta? (Compensação e Escalas 5x2) (https://calculadoradehorastrabalhadas.org/guia-clt/como-calcular-44-horas-trabalhadas-de-segunda-a-sexta)Como Calcular o Valor da Hora de Trabalho? (Divisores CLT 220, 200, 180 e 150) (https://calculadoradehorastrabalhadas.org/guia-clt/como-calcular-o-valor-da-hora-de-trabalho) Referência oficial: CLT — texto compilado (https://www.planalto.gov.br/ccivil_03/decreto-lei/del5452compilado.htm) • Método e correções (https://calculadoradehorastrabalhadas.org/sobre#metodologia-editorial) Voltar para Lista de Artigos ↑

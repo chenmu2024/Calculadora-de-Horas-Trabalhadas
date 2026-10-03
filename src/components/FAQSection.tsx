@@ -259,18 +259,18 @@ export default function FAQSection({ activeTab = 'daily', onSelectTab }: FAQSect
   };
 
   return (
-    <div id="faq-section" className="bg-white rounded-2xl p-6 sm:p-8 border border-neutral-200 shadow-sm animate-in fade-in duration-500 space-y-6">
+    <div id="faq-section" className="bg-white dark:bg-neutral-900 rounded-2xl p-6 sm:p-8 border border-neutral-200 dark:border-neutral-700 shadow-sm animate-in fade-in duration-500 space-y-6">
       {/* Inject JSON-LD into DOM for Google Bot */}
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdData) }} />
 
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-neutral-200 pb-5">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-neutral-200 dark:border-neutral-700 pb-5">
         <div className="flex items-center gap-3">
           <div className="p-2.5 bg-blue-50 text-blue-600 rounded-xl shrink-0">
             <HelpCircle className="w-6 h-6" />
           </div>
           <div>
-            <h2 className="text-xl font-bold text-neutral-900 flex items-center gap-2">
+            <h2 className="text-xl font-bold text-neutral-900 dark:text-neutral-100 flex items-center gap-2">
               Perguntas Frequentes (FAQ CLT 2026)
               <span className="text-[11px] font-semibold bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full border border-emerald-200 hidden sm:inline-flex items-center gap-1">
                 <Sparkles className="w-3 h-3" /> Atualizado 2026
@@ -290,7 +290,7 @@ export default function FAQSection({ activeTab = 'daily', onSelectTab }: FAQSect
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Buscar dúvida ou regra..."
-            className="w-full pl-9 pr-8 py-2 text-xs border border-neutral-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-neutral-50"
+            className="w-full pl-9 pr-8 py-2 text-xs border border-neutral-300 dark:border-neutral-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-neutral-50 dark:bg-neutral-800"
           />
           {searchQuery && (
             <button
@@ -343,9 +343,9 @@ export default function FAQSection({ activeTab = 'daily', onSelectTab }: FAQSect
       {/* FAQ Accordion List */}
       <div className="space-y-3" itemScope itemType="https://schema.org/FAQPage">
         {filteredFaqs.length === 0 ? (
-          <div className="p-8 text-center bg-neutral-50 rounded-2xl border border-dashed border-neutral-300 text-neutral-500 space-y-2">
+          <div className="p-8 text-center bg-neutral-50 dark:bg-neutral-800 rounded-2xl border border-dashed border-neutral-300 dark:border-neutral-600 text-neutral-500 space-y-2">
             <HelpCircle className="w-8 h-8 text-neutral-400 mx-auto" />
-            <p className="text-sm font-semibold text-neutral-700">Nenhuma pergunta encontrada para sua busca.</p>
+            <p className="text-sm font-semibold text-neutral-700 dark:text-neutral-300">Nenhuma pergunta encontrada para sua busca.</p>
             <p className="text-xs text-neutral-500">Tente buscar por "DSR", "Tolerância", "Noturno", "INSS" ou "Rescisão".</p>
             <button
               onClick={() => { setSearchQuery(''); setSelectedCategory('all'); }}
@@ -360,7 +360,7 @@ export default function FAQSection({ activeTab = 'daily', onSelectTab }: FAQSect
             const feedback = feedbackGiven[faq.id];
 
             return (
-              <div key={faq.id} className="border border-neutral-200 rounded-xl overflow-hidden transition-all duration-200" itemScope itemProp="mainEntity" itemType="https://schema.org/Question">
+              <div key={faq.id} className="border border-neutral-200 dark:border-neutral-700 rounded-xl overflow-hidden transition-all duration-200" itemScope itemProp="mainEntity" itemType="https://schema.org/Question">
                 <button
                   onClick={() => setOpenId(isOpen ? null : faq.id)}
                   className={`w-full p-4 text-left font-bold text-xs sm:text-sm text-neutral-800 flex items-center justify-between gap-4 transition-colors cursor-pointer ${
@@ -368,7 +368,7 @@ export default function FAQSection({ activeTab = 'daily', onSelectTab }: FAQSect
                   }`}
                 >
                   <span className="flex items-center gap-2">
-                    <span className="text-[10px] uppercase font-extrabold tracking-wider bg-neutral-200 text-neutral-700 px-2 py-0.5 rounded-md shrink-0">
+                    <span className="text-[10px] uppercase font-extrabold tracking-wider bg-neutral-200 text-neutral-700 dark:text-neutral-300 px-2 py-0.5 rounded-md shrink-0">
                       {faq.categoryLabel}
                     </span>
                     <span>{faq.q}</span>
@@ -377,7 +377,7 @@ export default function FAQSection({ activeTab = 'daily', onSelectTab }: FAQSect
                 </button>
 
                 {isOpen && (
-                  <div className="p-4 sm:p-5 text-xs sm:text-sm text-neutral-600 leading-relaxed bg-white space-y-4" itemScope itemProp="acceptedAnswer" itemType="https://schema.org/Answer">
+                  <div className="p-4 sm:p-5 text-xs sm:text-sm text-neutral-600 dark:text-neutral-400 leading-relaxed bg-white dark:bg-neutral-900 space-y-4" itemScope itemProp="acceptedAnswer" itemType="https://schema.org/Answer">
                     <p itemProp="text">{faq.a}</p>
 
                     {/* Bottom Toolbar: Direct CTA & Feedback Buttons */}
@@ -394,7 +394,7 @@ export default function FAQSection({ activeTab = 'daily', onSelectTab }: FAQSect
                       ) : <div />}
 
                       {/* Helpful Feedback Controls */}
-                      <div className="flex items-center gap-2 text-neutral-500 bg-neutral-50 px-3 py-1.5 rounded-lg border border-neutral-200 shrink-0">
+                      <div className="flex items-center gap-2 text-neutral-500 bg-neutral-50 dark:bg-neutral-800 px-3 py-1.5 rounded-lg border border-neutral-200 dark:border-neutral-700 shrink-0">
                         <span className="text-[11px] font-medium">Esta resposta foi útil?</span>
                         {feedback ? (
                           <span className="text-[11px] font-bold text-emerald-600 flex items-center gap-1">

@@ -1,3 +1,5 @@
+import { useDialog } from '../hooks/useDialog';
+import { copyText as writeClipboard, nonNegative } from '../utils/browser';
 import React, { useState } from 'react';
 import { ArrowRightLeft, Clock, DollarSign, X, Copy, Check, Calculator } from 'lucide-react';
 import { timeToMinutes, minutesToTime } from '../utils/time';
@@ -22,6 +24,7 @@ export default function QuickConverterModal({ isOpen, onClose }: QuickConverterM
 
   const [copied, setCopied] = useState(false);
 
+  const dialogRef = useDialog(isOpen, onClose);
   if (!isOpen) return null;
 
   // Minutes -> Decimal Calculation
@@ -29,23 +32,23 @@ export default function QuickConverterModal({ isOpen, onClose }: QuickConverterM
   const decimalResult = (totalMins / 60).toFixed(2);
 
   // Decimal -> Time Calculation
-  const decVal = parseFloat(decimalInput) || 0;
+  const decVal = nonNegative(decimalInput, 0);
   const decMins = Math.round(decVal * 60);
   const timeResult = minutesToTime(decMins);
 
   // Hourly Rate Calculation
-  const salVal = parseFloat(salaryInput) || 0;
-  const divVal = parseFloat(divisorInput) || 220;
+  const salVal = nonNegative(salaryInput, 0);
+  const divVal = nonNegative(divisorInput, 220);
   const hourlyRateResult = divVal > 0 ? (salVal / divVal).toFixed(2) : '0.00';
 
-  const copyText = (txt: string) => {
-    navigator.clipboard.writeText(txt);
+  const copyText = async (txt: string) => {
+    if (!await writeClipboard(txt)) return;
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
 
   return (
-    <div className="fixed inset-0 bg-neutral-900/60 backdrop-blur-xs z-50 flex items-center justify-center p-4 animate-in fade-in duration-200 no-print">
+    <div ref={dialogRef} role="dialog" aria-modal="true" aria-label="Conversor de Horas" tabIndex={-1} className="fixed inset-0 bg-neutral-900/60 backdrop-blur-xs z-[70] flex items-center justify-center p-4 animate-in fade-in duration-200 no-print">
       <div className="bg-white dark:bg-neutral-900 rounded-2xl max-w-md w-full p-6 shadow-2xl border border-neutral-200 dark:border-neutral-800 transition-colors">
         <div className="flex items-center justify-between pb-4 border-b border-neutral-100 dark:border-neutral-800">
           <div className="flex items-center gap-2">
@@ -59,6 +62,7 @@ export default function QuickConverterModal({ isOpen, onClose }: QuickConverterM
           </div>
           <button
             onClick={onClose}
+            aria-label="Fechar"
             className="text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-200 p-1 rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors cursor-pointer"
           >
             <X className="w-5 h-5" />
@@ -100,7 +104,7 @@ export default function QuickConverterModal({ isOpen, onClose }: QuickConverterM
               <label className="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 mb-1">
                 Digite o Horário (HH:MM):
               </label>
-              <input
+              <input aria-label="Digite o Horário (HH:MM):"
                 type="time"
                 value={timeInput}
                 onChange={(e) => setTimeInput(e.target.value)}
@@ -135,8 +139,8 @@ export default function QuickConverterModal({ isOpen, onClose }: QuickConverterM
               <label className="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 mb-1">
                 Digite em Decimal (ex: 7.75 ou 8.8):
               </label>
-              <input
-                type="number" inputMode="decimal"
+              <input aria-label="Digite em Decimal (ex: 7.75 ou 8.8):"
+                type="number" min="0" inputMode="decimal"
                 step="0.01"
                 value={decimalInput}
                 onChange={(e) => setDecimalInput(e.target.value)}
@@ -172,8 +176,8 @@ export default function QuickConverterModal({ isOpen, onClose }: QuickConverterM
                 <label className="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 mb-1">
                   Salário Bruto (R$):
                 </label>
-                <input
-                  type="number" inputMode="decimal"
+                <input aria-label="Salário Bruto (R$):"
+                  type="number" min="0" inputMode="decimal"
                   value={salaryInput}
                   onChange={(e) => setSalaryInput(e.target.value)}
                   className="w-full border border-neutral-300 dark:border-neutral-700 rounded-xl p-2.5 font-mono text-sm font-bold text-neutral-800 dark:text-white bg-white dark:bg-neutral-800"
@@ -183,7 +187,7 @@ export default function QuickConverterModal({ isOpen, onClose }: QuickConverterM
                 <label className="block text-xs font-semibold text-neutral-700 dark:text-neutral-300 mb-1">
                   Divisor Mensal:
                 </label>
-                <select
+                <select aria-label="Divisor Mensal:"
                   value={divisorInput}
                   onChange={(e) => setDivisorInput(e.target.value)}
                   className="w-full border border-neutral-300 dark:border-neutral-700 rounded-xl p-2.5 font-mono text-sm font-bold text-neutral-800 dark:text-white bg-white dark:bg-neutral-800 cursor-pointer"
@@ -216,6 +220,7 @@ export default function QuickConverterModal({ isOpen, onClose }: QuickConverterM
         <div className="pt-3 border-t border-neutral-100 dark:border-neutral-800 flex justify-end">
           <button
             onClick={onClose}
+            aria-label="Fechar"
             className="px-4 py-2 text-xs font-semibold text-neutral-600 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded-lg transition-colors cursor-pointer"
           >
             Fechar

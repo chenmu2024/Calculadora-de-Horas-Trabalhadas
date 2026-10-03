@@ -1,3 +1,6 @@
+import { copyText as writeClipboard, nonNegative } from '../utils/browser';
+import { calculateINSS, calculateIRRF } from '../utils/taxCalculations';
+import { MINIMUM_WAGE_2026 } from '../utils/taxCalculations';
 import React, { useState } from 'react';
 import { Palmtree, DollarSign, Calendar, AlertCircle, Copy, Check, Printer, Sparkles, HelpCircle, ArrowRight, ShieldCheck, Percent } from 'lucide-react';
 import InternalLinkCTA from './InternalLinkCTA';
@@ -14,10 +17,10 @@ export default function FeriasCalculator({ onSelectTab }: FeriasCalculatorProps)
   const [dependents, setDependents] = useState<string>('0');
   const [copied, setCopied] = useState(false);
 
-  const baseSalary = parseFloat(salary) || 0;
-  const numDependents = parseInt(dependents) || 0;
-  const days = parseInt(vacationDays) || 30;
-  const daysSold = parseInt(sellDays) || 0;
+  const baseSalary = nonNegative(salary, 0);
+  const numDependents = nonNegative(dependents, 0);
+  const days = nonNegative(vacationDays, 30);
+  const daysSold = Math.min(nonNegative(sellDays, 0), Math.floor(days / 3));
   const actualDaysOff = days - daysSold; // Dias que efetivamente ficará de folga
 
   // Valor diário
@@ -36,52 +39,16 @@ export default function FeriasCalculator({ onSelectTab }: FeriasCalculatorProps)
   // 1ª Parcela do 13º Salário (50% do salário bruto - Isento de INSS/IRRF no adiantamento)
   const advance13thAmount = advance13th ? baseSalary * 0.5 : 0;
 
-  // Cálculo INSS Progressivo 2026 sobre a parcela tributável
-  const calculateINSS = (value: number) => {
-    if (value <= 0) return 0;
-    let inss = 0;
-    const f1 = 1518.00;
-    const f2 = 2793.88;
-    const f3 = 4190.83;
-    const f4 = 8157.41;
-
-    if (value <= f1) {
-      inss = value * 0.075;
-    } else if (value <= f2) {
-      inss = (f1 * 0.075) + ((value - f1) * 0.09);
-    } else if (value <= f3) {
-      inss = (f1 * 0.075) + ((f2 - f1) * 0.09) + ((value - f2) * 0.12);
-    } else if (value <= f4) {
-      inss = (f1 * 0.075) + ((f2 - f1) * 0.09) + ((f3 - f2) * 0.12) + ((value - f3) * 0.14);
-    } else {
-      inss = (f1 * 0.075) + ((f2 - f1) * 0.09) + ((f3 - f2) * 0.12) + ((f4 - f3) * 0.14); // Teto
-    }
-    return inss;
-  };
-
   const inssDiscount = calculateINSS(totalTaxableVacation);
-
-  // Cálculo IRRF 2026 sobre a parcela tributável
-  const irrfBase = Math.max(0, totalTaxableVacation - inssDiscount - (numDependents * 189.59));
-  let irrfDiscount = 0;
-  if (irrfBase > 4664.68) {
-    irrfDiscount = (irrfBase * 0.275) - 896.00;
-  } else if (irrfBase > 3751.05) {
-    irrfDiscount = (irrfBase * 0.225) - 662.77;
-  } else if (irrfBase > 2826.65) {
-    irrfDiscount = (irrfBase * 0.15) - 381.44;
-  } else if (irrfBase > 2259.20) {
-    irrfDiscount = (irrfBase * 0.075) - 169.44;
-  }
-  irrfDiscount = Math.max(0, irrfDiscount);
+  const irrfDiscount = calculateIRRF(totalTaxableVacation, numDependents, inssDiscount);
 
   // Total Líquido a Receber 2 dias antes de sair de férias
   const totalGross = totalTaxableVacation + totalAbonoExempt + advance13thAmount;
   const totalNet = totalGross - inssDiscount - irrfDiscount;
 
-  const copyResults = () => {
+  const copyResults = async () => {
     const text = `=== Cálculo de Férias CLT (2026) ===\nSalário Base: R$ ${baseSalary.toFixed(2)}\nDias de Férias: ${actualDaysOff} dias de descanso${daysSold > 0 ? ` + ${daysSold} dias vendidos (abono)` : ''}\nFérias Brutas (${actualDaysOff}d): R$ ${vacationGross.toFixed(2)}\n1/3 Constitucional: R$ ${oneThirdVacation.toFixed(2)}\n${daysSold > 0 ? `Abono Pecuniário + 1/3 (Isento): R$ ${totalAbonoExempt.toFixed(2)}\n` : ''}${advance13th ? `Adiantamento 1ª parc. 13º: R$ ${advance13thAmount.toFixed(2)}\n` : ''}Desconto INSS: - R$ ${inssDiscount.toFixed(2)}\nDesconto IRRF: - R$ ${irrfDiscount.toFixed(2)}\nTotal Líquido no Bolso: R$ ${totalNet.toFixed(2)}\nCalculado em: https://calculadoradehorastrabalhadas.org/calculadora-de-ferias`;
-    navigator.clipboard.writeText(text);
+    if (!await writeClipboard(text)) return;
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
@@ -118,7 +85,7 @@ export default function FeriasCalculator({ onSelectTab }: FeriasCalculatorProps)
             <span className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400 text-xs font-bold">R$</span>
             <input
               id="fer-sal"
-              type="number"
+              type="number" min="0"
               value={salary}
               onChange={(e) => setSalary(e.target.value)}
               className="w-full bg-white dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-700 rounded-xl py-2.5 pl-9 pr-3 text-sm font-bold text-neutral-900 dark:text-white focus:ring-2 focus:ring-teal-500 outline-none"
@@ -216,7 +183,7 @@ export default function FeriasCalculator({ onSelectTab }: FeriasCalculatorProps)
           </label>
           <input
             id="fer-dep"
-            type="number"
+            type="number" min="0"
             value={dependents}
             onChange={(e) => setDependents(e.target.value)}
             className="w-full bg-white dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-700 rounded-xl py-2 px-3 text-sm font-bold text-neutral-900 dark:text-white focus:ring-2 focus:ring-teal-500 outline-none"
