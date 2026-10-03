@@ -1,4 +1,131 @@
 {
+  "redirects": [
+    {
+      "source": "/timesheet",
+      "destination": "/calculadora-semanal",
+      "permanent": true
+    },
+    {
+      "source": "/monthly",
+      "destination": "/calculadora-mensal",
+      "permanent": true
+    },
+    {
+      "source": "/12x36",
+      "destination": "/escala-12x36",
+      "permanent": true
+    },
+    {
+      "source": "/escala12x36",
+      "destination": "/escala-12x36",
+      "permanent": true
+    },
+    {
+      "source": "/faltas",
+      "destination": "/atrasos-e-faltas",
+      "permanent": true
+    },
+    {
+      "source": "/ferias",
+      "destination": "/calculadora-de-ferias",
+      "permanent": true
+    },
+    {
+      "source": "/decimo",
+      "destination": "/decimo-terceiro",
+      "permanent": true
+    },
+    {
+      "source": "/13",
+      "destination": "/decimo-terceiro",
+      "permanent": true
+    },
+    {
+      "source": "/seguro",
+      "destination": "/seguro-desemprego",
+      "permanent": true
+    },
+    {
+      "source": "/insalubridade",
+      "destination": "/insalubridade-e-periculosidade",
+      "permanent": true
+    },
+    {
+      "source": "/cltpj",
+      "destination": "/calculadora-clt-pj",
+      "permanent": true
+    },
+    {
+      "source": "/clt-pj",
+      "destination": "/calculadora-clt-pj",
+      "permanent": true
+    },
+    {
+      "source": "/banco",
+      "destination": "/banco-de-horas",
+      "permanent": true
+    },
+    {
+      "source": "/sum",
+      "destination": "/somador-de-horas",
+      "permanent": true
+    },
+    {
+      "source": "/holerite",
+      "destination": "/simulador-de-holerite",
+      "permanent": true
+    },
+    {
+      "source": "/rescisao",
+      "destination": "/calculadora-de-rescisao",
+      "permanent": true
+    },
+    {
+      "source": "/rate",
+      "destination": "/valor-da-hora",
+      "permanent": true
+    },
+    {
+      "source": "/overtime",
+      "destination": "/horas-extras",
+      "permanent": true
+    },
+    {
+      "source": "/night",
+      "destination": "/adicional-noturno",
+      "permanent": true
+    },
+    {
+      "source": "/excel",
+      "destination": "/planilha-excel-ponto",
+      "permanent": true
+    },
+    {
+      "source": "/blog",
+      "destination": "/guia-clt",
+      "permanent": true
+    },
+    {
+      "source": "/about",
+      "destination": "/sobre",
+      "permanent": true
+    },
+    {
+      "source": "/contact",
+      "destination": "/contato",
+      "permanent": true
+    },
+    {
+      "source": "/terms",
+      "destination": "/termos",
+      "permanent": true
+    },
+    {
+      "source": "/privacy",
+      "destination": "/privacidade",
+      "permanent": true
+    }
+  ],
   "rewrites": [
     {
       "source": "/calculadora-semanal",

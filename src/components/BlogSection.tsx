@@ -1,3 +1,4 @@
+import { CONTENT_UPDATED, CONTENT_UPDATED_LABEL, EDITOR_NAME, SOURCES } from '../utils/editorial';
 import { ARTICLE_META } from '../utils/articles';
 import { copyText as writeClipboard } from '../utils/browser';
 import React, { useState, useEffect } from 'react';
@@ -24,14 +25,14 @@ interface Article {
   content: (onSelectCalculator: (tab: string) => void) => React.ReactNode;
 }
 
-export default function BlogSection({ onSelectCalculator }: { onSelectCalculator: (tab: string) => void }) {
-  const [activeArticleId, setActiveArticleId] = useState<string | null>(() => ARTICLE_META.find(article => typeof window !== 'undefined' && window.location.pathname === `/guia-clt/${article.slug}`)?.id ?? null);
+export default function BlogSection({ onSelectCalculator, initialArticleId }: { onSelectCalculator: (tab: string) => void; initialArticleId?: string }) {
+  const [activeArticleId, setActiveArticleId] = useState<string | null>(() => initialArticleId ?? ARTICLE_META.find(article => typeof window !== 'undefined' && window.location.pathname.replace(/\/$/, '') === `/guia-clt/${article.slug}`)?.id ?? null);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('Todos');
   const [copiedFormula, setCopiedFormula] = useState<string | null>(null);
 
   useEffect(() => {
-    const sync = () => setActiveArticleId(ARTICLE_META.find(article => window.location.pathname === `/guia-clt/${article.slug}`)?.id ?? null);
+    const sync = () => setActiveArticleId(ARTICLE_META.find(article => window.location.pathname.replace(/\/$/, '') === `/guia-clt/${article.slug}`)?.id ?? null);
     window.addEventListener('popstate', sync);
     return () => window.removeEventListener('popstate', sync);
   }, []);
@@ -56,10 +57,10 @@ export default function BlogSection({ onSelectCalculator }: { onSelectCalculator
       title: 'Como Calcular Hora de Trabalho? Guia Completo de Jornada CLT (Diárias, Almoço e Ponto)',
       summary: 'Aprenda a fórmula oficial para calcular horas trabalhadas no dia, intervalo intrajornada, conversão de minutos para formato decimal e regras de controle de ponto segundo a CLT.',
       readTime: '12 min de leitura',
-      wordCount: '2.450 palavras',
+      wordCount: 'Fórmulas e exemplos',
       category: 'Jornada & Ponto',
-      updatedAt: 'Julho de 2026',
-      author: 'Especialista em Direito do Trabalho & Recursos Humanos',
+      updatedAt: CONTENT_UPDATED_LABEL,
+      author: EDITOR_NAME,
       keywords: ['calculadora de horas trabalhadas', 'como calcular horas trabalhadas', 'controle de ponto clt', 'intervalo de almoço art 71', 'horas trabalhadas no dia'],
       tableOfContents: [
         { id: 'art1-intro', title: '1. Introdução à Jornada de Trabalho na CLT' },
@@ -229,10 +230,10 @@ export default function BlogSection({ onSelectCalculator }: { onSelectCalculator
       title: 'Como Calcular 44 Horas Trabalhadas de Segunda a Sexta? (Compensação e Escalas 5x2)',
       summary: 'Entenda como funciona a distribuição das 44 horas semanais da CLT em 5 dias úteis com jornada de 8h48min por dia, regras do acordo de compensação e modelos de escala.',
       readTime: '10 min de leitura',
-      wordCount: '2.250 palavras',
+      wordCount: 'Fórmulas e exemplos',
       category: 'Jornada & Ponto',
-      updatedAt: 'Julho de 2026',
-      author: 'Consultoria Trabalhista & Engenharia de Processos de RH',
+      updatedAt: CONTENT_UPDATED_LABEL,
+      author: EDITOR_NAME,
       keywords: ['44 horas semanais de segunda a sexta', 'compensação do sábado clt', 'jornada 8h48m diárias', 'escala 5x2 e 6x1', 'calculadora de horas trabalhadas semanal'],
       tableOfContents: [
         { id: 'art2-constituicao', title: '1. A Regra Constitucional das 44 Horas Semanais' },
@@ -373,10 +374,10 @@ export default function BlogSection({ onSelectCalculator }: { onSelectCalculator
       title: 'Como Calcular o Valor da Hora de Trabalho? (Divisores CLT 220, 200, 180 e 150)',
       summary: 'Descubra como apurar o valor do seu salário hora com base na tabela oficial de divisores da CLT fixada pelo TST. Entenda a diferença entre mensalistas e horistas.',
       readTime: '11 min de leitura',
-      wordCount: '2.380 palavras',
+      wordCount: 'Fórmulas e exemplos',
       category: 'Salário & Divisores',
-      updatedAt: 'Julho de 2026',
-      author: 'Contabilidade Trabalhista & Perícia de Cálculos',
+      updatedAt: CONTENT_UPDATED_LABEL,
+      author: EDITOR_NAME,
       keywords: ['como calcular o valor da hora de trabalho', 'divisor 220 clt', 'divisor 200 clt', 'salario hora clt', 'calculadora de salario hora'],
       tableOfContents: [
         { id: 'art3-conceito', title: '1. O Conceito do Valor da Hora Salarial' },
@@ -537,10 +538,10 @@ export default function BlogSection({ onSelectCalculator }: { onSelectCalculator
       title: 'Como Calcular Hora Extra e Adicional Noturno? (50%, 100%, Hora Ficta e Reflexo DSR)',
       summary: 'Guia definitivo de cálculo de horas suplementares e adicionais noturnos com redução ficta de hora urbana, prorrogação de jornada (Súmula 60 TST) e integração no Descanso Semanal Remunerado.',
       readTime: '15 min de leitura',
-      wordCount: '2.600 palavras',
+      wordCount: 'Fórmulas e exemplos',
       category: 'Horas Extras & Noturno',
-      updatedAt: 'Julho de 2026',
-      author: 'Especialista em Cálculos Judiciais Trabalhistas',
+      updatedAt: CONTENT_UPDATED_LABEL,
+      author: EDITOR_NAME,
       keywords: ['como calcular hora extra 50 e 100', 'adicional noturno hora ficta', 'reflexo dsr horas extras', 'sumula 60 tst', 'calculadora de horas extras e noturna'],
       tableOfContents: [
         { id: 'art4-he50', title: '1. Como Calcular Hora Extra de 50% (Dias Úteis)' },
@@ -746,7 +747,7 @@ export default function BlogSection({ onSelectCalculator }: { onSelectCalculator
       {activeArticle ? (
         <div className="bg-neutral-50/50 border border-blue-200 rounded-2xl p-6 md:p-8 space-y-6 relative animate-in fade-in duration-300">
           {/* Header Bar inside Reader */}
-          <div className="flex items-center justify-between border-b border-neutral-200 dark:border-neutral-700 pb-4">
+          <div className="flex flex-wrap gap-3 items-center justify-between border-b border-neutral-200 dark:border-neutral-700 pb-4">
             <div className="flex items-center gap-2 text-xs text-neutral-500">
               <span className="bg-blue-100 text-blue-800 px-2.5 py-0.5 rounded-full font-bold">{activeArticle.category}</span>
               <span>•</span>
@@ -769,10 +770,10 @@ export default function BlogSection({ onSelectCalculator }: { onSelectCalculator
             </h2>
             <div className="flex flex-wrap items-center gap-4 text-xs text-neutral-500 border-b border-neutral-200 dark:border-neutral-700 pb-4">
               <span className="flex items-center gap-1 text-neutral-700 dark:text-neutral-300 font-medium">
-                <UserCheck className="w-3.5 h-3.5 text-blue-600" /> {activeArticle.author}
+                <UserCheck className="w-3.5 h-3.5 text-blue-600" /> <a href="/sobre#metodologia-editorial" className="underline">{activeArticle.author}</a>
               </span>
               <span className="flex items-center gap-1">
-                <Calendar className="w-3.5 h-3.5" /> Atualizado em {activeArticle.updatedAt}
+                <Calendar className="w-3.5 h-3.5" /> <time dateTime={CONTENT_UPDATED}>Conteúdo revisado em {activeArticle.updatedAt}</time>
               </span>
             </div>
           </div>
@@ -800,10 +801,16 @@ export default function BlogSection({ onSelectCalculator }: { onSelectCalculator
             {activeArticle.content(onSelectCalculator)}
           </div>
 
+          <aside className="text-sm space-y-2" aria-label="Limites e leituras relacionadas">
+            <p>Simulação informativa: confira contrato, categoria e convenção coletiva. O resumo não substitui a leitura das fontes oficiais nem uma análise individual.</p>
+            <nav className="flex flex-wrap gap-3" aria-label="Artigos relacionados">
+              {ARTICLE_META.filter(row => row.id !== activeArticle.id).map(row => <a className="text-blue-600 underline" key={row.id} href={`/guia-clt/${row.slug}`}>{row.title}</a>)}
+            </nav>
+          </aside>
           {/* Footer of Reader */}
           <div className="flex justify-between items-center pt-4 border-t border-neutral-200 dark:border-neutral-700">
             <span className="text-xs text-neutral-500">
-              Fonte Oficial: <a href={getHrefForTab('daily')} onClick={(e) => { e.preventDefault(); onSelectCalculator('daily'); }} className="text-blue-600 font-bold underline">calculadoradehorastrabalhadas.org</a>
+              Referência oficial: <a href={SOURCES.clt.url} className="text-blue-600 font-bold underline">CLT — texto compilado</a> • <a href="/sobre#metodologia-editorial" className="text-blue-600 underline">Método e correções</a>
             </span>
             <button
               onClick={() => selectArticle(null)}
@@ -847,7 +854,7 @@ export default function BlogSection({ onSelectCalculator }: { onSelectCalculator
                   onClick={() => selectArticle(art.id)}
                   className="text-xs font-bold text-blue-600 hover:text-blue-800 flex items-center gap-1 cursor-pointer transition-colors"
                 >
-                  Ler Artigo Completo (2.000+ palavras) <ArrowRight className="w-3.5 h-3.5" />
+                  Ler Artigo Completo <ArrowRight className="w-3.5 h-3.5" />
                 </button>
               </div>
             </div>

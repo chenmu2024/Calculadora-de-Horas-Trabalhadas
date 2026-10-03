@@ -1,3 +1,4 @@
+import { CONTENT_UPDATED, CONTENT_UPDATED_LABEL } from '../utils/editorial';
 import { copyText as writeClipboard } from '../utils/browser';
 import { MouseEvent, useState } from 'react';
 import EATBadge from './EATBadge';
@@ -171,7 +172,7 @@ export default function SEOContent({ activeTab = 'daily', onSelectTab }: SEOCont
           Como Calcular Horas Extras de 50% e 100% e Reflexo no DSR
         </h2>
         <p className="text-neutral-600 dark:text-neutral-300 text-sm sm:text-base leading-relaxed">
-          Entenda a fórmula matemática oficial para apurar horas extras diárias, acréscimos legais de 50% (dias úteis), 100% (domingos e feriados) e o cálculo do reflexo no <strong>Descanso Semanal Remunerado (DSR)</strong> conforme a <strong>Súmula 172 do TST</strong>.
+          Entenda a fórmula matemática oficial para apurar horas extras diárias, acréscimos legais de 50% (dias úteis), 100% (domingos e feriados não compensados, conforme o regime aplicável) e o cálculo do reflexo no <strong>Descanso Semanal Remunerado (DSR)</strong> conforme a <strong>Súmula 172 do TST</strong>.
         </p>
       </div>
 
@@ -457,7 +458,7 @@ export default function SEOContent({ activeTab = 'daily', onSelectTab }: SEOCont
             <Clock className="w-4 h-4 text-blue-600" /> Plantões e Carga Horária Mensal
           </h3>
           <p className="text-neutral-600 dark:text-neutral-300 text-xs leading-relaxed">
-            Em um mês padrão de 30 dias, o trabalhador cumpre <strong>15 plantões de 12 horas</strong>, totalizando 180 horas físicas de trabalho. Em meses de 31 dias, podem ser cumpridos até 16 plantões (192 horas). O divisor legal padrão para cálculo do salário-hora continua sendo <strong>220</strong> (ou 210/180 conforme CCT).
+            Em um mês padrão de 30 dias, o trabalhador cumpre <strong>15 plantões de 12 horas</strong>, totalizando 180 horas de duração dos plantões antes dos intervalos não computáveis. Em meses de 31 dias, podem ser cumpridos até 16 plantões (192 horas). O divisor legal padrão para cálculo do salário-hora continua sendo <strong>220</strong> (ou 210/180 conforme CCT).
           </p>
         </div>
 
@@ -466,7 +467,7 @@ export default function SEOContent({ activeTab = 'daily', onSelectTab }: SEOCont
             <Moon className="w-4 h-4 text-indigo-600" /> Adicional Noturno e Prorrogação (Súmula 60 TST)
           </h3>
           <p className="text-neutral-600 dark:text-neutral-300 text-xs leading-relaxed">
-            No plantão noturno (19h às 07h), o trabalhador tem direito ao adicional de 20% com a <strong>hora ficta reduzida de 52m30s</strong> das 22h às 05h. Além disso, as horas trabalhadas das 05h às 07h da manhã (prorrogação) continuam remuneradas com o adicional noturno.
+            No plantão noturno (19h às 07h), o trabalhador tem direito ao adicional de 20% com a <strong>hora ficta reduzida de 52m30s</strong> das 22h às 05h. A prorrogação das 05h às 07h exige confirmação dos requisitos aplicáveis; na escala 12x36, confira também o Art. 59-A da CLT e o acordo ou convenção coletiva antes de aplicar o adicional.
           </p>
         </div>
       </div>
@@ -521,7 +522,7 @@ export default function SEOContent({ activeTab = 'daily', onSelectTab }: SEOCont
           Como Calcular Férias CLT: 1/3 Constitucional, Venda e Prazo de Pagamento
         </h2>
         <p className="text-neutral-600 dark:text-neutral-300 text-sm leading-relaxed">
-          O cálculo de férias pela CLT garante a remuneração normal acrescida de no mínimo um terço constitucional (Art. 7º, XVII da CF/88). Além disso, o trabalhador pode optar pelo abono pecuniário (vender 10 dias) com isenção total de tributos.
+          O cálculo de férias pela CLT garante a remuneração normal acrescida de no mínimo um terço constitucional (Art. 7º, XVII da CF/88). Além disso, o trabalhador pode optar pelo abono pecuniário, limitado a um terço do período devido (vender 10 dias pressupõe direito a 30 dias). Confira o tratamento tributário de cada verba e dos reflexos, sem presumir isenção de toda a remuneração de férias.
         </p>
       </div>
 
@@ -752,12 +753,14 @@ export default function SEOContent({ activeTab = 'daily', onSelectTab }: SEOCont
     }
   };
 
+  if (['blog', 'about', 'contact', 'terms', 'privacy', 'sum', 'timesheet', 'monthly', 'excel', 'not-found'].includes(activeTab)) return null;
+
   return (
     <article className="bg-white dark:bg-neutral-900 p-6 md:p-8 rounded-2xl shadow-sm border border-neutral-200 dark:border-neutral-800 space-y-8 animate-in fade-in duration-300 transition-colors">
       <div className="flex flex-wrap items-center justify-between gap-4">
         <EATBadge />
         <span className="text-xs text-neutral-500 dark:text-neutral-400 flex items-center gap-1">
-          <Clock className="w-3.5 h-3.5 text-blue-600" /> Atualizado em 2026 • Em conformidade com a Legislação Trabalhista Brasileira
+          <Clock className="w-3.5 h-3.5 text-blue-600" /> <time dateTime={CONTENT_UPDATED}>Conteúdo revisado em {CONTENT_UPDATED_LABEL}</time> • Confira a legislação e o acordo aplicáveis
         </span>
       </div>
 

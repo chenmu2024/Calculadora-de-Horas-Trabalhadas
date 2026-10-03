@@ -1,3 +1,4 @@
+import { CONTENT_UPDATED, CONTENT_UPDATED_LABEL, SOURCES } from '../utils/editorial';
 import React from 'react';
 import { 
   Calculator, ShieldCheck, Users, Sparkles, Award, 
@@ -35,8 +36,8 @@ export default function AboutUsPage({ onSelectCalculator }: AboutUsPageProps) {
           <div className="w-10 h-10 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center mx-auto mb-2">
             <Calculator className="w-5 h-5" />
           </div>
-          <p className="text-xl sm:text-2xl font-black text-neutral-900 dark:text-neutral-100">+1.5 milhão</p>
-          <p className="text-xs text-neutral-500 font-medium">Simulações mensais</p>
+          <p className="text-xl sm:text-2xl font-black text-neutral-900 dark:text-neutral-100">Código aberto</p>
+          <p className="text-xs text-neutral-500 font-medium">Método verificável</p>
         </div>
 
         <div className="bg-white dark:bg-neutral-900 p-5 rounded-2xl border border-neutral-200 dark:border-neutral-700 shadow-sm text-center space-y-1">
@@ -80,6 +81,14 @@ export default function AboutUsPage({ onSelectCalculator }: AboutUsPageProps) {
           </p>
         </section>
 
+        <section id="metodologia-editorial" className="space-y-3 text-sm scroll-mt-24">
+          <h2 className="font-bold text-xl">Responsabilidade editorial, fontes e correções</h2>
+          <p>O conteúdo é publicado pela Calculadora de Horas Trabalhadas, identificada pelo domínio deste portal. Não atribuímos a autoria a profissionais com credenciais não verificadas. A identificação não representa registro de pessoa jurídica ou certificação profissional.</p>
+          <p>O <a className="text-blue-600 underline" href="https://github.com/chenmu2024/Calculadora-de-Horas-Trabalhadas">repositório público</a> permite consultar código, histórico de alterações e testes. As simulações dependem das premissas informadas e não substituem análise individual de contrato, categoria ou convenção coletiva.</p>
+          <p>Ao corrigir uma regra, atualizamos os exemplos e resumos correspondentes e verificamos os casos afetados. A data de revisão indica alteração do conteúdo, não certificação jurídica: <time dateTime={CONTENT_UPDATED}>{CONTENT_UPDATED_LABEL}</time>. Datas de primeira publicação não são inventadas.</p>
+          <ul className="list-disc pl-5">{Object.values(SOURCES).map(source => <li key={source.url}><a className="text-blue-600 underline" href={source.url}>{source.name}</a></li>)}</ul>
+          <p>Para relatar uma divergência, use o <a className="text-blue-600 underline" href="https://github.com/chenmu2024/Calculadora-de-Horas-Trabalhadas/issues">registro público de problemas</a> ou a <a className="text-blue-600 underline" href="/contato">página de contato</a>. Informe a ferramenta, premissas e resultado esperado sem publicar dados pessoais.</p>
+        </section>
         {/* Section 2: Mission, Vision & Values */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-2">
           <div className="bg-neutral-50 dark:bg-neutral-800 p-5 rounded-2xl border border-neutral-200 dark:border-neutral-700 space-y-2">
@@ -134,9 +143,9 @@ export default function AboutUsPage({ onSelectCalculator }: AboutUsPageProps) {
             <div className="flex items-start gap-3 bg-neutral-50 dark:bg-neutral-800 p-4 rounded-xl border border-neutral-200 dark:border-neutral-700">
               <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
               <div className="space-y-1">
-                <h4 className="font-bold text-neutral-900 dark:text-neutral-100 text-xs sm:text-sm">Rigor Jurídico e Atualização Permanentemente Auditada</h4>
+                <h4 className="font-bold text-neutral-900 dark:text-neutral-100 text-xs sm:text-sm">Referências Oficiais e Revisões do Conteúdo</h4>
                 <p className="text-xs text-neutral-600 dark:text-neutral-400 leading-relaxed">
-                  Nossos algoritmos são permanentemente alinhados às Súmulas do Tribunal Superior do Trabalho (TST), Portarias do MTE (incluindo Portaria 671/2021) e à legislação CLT vigente para 2026.
+                  As referências de cada ferramenta estão disponíveis junto ao método de cálculo. Testes automatizados verificam casos definidos; não representam auditoria jurídica independente nem abrangem todos os contratos e categorias.
                 </p>
               </div>
             </div>

@@ -28,6 +28,10 @@ O build pré-renderiza os 23 caminhos existentes e quatro artigos com seus títu
 
 As tabelas financeiras estão em `src/utils/taxCalculations.ts`; atualize os testes e as referências quando mudar o ano. As planilhas XLSX contêm fórmulas de horas, saldo e valor; o CSV contém valores estáticos e escapa conteúdo do usuário. Não há coleta do e-mail opcional de download.
 
+## SEO e GEO
+
+Consulte [a rotina de publicação, manutenção e medição](docs/SEO-GEO.md). `npm run verify` também verifica o conteúdo dos 27 arquivos HTML finais, os dados estruturados e os snapshots de contexto para IA. Depois da implantação, `npm run check:live` confere o domínio oficial; use `npm run check:live -- http://127.0.0.1:4174` para um preview. A execução local não confirma indexação, classificação ou desempenho de visitantes reais.
+
 ## Contato e privacidade
 
 O formulário abre um rascunho no aplicativo de e-mail para o endereço já informado pelo site; não afirma que o e-mail foi enviado nem garante prazo de resposta. Um backend de envio não está configurado. Os registros antigos de histórico são lidos sem apagar dados; falhas de armazenamento/clipboard são informadas na tela. As preferências de cookies podem ser reabertas no rodapé. Não há publicidade ou análise de terceiros ativa no aplicativo.

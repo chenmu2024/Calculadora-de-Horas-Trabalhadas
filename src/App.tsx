@@ -1,3 +1,6 @@
+import { ARTICLE_META } from './utils/articles';
+import CalculationReference from './components/CalculationReference';
+import { TOOL_ANSWERS } from './utils/editorial';
 import BrowserNotice from './components/BrowserNotice';
 import CalculatorErrorBoundary from './components/CalculatorErrorBoundary';
 import React, { useState, useEffect, Suspense } from 'react';
@@ -177,10 +180,10 @@ export default function App() {
       <section className="bg-white dark:bg-neutral-900 border-b border-neutral-200 dark:border-neutral-800 py-4 sm:py-8 px-4 transition-colors">
         <div className="max-w-4xl mx-auto text-center space-y-3">
           <h1 className="text-2xl sm:text-4xl font-extrabold text-neutral-900 dark:text-white tracking-tight leading-tight">
-            {PAGE_H1_TITLES[activeTab] || 'Calculadora de Horas Trabalhadas'}
+            {ARTICLE_META.find(row => pathname.replace(/\/$/, '') === `/guia-clt/${row.slug}`)?.title || PAGE_H1_TITLES[activeTab] || 'Calculadora de Horas Trabalhadas'}
           </h1>
           <p className="text-neutral-600 dark:text-neutral-400 text-xs sm:text-base max-w-2xl mx-auto leading-relaxed">
-            {PAGE_SUBTITLES[activeTab] || 'Ferramenta gratuita para calcular horas trabalhadas no dia, na semana e no mês, intervalo de almoço, valor da hora, horas extras (50% e 100%) e adicional noturno no padrão CLT.'}
+            {ARTICLE_META.find(row => pathname.replace(/\/$/, '') === `/guia-clt/${row.slug}`)?.description || PAGE_SUBTITLES[activeTab] || 'Ferramenta gratuita para calcular horas trabalhadas no dia, na semana e no mês, intervalo de almoço, valor da hora, horas extras (50% e 100%) e adicional noturno no padrão CLT.'}
           </p>
 
           <a href={activeTab === 'daily' ? '#daily-hours' : '#main-calculator'} className="inline-block text-sm font-bold text-blue-700 dark:text-blue-300 underline">Ir para a calculadora</a>
@@ -382,18 +385,12 @@ export default function App() {
                 </div>
               )}
 
+              <CalculationReference activeTab={activeTab} />
               {/* SEO Structured Content */}
               <div className="no-print"><Suspense fallback={null}><SEOContent activeTab={activeTab} onSelectTab={setActiveTab} /></Suspense></div>
 
-              {/* Knowledge Base Articles Section (when not on blog page) */}
-              {activeTab !== 'blog' && (
-                <Suspense fallback={null}>
-                  <BlogSection onSelectCalculator={setActiveTab} />
-                </Suspense>
-              )}
-
               {/* FAQ Section */}
-              <div className="no-print"><Suspense fallback={null}><FAQSection activeTab={activeTab} onSelectTab={setActiveTab} /></Suspense></div>
+              <div className="no-print"><Suspense fallback={null}>{TOOL_ANSWERS[activeTab] && <FAQSection activeTab={activeTab} onSelectTab={setActiveTab} />}</Suspense></div>
             </div>
 
             {/* Sidebar Column (4 cols) */}

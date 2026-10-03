@@ -1,32 +1,49 @@
 # Calculadora de Horas Trabalhadas
 
-> A Calculadora de Horas Trabalhadas (https://calculadoradehorastrabalhadas.org/) é a plataforma líder online e gratuita desenvolvida para o cálculo de jornada de trabalho e direitos trabalhistas no padrão da Consolidação das Leis do Trabalho (CLT) do Brasil. Oferece ferramentas para apuração de horas diárias, escala 12x36, faltas/DSR, férias CLT, 13º salário, seguro-desemprego, adicionais de insalubridade e periculosidade, comparativo CLT vs PJ, holerite e rescisão contratual.
+> Ferramentas gratuitas de cálculo de jornada e simulações trabalhistas no Brasil. Resultados dependem das premissas, categoria e convenção coletiva. Não representam parecer jurídico ou concessão de benefício.
 
-## Calculadoras e Ferramentas Gratuitas
+Revisão do conteúdo: 2026-10-04. Tabelas fiscais: 2026.
 
-- [Calculadora de Horas Diárias](https://calculadoradehorastrabalhadas.org/): Apuração de horas diárias trabalhadas com registro de ponto de até 4 horários (entrada 1, saída almoço, retorno almoço, saída 2).
-- [Calculadora de Horas Semanal](https://calculadoradehorastrabalhadas.org/calculadora-semanal): Cartão de ponto semanal completo para controle de jornada de 44 horas com saldo de banco de horas e horas extras.
-- [Calculadora de Horas Mensal](https://calculadoradehorastrabalhadas.org/calculadora-mensal): Apuração mensal com aplicação dos divisores oficiais CLT (220h, 200h, 180h) e cálculo do descanso semanal remunerado (DSR).
-- [Calculadora de Escala 12x36](https://calculadoradehorastrabalhadas.org/escala-12x36): Apuração de plantões 12x36 com adicional noturno urbano e feriados em dobro.
-- [Calculadora de Faltas e Perda de DSR](https://calculadoradehorastrabalhadas.org/atrasos-e-faltas): Cálculo de descontos por minutos de atraso, faltas sem atestado e perda do repouso semanal (Lei 605/49).
-- [Calculadora de Férias CLT](https://calculadoradehorastrabalhadas.org/calculadora-de-ferias): Simulação com 1/3 constitucional, abono pecuniário (venda de 10 dias) e deduções INSS/IRRF.
-- [Calculadora de 13º Salário](https://calculadoradehorastrabalhadas.org/decimo-terceiro): Cálculo da 1ª parcela (sem descontos) e 2ª parcela (com deduções de INSS/IRRF).
-- [Calculadora de Seguro-Desemprego](https://calculadoradehorastrabalhadas.org/seguro-desemprego): Cálculo da quantidade de parcelas (3 a 5) e valor mensal conforme tabela oficial do Ministério do Trabalho 2026.
-- [Calculadora de Insalubridade e Periculosidade](https://calculadoradehorastrabalhadas.org/insalubridade-e-periculosidade): Adicional de 10%, 20%, 40% (NR-15) e periculosidade 30% (NR-16) com reflexos.
-- [Calculadora CLT x PJ](https://calculadoradehorastrabalhadas.org/calculadora-clt-pj): Comparativo salarial líquido e valor PJ equivalente para cobrir 13º, férias e FGTS.
-- [Calculadora de Banco de Horas](https://calculadoradehorastrabalhadas.org/banco-de-horas): Gestão e acompanhamento de saldo positivo e negativo de horas conforme Artigos 58 e 59 da CLT.
-- [Somador de Horas](https://calculadoradehorastrabalhadas.org/somador-de-horas): Ferramenta para somar e subtrair horas e minutos no formato HH:MM com conversão decimal automática.
-- [Simulador de Holerite](https://calculadoradehorastrabalhadas.org/simulador-de-holerite): Simulação do salário líquido com descontos progressivos do INSS, tabela do IRRF 2026, vale-transporte e dependentes.
-- [Calculadora de Rescisão Contratual](https://calculadoradehorastrabalhadas.org/calculadora-de-rescisao): Simulação completa dos direitos rescisórios em demissão sem justa causa, aviso prévio, 13º proporcional, férias com 1/3 e multa do FGTS.
-- [Calculadora do Valor da Hora](https://calculadoradehorastrabalhadas.org/valor-da-hora): Cálculo do valor exato da hora de trabalho para funcionários CLT, profissionais PJ e freelancers.
-- [Calculadora de Horas Extras](https://calculadoradehorastrabalhadas.org/horas-extras): Apuração de horas extras com adicional mínimo de 50% em dias úteis e 100% aos domingos e feriados.
-- [Calculadora de Adicional Noturno](https://calculadoradehorastrabalhadas.org/adicional-noturno): Cálculo do adicional noturno (20%) com redução da hora ficta (52 min e 30 seg) e prorrogação de jornada.
-- [Planilhas de Ponto em Excel](https://calculadoradehorastrabalhadas.org/planilha-excel-ponto): Download de modelos gratuitos de planilhas de controle de ponto diário, semanal e mensal.
-- [Guia da CLT e Legislação](https://calculadoradehorastrabalhadas.org/guia-clt): Artigos explicativos sobre a legislação trabalhista brasileira atualizada para 2026.
+## Calculadoras e páginas
 
-## Páginas Institucionais e Legais
+- [Calculadora de Horas Trabalhadas Diária - CLT](https://calculadoradehorastrabalhadas.org/): Some os períodos entre entrada e saída e desconte os intervalos. Converta minutos para decimal dividindo por 60. O saldo depende da meta contratual; tolerâncias devem ser verificadas por registro.
+- [Cartão de Ponto Semanal e Apuração de Horas CLT](https://calculadoradehorastrabalhadas.org/calculadora-semanal): Some as horas líquidas de cada dia e compare com a carga semanal contratada. O saldo semanal não define sozinho a forma de pagamento: confira limites diários e o acordo de compensação.
+- [Calculadora de Horas Trabalhadas Mensal - CLT](https://calculadoradehorastrabalhadas.org/calculadora-mensal): Some as horas efetivamente registradas no mês. O divisor salarial serve para apurar o valor da hora e não representa automaticamente a quantidade de horas físicas trabalhadas.
+- [Calculadora de Escala 12x36 CLT - Plantões, Noturno e Feriados](https://calculadoradehorastrabalhadas.org/escala-12x36): Na escala 12x36, registre os plantões e intervalos. Feriados em dobro e prorrogação noturna dependem do regime e do acordo aplicáveis; não são acréscimos automáticos para toda escala.
+- [Calculadora de Desconto de Faltas, Atrasos e Perda do DSR CLT](https://calculadoradehorastrabalhadas.org/atrasos-e-faltas): Apure atrasos em minutos e faltas injustificadas separadamente. A perda do DSR depende da justificativa e da semana afetada; confirme a convenção coletiva e não desconte duas vezes o mesmo evento.
+- [Calculadora de Férias CLT 2026 - 1/3 Constitucional, Venda e Impostos](https://calculadoradehorastrabalhadas.org/calculadora-de-ferias): O cálculo de férias inclui a remuneração correspondente e o terço constitucional. O abono pecuniário é limitado a um terço do período de férias devido; venda de 10 dias pressupõe direito a 30 dias.
+- [Calculadora de 13º Salário 2026 - 1ª e 2ª Parcelas CLT](https://calculadoradehorastrabalhadas.org/decimo-terceiro): O 13º proporcional considera os meses com pelo menos 15 dias computáveis. Confira remuneração, médias e parcelas já pagas; os descontos da segunda parcela devem considerar o total devido.
+- [Calculadora de Seguro-Desemprego 2026 - Valor e Parcelas MTE](https://calculadoradehorastrabalhadas.org/seguro-desemprego): Use a média salarial e a tabela do MTE de 2026 para estimar o benefício. A quantidade de parcelas e a elegibilidade dependem do histórico e dos requisitos oficiais; a simulação não concede o benefício.
+- [Calculadora de Insalubridade e Periculosidade CLT 2026](https://calculadoradehorastrabalhadas.org/insalubridade-e-periculosidade): Insalubridade e periculosidade dependem de enquadramento e das condições de trabalho. A calculadora aplica o percentual à base selecionada; não comprova exposição nem substitui laudo ou análise do acordo.
+- [Calculadora CLT x PJ 2026 - Comparador Salarial e Benefícios](https://calculadoradehorastrabalhadas.org/calculadora-clt-pj): Compare remuneração CLT e receita PJ incluindo férias, 13º, benefícios, impostos, custos e horas faturáveis. A equivalência financeira depende das premissas e não determina a legalidade da contratação.
+- [Calculadora de Banco de Horas e Saldo - CLT](https://calculadoradehorastrabalhadas.org/banco-de-horas): O saldo do banco de horas é a diferença entre horas registradas e a meta informada. Prazos, compensação e pagamento dependem do acordo aplicável; o saldo positivo não equivale automaticamente a horas extras pagas.
+- [Somador de Horas Online Grátis - Somar Minutos](https://calculadoradehorastrabalhadas.org/somador-de-horas): Some ou subtraia durações em horas e minutos. Minutos são uma base de 60, portanto 1h30 não corresponde a 1,30 hora decimal.
+- [Simulador de Holerite e Salário Líquido CLT](https://calculadoradehorastrabalhadas.org/simulador-de-holerite): O salário líquido é o total de proventos menos os descontos aplicáveis. INSS é progressivo; no IRRF de 2026, o desconto simplificado substitui as deduções legais e a redução depende do rendimento.
+- [Calculadora de Rescisão Contratual CLT 2026](https://calculadoradehorastrabalhadas.org/calculadora-de-rescisao): A rescisão depende da modalidade, datas, aviso prévio, parcelas já pagas e férias adquiridas. A projeção do aviso pode alterar os avos; informe valores e períodos pendentes sem duplicar pagamentos.
+- [Calculadora de Valor da Hora Trabalhada - CLT](https://calculadoradehorastrabalhadas.org/valor-da-hora): Para mensalistas, divida o salário pela base de horas aplicável à jornada. Para PJ e freelancers, considere apenas horas faturáveis, custos e impostos; divisores CLT não devem ser usados automaticamente.
+- [Calculadora de Horas Extras 50% e 100% - CLT](https://calculadoradehorastrabalhadas.org/horas-extras): Multiplique o valor da hora normal pelas horas extras e pelo fator do adicional. Domingos e feriados não compensados podem exigir pagamento em dobro; confira a escala e o acordo aplicáveis.
+- [Calculadora de Adicional Noturno e Hora Ficta](https://calculadoradehorastrabalhadas.org/adicional-noturno): No trabalho noturno urbano, o período de referência é 22h–05h, com adicional mínimo de 20% e hora reduzida de 52min30s. Intervalos são descontados; prorrogação exige análise dos requisitos aplicáveis.
+- [Planilha de Controle de Ponto Excel Grátis](https://calculadoradehorastrabalhadas.org/planilha-excel-ponto): A planilha de ponto em Excel permite registrar entradas, saídas e intervalos, com fórmulas de duração e saldo. Confira a meta e os adicionais configurados antes de usar o relatório em folha.
+- [Guia Completo da CLT e Horas Trabalhadas 2026](https://calculadoradehorastrabalhadas.org/guia-clt): Aprenda tudo sobre regras de ponto, tolerância de 10 minutos, intervalo intrajornada, adicional noturno e divisor 220 da CLT.
+- [Sobre Nós - Calculadora de Horas Trabalhadas](https://calculadoradehorastrabalhadas.org/sobre): Conheça nossa missão, transparência, precisão dos cálculos e compromisso com os direitos trabalhistas no Brasil.
+- [Fale Conosco - Atendimento e Suporte CLT](https://calculadoradehorastrabalhadas.org/contato): Página de contato; o formulário abre o aplicativo de e-mail, sem envio direto pelo servidor.
+- [Termos de Uso e Condições de Serviço - CLT](https://calculadoradehorastrabalhadas.org/termos): Aviso legal e termos de utilização das ferramentas de cálculo de horas trabalhadas do portal calculadoradehorastrabalhadas.org.
+- [Política de Privacidade e Conformidade LGPD](https://calculadoradehorastrabalhadas.org/privacidade): Entenda como garantimos a total privacidade dos seus dados. Processamento 100% no seu navegador sem armazenamento em servidores.
 
-- [Sobre Nós](https://calculadoradehorastrabalhadas.org/sobre): Missão da plataforma, compromisso com a precisão dos cálculos e metodologia jurídica.
-- [Fale Conosco](https://calculadoradehorastrabalhadas.org/contato): Canais de atendimento, suporte ao usuário e tempo de resposta.
-- [Termos de Uso](https://calculadoradehorastrabalhadas.org/termos): Condições gerais de utilização das calculadoras e isenções de responsabilidade.
-- [Política de Privacidade](https://calculadoradehorastrabalhadas.org/privacidade): Proteção de dados pessoais e política de cookies conforme a LGPD (Lei nº 13.709/2018).
+## Artigos completos
+
+- [Como Calcular Hora de Trabalho? Guia Completo de Jornada CLT (Diárias, Almoço e Ponto)](https://calculadoradehorastrabalhadas.org/guia-clt/como-calcular-hora-de-trabalho): Aprenda a fórmula oficial para calcular horas trabalhadas no dia, intervalo intrajornada, conversão de minutos para formato decimal e regras de controle de ponto segundo a CLT.
+- [Como Calcular 44 Horas Trabalhadas de Segunda a Sexta? (Compensação e Escalas 5x2)](https://calculadoradehorastrabalhadas.org/guia-clt/como-calcular-44-horas-trabalhadas-de-segunda-a-sexta): Entenda como funciona a distribuição das 44 horas semanais da CLT em 5 dias úteis com jornada de 8h48min por dia, regras do acordo de compensação e modelos de escala.
+- [Como Calcular o Valor da Hora de Trabalho? (Divisores CLT 220, 200, 180 e 150)](https://calculadoradehorastrabalhadas.org/guia-clt/como-calcular-o-valor-da-hora-de-trabalho): Descubra como apurar o valor do seu salário hora com base na tabela oficial de divisores da CLT fixada pelo TST. Entenda a diferença entre mensalistas e horistas.
+- [Como Calcular Hora Extra e Adicional Noturno? (50%, 100%, Hora Ficta e Reflexo DSR)](https://calculadoradehorastrabalhadas.org/guia-clt/como-calcular-hora-extra-e-adicional-noturno): Guia definitivo de cálculo de horas suplementares e adicionais noturnos com redução ficta de hora urbana, prorrogação de jornada (Súmula 60 TST) e integração no Descanso Semanal Remunerado.
+
+## Fontes e método
+
+- [CLT — texto compilado, arts. 58, 59-A, 71, 73 e 143](https://www.planalto.gov.br/ccivil_03/decreto-lei/del5452compilado.htm)
+- [Receita Federal — tributação de 2026](https://www.gov.br/receitafederal/pt-br/assuntos/meu-imposto-de-renda/tabelas/2026)
+- [eSocial — valores previdenciários de 2026](https://www.gov.br/esocial/pt-br/noticias/liberado-o-envio-de-eventos-de-folha-para-o-esocial-apos-publicacao-de-portaria-que-reajusta-valores-previdenciarios-em-2026-1)
+- [MTE — Seguro-Desemprego de 2026, vigente desde 11/01/2026](https://www.gov.br/trabalho-e-emprego/pt-br/noticias-e-conteudo/2026/janeiro/mte-reajusta-valores-do-beneficio-seguro-desemprego)
+- [Autoria editorial, limites e correções](https://calculadoradehorastrabalhadas.org/sobre#metodologia-editorial)
+- [Documentação completa](https://calculadoradehorastrabalhadas.org/llms-full.txt)
+
+Este arquivo auxilia a leitura; não garante inclusão, classificação ou citação em mecanismos de busca ou respostas de IA.
