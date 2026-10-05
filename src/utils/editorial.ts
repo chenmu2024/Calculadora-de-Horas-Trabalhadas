@@ -1,8 +1,8 @@
 export const SITE_URL = 'https://calculadoradehorastrabalhadas.org';
 export const EDITOR_NAME = 'Calculadora de Horas Trabalhadas';
 // Content revision, not an assertion of professional legal review or first publication.
-export const CONTENT_UPDATED = '2026-10-04';
-export const CONTENT_UPDATED_LABEL = '4 de outubro de 2026';
+export const CONTENT_UPDATED = '2026-10-05';
+export const CONTENT_UPDATED_LABEL = '5 de outubro de 2026';
 export const SOURCES = {
   clt: { name: 'CLT — texto compilado, arts. 58, 59-A, 71, 73 e 143', url: 'https://www.planalto.gov.br/ccivil_03/decreto-lei/del5452compilado.htm' },
   irrf: { name: 'Receita Federal — tributação de 2026', url: 'https://www.gov.br/receitafederal/pt-br/assuntos/meu-imposto-de-renda/tabelas/2026' },
@@ -12,7 +12,12 @@ export const SOURCES = {
 
 export interface ToolAnswer { answer: string; example: string; related: string[]; fiscal?: boolean }
 export const TOOL_ANSWERS: Record<string, ToolAnswer> = {
-  daily: { answer: 'Some os períodos entre entrada e saída e desconte os intervalos. Converta minutos para decimal dividindo por 60. O saldo depende da meta contratual; tolerâncias devem ser verificadas por registro.', example: '08:00–12:00 e 13:00–17:00 = 8 horas líquidas; 8h30 = 8,5 horas.', related: ['timesheet', 'sum', 'overtime'] },
+  counter: { answer: "Calcule o tempo entre dois horários, inclusive ao cruzar a meia-noite. Veja HH:MM e decimal.", example: "08:25 → 17:46 = 9h21; 23:00 → 05:30 = 6h30.", related: ["minutes","decimal","sum"] },
+  decimal: { answer: "Converta horas decimais nos dois sentidos: HH:MM para decimal e decimal para horas.", example: "8h30 correspondem a 8,5 horas decimais; 7,25 = 7h15.", related: ["minutes","counter","sum"] },
+  business: { answer: "Use o contador de dias uteis entre duas datas, com opções de finais de semana e feriados.", example: "01/01/2026 a 02/01/2026: 2 dias corridos e 1 dia útil ao excluir o feriado nacional.", related: ["service","daily","timesheet"] },
+  service: { answer: "Calcule o intervalo entre datas em anos, meses e dias, com o total de dias corridos.", example: "23/06/2021 a 05/10/2026 = 5 anos, 3 meses e 12 dias.", related: ["business","daily","monthly"] },
+  minutes: { answer: "Some e subtraia durações com segundos opcionais. Veja total de minutos e horas decimais.", example: "01:30 + 00:45 = 02:15 = 135 minutos = 2,25 horas.", related: ["sum","decimal","counter"] },
+  daily: { answer: 'Some os períodos entre entrada e saída e desconte os intervalos. Converta minutos para decimal dividindo por 60. O saldo depende da meta contratual; tolerâncias devem ser verificadas por registro.', example: '08:00–12:00 e 13:00–17:00 = 8 horas líquidas; 8h30 = 8,5 horas.', related: ['banco', 'overtime', 'rate', 'sum', 'decimal'] },
   timesheet: { answer: 'Some as horas líquidas de cada dia e compare com a carga semanal contratada. O saldo semanal não define sozinho a forma de pagamento: confira limites diários e o acordo de compensação.', example: '8h48 por dia × 5 dias = 44 horas semanais, quando a compensação aplicável permite essa distribuição.', related: ['daily', 'banco', 'monthly'] },
   monthly: { answer: 'Some as horas efetivamente registradas no mês. O divisor salarial serve para apurar o valor da hora e não representa automaticamente a quantidade de horas físicas trabalhadas.', example: 'Salário de R$ 2.200 ÷ divisor 220 = R$ 10 por hora; compare a soma dos registros com a meta informada.', related: ['timesheet', 'rate', 'holerite'] },
   escala12x36: { answer: 'Na escala 12x36, registre os plantões e intervalos. Feriados em dobro e prorrogação noturna dependem do regime e do acordo aplicáveis; não são acréscimos automáticos para toda escala.', example: 'Plantão 19:00–07:00 com 1 hora de intervalo = 11 horas físicas. A hora noturna reduzida é uma contagem distinta.', related: ['night', 'overtime', 'monthly'] },
@@ -27,7 +32,7 @@ export const TOOL_ANSWERS: Record<string, ToolAnswer> = {
   holerite: { answer: 'O salário líquido é o total de proventos menos os descontos aplicáveis. INSS é progressivo; no IRRF de 2026, o desconto simplificado substitui as deduções legais e a redução depende do rendimento.', example: 'R$ 3.000 de proventos − R$ 400 de descontos informados = R$ 2.600 líquidos; os descontos reais variam.', related: ['rate', 'decimo', 'rescisao'], fiscal: true },
   rescisao: { answer: 'A rescisão depende da modalidade, datas, aviso prévio, parcelas já pagas e férias adquiridas. A projeção do aviso pode alterar os avos; informe valores e períodos pendentes sem duplicar pagamentos.', example: 'Saldo de 10 dias em salário de R$ 3.000: R$ 3.000 ÷ 30 × 10 = R$ 1.000, antes das demais verbas.', related: ['ferias', 'decimo', 'seguro'], fiscal: true },
   rate: { answer: 'Para mensalistas, divida o salário pela base de horas aplicável à jornada. Para PJ e freelancers, considere apenas horas faturáveis, custos e impostos; divisores CLT não devem ser usados automaticamente.', example: 'R$ 2.200 ÷ 220 = R$ 10 por hora normal.', related: ['overtime', 'night', 'cltpj'] },
-  overtime: { answer: 'Multiplique o valor da hora normal pelas horas extras e pelo fator do adicional. Domingos e feriados não compensados podem exigir pagamento em dobro; confira a escala e o acordo aplicáveis.', example: '2 horas × R$ 10 × 1,5 = R$ 30 com adicional de 50%, antes de reflexos.', related: ['rate', 'night', 'timesheet'] },
+  overtime: { answer: 'Multiplique o valor da hora normal pelas horas extras e pelo fator do adicional. Domingos e feriados não compensados podem exigir pagamento em dobro; confira a escala e o acordo aplicáveis.', example: '2 horas × R$ 10 × 1,5 = R$ 30 com adicional de 50%, antes de reflexos.', related: ['rate', 'banco', 'daily'] },
   night: { answer: 'No trabalho noturno urbano, o período de referência é 22h–05h, com adicional mínimo de 20% e hora reduzida de 52min30s. Intervalos são descontados; prorrogação exige análise dos requisitos aplicáveis.', example: '7 horas físicas noturnas sem intervalo ÷ 0,875 = 8 horas reduzidas; R$ 10 × 20% × 8 = R$ 16 de adicional.', related: ['overtime', 'rate', 'escala12x36'] },
   excel: { answer: 'A planilha de ponto em Excel permite registrar entradas, saídas e intervalos, com fórmulas de duração e saldo. Confira a meta e os adicionais configurados antes de usar o relatório em folha.', example: '08:00–18:00 com intervalo de 1 hora = 9 horas líquidas; meta de 8 horas produz saldo de +1 hora.', related: ['timesheet', 'monthly', 'overtime'] },
 };

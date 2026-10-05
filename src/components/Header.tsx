@@ -15,7 +15,7 @@ export default function Header({ activeTab, setActiveTab, isDark, toggleDark, on
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [copiedShare, setCopiedShare] = useState(false);
 
-  const navItems = [
+  const laborItems = [
     { id: 'daily', label: 'Diária', icon: Clock },
     { id: 'timesheet', label: 'Semanal', icon: Calendar },
     { id: 'monthly', label: 'Mensal', icon: Calculator },
@@ -36,6 +36,9 @@ export default function Header({ activeTab, setActiveTab, isDark, toggleDark, on
     { id: 'blog', label: 'Guia CLT', icon: BookOpen },
   ];
 
+  const navItems = [
+    {id:'daily',label:'Horas Trabalhadas',icon:Clock}, {id:'counter',label:'Contador de Horas',icon:Clock}, {id:'overtime',label:'Horas Extras',icon:Clock}, {id:'banco',label:'Banco de Horas',icon:Scale}, {id:'sum',label:'Somar Horas',icon:Calculator},
+  ];
   const handleSelect = (id: string) => {
     setActiveTab(id);
     setMobileMenuOpen(false);
@@ -164,6 +167,13 @@ export default function Header({ activeTab, setActiveTab, isDark, toggleDark, on
         </div>
       </div>
 
+      <nav aria-label="Navegação principal" className="max-w-7xl mx-auto px-4 py-2 flex flex-wrap items-center gap-3 text-xs text-blue-700 dark:text-blue-300">
+        <a href="/">Calculadora de Horas</a>
+        {navItems.map(item => <a key={item.id} href={getHrefForTab(item.id)}>{item.label}</a>)}
+        <details><summary className="cursor-pointer">Conversores</summary><div className="flex flex-wrap gap-3 py-2"><a href="/horas-decimais">Horas Decimais</a><a href="/horas-e-minutos">Horas e Minutos</a></div></details>
+        <details><summary className="cursor-pointer">Ferramentas auxiliares</summary><div className="flex flex-wrap gap-3 py-2"><a href="/tempo-de-servico">Tempo de Serviço</a><a href="/calculadora-de-dias-uteis">Dias Úteis</a><a href="/valor-da-hora">Valor da Hora</a><a href="/calculadora-semanal">Semanal</a><a href="/calculadora-mensal">Mensal</a></div></details>
+        <details><summary className="cursor-pointer">Mais Calculadoras</summary><div className="py-3"><h2 className="font-bold">Cálculos Trabalhistas</h2><div className="flex flex-wrap gap-3 py-2">{laborItems.filter(item => !['daily','timesheet','monthly','overtime','rate','banco'].includes(item.id)).map(item => <a key={item.id} href={getHrefForTab(item.id)}>{item.label}</a>)}</div></div></details>
+      </nav>
       {/* Mobile Drawer Navigation */}
       {mobileMenuOpen && (
         <div id="tool-menu" className="bg-white dark:bg-neutral-900 border-b border-neutral-200 dark:border-neutral-800 px-4 py-3 grid grid-cols-2 gap-1.5 shadow-lg animate-in slide-in-from-top-2 duration-200 max-h-[70vh] overflow-y-auto">

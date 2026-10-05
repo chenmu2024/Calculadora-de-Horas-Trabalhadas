@@ -21,6 +21,12 @@ export const HOLIDAYS_2026: Holiday[] = [
   { date: '2026-12-25', name: 'Natal', type: 'nacional' },
 ];
 
+export function getCalendarHolidays(includeOptional = false, localDates: string[] = []) {
+  const holidays = new Map(HOLIDAYS_2026.filter(holiday => holiday.type === 'nacional' || includeOptional).map(holiday => [holiday.date, holiday]));
+  for (const date of localDates) if (!holidays.has(date)) holidays.set(date, { date, name: 'Feriado local informado', type: 'nacional' });
+  return [...holidays.values()];
+}
+
 export const MONTH_NAMES_PT = [
   'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
   'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'
@@ -30,6 +36,7 @@ export const MONTH_NAMES_PT = [
  * Calculates working days (Mon-Sat or Mon-Fri) and Sundays/Holidays for a given month in 2026
  */
 export function getMonthWorkStats(year: number, monthZeroIndexed: number, includeSaturdayAsWorkday: boolean = true, includeOptional = false, localDates: string[] = []) {
+  const selectedHolidays = getCalendarHolidays(includeOptional, localDates);
   const daysInMonth = new Date(year, monthZeroIndexed + 1, 0).getDate();
   let workingDays = 0;
   let sundaysAndHolidays = 0;
@@ -44,7 +51,7 @@ export function getMonthWorkStats(year: number, monthZeroIndexed: number, includ
     const holiday = HOLIDAYS_2026.find(h => h.date === dateStr);
 
     if (holiday) monthHolidays.push({ day, name: holiday.name });
-    if ((holiday && (holiday.type === 'nacional' || includeOptional)) || localDates.includes(dateStr)) {
+    if (selectedHolidays.some(item => item.date === dateStr)) {
       sundaysAndHolidays++;
     } else if (dayOfWeek === 0) {
       sundaysAndHolidays++;

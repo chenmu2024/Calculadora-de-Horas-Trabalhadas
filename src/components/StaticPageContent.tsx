@@ -1,3 +1,5 @@
+import HoursToolContent from './HoursToolContent';
+import { HOURS_CONTENT } from '../utils/hoursContent';
 import AboutUsPage from './AboutUsPage';
 import ContactPage from './ContactPage';
 import TermsPage from './TermsPage';
@@ -15,5 +17,6 @@ export default function StaticPageContent({ tab, articleId }: { tab: string; art
   if (tab === 'privacy') return <PrivacyPage />;
   if (tab === 'blog') return <BlogSection initialArticleId={articleId} onSelectCalculator={() => {}} />;
   if (tab === 'not-found') return <p>A página não existe. <a href="/">Voltar ao início</a></p>;
+  if (HOURS_CONTENT[tab]) return <HoursToolContent tab={tab} />;
   return <><CalculationReference activeTab={tab} /><SEOContent activeTab={tab} />{TOOL_ANSWERS[tab] && <FAQSection activeTab={tab} />}</>;
 }

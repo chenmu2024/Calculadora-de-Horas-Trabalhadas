@@ -2,11 +2,16 @@
 
 > Ferramentas gratuitas de cálculo de jornada e simulações trabalhistas no Brasil. Resultados dependem das premissas, categoria e convenção coletiva. Não representam parecer jurídico ou concessão de benefício.
 
-Revisão do conteúdo: 2026-10-04. Tabelas fiscais: 2026.
+Revisão do conteúdo: 2026-10-05. Tabelas fiscais: 2026.
 
 ## Calculadoras e páginas
 
-- [Calculadora de Horas Trabalhadas Diária - CLT](https://calculadoradehorastrabalhadas.org/): Some os períodos entre entrada e saída e desconte os intervalos. Converta minutos para decimal dividindo por 60. O saldo depende da meta contratual; tolerâncias devem ser verificadas por registro.
+- [Calculadora de Horas | Calculadora de Horas Trabalhadas](https://calculadoradehorastrabalhadas.org/): Some os períodos entre entrada e saída e desconte os intervalos. Converta minutos para decimal dividindo por 60. O saldo depende da meta contratual; tolerâncias devem ser verificadas por registro.
+- [Contador de Horas](https://calculadoradehorastrabalhadas.org/contador-de-horas): Calcule o tempo entre dois horários, inclusive ao cruzar a meia-noite. Veja HH:MM e decimal.
+- [Horas Decimais: Converter Horas em Decimal](https://calculadoradehorastrabalhadas.org/horas-decimais): Converta horas decimais nos dois sentidos: HH:MM para decimal e decimal para horas.
+- [Calculadora de Dias Úteis](https://calculadoradehorastrabalhadas.org/calculadora-de-dias-uteis): Use o contador de dias uteis entre duas datas, com opções de finais de semana e feriados.
+- [Calculadora de Tempo de Serviço](https://calculadoradehorastrabalhadas.org/tempo-de-servico): Calcule o intervalo entre datas em anos, meses e dias, com o total de dias corridos.
+- [Calculadora de Horas e Minutos](https://calculadoradehorastrabalhadas.org/horas-e-minutos): Some e subtraia durações com segundos opcionais. Veja total de minutos e horas decimais.
 - [Cartão de Ponto Semanal e Apuração de Horas CLT](https://calculadoradehorastrabalhadas.org/calculadora-semanal): Some as horas líquidas de cada dia e compare com a carga semanal contratada. O saldo semanal não define sozinho a forma de pagamento: confira limites diários e o acordo de compensação.
 - [Calculadora de Horas Trabalhadas Mensal - CLT](https://calculadoradehorastrabalhadas.org/calculadora-mensal): Some as horas efetivamente registradas no mês. O divisor salarial serve para apurar o valor da hora e não representa automaticamente a quantidade de horas físicas trabalhadas.
 - [Calculadora de Escala 12x36 CLT - Plantões, Noturno e Feriados](https://calculadoradehorastrabalhadas.org/escala-12x36): Na escala 12x36, registre os plantões e intervalos. Feriados em dobro e prorrogação noturna dependem do regime e do acordo aplicáveis; não são acréscimos automáticos para toda escala.
@@ -29,6 +34,7 @@ Revisão do conteúdo: 2026-10-04. Tabelas fiscais: 2026.
 - [Fale Conosco - Atendimento e Suporte CLT](https://calculadoradehorastrabalhadas.org/contato): Página de contato; o formulário abre o aplicativo de e-mail, sem envio direto pelo servidor.
 - [Termos de Uso e Condições de Serviço - CLT](https://calculadoradehorastrabalhadas.org/termos): Aviso legal e termos de utilização das ferramentas de cálculo de horas trabalhadas do portal calculadoradehorastrabalhadas.org.
 - [Política de Privacidade e Conformidade LGPD](https://calculadoradehorastrabalhadas.org/privacidade): Entenda como garantimos a total privacidade dos seus dados. Processamento 100% no seu navegador sem armazenamento em servidores.
+- [Widgets de Horas: Calculadora para Incorporar no Seu Site](https://calculadoradehorastrabalhadas.org/widgets): Incorpore uma calculadora gratuita de jornada com intervalo no seu site. Widget responsivo, sem rastreamento e sem envio dos horários.
 
 ## Artigos completos
 

@@ -7,7 +7,12 @@ interface BreadcrumbProps {
 }
 
 const TAB_NAMES: Record<string, string> = {
-  daily: 'Calculadora Diária',
+  daily: 'Calculadora de Horas',
+  counter: "Contador de Horas",
+  decimal: "Horas Decimais: Converter Horas em Decimal",
+  business: "Calculadora de Dias Úteis",
+  service: "Calculadora de Tempo de Serviço",
+  minutes: "Calculadora de Horas e Minutos",
   timesheet: 'Cartão de Ponto Semanal',
   monthly: 'Cálculo Mensal',
   banco: 'Banco de Horas',

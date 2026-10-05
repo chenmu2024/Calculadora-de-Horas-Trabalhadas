@@ -125,14 +125,19 @@ export default function OvertimeCalculator({ onSelectTab }: OvertimeCalculatorPr
     };
   };
 
+  const validNumber = (value: string) => value.trim() !== '' && Number.isFinite(Number(value)) && Number(value) >= 0;
+  const validOvertime = [salary,weeklyHours,ot50Hours,ot100Hours,otCustomHours,customOtPct].every(validNumber) && Number(weeklyHours) > 0 && (!includeDSR || (validNumber(workingDays) && Number(workingDays) > 0 && validNumber(sundaysHolidays)));
   const results = calcOvertime();
+  const extraHours = nonNegative(ot50Hours,0) + nonNegative(ot100Hours,0) + nonNegative(otCustomHours,0);
+  const normalValue = extraHours * (results.effectiveHourlyRate ?? results.hourlyRate);
 
   const copyResult = async () => {
+    if (!validOvertime) return;
     const text = `Cálculo de Horas Extras e DSR:
 Salário Base: R$ ${salary}
-Hora Normal Base: R$ ${results.hourlyRate.toFixed(2)}
-${parseFloat(ot50Hours) > 0 ? `• Horas Extras 50%: ${ot50Hours}h = R$ ${results.ot50Val.toFixed(2)}\n` : ''}${parseFloat(ot100Hours) > 0 ? `• Horas Extras 100%: ${ot100Hours}h = R$ ${results.ot100Val.toFixed(2)}\n` : ''}${parseFloat(otCustomHours) > 0 ? `• Horas Extras ${customOtPct}%: ${otCustomHours}h = R$ ${results.otCustVal.toFixed(2)}\n` : ''}Total Bruto das Horas Extras: R$ ${results.totalOTValue.toFixed(2)}
-${includeDSR ? `Reflexo no DSR (Súmula 172 TST): R$ ${results.dsrAmount.toFixed(2)}\n` : ''}TOTAL A RECEBER: R$ ${results.grandTotalOT.toFixed(2)}
+Hora Normal Base: R$ ${validOvertime ? results.hourlyRate.toFixed(2) : "—"}
+${parseFloat(ot50Hours) > 0 ? `• Horas Extras 50%: ${ot50Hours}h = R$ ${validOvertime ? results.ot50Val.toFixed(2) : "—"}\n` : ''}${parseFloat(ot100Hours) > 0 ? `• Horas Extras 100%: ${ot100Hours}h = R$ ${validOvertime ? results.ot100Val.toFixed(2) : "—"}\n` : ''}${parseFloat(otCustomHours) > 0 ? `• Horas Extras ${customOtPct}%: ${otCustomHours}h = R$ ${validOvertime ? results.otCustVal.toFixed(2) : "—"}\n` : ''}Total Bruto das Horas Extras: R$ ${validOvertime ? results.totalOTValue.toFixed(2) : "—"}
+${includeDSR ? `Reflexo no DSR (Súmula 172 TST): R$ ${validOvertime ? results.dsrAmount.toFixed(2) : "—"}\n` : ''}TOTAL A RECEBER: R$ ${validOvertime ? results.grandTotalOT.toFixed(2) : "—"}
 
 Calculado em calculadoradehorastrabalhadas.org`;
     if (!await writeClipboard(text)) return;
@@ -143,12 +148,12 @@ Calculado em calculadoradehorastrabalhadas.org`;
   const exportCSV = () => {
     generateTimesheetCSV([
       { date: 'Salário Base', start: '-', end: '-', breakTime: '-', totalHours: `R$ ${salary}` },
-      { date: 'Valor da Hora Normal', start: '-', end: '-', breakTime: '-', totalHours: `R$ ${results.hourlyRate.toFixed(2)}` },
-      { date: `Horas Extras 50% (${ot50Hours}h)`, start: '-', end: '-', breakTime: '-', totalHours: `R$ ${results.ot50Val.toFixed(2)}` },
-      { date: `Horas Extras 100% (${ot100Hours}h)`, start: '-', end: '-', breakTime: '-', totalHours: `R$ ${results.ot100Val.toFixed(2)}` },
-      { date: `Horas Extras ${customOtPct}% (${otCustomHours}h)`, start: '-', end: '-', breakTime: '-', totalHours: `R$ ${results.otCustVal.toFixed(2)}` },
-      { date: 'Reflexo no DSR', start: '-', end: '-', breakTime: '-', totalHours: `R$ ${results.dsrAmount.toFixed(2)}` },
-      { date: 'TOTAL A RECEBER (HE + DSR)', start: '-', end: '-', breakTime: '-', totalHours: `R$ ${results.grandTotalOT.toFixed(2)}` },
+      { date: 'Valor da Hora Normal', start: '-', end: '-', breakTime: '-', totalHours: `R$ ${validOvertime ? results.hourlyRate.toFixed(2) : "—"}` },
+      { date: `Horas Extras 50% (${ot50Hours}h)`, start: '-', end: '-', breakTime: '-', totalHours: `R$ ${validOvertime ? results.ot50Val.toFixed(2) : "—"}` },
+      { date: `Horas Extras 100% (${ot100Hours}h)`, start: '-', end: '-', breakTime: '-', totalHours: `R$ ${validOvertime ? results.ot100Val.toFixed(2) : "—"}` },
+      { date: `Horas Extras ${customOtPct}% (${otCustomHours}h)`, start: '-', end: '-', breakTime: '-', totalHours: `R$ ${validOvertime ? results.otCustVal.toFixed(2) : "—"}` },
+      { date: 'Reflexo no DSR', start: '-', end: '-', breakTime: '-', totalHours: `R$ ${validOvertime ? results.dsrAmount.toFixed(2) : "—"}` },
+      { date: 'TOTAL A RECEBER (HE + DSR)', start: '-', end: '-', breakTime: '-', totalHours: `R$ ${validOvertime ? results.grandTotalOT.toFixed(2) : "—"}` },
     ], 'Calculo_Horas_Extras');
   };
 
@@ -322,7 +327,7 @@ Calculado em calculadoradehorastrabalhadas.org`;
               <span className="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-400 text-xs font-bold">hs</span>
             </div>
             <span className="text-[11px] text-neutral-500 mt-1 block">
-              Valor unitário: <strong>R$ {results.ot50Rate.toFixed(2)}/h</strong>
+              Valor unitário: <strong>R$ {validOvertime ? results.ot50Rate.toFixed(2) : "—"}/h</strong>
             </span>
           </div>
 
@@ -344,7 +349,7 @@ Calculado em calculadoradehorastrabalhadas.org`;
               <span className="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-400 text-xs font-bold">hs</span>
             </div>
             <span className="text-[11px] text-neutral-500 mt-1 block">
-              Valor unitário: <strong>R$ {results.ot100Rate.toFixed(2)}/h</strong>
+              Valor unitário: <strong>R$ {validOvertime ? results.ot100Rate.toFixed(2) : "—"}/h</strong>
             </span>
           </div>
 
@@ -377,7 +382,7 @@ Calculado em calculadoradehorastrabalhadas.org`;
               <span className="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-400 text-xs font-bold">hs</span>
             </div>
             <span className="text-[11px] text-neutral-500 mt-1 block">
-              Valor unitário: <strong>R$ {results.otCustRate.toFixed(2)}/h</strong>
+              Valor unitário: <strong>R$ {validOvertime ? results.otCustRate.toFixed(2) : "—"}/h</strong>
             </span>
           </div>
         </div>
@@ -447,19 +452,19 @@ Calculado em calculadoradehorastrabalhadas.org`;
       <div className="grid grid-cols-1 sm:grid-cols-4 gap-4 mb-6">
          <div className="bg-neutral-50 dark:bg-neutral-800 p-4 rounded-xl border border-neutral-200 dark:border-neutral-700">
             <p className="text-xs text-neutral-500 mb-1 font-medium">Hora Normal Base</p>
-            <p className="text-xl font-bold font-mono text-neutral-700 dark:text-neutral-300">R$ {results.hourlyRate.toFixed(2).replace('.', ',')}</p>
+            <p className="text-xl font-bold font-mono text-neutral-700 dark:text-neutral-300">R$ {validOvertime ? results.hourlyRate.toFixed(2).replace('.', ',') : "—"}</p>
          </div>
          <div className="bg-neutral-50 dark:bg-neutral-800 p-4 rounded-xl border border-neutral-200 dark:border-neutral-700">
             <p className="text-xs text-neutral-500 mb-1 font-medium">Total Bruto HE (50%/100%)</p>
-            <p className="text-xl font-bold font-mono text-neutral-700 dark:text-neutral-300">R$ {results.totalOTValue.toFixed(2).replace('.', ',')}</p>
+            <p className="text-xl font-bold font-mono text-neutral-700 dark:text-neutral-300">R$ {validOvertime ? results.totalOTValue.toFixed(2).replace('.', ',') : "—"}</p>
          </div>
          <div className="bg-neutral-50 dark:bg-neutral-800 p-4 rounded-xl border border-neutral-200 dark:border-neutral-700">
             <p className="text-xs text-neutral-500 mb-1 font-medium">Reflexo no DSR</p>
-            <p className="text-xl font-bold font-mono text-emerald-600">R$ {results.dsrAmount.toFixed(2).replace('.', ',')}</p>
+            <p className="text-xl font-bold font-mono text-emerald-600">R$ {validOvertime ? results.dsrAmount.toFixed(2).replace('.', ',') : "—"}</p>
          </div>
          <div className="bg-neutral-50 dark:bg-neutral-800 p-4 rounded-xl border border-neutral-200 dark:border-neutral-700">
             <p className="text-xs text-neutral-500 mb-1 font-medium">Salário Bruto + Extras</p>
-            <p className="text-xl font-bold font-mono text-blue-700">R$ {results.totalSalaryWithOT.toFixed(2).replace('.', ',')}</p>
+            <p className="text-xl font-bold font-mono text-blue-700">R$ {validOvertime ? results.totalSalaryWithOT.toFixed(2).replace('.', ',') : "—"}</p>
          </div>
       </div>
 
@@ -467,10 +472,10 @@ Calculado em calculadoradehorastrabalhadas.org`;
         <div>
           <p className="text-xs font-bold text-blue-200 mb-1 uppercase tracking-wider">Total a Receber pelas Horas Extras + DSR no Mês</p>
           <div className="text-4xl font-extrabold font-mono tracking-tight">
-            R$ {results.grandTotalOT.toFixed(2).replace('.', ',')}
+            R$ {validOvertime ? results.grandTotalOT.toFixed(2).replace('.', ',') : "—"}
           </div>
           <p className="text-xs text-blue-100 mt-1">
-            Salário Bruto Total Com Extras: R$ {results.totalSalaryWithOT.toFixed(2).replace('.', ',')}
+            Salário Bruto Total Com Extras: R$ {validOvertime ? results.totalSalaryWithOT.toFixed(2).replace('.', ',') : "—"}
           </p>
         </div>
         <div className="w-14 h-14 bg-white/10 rounded-2xl flex items-center justify-center">
@@ -479,13 +484,16 @@ Calculado em calculadoradehorastrabalhadas.org`;
       </div>
 
       {/* Smart Contextual Holerite Recommendation */}
-      {results.grandTotalOT > 0 && onSelectTab && (
+      {!validOvertime && <p role="alert">Informe valores válidos e uma jornada maior que zero. DSR exige dias úteis maiores que zero.</p>}
+      <button className="tool-button" onClick={() => { setSalary(''); setWeeklyHours(''); setOt50Hours('0'); setOt100Hours('0'); setOtCustomHours('0'); }}>Limpar</button>
+      {validOvertime && <details open className="tool-card"><summary>Memória de cálculo</summary><p>Horas extras: {extraHours.toFixed(2)} h; valor normal: R$ {normalValue.toFixed(2)}; adicional: R$ {(results.totalOTValue - normalValue).toFixed(2)}; valor total: R$ {validOvertime ? results.totalOTValue.toFixed(2) : "—"}.</p><p>50%: {ot50Hours} × R$ {(results.ot50Rate / 1.5).toFixed(2)} × 1,5 = R$ {validOvertime ? results.ot50Val.toFixed(2) : "—"}.</p><p>100%: {ot100Hours} × R$ {(results.ot100Rate / 2).toFixed(2)} × 2 = R$ {validOvertime ? results.ot100Val.toFixed(2) : "—"}.</p><p>Personalizado: {otCustomHours} × fator (1 + {customOtPct} ÷ 100) = R$ {validOvertime ? results.otCustVal.toFixed(2) : "—"}. DSR separado: R$ {validOvertime ? results.dsrAmount.toFixed(2) : "—"}.</p></details>}
+      {validOvertime && results.grandTotalOT > 0 && onSelectTab && (
         <div className="bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800/80 rounded-2xl p-4 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs no-print transition-colors">
           <div className="flex items-center gap-2.5">
             <Sparkles className="w-5 h-5 text-emerald-600 dark:text-emerald-400 shrink-0" />
             <div>
               <strong className="text-emerald-950 dark:text-emerald-200 font-bold block">
-                Total de Extras a Receber: R$ {results.grandTotalOT.toFixed(2).replace('.', ',')}
+                Total de Extras a Receber: R$ {validOvertime ? results.grandTotalOT.toFixed(2).replace('.', ',') : "—"}
               </strong>
               <span className="text-emerald-800 dark:text-emerald-300">
                 Veja o impacto líquido real no seu salário com descontos progressivos do INSS e IRRF 2026.
@@ -502,7 +510,7 @@ Calculado em calculadoradehorastrabalhadas.org`;
         </div>
       )}
 
-      {onSelectTab && <InternalLinkCTA currentTab="overtime" onSelectTab={onSelectTab} />}
+
     </div>
   );
 }

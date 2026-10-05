@@ -10,7 +10,8 @@
     "clean": "node -e \"require('fs').rmSync('dist',{recursive:true,force:true})\"",
     "lint": "tsc --noEmit",
     "test": "tsx --test tests/*.test.ts tests/*.test.tsx",
-    "verify": "npm run lint && npm test && npm run build && npm run check:seo",
+    "verify": "npm run lint && npm test && npm run build && npm run check:seo && npm run check:http",
+    "check:http": "tsx scripts/check-http.ts",
     "check:seo": "tsx scripts/check-seo.ts",
     "check:live": "node scripts/check-live-seo.mjs"
   },

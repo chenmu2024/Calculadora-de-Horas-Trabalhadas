@@ -1,3 +1,4 @@
+import { sumDurationSeconds } from '../utils/conversions';
 import { storage, copyText as writeClipboard, nonNegative } from '../utils/browser';
 import React, { useState, useEffect } from 'react';
 import { Plus, Minus, Trash2, ArrowRightLeft, Clock, Copy, Check, RotateCcw, Download, Printer } from 'lucide-react';
@@ -64,10 +65,9 @@ export default function TimeSumCalculator({ onSelectTab }: TimeSumCalculatorProp
   };
 
   // Sum calculation
-  const totalMinutesSum = parcels.reduce((acc, p) => {
-    const mins = timeToMinutes(p.time);
-    return acc + (p.operation === '+' ? mins : -mins);
-  }, 0);
+  const summed = sumDurationSeconds(parcels.map(row => ({ value: row.time, operation: row.operation })));
+  const validSum = parcels.length > 0 && summed !== null && parcels.every(row => isValidTime(row.time,true));
+  const totalMinutesSum = (summed ?? 0) / 60;
 
   const isNegativeSum = totalMinutesSum < 0;
   const absTotalMin = Math.abs(totalMinutesSum);
@@ -85,6 +85,7 @@ export default function TimeSumCalculator({ onSelectTab }: TimeSumCalculatorProp
   const decToTimeStr = minutesToTime(decTotalMinutes);
 
   const copySum = async () => {
+    if (!validSum) return;
     const lines = parcels.map(p => `${p.operation} ${p.time} (${p.label || 'Item'})`);
     const text = `SOMA/SUBTRAÇÃO DE HORAS:\n${lines.join('\n')}\n\nTOTAL FINAL: ${isNegativeSum ? '-' : ''}${totalHoursFormatted} h (${totalDecimalHours}h decimais)\nCalculado em calculadoradehorastrabalhadas.org`;
     if (!await writeClipboard(text)) return;
@@ -93,6 +94,7 @@ export default function TimeSumCalculator({ onSelectTab }: TimeSumCalculatorProp
   };
 
   const exportCSV = () => {
+    if (!validSum) return;
     generateTimesheetCSV(
       parcels.map(p => ({
         date: p.label || 'Intervalo',
@@ -117,7 +119,7 @@ export default function TimeSumCalculator({ onSelectTab }: TimeSumCalculatorProp
             </p>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             <button onClick={clearAll} className="bg-neutral-100 hover:bg-red-50 hover:text-red-600 text-neutral-500 text-xs px-2.5 py-1.5 rounded-lg transition-colors font-medium flex items-center gap-1 cursor-pointer">
               <RotateCcw className="w-3.5 h-3.5" /> Limpar Tudo
             </button>
@@ -159,7 +161,7 @@ export default function TimeSumCalculator({ onSelectTab }: TimeSumCalculatorProp
                 <div className="flex items-center gap-2 bg-neutral-50 dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-600 rounded-lg p-1.5">
                   <Clock className="w-4 h-4 text-neutral-400 ml-1 shrink-0" />
                   <input
-                    type="time"
+                    type="text" placeholder="HH:MM" inputMode="text"
                     value={p.time}
                     onChange={(e) => updateParcel(p.id, 'time', e.target.value)}
                     className="w-full bg-transparent font-mono font-bold text-sm text-neutral-800 dark:text-neutral-200 outline-none"
@@ -185,12 +187,12 @@ export default function TimeSumCalculator({ onSelectTab }: TimeSumCalculatorProp
 
         {/* Buttons Row */}
         <div className="flex flex-wrap items-center justify-between gap-3 mb-6">
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             <button
               onClick={() => addParcel('+', '08:00', 'Novo Turno')}
               className="flex items-center gap-1.5 text-xs font-semibold text-emerald-700 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 px-3 py-2 rounded-xl transition-colors cursor-pointer"
             >
-              <Plus className="w-4 h-4" /> Somar Horas (+)
+              <Plus className="w-4 h-4" /> Adicionar linha (+)
             </button>
             <button
               onClick={() => addParcel('-', '01:00', 'Desconto / Intervalo')}
@@ -200,7 +202,7 @@ export default function TimeSumCalculator({ onSelectTab }: TimeSumCalculatorProp
             </button>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             <button onClick={exportCSV} className="flex items-center gap-1 text-xs font-semibold text-neutral-700 dark:text-neutral-300 bg-neutral-100 hover:bg-neutral-200 px-3 py-2 rounded-xl transition-colors cursor-pointer">
               <Download className="w-3.5 h-3.5 text-emerald-600" /> Exportar CSV
             </button>
@@ -213,22 +215,25 @@ export default function TimeSumCalculator({ onSelectTab }: TimeSumCalculatorProp
           </div>
         </div>
 
+        {!validSum && <p role="alert">Informe durações válidas em HH:MM; minutos entre 00 e 59.</p>}
         {/* Total Display */}
         <div className="bg-neutral-900 text-white p-6 rounded-2xl shadow-md flex flex-col sm:flex-row items-center justify-between gap-4">
           <div>
             <span className="text-xs text-neutral-400 uppercase tracking-wider font-semibold">Total Final Acumulado</span>
             <div className={`text-4xl font-extrabold font-mono mt-0.5 ${isNegativeSum ? 'text-rose-400' : 'text-blue-400'}`}>
-              {isNegativeSum ? '-' : ''}{totalHoursFormatted} h
+              {validSum ? `${isNegativeSum ? '-' : ''}${totalHoursFormatted}` : '—'} h
             </div>
           </div>
           <div className="bg-neutral-800 px-5 py-3 rounded-xl border border-neutral-700 text-right">
             <span className="text-[11px] text-neutral-400 block">Formato Decimal (Sistemas de RH / Ponto)</span>
             <span className="text-2xl font-bold font-mono text-emerald-400">
-              {isNegativeSum ? '-' : ''}{totalDecimalHours} h
+              {validSum ? `${isNegativeSum ? '-' : ''}${totalDecimalHours}` : '—'} h
             </span>
           </div>
         </div>
       </div>
+
+        {validSum && <details open><summary>Memória de cálculo</summary><p>{parcels.map(row => `${row.operation} ${row.time}`).join(" ")} = {isNegativeSum ? "-" : ""}{totalHoursFormatted}</p><p>Decimal = {totalMinutesSum} ÷ 60.</p></details>}
 
       <hr className="border-neutral-200 dark:border-neutral-700" />
 
@@ -327,7 +332,7 @@ export default function TimeSumCalculator({ onSelectTab }: TimeSumCalculatorProp
         </div>
       </div>
 
-      {onSelectTab && <InternalLinkCTA currentTab="sum" onSelectTab={onSelectTab} />}
+
     </div>
   );
 }

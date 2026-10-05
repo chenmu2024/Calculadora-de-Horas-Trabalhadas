@@ -128,6 +128,26 @@
   ],
   "rewrites": [
     {
+      "source": "/contador-de-horas",
+      "destination": "/contador-de-horas/index.html"
+    },
+    {
+      "source": "/horas-decimais",
+      "destination": "/horas-decimais/index.html"
+    },
+    {
+      "source": "/calculadora-de-dias-uteis",
+      "destination": "/calculadora-de-dias-uteis/index.html"
+    },
+    {
+      "source": "/tempo-de-servico",
+      "destination": "/tempo-de-servico/index.html"
+    },
+    {
+      "source": "/horas-e-minutos",
+      "destination": "/horas-e-minutos/index.html"
+    },
+    {
       "source": "/calculadora-semanal",
       "destination": "/calculadora-semanal/index.html"
     },
@@ -230,6 +250,14 @@
     {
       "source": "/guia-clt/como-calcular-hora-extra-e-adicional-noturno",
       "destination": "/guia-clt/como-calcular-hora-extra-e-adicional-noturno/index.html"
+    },
+    {
+      "source": "/widgets",
+      "destination": "/widgets/index.html"
+    },
+    {
+      "source": "/embed/horas",
+      "destination": "/embed/horas/index.html"
     }
   ]
 }
