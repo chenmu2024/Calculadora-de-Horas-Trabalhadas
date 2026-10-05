@@ -108,7 +108,7 @@ export default function QuickConverterModal({ isOpen, onClose }: QuickConverterM
               <input aria-label="Digite o Horário (HH:MM):"
                 type="time"
                 value={timeInput}
-                onChange={(e) => setTimeInput(e.target.value)}
+                onInput={(e) => setTimeInput(e.currentTarget.value)}
                 className="w-full border border-neutral-300 dark:border-neutral-700 rounded-xl p-3 font-mono text-base font-bold text-neutral-800 dark:text-white bg-white dark:bg-neutral-800 focus:ring-2 focus:ring-blue-500 outline-none"
               />
             </div>

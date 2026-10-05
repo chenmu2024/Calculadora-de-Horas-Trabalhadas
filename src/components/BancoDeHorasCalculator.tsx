@@ -327,7 +327,6 @@ export default function BancoDeHorasCalculator({ onSelectTab }: BancoDeHorasCalc
             overtimeMinutes={isQuickPositive ? quickDiffMin : 0}
           />
 
-          {quickValid && <details open className="tool-card"><summary>Memória de cálculo</summary><p>{minutesToTime(actualMin)} − {minutesToTime(expectedMin)} = {rawDiffMin >= 0 ? '+' : '-'}{minutesToTime(Math.abs(rawDiffMin))}</p><p>Horas a compensar: {minutesToTime(Math.max(0, -rawDiffMin))}.</p></details>}
           {!quickValid && <p role="alert">Informe horas inteiras e minutos de 00 a 59.</p>}
           {/* Results Box Quick */}
           <div className="bg-neutral-900 rounded-2xl p-6 text-white shadow-md space-y-4">
@@ -361,11 +360,11 @@ export default function BancoDeHorasCalculator({ onSelectTab }: BancoDeHorasCalc
               </div>
             </div>
           </div>
+          {quickValid && <details open className="tool-card"><summary>Memória de cálculo</summary><p>{minutesToTime(actualMin)} − {minutesToTime(expectedMin)} = {rawDiffMin >= 0 ? '+' : '-'}{minutesToTime(Math.abs(rawDiffMin))}</p><p>Horas a compensar: {minutesToTime(Math.max(0, -rawDiffMin))}.</p></details>}
         </div>
       ) : (
         /* Ledger Mode UI */
         <div className="space-y-6">
-          {ledgerValid && <details open className="tool-card"><summary>Memória de cálculo</summary><p>Saldo inicial {initialBalanceSign}{minutesToTime(Math.abs(initialMin))} + créditos {minutesToTime(totalCreditLogsMin)} − débitos {minutesToTime(totalDebitLogsMin)} = {isLedgerPositive ? "+" : "-"}{ledgerFormatted}.</p><p>Horas a compensar: {minutesToTime(Math.max(0,-totalLedgerMin))}.</p></details>}
           {/* Initial Balance bar */}
           <div className="bg-neutral-50 dark:bg-neutral-800 p-4 rounded-xl border border-neutral-200 dark:border-neutral-700 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div>
@@ -553,6 +552,7 @@ export default function BancoDeHorasCalculator({ onSelectTab }: BancoDeHorasCalc
               </div>
             </div>
           </div>
+          {ledgerValid && <details open className="tool-card"><summary>Memória de cálculo</summary><p>Saldo inicial {initialBalanceSign}{minutesToTime(Math.abs(initialMin))} + créditos {minutesToTime(totalCreditLogsMin)} − débitos {minutesToTime(totalDebitLogsMin)} = {isLedgerPositive ? "+" : "-"}{ledgerFormatted}.</p><p>Horas a compensar: {minutesToTime(Math.max(0,-totalLedgerMin))}.</p></details>}
         </div>
       )}
 

@@ -250,6 +250,14 @@
     {
       "source": "/guia-clt/como-calcular-hora-extra-e-adicional-noturno",
       "destination": "/guia-clt/como-calcular-hora-extra-e-adicional-noturno/index.html"
+    },
+    {
+      "source": "/widgets",
+      "destination": "/widgets/index.html"
+    },
+    {
+      "source": "/embed/horas",
+      "destination": "/embed/horas/index.html"
     }
   ]
 }

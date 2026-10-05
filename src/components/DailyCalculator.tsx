@@ -367,7 +367,6 @@ export default function DailyCalculator({ onSelectTab }: DailyCalculatorProps) {
         </div>
       </div>
 
-      {validInputs && <section className="tool-card"><output className="tool-result">Horas em decimal: {(totalMin / 60).toFixed(2).replace('.', ',')} h</output><p>Saldo em relação à jornada informada: {totalMin >= targetMin ? '+' : '-'}{minutesToTime(Math.abs(totalMin - targetMin))}</p><details open><summary>Memória de cálculo</summary>{mode === '4points' ? <p>{in1}–{out1} = {minutesToTime(calculateDuration(in1,out1))}; {in2}–{out2} = {minutesToTime(calculateDuration(in2,out2))}</p> : <p>{startSimple}–{endSimple} − {breakTimeSimple} de intervalo</p>}<p>Total = {totalFormatted}; intervalo = {intervalFormatted}; decimal = {totalMin} ÷ 60.</p></details></section>}
       {/* CLT Legal Compliance Check Banner */}
       {!validInputs && <p role="alert" className="text-sm font-semibold text-red-700 dark:text-red-300">Preencha os horários em sequência. A jornada deve terminar em menos de 24 horas; o intervalo deve estar dentro do turno.</p>}
       <CLTAlertBanner
@@ -451,6 +450,8 @@ export default function DailyCalculator({ onSelectTab }: DailyCalculatorProps) {
           </button>
         </div>
       </div>}
+
+      {validInputs && <section className="tool-card"><output className="tool-result">Horas em decimal: {(totalMin / 60).toFixed(2).replace('.', ',')} h</output><p>Saldo em relação à jornada informada: {totalMin >= targetMin ? '+' : '-'}{minutesToTime(Math.abs(totalMin - targetMin))}</p><details open><summary>Memória de cálculo</summary>{mode === '4points' ? <p>{in1}–{out1} = {minutesToTime(calculateDuration(in1,out1))}; {in2}–{out2} = {minutesToTime(calculateDuration(in2,out2))}</p> : <p>{startSimple}–{endSimple} − {breakTimeSimple} de intervalo</p>}<p>Total = {totalFormatted}; intervalo = {intervalFormatted}; decimal = {totalMin} ÷ 60.</p></details></section>}
 
       {/* Smart Contextual Overtime Recommendation */}
       {overtimeMin > 0 && onSelectTab && (

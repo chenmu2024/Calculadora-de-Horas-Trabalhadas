@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="noindex, follow" />
+  <meta name="description" content="Calculadora incorporável de jornada com intervalo. Cálculos locais, sem rastreamento." />
+  <link rel="canonical" href="https://calculadoradehorastrabalhadas.org/" />
+  <title>Widget de Horas Trabalhadas</title>
+  <link rel="stylesheet" href="/src/embed/widget.css" />
+</head>
+<body>
+<main class="calculator">
+  <h1>Horas Trabalhadas</h1>
+  <p>Informe os quatro horários para descontar o intervalo e conferir o saldo.</p>
+  <form id="hours-form">
+    <div class="fields">
+      <label>Entrada<input name="entry" type="time" value="08:00" required /></label>
+      <label>Saída para intervalo<input name="break-start" type="time" value="12:00" required /></label>
+      <label>Retorno do intervalo<input name="break-end" type="time" value="13:00" required /></label>
+      <label>Saída final<input name="exit" type="time" value="17:30" required /></label>
+      <label>Jornada informada (HH:MM)<input name="target" type="text" inputmode="numeric" value="08:00" maxlength="6" required /></label>
+    </div>
+    <p id="error" role="alert" hidden></p>
+    <div id="results" aria-live="polite">
+      <output id="worked">08:30 h trabalhadas</output>
+      <p id="rest">Intervalo: 01:00</p>
+      <p id="decimal">Decimal: 8,50 h</p>
+      <p id="balance">Saldo: +00:30</p>
+    </div>
+    <details id="memory" open><summary>Memória de cálculo</summary><p id="memory-text">08:00–12:00 + 13:00–17:30 = 08:30. Decimal: 510 ÷ 60 = 8,50.</p></details>
+    <div class="actions"><button type="button" id="copy">Copiar resultado</button><button type="button" id="clear">Limpar</button></div>
+    <p id="copy-status" role="status"></p>
+  </form>
+  <p class="source">Por <a href="https://calculadoradehorastrabalhadas.org/" target="_blank" rel="noopener noreferrer">calculadoradehorastrabalhadas.org</a></p>
+  <p class="privacy">Sem cookies, rastreamento ou envio dos horários. Cálculo de duração; confira as regras aplicáveis à sua jornada.</p>
+  <noscript>Ative JavaScript para alterar os valores e calcular.</noscript>
+</main>
+<script type="module" src="/src/embed/calculator.ts"></script>
+</body>
+</html>

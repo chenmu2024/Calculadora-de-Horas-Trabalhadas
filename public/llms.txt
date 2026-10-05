@@ -34,6 +34,7 @@ Revisão do conteúdo: 2026-10-05. Tabelas fiscais: 2026.
 - [Fale Conosco - Atendimento e Suporte CLT](https://calculadoradehorastrabalhadas.org/contato): Página de contato; o formulário abre o aplicativo de e-mail, sem envio direto pelo servidor.
 - [Termos de Uso e Condições de Serviço - CLT](https://calculadoradehorastrabalhadas.org/termos): Aviso legal e termos de utilização das ferramentas de cálculo de horas trabalhadas do portal calculadoradehorastrabalhadas.org.
 - [Política de Privacidade e Conformidade LGPD](https://calculadoradehorastrabalhadas.org/privacidade): Entenda como garantimos a total privacidade dos seus dados. Processamento 100% no seu navegador sem armazenamento em servidores.
+- [Widgets de Horas: Calculadora para Incorporar no Seu Site](https://calculadoradehorastrabalhadas.org/widgets): Incorpore uma calculadora gratuita de jornada com intervalo no seu site. Widget responsivo, sem rastreamento e sem envio dos horários.
 
 ## Artigos completos
 

@@ -6,8 +6,10 @@ import { TAB_ROUTES } from '../src/utils/routes';
 import { buildStructuredData } from '../src/utils/structuredData';
 import { CONTENT_UPDATED } from '../src/utils/editorial';
 import { HOURS_CONTENT } from '../src/utils/hoursContent';
+import { WIDGET_META } from '../src/utils/widgets';
 
 const pages = [...Object.entries(TAB_ROUTES).map(([tab, path]) => ({ tab, path, meta: PAGE_META[tab] })), ...ARTICLE_META.map(row => ({ tab: 'blog', path: `/guia-clt/${row.slug}`, meta: { ...row, canonical: `https://calculadoradehorastrabalhadas.org/guia-clt/${row.slug}` } }))];
+pages.push({ tab: 'widgets', path: '/widgets', meta: WIDGET_META });
 assert.equal(new Set(pages.map(page => page.meta.title)).size, pages.length, 'Titles must be unique');
 assert.equal(new Set(pages.map(page => page.meta.canonical)).size, pages.length, 'Canonicals must be unique');
 for (const page of pages) {
@@ -27,7 +29,7 @@ for (const page of pages) {
   for (const match of html.matchAll(/href="(\/[^"#?]*)/g)) {
     const href = match[1].replace(/\/$/, '') || '/';
     if (/\.[a-z0-9]+$/i.test(href)) continue;
-    assert.ok(pages.some(row => row.path === href), `${page.path}: broken internal link ${href}`);
+    assert.ok(href === '/embed/horas' || pages.some(row => row.path === href), `${page.path}: broken internal link ${href}`);
   }
   const article = ARTICLE_META.find(row => page.path.endsWith('/' + row.slug));
   if (article) assert.ok(html.includes(`id="art${article.id}-`), page.path);
@@ -38,4 +40,9 @@ assert.equal((sitemap.match(/<url>/g) ?? []).length, pages.length);
 assert.equal((sitemap.match(new RegExp(`<lastmod>${CONTENT_UPDATED}</lastmod>`, 'g')) ?? []).length, pages.length);
 for (const filename of ['llms.txt', 'llms-full.txt']) assert.equal(await readFile(`dist/${filename}`, 'utf8'), await readFile(`public/${filename}`, 'utf8'), `Refresh public/${filename} from its generated dist counterpart after editorial changes`);
 assert.ok((await readFile('dist/404.html', 'utf8')).includes('noindex, follow'));
+const embed = await readFile('dist/embed/horas/index.html', 'utf8');
+assert.ok(embed.includes('noindex, follow'));
+assert.ok(embed.includes('https://calculadoradehorastrabalhadas.org/'));
+assert.ok(embed.indexOf('id="results"') < embed.indexOf('id="memory"'));
+assert.ok(!sitemap.includes('/embed/horas'));
 console.log(`Verified ${pages.length} initial HTML pages, schemas, sitemap and AI context snapshots.`);

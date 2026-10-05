@@ -216,7 +216,6 @@ export default function TimeSumCalculator({ onSelectTab }: TimeSumCalculatorProp
         </div>
 
         {!validSum && <p role="alert">Informe durações válidas em HH:MM; minutos entre 00 e 59.</p>}
-        {validSum && <details open><summary>Memória de cálculo</summary><p>{parcels.map(row => `${row.operation} ${row.time}`).join(" ")} = {isNegativeSum ? "-" : ""}{totalHoursFormatted}</p><p>Decimal = {totalMinutesSum} ÷ 60.</p></details>}
         {/* Total Display */}
         <div className="bg-neutral-900 text-white p-6 rounded-2xl shadow-md flex flex-col sm:flex-row items-center justify-between gap-4">
           <div>
@@ -233,6 +232,8 @@ export default function TimeSumCalculator({ onSelectTab }: TimeSumCalculatorProp
           </div>
         </div>
       </div>
+
+        {validSum && <details open><summary>Memória de cálculo</summary><p>{parcels.map(row => `${row.operation} ${row.time}`).join(" ")} = {isNegativeSum ? "-" : ""}{totalHoursFormatted}</p><p>Decimal = {totalMinutesSum} ÷ 60.</p></details>}
 
       <hr className="border-neutral-200 dark:border-neutral-700" />
 

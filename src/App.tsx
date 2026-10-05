@@ -39,7 +39,7 @@ const BlogSection = React.lazy(() => import('./components/BlogSection'));
 const FAQSection = React.lazy(() => import('./components/FAQSection'));
 const SEOContent = React.lazy(() => import('./components/SEOContent'));
 import Breadcrumb from './components/Breadcrumb';
-import CalculationHistoryModal from './components/CalculationHistoryModal';
+const CalculationHistoryModal = React.lazy(() => import('./components/CalculationHistoryModal'));
 
 const AboutUsPage = React.lazy(() => import('./components/AboutUsPage'));
 const ContactPage = React.lazy(() => import('./components/ContactPage'));
@@ -48,13 +48,16 @@ const PrivacyPage = React.lazy(() => import('./components/PrivacyPage'));
 const NotFound = React.lazy(() => import('./components/NotFound'));
 
 import CookieBanner from './components/CookieBanner';
-import QuickConverterModal from './components/QuickConverterModal';
-import { HolidayCalendarModal } from './components/HolidayCalendarModal';
-import { LegalFAQModal } from './components/LegalFAQModal';
+const QuickConverterModal = React.lazy(() => import('./components/QuickConverterModal'));
+const HolidayCalendarModal = React.lazy(() => import('./components/HolidayCalendarModal').then(module => ({ default: module.HolidayCalendarModal })));
+const LegalFAQModal = React.lazy(() => import('./components/LegalFAQModal').then(module => ({ default: module.LegalFAQModal })));
 import { FileSpreadsheet, Clock, Sparkles, CheckCircle, Calculator, ArrowRightLeft, Calendar, BookOpen, Scale, WifiOff, Moon, Sun, ShieldAlert, Biohazard, Gift, Palmtree } from 'lucide-react';
 import { getTabFromLocation, getHrefForTab, TAB_ROUTES } from './utils/routes';
 import { useOfflineStatus } from './hooks/useOfflineStatus';
 import { useDarkMode } from './hooks/useDarkMode';
+
+const initialCalculatorHTML = typeof document === 'undefined' ? '' : document.getElementById('prerender-calculator')?.innerHTML ?? '';
+const initialTab = getTabFromLocation();
 
 export const PAGE_SUBTITLES: Record<string, string> = {
   daily: 'Use a calculadora de horas para calcular horas trabalhadas, intervalo, saldo da jornada e hora extra.',
@@ -136,6 +139,12 @@ export default function App() {
   const [isHolidayCalendarOpen, setIsHolidayCalendarOpen] = useState(false);
   const [isLegalFAQOpen, setIsLegalFAQOpen] = useState(false);
   const [isHistoryOpen, setIsHistoryOpen] = useState(false);
+  const [loadedModals, setLoadedModals] = useState({ quick: false, calendar: false, legal: false, history: false });
+  useEffect(() => {
+    if (isQuickConverterOpen || isHolidayCalendarOpen || isLegalFAQOpen || isHistoryOpen) {
+      setLoadedModals(previous => ({ quick: previous.quick || isQuickConverterOpen, calendar: previous.calendar || isHolidayCalendarOpen, legal: previous.legal || isLegalFAQOpen, history: previous.history || isHistoryOpen }));
+    }
+  }, [isQuickConverterOpen, isHolidayCalendarOpen, isLegalFAQOpen, isHistoryOpen]);
 
   // Sync state with browser URL
   const setActiveTab = (tab: string) => {
@@ -231,7 +240,7 @@ export default function App() {
                 </Suspense>
               ) : (
                 <div id="main-calculator" className="bg-white dark:bg-neutral-900 rounded-2xl shadow-sm border border-neutral-200 dark:border-neutral-800 p-6 sm:p-8 transition-colors">
-                  <CalculatorErrorBoundary key={activeTab}><Suspense fallback={<div className="p-12 text-center text-xs text-neutral-400">Carregando calculadora...</div>}>
+                  <CalculatorErrorBoundary key={activeTab}><Suspense fallback={activeTab === initialTab && initialCalculatorHTML ? <div inert aria-busy="true" dangerouslySetInnerHTML={{ __html: initialCalculatorHTML }} /> : <div className="p-12 text-center text-xs text-neutral-400">Carregando calculadora...</div>}>
                     {activeTab === 'counter' && <HourCounterCalculator />}
                     {activeTab === 'decimal' && <DecimalHoursCalculator />}
                     {activeTab === 'business' && <BusinessDaysCalculator />}
@@ -270,7 +279,7 @@ export default function App() {
 
             {/* Sidebar Column (4 cols) */}
             <div className="lg:col-span-4 space-y-6 no-print">
-              {HOURS_CONTENT[activeTab] ? <aside className="tool-card"><h2 className="font-bold">Horas, minutos e jornada</h2><p>Use os registros para conferir durações, conversões e saldos. Todos os cálculos são feitos no navegador.</p><a className="text-blue-600 underline" href="/calculadora-semanal">Conferir horas da semana</a></aside> : <>
+              {HOURS_CONTENT[activeTab] ? <aside className="tool-card"><h2 className="font-bold">Horas, minutos e jornada</h2><p>Use os registros para conferir durações, conversões e saldos. Todos os cálculos são feitos no navegador.</p><a className="text-blue-600 underline" href="/calculadora-semanal">Conferir horas da semana</a><div className="flex flex-wrap gap-3 mt-3"><button className="tool-button" onClick={() => setIsQuickConverterOpen(true)}>Conversor rápido</button><button className="tool-button" onClick={() => setIsHolidayCalendarOpen(true)}>Calendário de 2026</button>{['daily','banco','overtime','rate'].includes(activeTab) && <button className="tool-button" onClick={() => setIsLegalFAQOpen(true)}>Regras da jornada</button>}</div></aside> : <>
               
               {/* Sidebar CTA 1: Excel Planilha Download */}
               <div className="bg-gradient-to-br from-blue-600 to-indigo-700 rounded-2xl p-6 text-white shadow-md space-y-4">
@@ -345,29 +354,29 @@ export default function App() {
       <button className="text-xs underline py-3 bg-neutral-100 dark:bg-neutral-900 no-print" onClick={() => window.dispatchEvent(new Event('cookie-preferences'))}>Gerenciar preferências de cookies</button>
 
       {/* Quick Converter Modal */}
-      <QuickConverterModal
+      {(isQuickConverterOpen || loadedModals.quick) && <Suspense fallback={null}><QuickConverterModal
         isOpen={isQuickConverterOpen}
         onClose={() => setIsQuickConverterOpen(false)}
-      />
+      /></Suspense>}
 
       {/* Holiday & Working Days Calendar Modal */}
-      <HolidayCalendarModal
+      {(isHolidayCalendarOpen || loadedModals.calendar) && <Suspense fallback={null}><HolidayCalendarModal
         isOpen={isHolidayCalendarOpen}
         onClose={() => setIsHolidayCalendarOpen(false)}
-      />
+      /></Suspense>}
 
       {/* CLT Legal FAQ Modal */}
-      <LegalFAQModal
+      {(isLegalFAQOpen || loadedModals.legal) && <Suspense fallback={null}><LegalFAQModal
         isOpen={isLegalFAQOpen}
         onClose={() => setIsLegalFAQOpen(false)}
-      />
+      /></Suspense>}
 
       {/* Calculation History Modal */}
-      <CalculationHistoryModal
+      {(isHistoryOpen || loadedModals.history) && <Suspense fallback={null}><CalculationHistoryModal
         isOpen={isHistoryOpen}
         onClose={() => setIsHistoryOpen(false)}
         onSelectTab={setActiveTab}
-      />
+      /></Suspense>}
 
       {/* PWA Floating Install Prompt */}
       <PWAInstallPrompt />

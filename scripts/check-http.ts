@@ -13,7 +13,7 @@ try {
     server.stdout.on('data', chunk => { if (chunk.toString().includes('Preview ready')) { clearTimeout(timeout); resolve(); } });
     server.once('exit', code => { clearTimeout(timeout); reject(new Error(`Preview exited: ${code}`)); });
   });
-  const paths = [...Object.values(TAB_ROUTES), ...ARTICLE_META.map(article => `/guia-clt/${article.slug}`)];
+  const paths = ['/widgets', '/embed/horas', ...Object.values(TAB_ROUTES), ...ARTICLE_META.map(article => `/guia-clt/${article.slug}`)];
   for (const path of paths) {
     const response = await fetch(`http://127.0.0.1:${port}${path}`);
     assert.equal(response.status, 200, path);

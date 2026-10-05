@@ -13,7 +13,7 @@ export default function Footer({ setActiveTab }: FooterProps) {
 
   return (
     <footer className="bg-neutral-900 text-neutral-400 text-xs border-t border-neutral-800 mt-16">
-      <nav aria-label="Ferramentas de horas no rodapé" className="max-w-6xl mx-auto px-4 pt-8 flex flex-wrap gap-4"><a href="/">Horas Trabalhadas</a><a href="/contador-de-horas">Contador de Horas</a><a href="/somador-de-horas">Somar Horas</a><a href="/horas-decimais">Horas Decimais</a><a href="/horas-e-minutos">Horas e Minutos</a><a href="/calculadora-de-dias-uteis">Dias Úteis</a><a href="/tempo-de-servico">Tempo de Serviço</a></nav>
+      <nav aria-label="Ferramentas de horas no rodapé" className="max-w-6xl mx-auto px-4 pt-8 flex flex-wrap gap-4"><a href="/">Horas Trabalhadas</a><a href="/contador-de-horas">Contador de Horas</a><a href="/somador-de-horas">Somar Horas</a><a href="/horas-decimais">Horas Decimais</a><a href="/horas-e-minutos">Horas e Minutos</a><a href="/calculadora-de-dias-uteis">Dias Úteis</a><a href="/tempo-de-servico">Tempo de Serviço</a><a href="/widgets">Widget para seu site</a></nav>
       <div className="max-w-6xl mx-auto px-4 py-12 grid grid-cols-1 md:grid-cols-4 gap-8">
         
         {/* Col 1: Domain Brand */}
