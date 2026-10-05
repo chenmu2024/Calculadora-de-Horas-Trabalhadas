@@ -2,6 +2,7 @@ import { useDialog } from '../hooks/useDialog';
 import { copyText as writeClipboard, nonNegative } from '../utils/browser';
 import React, { useState } from 'react';
 import { ArrowRightLeft, Clock, DollarSign, X, Copy, Check, Calculator } from 'lucide-react';
+import { hoursToDecimal, decimalToMinutes } from '../utils/conversions';
 import { timeToMinutes, minutesToTime } from '../utils/time';
 
 interface QuickConverterModalProps {
@@ -29,12 +30,11 @@ export default function QuickConverterModal({ isOpen, onClose }: QuickConverterM
 
   // Minutes -> Decimal Calculation
   const totalMins = timeToMinutes(timeInput);
-  const decimalResult = (totalMins / 60).toFixed(2);
+  const decimalResult = hoursToDecimal(timeInput)?.toFixed(2) ?? '—';
 
   // Decimal -> Time Calculation
-  const decVal = nonNegative(decimalInput, 0);
-  const decMins = Math.round(decVal * 60);
-  const timeResult = minutesToTime(decMins);
+  const decMins = decimalToMinutes(decimalInput);
+  const timeResult = decMins === null ? '—' : minutesToTime(decMins);
 
   // Hourly Rate Calculation
   const salVal = nonNegative(salaryInput, 0);
@@ -97,6 +97,7 @@ export default function QuickConverterModal({ isOpen, onClose }: QuickConverterM
           </button>
         </div>
 
+        {(activeTab === 'mins_to_dec' && hoursToDecimal(timeInput) === null || activeTab === 'dec_to_mins' && decMins === null) && <p role="alert">Informe uma duração ou decimal válido.</p>}
         {/* Content 1: Hours -> Decimals */}
         {activeTab === 'mins_to_dec' && (
           <div className="space-y-4 my-4">
@@ -123,7 +124,7 @@ export default function QuickConverterModal({ isOpen, onClose }: QuickConverterM
             </div>
 
             <button
-              onClick={() => copyText(`${decimalResult}`)}
+              disabled={hoursToDecimal(timeInput) === null} onClick={() => copyText(`${decimalResult}`)}
               className="w-full bg-neutral-900 dark:bg-blue-600 hover:bg-neutral-800 dark:hover:bg-blue-700 text-white text-xs font-bold py-2.5 rounded-xl transition-colors flex items-center justify-center gap-2 cursor-pointer min-h-[44px]"
             >
               {copied ? <Check className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4" />}
@@ -140,8 +141,7 @@ export default function QuickConverterModal({ isOpen, onClose }: QuickConverterM
                 Digite em Decimal (ex: 7.75 ou 8.8):
               </label>
               <input aria-label="Digite em Decimal (ex: 7.75 ou 8.8):"
-                type="number" min="0" inputMode="decimal"
-                step="0.01"
+                type="text" inputMode="decimal"
                 value={decimalInput}
                 onChange={(e) => setDecimalInput(e.target.value)}
                 className="w-full border border-neutral-300 dark:border-neutral-700 rounded-xl p-3 font-mono text-base font-bold text-neutral-800 dark:text-white bg-white dark:bg-neutral-800 focus:ring-2 focus:ring-blue-500 outline-none"
@@ -159,7 +159,7 @@ export default function QuickConverterModal({ isOpen, onClose }: QuickConverterM
             </div>
 
             <button
-              onClick={() => copyText(timeResult)}
+              disabled={decMins === null} onClick={() => copyText(timeResult)}
               className="w-full bg-neutral-900 dark:bg-blue-600 hover:bg-neutral-800 dark:hover:bg-blue-700 text-white text-xs font-bold py-2.5 rounded-xl transition-colors flex items-center justify-center gap-2 cursor-pointer min-h-[44px]"
             >
               {copied ? <Check className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4" />}

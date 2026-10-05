@@ -1,6 +1,11 @@
 import { ARTICLE_META } from './articles';
 export const TAB_ROUTES: Record<string, string> = {
   daily: '/',
+  counter: '/contador-de-horas',
+  decimal: '/horas-decimais',
+  business: '/calculadora-de-dias-uteis',
+  service: '/tempo-de-servico',
+  minutes: '/horas-e-minutos',
   timesheet: '/calculadora-semanal',
   monthly: '/calculadora-mensal',
   escala12x36: '/escala-12x36',
@@ -27,6 +32,11 @@ export const TAB_ROUTES: Record<string, string> = {
 
 export const PATH_TO_TAB: Record<string, string> = {
   '/': 'daily',
+  '/contador-de-horas': 'counter',
+  '/horas-decimais': 'decimal',
+  '/calculadora-de-dias-uteis': 'business',
+  '/tempo-de-servico': 'service',
+  '/horas-e-minutos': 'minutes',
   '/calculadora-semanal': 'timesheet',
   '/calculadora-mensal': 'monthly',
   '/escala-12x36': 'escala12x36',

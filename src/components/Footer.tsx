@@ -13,6 +13,7 @@ export default function Footer({ setActiveTab }: FooterProps) {
 
   return (
     <footer className="bg-neutral-900 text-neutral-400 text-xs border-t border-neutral-800 mt-16">
+      <nav aria-label="Ferramentas de horas no rodapé" className="max-w-6xl mx-auto px-4 pt-8 flex flex-wrap gap-4"><a href="/">Horas Trabalhadas</a><a href="/contador-de-horas">Contador de Horas</a><a href="/somador-de-horas">Somar Horas</a><a href="/horas-decimais">Horas Decimais</a><a href="/horas-e-minutos">Horas e Minutos</a><a href="/calculadora-de-dias-uteis">Dias Úteis</a><a href="/tempo-de-servico">Tempo de Serviço</a></nav>
       <div className="max-w-6xl mx-auto px-4 py-12 grid grid-cols-1 md:grid-cols-4 gap-8">
         
         {/* Col 1: Domain Brand */}
@@ -28,7 +29,7 @@ export default function Footer({ setActiveTab }: FooterProps) {
 
         {/* Col 2: Sub-Calculators */}
         <div>
-          <h4 className="text-white font-bold mb-3 text-sm">Calculadoras</h4>
+          <details><summary className="text-white font-bold mb-3 text-sm cursor-pointer">Mais Calculadoras — Cálculos Trabalhistas</summary>
           <ul className="space-y-2">
             <li>
               <a href={getHrefForTab('daily')} onClick={(e) => { e.preventDefault(); handleNav('daily'); }} className="hover:text-white transition-colors" title="Calculadora de Horas Trabalhadas Diária">
@@ -105,7 +106,7 @@ export default function Footer({ setActiveTab }: FooterProps) {
                 Calculadora de Rescisão
               </a>
             </li>
-          </ul>
+          </ul></details>
         </div>
 
         {/* Col 3: Resources & Articles */}

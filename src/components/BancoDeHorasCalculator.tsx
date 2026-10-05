@@ -1,3 +1,4 @@
+import { bankBalance } from '../utils/conversions';
 import { storage, copyText as writeClipboard, nonNegative } from '../utils/browser';
 import React, { useState, useEffect } from 'react';
 import { Scale, ArrowUpRight, ArrowDownRight, Clock, Info, Plus, Trash2, Download, Copy, Check, Printer, AlertTriangle, Calendar, Sparkles } from 'lucide-react';
@@ -19,7 +20,7 @@ interface BancoDeHorasCalculatorProps {
 }
 
 export default function BancoDeHorasCalculator({ onSelectTab }: BancoDeHorasCalculatorProps) {
-  const [activeMode, setActiveMode] = useState<'quick' | 'ledger'>('ledger');
+  const [activeMode, setActiveMode] = useState<'quick' | 'ledger'>('quick');
 
   // Quick Daily Calculator state
   const [expectedHours, setExpectedHours] = useState(() => storage.getItem('calc_bank_exph') || '08');
@@ -68,10 +69,14 @@ export default function BancoDeHorasCalculator({ onSelectTab }: BancoDeHorasCalc
     storage.setItem('calc_bank_logs', JSON.stringify(logs));
   }, [expectedHours, expectedMinutes, actualHours, actualMinutes, applyCLTTolerance, hourlyWage, overtimePercentage, agreementTerm, initialBalanceSign, initialBalanceHours, initialBalanceMinutes, logs]);
 
+  const validPart = (value: string, minutes = false) => /^\d+$/.test(value) && Number.isSafeInteger(Number(value)) && (!minutes || Number(value) < 60);
+  const quickValid = validPart(expectedHours) && validPart(expectedMinutes,true) && validPart(actualHours) && validPart(actualMinutes,true);
+  const ledgerValid = validPart(initialBalanceHours) && validPart(initialBalanceMinutes,true) && logs.every(log => isValidTime(log.hours,true));
+  const validBalance = activeMode === 'ledger' ? ledgerValid : quickValid;
   // Quick mode calculation
   const expectedMin = (nonNegative(expectedHours, 0)) * 60 + (nonNegative(expectedMinutes, 0));
   const actualMin = (nonNegative(actualHours, 0)) * 60 + (nonNegative(actualMinutes, 0));
-  let rawDiffMin = actualMin - expectedMin;
+  let rawDiffMin = bankBalance(actualMin, expectedMin) ?? 0;
 
   // Art 58 § 1º CLT Tolerance: variation <= 10 mins per day is disregarded
   let quickDiffMin = rawDiffMin;
@@ -157,9 +162,10 @@ export default function BancoDeHorasCalculator({ onSelectTab }: BancoDeHorasCalc
   };
 
   const copyLedgerSummary = async () => {
+    if (!validBalance) return;
     const currentModeText = activeMode === 'ledger'
-      ? `EXTRATO DE BANCO DE HORAS ACUMULADO:\nSaldo Inicial: ${initialBalanceSign}${initialBalanceHours}:${initialBalanceMinutes}\nTotal de Lançamentos: ${logs.length}\nSALDO FINAL: ${isLedgerPositive ? '+' : '-'}${ledgerFormatted} h\nValor Estimado de Quitação: R$ ${ledgerFinancialImpact.toFixed(2).replace('.', ',')}`
-      : `APURAÇÃO DIÁRIA DE BANCO DE HORAS:\nJornada Esperada: ${expectedHours}:${expectedMinutes}\nRealizado: ${actualHours}:${actualMinutes}\nSaldo do Dia: ${isQuickPositive ? '+' : '-'}${quickDiffFormatted} h\nValor Estimado: R$ ${quickFinancialImpact.toFixed(2).replace('.', ',')}`;
+      ? `EXTRATO DE BANCO DE HORAS ACUMULADO:\nSaldo Inicial: ${initialBalanceSign}${initialBalanceHours}:${initialBalanceMinutes}\nTotal de Lançamentos: ${logs.length}\nSALDO FINAL: ${isLedgerPositive ? '+' : '-'}${ledgerFormatted} h\nValor Estimado de Quitação: R$ ${ledgerValid ? ledgerFinancialImpact.toFixed(2).replace(".",",") : "—"}`
+      : `APURAÇÃO DIÁRIA DE BANCO DE HORAS:\nJornada Esperada: ${expectedHours}:${expectedMinutes}\nRealizado: ${actualHours}:${actualMinutes}\nSaldo do Dia: ${isQuickPositive ? '+' : '-'}${quickDiffFormatted} h\nValor Estimado: R$ ${quickValid ? quickFinancialImpact.toFixed(2).replace(".",",") : "—"}`;
 
     if (!await writeClipboard(`${currentModeText}\n\nCalculado em calculadoradehorastrabalhadas.org`)) return;
     setCopied(true);
@@ -167,6 +173,7 @@ export default function BancoDeHorasCalculator({ onSelectTab }: BancoDeHorasCalc
   };
 
   const exportCSV = () => {
+    if (!validBalance) return;
     if (activeMode === 'ledger') {
       generateTimesheetCSV(
         logs.map(l => ({
@@ -320,6 +327,8 @@ export default function BancoDeHorasCalculator({ onSelectTab }: BancoDeHorasCalc
             overtimeMinutes={isQuickPositive ? quickDiffMin : 0}
           />
 
+          {quickValid && <details open className="tool-card"><summary>Memória de cálculo</summary><p>{minutesToTime(actualMin)} − {minutesToTime(expectedMin)} = {rawDiffMin >= 0 ? '+' : '-'}{minutesToTime(Math.abs(rawDiffMin))}</p><p>Horas a compensar: {minutesToTime(Math.max(0, -rawDiffMin))}.</p></details>}
+          {!quickValid && <p role="alert">Informe horas inteiras e minutos de 00 a 59.</p>}
           {/* Results Box Quick */}
           <div className="bg-neutral-900 rounded-2xl p-6 text-white shadow-md space-y-4">
             <div className="flex items-center justify-between border-b border-neutral-800 pb-4">
@@ -329,7 +338,7 @@ export default function BancoDeHorasCalculator({ onSelectTab }: BancoDeHorasCalc
                 </span>
                 <div className={`text-4xl font-extrabold font-mono mt-1 flex items-center gap-2 ${isQuickPositive ? 'text-emerald-400' : 'text-rose-400'}`}>
                   {isQuickPositive ? <ArrowUpRight className="w-8 h-8" /> : <ArrowDownRight className="w-8 h-8" />}
-                  {isQuickPositive ? '+' : '-'}{quickDiffFormatted} h
+                  {quickValid ? `${isQuickPositive ? '+' : '-'}${quickDiffFormatted} h` : '—'}
                 </div>
               </div>
               <Scale className="w-10 h-10 text-neutral-700 dark:text-neutral-300" />
@@ -339,7 +348,7 @@ export default function BancoDeHorasCalculator({ onSelectTab }: BancoDeHorasCalc
               <div className="bg-neutral-800/80 p-3.5 rounded-xl border border-neutral-700">
                 <span className="text-neutral-400 block mb-1">Equivalência em Horas Decimais</span>
                 <span className="text-lg font-bold font-mono text-white">
-                  {quickHoursDecimal.toFixed(2)} hrs
+                  {quickValid ? quickHoursDecimal.toFixed(2) : "—"} hrs
                 </span>
               </div>
               <div className="bg-neutral-800/80 p-3.5 rounded-xl border border-neutral-700">
@@ -356,6 +365,7 @@ export default function BancoDeHorasCalculator({ onSelectTab }: BancoDeHorasCalc
       ) : (
         /* Ledger Mode UI */
         <div className="space-y-6">
+          {ledgerValid && <details open className="tool-card"><summary>Memória de cálculo</summary><p>Saldo inicial {initialBalanceSign}{minutesToTime(Math.abs(initialMin))} + créditos {minutesToTime(totalCreditLogsMin)} − débitos {minutesToTime(totalDebitLogsMin)} = {isLedgerPositive ? "+" : "-"}{ledgerFormatted}.</p><p>Horas a compensar: {minutesToTime(Math.max(0,-totalLedgerMin))}.</p></details>}
           {/* Initial Balance bar */}
           <div className="bg-neutral-50 dark:bg-neutral-800 p-4 rounded-xl border border-neutral-200 dark:border-neutral-700 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div>
@@ -508,7 +518,7 @@ export default function BancoDeHorasCalculator({ onSelectTab }: BancoDeHorasCalc
                 </span>
                 <div className={`text-4xl font-extrabold font-mono mt-1 flex items-center gap-2 ${isLedgerPositive ? 'text-emerald-400' : 'text-rose-400'}`}>
                   {isLedgerPositive ? <ArrowUpRight className="w-8 h-8" /> : <ArrowDownRight className="w-8 h-8" />}
-                  {isLedgerPositive ? '+' : '-'}{ledgerFormatted} h
+                  {ledgerValid ? `${isLedgerPositive ? '+' : '-'}${ledgerFormatted} h` : '—'}
                 </div>
               </div>
               <Scale className="w-10 h-10 text-neutral-700 dark:text-neutral-300" />
@@ -530,7 +540,7 @@ export default function BancoDeHorasCalculator({ onSelectTab }: BancoDeHorasCalc
               <div className="bg-neutral-800/80 p-3 rounded-xl border border-neutral-700">
                 <span className="text-neutral-400 block mb-1">Horas Decimais</span>
                 <span className="text-base font-bold font-mono text-white">
-                  {ledgerHoursDecimal.toFixed(2)} hrs
+                  {ledgerValid ? ledgerHoursDecimal.toFixed(2) : "—"} hrs
                 </span>
               </div>
               <div className="bg-neutral-800/80 p-3 rounded-xl border border-neutral-700">
@@ -546,6 +556,11 @@ export default function BancoDeHorasCalculator({ onSelectTab }: BancoDeHorasCalc
         </div>
       )}
 
+      {!validBalance && <p role="alert">Corrija as horas e minutos antes de usar o saldo.</p>}
+      <div className="flex flex-wrap gap-3">
+        <button className="tool-button" onClick={() => { setExpectedHours(''); setExpectedMinutes(''); setActualHours(''); setActualMinutes(''); setLogs([]); setInitialBalanceHours('0'); setInitialBalanceMinutes('00'); }}>Limpar</button>
+        {activeMode === 'quick' && <button className="tool-button" disabled={!quickValid} onClick={copyLedgerSummary}>{copied ? 'Copiado!' : 'Copiar resultado'}</button>}
+      </div>
       {/* Hourly rate input, percentage and validity term for financial valuation */}
       <div className="mt-6 pt-6 border-t border-neutral-200 dark:border-neutral-700 grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div>
@@ -597,8 +612,7 @@ export default function BancoDeHorasCalculator({ onSelectTab }: BancoDeHorasCalc
         </div>
       </div>
 
-      {onSelectTab && <InternalLinkCTA currentTab="banco" onSelectTab={onSelectTab} />}
+
     </div>
   );
 }
-

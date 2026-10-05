@@ -58,19 +58,13 @@ export default function DailyCalculator({ onSelectTab }: DailyCalculatorProps) {
 
   const handleReset = () => {
     setMode('4points');
-    setIn1('08:00');
-    setOut1('12:00');
-    setIn2('13:00');
-    setOut2('18:00');
-    setStartSimple('08:00');
-    setEndSimple('18:00');
-    setBreakTimeSimple('01:00');
-    setDailyTarget('08:00');
+    setIn1(''); setOut1(''); setIn2(''); setOut2('');
+    setStartSimple(''); setEndSimple(''); setBreakTimeSimple(''); setDailyTarget('');
   };
 
   const fourPunches = calculateFourPunches([in1, out1, in2, out2]);
   const simpleValid = isValidTime(startSimple) && isValidTime(endSimple) && isValidTime(breakTimeSimple, true) && timeToMinutes(breakTimeSimple) <= calculateDuration(startSimple, endSimple);
-  const validInputs = mode === '4points' ? fourPunches !== null : simpleValid;
+  const validInputs = (mode === '4points' ? fourPunches !== null : simpleValid) && isValidTime(dailyTarget, true);
   const intervalMin = mode === '4points' ? (fourPunches?.rest ?? 0) : timeToMinutes(breakTimeSimple);
   const totalMin = mode === '4points' ? (fourPunches?.worked ?? 0) : (simpleValid ? calculateDuration(startSimple, endSimple, undefined, undefined, intervalMin) : 0);
 
@@ -171,7 +165,7 @@ export default function DailyCalculator({ onSelectTab }: DailyCalculatorProps) {
 
           <button
             onClick={handleReset}
-            title="Restaurar padrões"
+            title="Limpar" aria-label="Limpar"
             className="p-2 text-neutral-500 dark:text-neutral-400 hover:text-red-600 dark:hover:text-red-400 bg-neutral-100 dark:bg-neutral-800 hover:bg-neutral-200 dark:hover:bg-neutral-700 rounded-lg transition-colors cursor-pointer"
           >
             <RotateCcw className="w-4 h-4" />
@@ -182,46 +176,46 @@ export default function DailyCalculator({ onSelectTab }: DailyCalculatorProps) {
       {mode === '4points' ? (
         <div id="daily-hours" className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
           <div>
-            <label htmlFor="daily-in1" className="block text-xs font-semibold text-neutral-600 dark:text-neutral-300 mb-1">Entrada 1 (Manhã)</label>
+            <label htmlFor="daily-in1" className="block text-xs font-semibold text-neutral-600 dark:text-neutral-300 mb-1">Entrada</label>
             <input
               id="daily-in1"
-              aria-label="Entrada 1 (Manhã)"
+              aria-label="Entrada"
               type="time"
               value={in1}
-              onChange={(e) => setIn1(e.target.value)}
+              onInput={(e) => setIn1(e.currentTarget.value)}
               className="w-full bg-white dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-700 text-neutral-900 dark:text-white rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 outline-none"
             />
           </div>
           <div>
-            <label htmlFor="daily-out1" className="block text-xs font-semibold text-neutral-600 dark:text-neutral-300 mb-1">Saída 1 (Almoço)</label>
+            <label htmlFor="daily-out1" className="block text-xs font-semibold text-neutral-600 dark:text-neutral-300 mb-1">Saída para intervalo</label>
             <input
               id="daily-out1"
-              aria-label="Saída 1 (Almoço)"
+              aria-label="Saída para intervalo"
               type="time"
               value={out1}
-              onChange={(e) => setOut1(e.target.value)}
+              onInput={(e) => setOut1(e.currentTarget.value)}
               className="w-full bg-white dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-700 text-neutral-900 dark:text-white rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 outline-none"
             />
           </div>
           <div>
-            <label htmlFor="daily-in2" className="block text-xs font-semibold text-neutral-600 dark:text-neutral-300 mb-1">Entrada 2 (Retorno)</label>
+            <label htmlFor="daily-in2" className="block text-xs font-semibold text-neutral-600 dark:text-neutral-300 mb-1">Retorno do intervalo</label>
             <input
               id="daily-in2"
-              aria-label="Entrada 2 (Retorno)"
+              aria-label="Retorno do intervalo"
               type="time"
               value={in2}
-              onChange={(e) => setIn2(e.target.value)}
+              onInput={(e) => setIn2(e.currentTarget.value)}
               className="w-full bg-white dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-700 text-neutral-900 dark:text-white rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 outline-none"
             />
           </div>
           <div>
-            <label htmlFor="daily-out2" className="block text-xs font-semibold text-neutral-600 dark:text-neutral-300 mb-1">Saída 2 (Fim)</label>
+            <label htmlFor="daily-out2" className="block text-xs font-semibold text-neutral-600 dark:text-neutral-300 mb-1">Saída final</label>
             <input
               id="daily-out2"
-              aria-label="Saída 2 (Fim)"
+              aria-label="Saída final"
               type="time"
               value={out2}
-              onChange={(e) => setOut2(e.target.value)}
+              onInput={(e) => setOut2(e.currentTarget.value)}
               className="w-full bg-white dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-700 text-neutral-900 dark:text-white rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 outline-none"
             />
           </div>
@@ -235,7 +229,7 @@ export default function DailyCalculator({ onSelectTab }: DailyCalculatorProps) {
               aria-label="Hora de Entrada"
               type="time"
               value={startSimple}
-              onChange={(e) => setStartSimple(e.target.value)}
+              onInput={(e) => setStartSimple(e.currentTarget.value)}
               className="w-full bg-white dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-700 text-neutral-900 dark:text-white rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 outline-none"
             />
           </div>
@@ -246,7 +240,7 @@ export default function DailyCalculator({ onSelectTab }: DailyCalculatorProps) {
               aria-label="Hora de Saída"
               type="time"
               value={endSimple}
-              onChange={(e) => setEndSimple(e.target.value)}
+              onInput={(e) => setEndSimple(e.currentTarget.value)}
               className="w-full bg-white dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-700 text-neutral-900 dark:text-white rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 outline-none"
             />
           </div>
@@ -257,7 +251,7 @@ export default function DailyCalculator({ onSelectTab }: DailyCalculatorProps) {
               aria-label="Duração do Intervalo"
               type="time"
               value={breakTimeSimple}
-              onChange={(e) => setBreakTimeSimple(e.target.value)}
+              onInput={(e) => setBreakTimeSimple(e.currentTarget.value)}
               className="w-full bg-white dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-700 text-neutral-900 dark:text-white rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 outline-none"
             />
           </div>
@@ -373,6 +367,7 @@ export default function DailyCalculator({ onSelectTab }: DailyCalculatorProps) {
         </div>
       </div>
 
+      {validInputs && <section className="tool-card"><output className="tool-result">Horas em decimal: {(totalMin / 60).toFixed(2).replace('.', ',')} h</output><p>Saldo em relação à jornada informada: {totalMin >= targetMin ? '+' : '-'}{minutesToTime(Math.abs(totalMin - targetMin))}</p><details open><summary>Memória de cálculo</summary>{mode === '4points' ? <p>{in1}–{out1} = {minutesToTime(calculateDuration(in1,out1))}; {in2}–{out2} = {minutesToTime(calculateDuration(in2,out2))}</p> : <p>{startSimple}–{endSimple} − {breakTimeSimple} de intervalo</p>}<p>Total = {totalFormatted}; intervalo = {intervalFormatted}; decimal = {totalMin} ÷ 60.</p></details></section>}
       {/* CLT Legal Compliance Check Banner */}
       {!validInputs && <p role="alert" className="text-sm font-semibold text-red-700 dark:text-red-300">Preencha os horários em sequência. A jornada deve terminar em menos de 24 horas; o intervalo deve estar dentro do turno.</p>}
       <CLTAlertBanner
@@ -392,7 +387,7 @@ export default function DailyCalculator({ onSelectTab }: DailyCalculatorProps) {
       )}
 
       {/* Results Card */}
-      <div className="bg-gradient-to-br from-neutral-900 to-neutral-800 text-white rounded-2xl p-6 shadow-md space-y-6">
+      {validInputs && <div className="bg-gradient-to-br from-neutral-900 to-neutral-800 text-white rounded-2xl p-6 shadow-md space-y-6">
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 divide-y sm:divide-y-0 sm:divide-x divide-neutral-700">
           <div>
             <p className="text-xs font-medium text-neutral-400 mb-1 uppercase tracking-wider">Total Trabalhado</p>
@@ -455,7 +450,7 @@ export default function DailyCalculator({ onSelectTab }: DailyCalculatorProps) {
             <Printer className="w-4 h-4" /> Imprimir
           </button>
         </div>
-      </div>
+      </div>}
 
       {/* Smart Contextual Overtime Recommendation */}
       {overtimeMin > 0 && onSelectTab && (
@@ -481,7 +476,7 @@ export default function DailyCalculator({ onSelectTab }: DailyCalculatorProps) {
         </div>
       )}
 
-      {onSelectTab && <InternalLinkCTA currentTab="daily" onSelectTab={onSelectTab} />}
+
     </div>
   );
 }

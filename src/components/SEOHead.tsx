@@ -9,9 +9,14 @@ interface SEOHeadProps {
 }
 
 export const PAGE_META: Record<string, { title: string; description: string; canonical: string }> = {
+  counter: { title: "Contador de Horas", description: "Calcule o tempo entre dois horários, inclusive ao cruzar a meia-noite. Veja HH:MM e decimal.", canonical: 'https://calculadoradehorastrabalhadas.org/contador-de-horas' },
+  decimal: { title: "Horas Decimais: Converter Horas em Decimal", description: "Converta horas decimais nos dois sentidos: HH:MM para decimal e decimal para horas.", canonical: 'https://calculadoradehorastrabalhadas.org/horas-decimais' },
+  business: { title: "Calculadora de Dias Úteis", description: "Use o contador de dias uteis entre duas datas, com opções de finais de semana e feriados.", canonical: 'https://calculadoradehorastrabalhadas.org/calculadora-de-dias-uteis' },
+  service: { title: "Calculadora de Tempo de Serviço", description: "Calcule o intervalo entre datas em anos, meses e dias, com o total de dias corridos.", canonical: 'https://calculadoradehorastrabalhadas.org/tempo-de-servico' },
+  minutes: { title: "Calculadora de Horas e Minutos", description: "Some e subtraia durações com segundos opcionais. Veja total de minutos e horas decimais.", canonical: 'https://calculadoradehorastrabalhadas.org/horas-e-minutos' },
   daily: {
-    title: 'Calculadora de Horas Trabalhadas Diária - CLT',
-    description: 'Calcule o total de horas trabalhadas no dia com batida de ponto de 4 horários e intervalo de almoço. Resultado instantâneo no padrão CLT com horas extras.',
+    title: 'Calculadora de Horas | Calculadora de Horas Trabalhadas',
+    description: 'Calculadora de horas para calcular horas trabalhadas com entrada, intervalo e saída. Veja horas em decimal, saldo da jornada e hora extra.',
     canonical: 'https://calculadoradehorastrabalhadas.org/'
   },
   timesheet: {

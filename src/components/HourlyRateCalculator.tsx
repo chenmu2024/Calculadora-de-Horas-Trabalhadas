@@ -104,7 +104,7 @@ export default function HourlyRateCalculator({ onSelectTab }: HourlyRateCalculat
   const cmpEquivalentPjGross = (cmpCltTotalPackage + cmpPjAcc) / (cmpPjTax < 1 ? 1 - cmpPjTax : Infinity);
 
   const validTax = (value: string) => value.trim() !== '' && Number.isFinite(Number(value)) && Number(value) >= 0 && Number(value) < 100;
-  const resultValid = activeTab === 'clt' ? divVal > 0 : activeTab === 'pj' ? validTax(taxRate) && billableW > 0 : validTax(comparePjTaxPct);
+  const resultValid = activeTab === 'clt' ? salary.trim() !== '' && Number.isFinite(Number(salary)) && Number(salary) >= 0 && divVal > 0 : activeTab === 'pj' ? validTax(taxRate) && billableW > 0 : validTax(comparePjTaxPct);
   const displayedAmount = (value: number) => resultValid && Number.isFinite(value) ? value.toFixed(2).replace('.', ',') : '—';
 
   const selectPreset = (hours: string, div: string) => {
@@ -187,7 +187,7 @@ Calculado em calculadoradehorastrabalhadas.org`;
           </p>
         </div>
 
-        <div className="flex items-center gap-2 self-start md:self-auto">
+        <div className="flex flex-wrap items-center gap-2 self-start md:self-auto">
           <button disabled={!resultValid} onClick={exportCSV} className="flex items-center gap-1.5 text-xs font-semibold text-neutral-700 dark:text-neutral-300 bg-neutral-100 hover:bg-neutral-200 px-3 py-2 rounded-xl transition-colors cursor-pointer">
             <Download className="w-3.5 h-3.5 text-emerald-600" /> Exportar CSV
           </button>
@@ -201,7 +201,7 @@ Calculado em calculadoradehorastrabalhadas.org`;
       </div>
 
       {/* Tabs Switcher */}
-      <div className="flex bg-neutral-100 p-1 rounded-2xl border border-neutral-200 dark:border-neutral-700 w-full sm:w-max">
+      <div className="flex flex-col sm:flex-row bg-neutral-100 p-1 rounded-2xl border border-neutral-200 dark:border-neutral-700 w-full sm:w-max">
         <button
           onClick={() => setActiveTab('clt')}
           className={`flex-1 sm:flex-initial flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
@@ -229,6 +229,7 @@ Calculado em calculadoradehorastrabalhadas.org`;
       </div>
 
       {/* TAB 1: CLT */}
+      <button className="tool-button" onClick={() => { setSalary(''); setCustomDivisor(''); setWeeklyHours(''); }}>Limpar</button>
       {activeTab === 'clt' && (
         <div className="space-y-6">
           {/* Preset Buttons */}
@@ -334,7 +335,7 @@ Calculado em calculadoradehorastrabalhadas.org`;
                 R$ {displayedAmount(baseRate)} <span className="text-lg font-normal text-emerald-200">/ hora</span>
               </div>
               <p className="text-emerald-100 text-xs mt-1">
-                Calculado com divisor de {divVal} horas mensais sobre base total de R$ {totalRemunerationBase.toFixed(2).replace('.', ',')}.
+                Salário mensal ÷ divisor; adicionais selecionados integram a base. Calculado com divisor de {divVal} horas mensais sobre base total de R$ {totalRemunerationBase.toFixed(2).replace('.', ',')}.
               </p>
             </div>
             <div className="w-16 h-16 bg-white/10 rounded-2xl flex items-center justify-center shrink-0">
@@ -361,6 +362,7 @@ Calculado em calculadoradehorastrabalhadas.org`;
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+              {resultValid && <details open className="tool-card"><summary>Memória de cálculo</summary><p>Salário mensal ÷ divisor = valor da hora. Base remuneratória R$ {totalRemunerationBase.toFixed(2)} ÷ {divVal} = R$ {displayedAmount(baseRate)}.</p></details>}
               <div className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700 p-4 rounded-xl space-y-1 hover:border-blue-300 transition-colors">
                 <div className="flex justify-between items-center text-xs">
                   <span className="font-bold text-neutral-800 dark:text-neutral-200">Hora Extra 50%</span>
@@ -710,7 +712,7 @@ Calculado via calculadoradehorastrabalhadas.org`;
         </ul>
       </div>
 
-      {onSelectTab && <InternalLinkCTA currentTab="rate" onSelectTab={onSelectTab} />}
+
     </div>
   );
 }

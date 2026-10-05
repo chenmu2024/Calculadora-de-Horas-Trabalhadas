@@ -1,3 +1,13 @@
+import DailyCalculator from '../src/components/DailyCalculator';
+import TimeSumCalculator from '../src/components/TimeSumCalculator';
+import BancoDeHorasCalculator from '../src/components/BancoDeHorasCalculator';
+import HourlyRateCalculator from '../src/components/HourlyRateCalculator';
+import OvertimeCalculator from '../src/components/OvertimeCalculator';
+import HourCounterCalculator from '../src/components/HourCounterCalculator';
+import DecimalHoursCalculator from '../src/components/DecimalHoursCalculator';
+import BusinessDaysCalculator from '../src/components/BusinessDaysCalculator';
+import ServiceTimeCalculator from '../src/components/ServiceTimeCalculator';
+import HoursMinutesCalculator from '../src/components/HoursMinutesCalculator';
 import React from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { readFile, writeFile, mkdir, readdir } from 'node:fs/promises';
@@ -12,6 +22,7 @@ import { buildAIContext, htmlToText } from './ai-context';
 import { TAB_ROUTES, PATH_TO_TAB } from '../src/utils/routes';
 import { ARTICLE_META } from '../src/utils/articles';
 
+const calculators: Record<string, React.ComponentType> = { daily: DailyCalculator, sum: TimeSumCalculator, banco: BancoDeHorasCalculator, rate: HourlyRateCalculator, overtime: OvertimeCalculator, counter: HourCounterCalculator, decimal: DecimalHoursCalculator, business: BusinessDaysCalculator, service: ServiceTimeCalculator, minutes: HoursMinutesCalculator };
 const escape = (value: string) => value.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 const base = await readFile('dist/index.html', 'utf8');
 if (!base.includes('<!-- /prerender-root -->')) throw new Error('Missing pre-render root boundary');
@@ -27,9 +38,10 @@ for (const page of [...pages, { tab: 'not-found', path: '/404', meta: PAGE_META[
   html = html.replace(/(<link rel="alternate" hreflang="pt-BR" href=")[^"]*("\s*\/?>)/, `$1${page.meta.canonical}$2`);
   if (page.tab === 'not-found') html = html.replace(/(<meta name="robots" content=")[^"]*("\s*\/?>)/, '$1noindex, follow$2');
   const article = ARTICLE_META.find(row => page.path === `/guia-clt/${row.slug}`);
-  const content = renderToStaticMarkup(<StaticPageContent tab={page.tab} articleId={article?.id} />);
+  const Calculator = calculators[page.tab];
+  const content = renderToStaticMarkup(<>{Calculator && <Calculator />}<StaticPageContent tab={page.tab} articleId={article?.id} /></>);
   if (page.tab !== 'not-found') documents.push({ tab: page.tab, meta: page.meta, text: htmlToText(content) });
-  const navigation = Object.entries(TAB_ROUTES).map(([tab, path]) => `<li><a href="${path}">${escape(PAGE_H1_TITLES[tab])}</a></li>`).join('');
+  const navigation = Object.entries(TAB_ROUTES).filter(([tab]) => ['daily','counter','overtime','banco','sum','decimal','minutes','business','service','rate'].includes(tab)).map(([tab, path]) => `<li><a href="${path}">${escape(PAGE_H1_TITLES[tab])}</a></li>`).join('');
   const fallback = `<main><h1>${escape(page.h1)}</h1><p>${escape(page.meta.description)}</p>${content}<nav aria-label="Calculadoras"><ul>${navigation}</ul></nav><noscript>Ative JavaScript para calcular e editar os valores.</noscript></main>`;
   html = html.replace(/(<div id="root">)[\s\S]*?(<\/div>\s*<!-- \/prerender-root -->)/, `$1${fallback}$2`);
   const schema = buildStructuredData(page.tab, page.meta);
