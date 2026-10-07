@@ -14,7 +14,7 @@ Os títulos, descrições, H1 das calculadoras, URLs originais, meta keywords e 
 
 1. Execute `npm ci` e `npm run verify`. Os testes de conteúdo não exigem JavaScript no navegador; `check:seo` confere os arquivos finais, não somente os componentes.
 2. Ao mudar conteúdo, atualize explicitamente `CONTENT_UPDATED` em `src/utils/editorial.ts`. A revisão registrada em 2026-10-04 inclui a correção do conteúdo inicial e dos dados estruturados. Não use a data de cada build como atualização editorial.
-3. Execute `npm run build` e atualize `public/llms.txt`, `public/llms-full.txt` e `public/sitemap.xml` com os respectivos arquivos de `dist`; execute novamente `npm run verify`.
+3. Execute `npm run build`: o pré-renderizador gera os arquivos em `dist` e sincroniza automaticamente os snapshots `public/llms.txt`, `public/llms-full.txt` e `public/sitemap.xml`. Se esses arquivos mudaram, inclua os snapshots atualizados no próximo commit; execute novamente `npm run verify`.
 4. Não invente `datePublished`: a data de primeira publicação não foi comprovada. Caso seja documentada depois, registre-a separadamente da revisão do conteúdo e mostre-a na página.
 5. Revise a norma, categoria, vigência e acordo aplicáveis antes de atualizar exemplos fiscais ou trabalhistas. Os testes numéricos não equivalem a revisão profissional de todos os casos.
 
