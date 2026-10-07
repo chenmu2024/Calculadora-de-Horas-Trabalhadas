@@ -29,3 +29,10 @@ export function formatDurationSeconds(value: number, seconds = false): string {
 export function bankBalance(worked: number, expected: number): number | null {
   return [worked, expected].every(value => Number.isFinite(value) && value >= 0) ? worked - expected : null;
 }
+
+// Returns null rather than Infinity/NaN for invalid salary-hour divisors.
+export function hourlyRateForDivisor(salary: number, divisor: number): number | null {
+  if (!Number.isFinite(salary) || salary < 0 || !Number.isFinite(divisor) || divisor <= 0) return null;
+  const value = salary / divisor;
+  return Number.isFinite(value) ? value : null;
+}

@@ -46,7 +46,8 @@ self.addEventListener('fetch', event => {
     catch {
       if (cached) return cached;
       if (request.mode === 'navigate') {
-        const path = new URL(request.url).pathname.replace(/\\/$/, '') || '/';
+        const pathname = new URL(request.url).pathname;
+        const path = pathname.length > 1 && pathname.endsWith('/') ? pathname.slice(0, -1) : pathname;
         if (PAGE_PATHS.includes(path)) {
           try {
             const fallback = await cache?.match(path, { ignoreSearch: true });

@@ -73,7 +73,7 @@ const assets = (await list('dist')).filter(file => !file.endsWith('/sw.js') && !
 const pagePaths = pages.map(page => page.path);
 // Cache the calculator code and the most-used tools; other pages are cached on visit.
 // Avoid eagerly downloading duplicate trailing-slash pages, large AI files and images.
-const calculatorAssets = assets.filter(asset => /^\\/assets\\/.*\\.(?:js|css|woff2?)$/i.test(asset));
+const calculatorAssets = assets.filter(asset => asset.startsWith('/assets/') && ['.js', '.css', '.woff2', '.woff'].some(extension => asset.endsWith(extension)));
 const priorityPages = ['/', '/contador-de-horas', '/horas-decimais', '/horas-e-minutos', '/somador-de-horas', '/calculadora-semanal', '/calculadora-mensal', '/banco-de-horas', '/horas-extras'];
 const urls = [...new Set([...calculatorAssets, '/index.html', '/manifest.json', '/favicon.svg', ...priorityPages])];
 const hash = createHash('sha256');

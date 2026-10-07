@@ -1,5 +1,6 @@
 import { storage, copyText as writeClipboard, nonNegative } from '../utils/browser';
 import { useState, useEffect } from 'react';
+import { hourlyRateForDivisor } from '../utils/conversions';
 import { Calendar, Calculator, Download, Copy, Check, Printer, Clock, AlertCircle, Sparkles, Moon, ArrowRight } from 'lucide-react';
 import { minutesToTime } from '../utils/time';
 import { generateTimesheetCSV } from '../utils/excelGenerator';
@@ -40,8 +41,10 @@ export default function MonthlyCalculator({ onSelectTab }: MonthlyCalculatorProp
   }, [calculationType, monthlySalary, divisorCLT, hourlyWageInput, workingDays, sundaysAndHolidays, dailyHours, dailyMinutes, overtime50Hours, overtime100Hours, nightShiftHours]);
 
   // Derive hourly wage
+  const validatedRate = hourlyRateForDivisor(nonNegative(monthlySalary, 0), Number(divisorCLT));
+  const divisorValid = validatedRate !== null;
   const calculatedHourlyWage = calculationType === 'monthly'
-    ? (nonNegative(monthlySalary, 0)) / (nonNegative(divisorCLT, 220))
+    ? validatedRate ?? 0
     : nonNegative(hourlyWageInput, 0);
 
   const days = nonNegative(workingDays, 0);
@@ -83,6 +86,7 @@ export default function MonthlyCalculator({ onSelectTab }: MonthlyCalculatorProp
   };
 
   const copySummary = async () => {
+    if (calculationType === 'monthly' && !divisorValid) { notify('Selecione um divisor CLT válido e maior que zero.'); return; }
     const text = `DEMONSTRATIVO MENSAL DE HORAS E VALORES (CLT):
 • Dias Úteis Trabalhados: ${days} dias
 • Domingos/Feriados (DSR): ${dsrDays} dias
@@ -103,6 +107,7 @@ Calculado em calculadoradehorastrabalhadas.org`;
   };
 
   const exportCSV = () => {
+    if (calculationType === 'monthly' && !divisorValid) { notify('Selecione um divisor CLT válido e maior que zero.'); return; }
     generateTimesheetCSV([
       { date: 'Dias Úteis Trabalhados', start: `${days} dias`, end: '-', breakTime: '-', totalHours: totalMonthlyHoursFormatted },
       { date: 'Salário Base', start: '-', end: '-', breakTime: '-', totalHours: `R$ ${baseSalary.toFixed(2)}` },
@@ -176,6 +181,7 @@ Calculado em calculadoradehorastrabalhadas.org`;
                 <option value="180">180 Horas (36h Semanais / Escalas)</option>
                 <option value="150">150 Horas (30h Semanais)</option>
               </select>
+              {!divisorValid && <p role="alert" className="mt-2 text-sm text-red-700 dark:text-red-300">Selecione um divisor válido e maior que zero para calcular.</p>}
             </div>
             <div className="bg-white dark:bg-neutral-900 p-3 rounded-xl border border-blue-200 flex flex-col justify-center">
               <span className="text-[11px] text-neutral-500 font-medium">Valor da Hora Calculado:</span>
