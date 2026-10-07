@@ -71,7 +71,11 @@ async function list(directory: string): Promise<string[]> {
 }
 const assets = (await list('dist')).filter(file => !file.endsWith('/sw.js') && !file.endsWith('/_redirects') && !file.endsWith('/404.html')).map(file => '/' + file.slice(5));
 const pagePaths = pages.map(page => page.path);
-const urls = [...new Set([...assets, ...pagePaths, ...pagePaths.filter(path => path !== '/').map(path => path + '/')])];
+// Cache the calculator code and the most-used tools; other pages are cached on visit.
+// Avoid eagerly downloading duplicate trailing-slash pages, large AI files and images.
+const calculatorAssets = assets.filter(asset => /^\\/assets\\/.*\\.(?:js|css|woff2?)$/i.test(asset));
+const priorityPages = ['/', '/contador-de-horas', '/horas-decimais', '/horas-e-minutos', '/somador-de-horas', '/calculadora-semanal', '/calculadora-mensal', '/banco-de-horas', '/horas-extras'];
+const urls = [...new Set([...calculatorAssets, '/index.html', '/manifest.json', '/favicon.svg', ...priorityPages])];
 const hash = createHash('sha256');
 for (const asset of assets) hash.update(await readFile('dist' + asset));
 let worker = await readFile('public/sw.js', 'utf8');

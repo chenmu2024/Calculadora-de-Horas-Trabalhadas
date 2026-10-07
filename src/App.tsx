@@ -271,10 +271,10 @@ export default function App() {
 
               {HOURS_CONTENT[activeTab] ? <HoursToolContent tab={activeTab} /> : <CalculationReference activeTab={activeTab} />}
               {/* SEO Structured Content */}
-              <div className="no-print"><Suspense fallback={null}>{!HOURS_CONTENT[activeTab] && <SEOContent activeTab={activeTab} onSelectTab={setActiveTab} />}</Suspense></div>
+              <div className="no-print"><CalculatorErrorBoundary key={`guide-${activeTab}`} message="Não foi possível carregar o guia. Tente novamente."><Suspense fallback={null}>{!HOURS_CONTENT[activeTab] && <SEOContent activeTab={activeTab} onSelectTab={setActiveTab} />}</Suspense></CalculatorErrorBoundary></div>
 
               {/* FAQ Section */}
-              <div className="no-print"><Suspense fallback={null}>{!HOURS_CONTENT[activeTab] && TOOL_ANSWERS[activeTab] && <FAQSection activeTab={activeTab} onSelectTab={setActiveTab} />}</Suspense></div>
+              <div className="no-print"><CalculatorErrorBoundary key={`faq-${activeTab}`} message="Não foi possível carregar as perguntas frequentes. Tente novamente."><Suspense fallback={null}>{!HOURS_CONTENT[activeTab] && TOOL_ANSWERS[activeTab] && <FAQSection activeTab={activeTab} onSelectTab={setActiveTab} />}</Suspense></CalculatorErrorBoundary></div>
             </div>
 
             {/* Sidebar Column (4 cols) */}

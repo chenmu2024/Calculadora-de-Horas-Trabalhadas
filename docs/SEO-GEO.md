@@ -36,7 +36,7 @@ Em uma ferramenta de estatísticas já autorizada, compare páginas de entrada e
 
 Para desempenho, consulte PageSpeed Insights e dados de campo do Search Console/CrUX. Metas recomendadas no percentil 75: LCP até 2,5 s, INP até 200 ms e CLS até 0,1. Faça também medições de laboratório em celular, mas não apresente o resultado local como experiência real dos visitantes. Se não houver amostra suficiente, registre “dados insuficientes”.
 
-Os módulos de artigos deixam de ser montados automaticamente em todas as calculadoras; os links relacionados permitem chegar ao guia. O service worker ainda pode baixar recursos para uso offline: economia de renderização não significa que todos esses recursos deixaram de ser transferidos.
+Os módulos de artigos deixam de ser montados automaticamente em todas as calculadoras; os links relacionados permitem chegar ao guia. O service worker pré-carrega apenas os arquivos JavaScript/CSS das calculadoras e páginas de maior uso; outras páginas são guardadas após visita. O uso offline depende de armazenamento disponível e não deve ser anunciado como universal.
 
 ## Referências primárias
 
