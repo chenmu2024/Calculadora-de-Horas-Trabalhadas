@@ -1,4 +1,4 @@
-import { storage, copyText as writeClipboard, nonNegative } from '../utils/browser';
+import { storage, copyText as writeClipboard, nonNegative, notify } from '../utils/browser';
 import { useState, useEffect } from 'react';
 import { hourlyRateForDivisor } from '../utils/conversions';
 import { Calendar, Calculator, Download, Copy, Check, Printer, Clock, AlertCircle, Sparkles, Moon, ArrowRight } from 'lucide-react';
