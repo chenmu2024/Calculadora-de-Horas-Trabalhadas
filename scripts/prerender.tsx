@@ -64,6 +64,13 @@ await writeFile('dist/sitemap.xml', sitemap);
 const context = buildAIContext(documents);
 await writeFile('dist/llms.txt', context.summary);
 await writeFile('dist/llms-full.txt', context.full);
+ // Keep checked-in public snapshots up to date whenever a build regenerates SEO/GEO output.
+ // The deployed versions remain the generated dist files.
+ await Promise.all([
+   writeFile('public/sitemap.xml', sitemap),
+   writeFile('public/llms.txt', context.summary),
+   writeFile('public/llms-full.txt', context.full),
+ ]);
 async function list(directory: string): Promise<string[]> {
   const entries = await readdir(directory, { withFileTypes: true });
   const nested = await Promise.all(entries.map(entry => entry.isDirectory() ? list(join(directory, entry.name)) : [join(directory, entry.name).replace(/\\/g, '/')]));
