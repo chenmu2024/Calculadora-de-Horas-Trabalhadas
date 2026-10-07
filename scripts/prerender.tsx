@@ -64,6 +64,13 @@ await writeFile('dist/sitemap.xml', sitemap);
 const context = buildAIContext(documents);
 await writeFile('dist/llms.txt', context.summary);
 await writeFile('dist/llms-full.txt', context.full);
+ // Keep checked-in public snapshots up to date whenever a build regenerates SEO/GEO output.
+ // The deployed versions remain the generated dist files.
+ await Promise.all([
+   writeFile('public/sitemap.xml', sitemap),
+   writeFile('public/llms.txt', context.summary),
+   writeFile('public/llms-full.txt', context.full),
+ ]);
 async function list(directory: string): Promise<string[]> {
   const entries = await readdir(directory, { withFileTypes: true });
   const nested = await Promise.all(entries.map(entry => entry.isDirectory() ? list(join(directory, entry.name)) : [join(directory, entry.name).replace(/\\/g, '/')]));
@@ -71,7 +78,11 @@ async function list(directory: string): Promise<string[]> {
 }
 const assets = (await list('dist')).filter(file => !file.endsWith('/sw.js') && !file.endsWith('/_redirects') && !file.endsWith('/404.html')).map(file => '/' + file.slice(5));
 const pagePaths = pages.map(page => page.path);
-const urls = [...new Set([...assets, ...pagePaths, ...pagePaths.filter(path => path !== '/').map(path => path + '/')])];
+// Cache the calculator code and the most-used tools; other pages are cached on visit.
+// Avoid eagerly downloading duplicate trailing-slash pages, large AI files and images.
+const calculatorAssets = assets.filter(asset => asset.startsWith('/assets/') && ['.js', '.css', '.woff2', '.woff'].some(extension => asset.endsWith(extension)));
+const priorityPages = ['/', '/contador-de-horas', '/horas-decimais', '/horas-e-minutos', '/somador-de-horas', '/calculadora-semanal', '/calculadora-mensal', '/banco-de-horas', '/horas-extras'];
+const urls = [...new Set([...calculatorAssets, '/index.html', '/manifest.json', '/favicon.svg', ...priorityPages])];
 const hash = createHash('sha256');
 for (const asset of assets) hash.update(await readFile('dist' + asset));
 let worker = await readFile('public/sw.js', 'utf8');

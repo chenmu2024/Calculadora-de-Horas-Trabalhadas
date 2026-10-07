@@ -2,9 +2,9 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { calculateDuration, calculateFourPunches } from '../src/utils/time';
-import { hoursToDecimal, decimalToMinutes, sumDurationSeconds, formatDurationSeconds, bankBalance } from '../src/utils/conversions';
+import { hoursToDecimal, decimalToMinutes, sumDurationSeconds, formatDurationSeconds, bankBalance, hourlyRateForDivisor } from '../src/utils/conversions';
 import { serviceTime, countBusinessDays, parseDate } from '../src/utils/dates';
-import { getCalendarHolidays, getMonthWorkStats } from '../src/utils/holidays2026';
+import { getCalendarHolidays, getMonthWorkStats, getCalendarHolidaysForRange, getHolidaysForYear } from '../src/utils/holidays2026';
 import { TAB_ROUTES, PATH_TO_TAB } from '../src/utils/routes';
 import { PAGE_META } from '../src/components/SEOHead';
 import { buildStructuredData } from '../src/utils/structuredData';
@@ -87,4 +87,22 @@ test('new routes have independent initial content, tools, schema and no invented
   assert.equal(PATH_TO_TAB['/calculadora-de-horas-trabalhadas'],undefined);
   assert.equal(PATH_TO_TAB['/somar-horas'],undefined);
   assert.equal(PATH_TO_TAB['/hora-extra'],undefined);
+});
+
+test('hourly wage rejects invalid divisors instead of producing Infinity or NaN', () => {
+  assert.equal(hourlyRateForDivisor(3300, 220), 15);
+  assert.equal(hourlyRateForDivisor(3300, 0), null);
+  assert.equal(hourlyRateForDivisor(3300, NaN), null);
+  assert.equal(hourlyRateForDivisor(-1, 220), null);
+});
+test('2027 projected national calendar covers Easter and year boundaries', () => {
+  const holidays = getHolidaysForYear(2027);
+  assert.ok(holidays.some(holiday => holiday.date === '2027-03-26' && holiday.type === 'nacional'));
+  assert.ok(holidays.some(holiday => holiday.date === '2027-05-27' && holiday.type === 'facultativo'));
+  const combined = getCalendarHolidaysForRange(2026, 2027);
+  assert.ok(combined.some(holiday => holiday.date === '2026-04-03'));
+  assert.ok(combined.some(holiday => holiday.date === '2027-03-26'));
+  assert.ok(!combined.some(holiday => holiday.date === '2027-05-27'));
+  assert.equal(countBusinessDays('2027-03-25', '2027-03-29', {excludeSaturday:true,excludeSunday:true,holidays:combined})?.businessDays, 2);
+  assert.ok(getMonthWorkStats(2027, 2, false).monthHolidays.some(holiday => holiday.day === 26));
 });

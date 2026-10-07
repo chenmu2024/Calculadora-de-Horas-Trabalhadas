@@ -177,7 +177,7 @@ export default function App() {
       {isOffline && (
         <div className="bg-amber-500 text-neutral-950 px-4 py-2 text-xs font-bold flex items-center justify-center gap-2 shadow-sm animate-in fade-in duration-300">
           <WifiOff className="w-4 h-4" />
-          <span>Modo Offline Ativo: Todas as calculadoras continuam funcionando perfeitamente sem internet!</span>
+          <span>Modo offline: ferramentas já armazenadas podem funcionar sem conexão.</span>
         </div>
       )}
 
@@ -271,10 +271,10 @@ export default function App() {
 
               {HOURS_CONTENT[activeTab] ? <HoursToolContent tab={activeTab} /> : <CalculationReference activeTab={activeTab} />}
               {/* SEO Structured Content */}
-              <div className="no-print"><Suspense fallback={null}>{!HOURS_CONTENT[activeTab] && <SEOContent activeTab={activeTab} onSelectTab={setActiveTab} />}</Suspense></div>
+              <div className="no-print"><CalculatorErrorBoundary key={`guide-${activeTab}`} message="Não foi possível carregar o guia. Tente novamente."><Suspense fallback={null}>{!HOURS_CONTENT[activeTab] && <SEOContent activeTab={activeTab} onSelectTab={setActiveTab} />}</Suspense></CalculatorErrorBoundary></div>
 
               {/* FAQ Section */}
-              <div className="no-print"><Suspense fallback={null}>{!HOURS_CONTENT[activeTab] && TOOL_ANSWERS[activeTab] && <FAQSection activeTab={activeTab} onSelectTab={setActiveTab} />}</Suspense></div>
+              <div className="no-print"><CalculatorErrorBoundary key={`faq-${activeTab}`} message="Não foi possível carregar as perguntas frequentes. Tente novamente."><Suspense fallback={null}>{!HOURS_CONTENT[activeTab] && TOOL_ANSWERS[activeTab] && <FAQSection activeTab={activeTab} onSelectTab={setActiveTab} />}</Suspense></CalculatorErrorBoundary></div>
             </div>
 
             {/* Sidebar Column (4 cols) */}

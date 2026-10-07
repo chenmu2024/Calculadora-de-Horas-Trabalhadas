@@ -14,7 +14,7 @@ Os títulos, descrições, H1 das calculadoras, URLs originais, meta keywords e 
 
 1. Execute `npm ci` e `npm run verify`. Os testes de conteúdo não exigem JavaScript no navegador; `check:seo` confere os arquivos finais, não somente os componentes.
 2. Ao mudar conteúdo, atualize explicitamente `CONTENT_UPDATED` em `src/utils/editorial.ts`. A revisão registrada em 2026-10-04 inclui a correção do conteúdo inicial e dos dados estruturados. Não use a data de cada build como atualização editorial.
-3. Execute `npm run build` e atualize `public/llms.txt`, `public/llms-full.txt` e `public/sitemap.xml` com os respectivos arquivos de `dist`; execute novamente `npm run verify`.
+3. Execute `npm run build`: o pré-renderizador gera os arquivos em `dist` e sincroniza automaticamente os snapshots `public/llms.txt`, `public/llms-full.txt` e `public/sitemap.xml`. Se esses arquivos mudaram, inclua os snapshots atualizados no próximo commit; execute novamente `npm run verify`.
 4. Não invente `datePublished`: a data de primeira publicação não foi comprovada. Caso seja documentada depois, registre-a separadamente da revisão do conteúdo e mostre-a na página.
 5. Revise a norma, categoria, vigência e acordo aplicáveis antes de atualizar exemplos fiscais ou trabalhistas. Os testes numéricos não equivalem a revisão profissional de todos os casos.
 
@@ -36,7 +36,7 @@ Em uma ferramenta de estatísticas já autorizada, compare páginas de entrada e
 
 Para desempenho, consulte PageSpeed Insights e dados de campo do Search Console/CrUX. Metas recomendadas no percentil 75: LCP até 2,5 s, INP até 200 ms e CLS até 0,1. Faça também medições de laboratório em celular, mas não apresente o resultado local como experiência real dos visitantes. Se não houver amostra suficiente, registre “dados insuficientes”.
 
-Os módulos de artigos deixam de ser montados automaticamente em todas as calculadoras; os links relacionados permitem chegar ao guia. O service worker ainda pode baixar recursos para uso offline: economia de renderização não significa que todos esses recursos deixaram de ser transferidos.
+Os módulos de artigos deixam de ser montados automaticamente em todas as calculadoras; os links relacionados permitem chegar ao guia. O service worker pré-carrega apenas os arquivos JavaScript/CSS das calculadoras e páginas de maior uso; outras páginas são guardadas após visita. O uso offline depende de armazenamento disponível e não deve ser anunciado como universal.
 
 ## Referências primárias
 
