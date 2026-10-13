@@ -16,7 +16,7 @@ Revisão do conteúdo: 2026-10-05. Tabelas fiscais: 2026.
 - [Calculadora de Horas Trabalhadas Mensal - CLT](https://calculadoradehorastrabalhadas.org/calculadora-mensal): Some as horas efetivamente registradas no mês. O divisor salarial serve para apurar o valor da hora e não representa automaticamente a quantidade de horas físicas trabalhadas.
 - [Calculadora de Escala 12x36 CLT - Plantões, Noturno e Feriados](https://calculadoradehorastrabalhadas.org/escala-12x36): Na escala 12x36, registre os plantões e intervalos. Feriados em dobro e prorrogação noturna dependem do regime e do acordo aplicáveis; não são acréscimos automáticos para toda escala.
 - [Calculadora de Desconto de Faltas, Atrasos e Perda do DSR CLT](https://calculadoradehorastrabalhadas.org/atrasos-e-faltas): Apure atrasos em minutos e faltas injustificadas separadamente. A perda do DSR depende da justificativa e da semana afetada; confirme a convenção coletiva e não desconte duas vezes o mesmo evento.
-- [Calculadora de Férias CLT 2026 - 1/3 Constitucional, Venda e Impostos](https://calculadoradehorastrabalhadas.org/calculadora-de-ferias): O cálculo de férias inclui a remuneração correspondente e o terço constitucional. O abono pecuniário é limitado a um terço do período de férias devido; venda de 10 dias pressupõe direito a 30 dias.
+- [Calculadora de Férias 2026: Calcule Férias + 1/3](https://calculadoradehorastrabalhadas.org/calculadora-de-ferias): O cálculo de férias integrais ou proporcionais inclui remuneração e terço constitucional, com ajuste por faltas injustificadas. O abono é limitado a um terço do período devido; venda de 10 dias pressupõe direito a 30 dias. A estimativa é bruta, sem INSS ou IRRF.
 - [Calculadora de 13º Salário 2026 - 1ª e 2ª Parcelas CLT](https://calculadoradehorastrabalhadas.org/decimo-terceiro): O 13º proporcional considera os meses com pelo menos 15 dias computáveis. Confira remuneração, médias e parcelas já pagas; os descontos da segunda parcela devem considerar o total devido.
 - [Calculadora de Seguro-Desemprego 2026 - Valor e Parcelas MTE](https://calculadoradehorastrabalhadas.org/seguro-desemprego): Use a média salarial e a tabela do MTE de 2026 para estimar o benefício. A quantidade de parcelas e a elegibilidade dependem do histórico e dos requisitos oficiais; a simulação não concede o benefício.
 - [Calculadora de Insalubridade e Periculosidade CLT 2026](https://calculadoradehorastrabalhadas.org/insalubridade-e-periculosidade): Insalubridade e periculosidade dependem de enquadramento e das condições de trabalho. A calculadora aplica o percentual à base selecionada; não comprova exposição nem substitui laudo ou análise do acordo.
@@ -24,7 +24,7 @@ Revisão do conteúdo: 2026-10-05. Tabelas fiscais: 2026.
 - [Calculadora de Banco de Horas e Saldo - CLT](https://calculadoradehorastrabalhadas.org/banco-de-horas): O saldo do banco de horas é a diferença entre horas registradas e a meta informada. Prazos, compensação e pagamento dependem do acordo aplicável; o saldo positivo não equivale automaticamente a horas extras pagas.
 - [Somador de Horas Online Grátis - Somar Minutos](https://calculadoradehorastrabalhadas.org/somador-de-horas): Some ou subtraia durações em horas e minutos. Minutos são uma base de 60, portanto 1h30 não corresponde a 1,30 hora decimal.
 - [Simulador de Holerite e Salário Líquido CLT](https://calculadoradehorastrabalhadas.org/simulador-de-holerite): O salário líquido é o total de proventos menos os descontos aplicáveis. INSS é progressivo; no IRRF de 2026, o desconto simplificado substitui as deduções legais e a redução depende do rendimento.
-- [Calculadora de Rescisão Contratual CLT 2026](https://calculadoradehorastrabalhadas.org/calculadora-de-rescisao): A rescisão depende da modalidade, datas, aviso prévio, parcelas já pagas e férias adquiridas. A projeção do aviso pode alterar os avos; informe valores e períodos pendentes sem duplicar pagamentos.
+- [Calculadora de Rescisão Trabalhista 2026: Calcule sua Rescisão](https://calculadoradehorastrabalhadas.org/calculadora-de-rescisao): A rescisão depende da modalidade, datas, aviso, parcelas já pagas e férias pendentes. A estimativa detalha verbas brutas e abatimentos informados, sem INSS ou IRRF; FGTS e multa ficam separados. A projeção pode alterar os avos.
 - [Calculadora de Valor da Hora Trabalhada - CLT](https://calculadoradehorastrabalhadas.org/valor-da-hora): Para mensalistas, divida o salário pela base de horas aplicável à jornada. Para PJ e freelancers, considere apenas horas faturáveis, custos e impostos; divisores CLT não devem ser usados automaticamente.
 - [Calculadora de Horas Extras 50% e 100% - CLT](https://calculadoradehorastrabalhadas.org/horas-extras): Multiplique o valor da hora normal pelas horas extras e pelo fator do adicional. Domingos e feriados não compensados podem exigir pagamento em dobro; confira a escala e o acordo aplicáveis.
 - [Calculadora de Adicional Noturno e Hora Ficta](https://calculadoradehorastrabalhadas.org/adicional-noturno): No trabalho noturno urbano, o período de referência é 22h–05h, com adicional mínimo de 20% e hora reduzida de 52min30s. Intervalos são descontados; prorrogação exige análise dos requisitos aplicáveis.
@@ -481,74 +481,89 @@ Banco de Horas & DSR Qual o prazo legal para compensar ou zerar o saldo do banco
 Banco de Horas & DSR Como calcular o reflexo das horas extras habituais no DSR?
 Banco de Horas & DSR O que acontece com o saldo do banco de horas no momento da rescisão?
 
-### Calculadora de Férias CLT 2026 - 1/3 Constitucional, Venda e Impostos
+### Calculadora de Férias 2026: Calcule Férias + 1/3
 
 URL: https://calculadoradehorastrabalhadas.org/calculadora-de-ferias
-Revisão: 2026-10-05
+Revisão: 2026-10-14
 
-Resposta rápida e método de cálculo
-O cálculo de férias inclui a remuneração correspondente e o terço constitucional. O abono pecuniário é limitado a um terço do período de férias devido; venda de 10 dias pressupõe direito a 30 dias.
-Exemplo com as premissas informadas
-30 dias sobre R$ 3.000 + 1/3 = R$ 4.000 brutos, sem abono, médias ou antecipação do 13º.
-Simulação informativa. Confira contrato, categoria e convenção coletiva. Revisão do conteúdo: 5 de outubro de 2026 . Tabelas fiscais: ano de 2026.
-Fontes oficiais e limites
-CLT — texto compilado, arts. 58, 59-A, 71, 73 e 143 (https://www.planalto.gov.br/ccivil_03/decreto-lei/del5452compilado.htm)
-Receita Federal — tributação de 2026 (https://www.gov.br/receitafederal/pt-br/assuntos/meu-imposto-de-renda/tabelas/2026)
-eSocial — valores previdenciários de 2026 (https://www.gov.br/esocial/pt-br/noticias/liberado-o-envio-de-eventos-de-folha-para-o-esocial-apos-publicacao-de-portaria-que-reajusta-valores-previdenciarios-em-2026-1)
-Método editorial e correção de divergências (https://calculadoradehorastrabalhadas.org/sobre#metodologia-editorial)
-Como Calcular Hora de Trabalho? Guia Completo de Jornada CLT (Diárias, Almoço e Ponto) (https://calculadoradehorastrabalhadas.org/guia-clt/como-calcular-hora-de-trabalho)decimo terceiro (https://calculadoradehorastrabalhadas.org/decimo-terceiro)simulador de holerite (https://calculadoradehorastrabalhadas.org/simulador-de-holerite)calculadora de rescisao (https://calculadoradehorastrabalhadas.org/calculadora-de-rescisao)
+Art. 129 a 145 da CLT • 1/3 Constitucional Simulação de férias + 1/3 constitucional
 
-Referências de Cálculo Trabalhista CLT 2026
-Referências: TST, Art. 58 e Art. 73 da CLT • Tabelas fiscais 2026 • Confirme o acordo aplicável
+Imprimir
+Salário Bruto Atual (R$) R$
+Diária: R$ 106.67
+Tipo de férias Férias integrais Férias proporcionais (indenizadas) Média de adicionais, horas extras e comissões (R$)
+Faltas injustificadas no período aquisitivo
+Dias já gozados ou quitados neste período
+Converter 1/3 do direito anual em abono 30, 24, 18 ou 12 dias de direito permitem converter 10, 8, 6 ou 4 dias. Abono indisponível para férias proporcionais indenizadas.
+Calcular férias Os resultados válidos são atualizados ao editar. Regras atualizadas em: 14/10/2026 . Salário e demais entradas ficam apenas nesta página, sem armazenamento.
+Direito apurado 30 dias
 
-100% Privado (Sem Banco de Dados)
+Dias de férias restantes 30 dias de descanso
 
-Conteúdo revisado em 5 de outubro de 2026 • Confira a legislação e o acordo aplicáveis
-Guia Oficial de Férias CLT 2026
-Como Calcular Férias CLT: 1/3 Constitucional, Venda e Prazo de Pagamento
-O cálculo de férias pela CLT garante a remuneração normal acrescida de no mínimo um terço constitucional (Art. 7º, XVII da CF/88). Além disso, o trabalhador pode optar pelo abono pecuniário, limitado a um terço do período devido (vender 10 dias pressupõe direito a 30 dias). Confira o tratamento tributário de cada verba e dos reflexos, sem presumir isenção de toda a remuneração de férias.
+Convertidos em abono 0 dias
 
-Abono Pecuniário (Venda de 10 Dias)
-Pelo Art. 143 da CLT, o empregado pode converter 1/3 do seu período de férias em abono pecuniário. Esse valor indenizatório, juntamente com o seu terço constitucional, é 100% isento de INSS e IRRF .
+Resultado detalhado e fórmulas de cálculo Item Valor estimado
+Remuneração base Referência, já incluída na base Como foi calculado? Salário bruto + média de adicionais e comissões.
+R$ 3.200,00
+Adicionais incluídos Referência, já incluída na base Como foi calculado? Média informada, já incluída na remuneração base; não é somada novamente.
+R$ 0,00
+Valor das férias Como foi calculado? Remuneração base × 30 dias ÷ 30.
+R$ 3.200,00
+1/3 constitucional sobre férias Como foi calculado? Valor das férias ÷ 3.
+R$ 1.066,67
+Abono pecuniário Como foi calculado? Remuneração base × 0 dias convertidos ÷ 30.
+R$ 0,00
+1/3 sobre abono Como foi calculado? Abono pecuniário ÷ 3. O terço total é distribuído entre férias e abono, sem duplicar valores.
+R$ 0,00
 
-Prazo Limite de Pagamento (Art. 145 CLT)
-O valor total líquido das férias deve ser depositado pelo empregador até 2 dias antes do início do gozo . O atraso no pagamento pode gerar o direito à remuneração em dobro (Art. 137 CLT / Súmula 450 STF).
+Total bruto estimado
+R$ 4.266,67
+Férias + terço + abono + terço sobre abono. Sem estimar INSS/IRRF, adiantamento do 13º ou salário dos dias trabalhados.
+Copiar cálculo de férias
 
-— / 5.0
-Avaliação da ferramenta: sua opinião é salva apenas neste navegador, sem pontuação agregada.
+Regras de Pagamento de Férias (Artigo 145 da CLT)
+O pagamento da remuneração das férias e, se for o caso, do abono pecuniário, deverá ser efetuado até 2 (dois) dias antes do início do respectivo período .
+Férias concedidas após o prazo concessivo podem ser devidas em dobro (art. 137). O atraso apenas no pagamento não gera automaticamente a dobra: o STF invalidou a Súmula 450 do TST na ADPF 501.
 
-Clique nas estrelas para avaliar
+Está saindo da empresa? Calcule sua rescisão trabalhista (https://calculadoradehorastrabalhadas.org/calculadora-de-rescisao).
 
-Outras Calculadoras Trabalhistas CLT Disponíveis Gratuitamente
-Horas Diárias (https://calculadoradehorastrabalhadas.org/)Semanal 44h (https://calculadoradehorastrabalhadas.org/calculadora-semanal)Horas Extras (https://calculadoradehorastrabalhadas.org/horas-extras)Simular Holerite (https://calculadoradehorastrabalhadas.org/simulador-de-holerite)
+Como calcular férias?
+Some salário bruto e médias remuneratórias aplicáveis. Multiplique essa base pelos dias de descanso restantes e divida por 30. Acrescente um terço e, se solicitado e permitido, o abono com seu terço. A ferramenta mostra o total bruto, sem estimar INSS ou IRRF.
 
-Perguntas Frequentes (FAQ CLT 2026) Atualizado 2026
-Tire suas dúvidas trabalhistas com respostas fundamentadas na CLT e Súmulas do TST.
+Como calcular 1/3 de férias?
+Divida o valor das férias por 3. Em 30 dias sobre R$ 3.000, as férias são R$ 3.000 e o terço é R$ 1.000. Ao converter parte em abono, o terço é distribuído entre os dias de descanso e os dias convertidos, sem somar um segundo terço sobre o total.
 
-Filtrar por tema:
-Todas as Dúvidas Jornada & Ponto Horas Extras & Noturno Holerite & Descontos Rescisão & FGTS Banco de Horas & DSR
+Como calcular férias proporcionais?
+Esta calculadora de férias proporcionais estima a indenização por período incompleto: dias anuais de direito × avos ÷ 12. Conte cada mês de serviço e a fração final de pelo menos 15 dias. Por exemplo, 6/12 de 30 dias equivalem a 15 dias; sobre R$ 3.000, são R$ 1.500 mais R$ 500 de terço. Isso não autoriza o gozo antecipado nem garante direito em qualquer modalidade de desligamento.
 
-Jornada & Ponto Como calcular as horas trabalhadas em um dia de trabalho? Para calcular as horas trabalhadas no dia, subtraia a hora de entrada do horário de saída. Se houver intervalo intrajornada (almoço), desconte a duração total da pausa. Exemplo: Entrada 08:00, Almoço 12:00 às 13:00, Saída Final 18:00. Total do dia = (12h - 8h) + (18h - 13h) = 9 horas efetivas.
+Como funciona o cálculo de férias de 30 dias?
+Sem redução por faltas, sem abono e sem dias já quitados, 30 dias correspondem à remuneração base mais um terço. Faltas injustificadas podem reduzir o direito: até 5 faltas, 30 dias; de 6 a 14, 24 dias; de 15 a 23, 18 dias; de 24 a 32, 12 dias; acima de 32, nenhum dia nessa faixa legal. Não subtraia uma falta diretamente de um dia de férias.
 
-Esta resposta foi útil?
+O que entra no valor das férias?
+Além do salário, médias de adicionais, horas extras e comissões podem integrar a base, conforme art. 142 da CLT. O campo de médias é informativo no resultado: seu valor já está incluído na base e não é somado novamente. Afastamentos que alteram o período aquisitivo e convenções coletivas exigem análise específica.
 
-Jornada & Ponto Qual é a tolerância legal do cartão de ponto no Brasil em 2026?
-Jornada & Ponto Como funciona a jornada de 44 horas semanais de segunda a sexta?
-Jornada & Ponto Qual é o tempo mínimo obrigatório de intervalo de almoço?
-Jornada & Ponto Qual é o divisor oficial da CLT para calcular o valor da hora de trabalho?
-Horas Extras & Noturno Qual é o valor mínimo do adicional de hora extra pela CLT?
-Horas Extras & Noturno O que é a hora ficta noturna e como funciona o adicional noturno urbano?
-Horas Extras & Noturno O adicional noturno integra a base de cálculo de horas extras e DSR?
-Holerite & Descontos Como é calculado o desconto de INSS no holerite em 2026?
-Holerite & Descontos Como calcular a retenção de IRRF no contracheque?
-Holerite & Descontos Qual o limite máximo de desconto de Vale Transporte (VT)?
-Rescisão & FGTS Qual é o prazo legal para pagamento do acerto trabalhista na rescisão?
-Rescisão & FGTS Como funciona o aviso prévio proporcional por tempo de serviço?
-Rescisão & FGTS Quem pede demissão tem direito ao saque do FGTS e à multa de 40%?
-Rescisão & FGTS Como funciona a demissão por acordo mútuo (Art. 484-A da CLT)?
-Banco de Horas & DSR Qual o prazo legal para compensar ou zerar o saldo do banco de horas?
-Banco de Horas & DSR Como calcular o reflexo das horas extras habituais no DSR?
-Banco de Horas & DSR O que acontece com o saldo do banco de horas no momento da rescisão?
+Posso vender parte das minhas férias?
+O art. 143 permite converter um terço do direito em abono: 10 dias de 30, 8 de 24, 6 de 18 ou 4 de 12. O pedido deve ser feito até 15 dias antes do término do período aquisitivo, observadas as regras de férias coletivas. A simulação não oferece abono para férias proporcionais indenizadas. Se já houve gozo, o saldo precisa comportar o abono.
+
+Exemplo de cálculo com premissas explícitas
+Salário de R$ 3.000, sem médias ou faltas, direito de 30 dias e abono de 10 dias: 20 dias de descanso = R$ 2.000; terço = R$ 666,67; abono = R$ 1.000; terço do abono = R$ 333,33. Total bruto estimado: R$ 4.000. O salário relativo aos dias efetivamente trabalhados não integra esse total.
+
+Perguntas frequentes sobre férias
+Como calcular o terço de férias? O terço é o valor correspondente às férias dividido por 3. Sobre R$ 2.400 de férias, o adicional é R$ 800. O resultado detalha também a parcela de terço correspondente ao abono, quando houver.
+Como calcular as férias de 30 dias com adicionais? Para salário de R$ 3.000 e média de R$ 300, a base é R$ 3.300. Sem faltas, abono ou dias quitados, o total bruto é R$ 4.400, já incluindo R$ 1.100 de terço.
+Posso usar férias proporcionais para conferir uma rescisão? Sim, informe os avos e as médias que correspondem ao período incompleto. Use também a calculadora de rescisão para verificar a modalidade, os períodos adquiridos pendentes e a projeção do aviso.
+Com 6 faltas, ainda posso vender 10 dias? Nessa faixa, o direito anual é de 24 dias e o abono corresponde a 8 dias. A ferramenta ajusta automaticamente esse limite; ausências legalmente justificadas não entram na contagem de faltas injustificadas.
+Quando as férias devem ser pagas? O art. 145 determina pagamento das férias e do abono até dois dias antes do início do período. Atraso apenas no pagamento não resulta automaticamente em dobra; o STF invalidou a Súmula 450 do TST na ADPF 501.
+Meus dados de salário ficam salvos? Não. Estas duas calculadoras processam entradas na memória da página, sem enviar ou salvar salário e datas. Ao recarregar, os campos voltam aos exemplos. Copiar ou imprimir só ocorre por sua ação.
+
+Fontes oficiais e regras
+Regras atualizadas em: 14/10/2026 . Revisão editorial das fontes; não é certificação jurídica.
+CLT — arts. 130, 137, 142–147, 477, 484-A e 487 (https://www.planalto.gov.br/ccivil_03/decreto-lei/del5452compilado.htm)
+Constituição Federal — art. 7º, XVII (https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm)
+STF — ADPF 501: atraso no pagamento e férias em dobro (https://portal.stf.jus.br/noticias/verNoticiaDetalhe.asp?idConteudo=492245&ori=1)
+
+Estimativa informativa para regras gerais de mensalistas CLT. Não substitui o termo de rescisão, a folha, a convenção coletiva ou orientação profissional. Afastamentos, estabilidade, remuneração histórica variável e situações especiais podem alterar o cálculo. Confira documentos e eventuais divergências com o RH ou sindicato. Arredondamento por verba pode gerar diferenças de centavos.
+Calcular horas trabalhadas (https://calculadoradehorastrabalhadas.org/)Calcular sua rescisão (https://calculadoradehorastrabalhadas.org/calculadora-de-rescisao)
 
 ### Calculadora de 13º Salário 2026 - 1ª e 2ª Parcelas CLT
 
@@ -1038,75 +1053,135 @@ Banco de Horas & DSR Qual o prazo legal para compensar ou zerar o saldo do banco
 Banco de Horas & DSR Como calcular o reflexo das horas extras habituais no DSR?
 Banco de Horas & DSR O que acontece com o saldo do banco de horas no momento da rescisão?
 
-### Calculadora de Rescisão Contratual CLT 2026
+### Calculadora de Rescisão Trabalhista 2026: Calcule sua Rescisão
 
 URL: https://calculadoradehorastrabalhadas.org/calculadora-de-rescisao
-Revisão: 2026-10-05
+Revisão: 2026-10-14
 
-Resposta rápida e método de cálculo
-A rescisão depende da modalidade, datas, aviso prévio, parcelas já pagas e férias adquiridas. A projeção do aviso pode alterar os avos; informe valores e períodos pendentes sem duplicar pagamentos.
-Exemplo com as premissas informadas
-Saldo de 10 dias em salário de R$ 3.000: R$ 3.000 ÷ 30 × 10 = R$ 1.000, antes das demais verbas.
-Simulação informativa. Confira contrato, categoria e convenção coletiva. Revisão do conteúdo: 5 de outubro de 2026 . Tabelas fiscais: ano de 2026.
-Fontes oficiais e limites
-CLT — texto compilado, arts. 58, 59-A, 71, 73 e 143 (https://www.planalto.gov.br/ccivil_03/decreto-lei/del5452compilado.htm)
-Receita Federal — tributação de 2026 (https://www.gov.br/receitafederal/pt-br/assuntos/meu-imposto-de-renda/tabelas/2026)
-eSocial — valores previdenciários de 2026 (https://www.gov.br/esocial/pt-br/noticias/liberado-o-envio-de-eventos-de-folha-para-o-esocial-apos-publicacao-de-portaria-que-reajusta-valores-previdenciarios-em-2026-1)
-Método editorial e correção de divergências (https://calculadoradehorastrabalhadas.org/sobre#metodologia-editorial)
-Como Calcular Hora de Trabalho? Guia Completo de Jornada CLT (Diárias, Almoço e Ponto) (https://calculadoradehorastrabalhadas.org/guia-clt/como-calcular-hora-de-trabalho)calculadora de ferias (https://calculadoradehorastrabalhadas.org/calculadora-de-ferias)decimo terceiro (https://calculadoradehorastrabalhadas.org/decimo-terceiro)seguro desemprego (https://calculadoradehorastrabalhadas.org/seguro-desemprego)
+No modo manual, informe os avos incluindo a projeção do aviso. O assistente usa apenas períodos não quitados que você informar; confira pagamentos anteriores, férias parciais e acordos antes de aplicar.
+Assistente de datas e períodos não quitados Data de admissão Último dia do contrato sem projeção indenizada Início do período de 13º ainda não quitado Início do primeiro período de férias não quitado nem gozado
+Projeta o aviso indenizado na dispensa sem justa causa. No acordo mútuo, informe os dias de projeção conforme os documentos, sem presumir que o pagamento pela metade define a duração. No aviso trabalhado, informe o último dia já incluindo esse período. Conta 13º por ano e férias por aniversário; não detecta valores já pagos nem férias parcialmente gozadas.
+Aplicar datas aos cálculos Usar avos manuais
+Legislação CLT Art. 477 Estimativa bruta • 2026
+Simulação da rescisão trabalhista
+Confira as verbas por modalidade. FGTS é exibido separadamente; INSS e IRRF não são estimados.
 
-Referências de Cálculo Trabalhista CLT 2026
-Referências: TST, Art. 58 e Art. 73 da CLT • Tabelas fiscais 2026 • Confirme o acordo aplicável
+Preencher Exemplo Copiar Imprimir
 
-100% Privado (Sem Banco de Dados)
+Prazo Legal de Pagamento (Art. 477, § 6º CLT): A empresa tem até 10 (dez) dias corridos a contar do término do contrato para realizar o pagamento integral das verbas rescisórias devidas ao trabalhador.
 
-Conteúdo revisado em 5 de outubro de 2026 • Confira a legislação e o acordo aplicáveis
-Rescisão Contratual - Art. 477 da CLT
-Cálculo de Rescisão Contratual CLT 2026: Verbas, Multa FGTS e Prazos
-Guia completo de direitos rescisórios: Aviso Prévio Proporcional (Lei 12.506/11), 13º salário proporcional, férias com 1/3 constitucional, multa rescisória de 40% do FGTS e o prazo de pagamento legal de 10 dias corridos.
+Último Salário Bruto Mensal (R$) R$
+Atalhos: R$ 2.500 R$ 3.500 R$ 5.000 R$ 8.000
 
-Demissão Sem Justa Causa Garante todos os direitos: Saldo de salário, aviso prévio indenizado/trabalhado, 13º proporcional, férias vencidas + proporcionais + 1/3, saque do FGTS com multa de 40% e guias do seguro-desemprego.
+Tipo de Desligamento / Motivo Demissão sem justa causa (Pelo empregador) Pedido de demissão (Pelo empregado) Acordo Consensual entre as Partes (Art. 484-A)
+Anos Completos de Serviço (Tempo de Empresa) Gera 36 dias de aviso prévio proporcional (30 dias + 3d/ano completo).
+Aviso Prévio Indenizado (pago sem trabalhar) Trabalhado (Cumprido normalmente)
+Dias de saldo de salário ainda não pagos (0 a 30)
+Avos de 13º ainda não quitados (0 a 12 no modo manual) Frações iguais ou superiores a 15 dias contam como 1 mês inteiro.
+Avos de férias proporcionais (0 a 12)
+Saldo atual deste vínculo no FGTS (R$, opcional) R$
+Saldo atual antes da nova multa, para simular o saque. A multa usa outra base, informada abaixo.
+Média de adicionais e comissões (R$) R$
+Média de adicionais para integração de reflexos nas verbas rescisórias.
+Média de horas extras (R$)
+13º já adiantado (R$)
+Outros créditos (R$)
+Outros descontos (R$)
+Faltas injustificadas no período incompleto de férias
+Dias de férias integrais pendentes (simples)
+Dias de férias vencidas pendentes (em dobro)
+Base total do FGTS para fins rescisórios (R$, opcional) Informe a base total atualizada, incluindo depósitos rescisórios devidos. Não é necessariamente o saldo atual; confira o FGTS Digital/RH. Modalidade de saque do FGTS Saque-rescisão Saque-aniversário Férias pendentes: informe apenas dias ainda não gozados e não pagos, ajustados por faltas. A dobra se refere ao prazo de concessão vencido, não apenas à data de pagamento. Não duplique dias entre integrais, vencidas e proporcionais. Confirme o saldo de salário com a folha, especialmente em fevereiro e meses de 31 dias.
 
-Acordo Mútuo (Art. 484-A CLT) Criado pela Reforma Trabalhista: O trabalhador recebe 50% do aviso prévio indenizado, 20% de multa do FGTS e pode movimentar até 80% da sua conta vinculada do FGTS (sem direito a seguro-desemprego).
+Calcular rescisão Os resultados válidos são atualizados ao editar. Regras atualizadas em: 14/10/2026 . Dados processados apenas nesta página, sem salvar salário ou datas.
+Total estimado das verbas rescisórias
+R$ 10.713,90
+Bruto: R$ 10.713,90 • Abatimentos informados e aviso: R$ 0,00. Antes de INSS e IRRF; FGTS separado.
 
-Aviso Prévio Proporcional (Lei 12.506/2011):
-Dias de Aviso = 30 dias + (3 dias × Anos Completos Trabalhados) [Máx: 90 dias]
+Resultado detalhado e fórmulas de cálculo Item Valor estimado
+Saldo de salário Como foi calculado? Remuneração base ÷ 30 × 15 dias ainda não pagos.
+R$ 1.750,00
+Aviso prévio indenizado Como foi calculado? Base ÷ 30 × 36 dias × 100%. Aviso trabalhado ou dispensado não gera indenização nesta simulação.
+R$ 4.200,00
+13º proporcional Como foi calculado? Base × 7/12. Meses com pelo menos 15 dias; anos separados no assistente de datas.
+R$ 2.041,67
+Férias integrais Como foi calculado? Base ÷ 30 × 0 dias adquiridos, não gozados e não pagos, dentro do prazo concessivo.
+R$ 0,00
+Férias vencidas Como foi calculado? Base ÷ 30 × 0 dias fora do prazo concessivo × 2. Não basta atraso no pagamento.
+R$ 0,00
+Férias proporcionais Como foi calculado? Base ÷ 30 × dias anuais após faltas × 7/12.
+R$ 2.041,67
+1/3 constitucional Como foi calculado? (Férias integrais + vencidas em dobro + proporcionais) ÷ 3.
+R$ 680,56
+Outros créditos Como foi calculado? Valor informado, sem reflexos automáticos nas demais verbas.
+R$ 0,00
+13º já adiantado Como foi calculado? Adiantamento informado, abatido uma única vez.
+− R$ 0,00
+Aviso não cumprido Como foi calculado? No pedido de demissão: base ÷ 30 × dias não cumpridos (até 30), quando o desconto é aplicável.
+− R$ 0,00
+Outros descontos Como foi calculado? Descontos informados. Confira autorização e limites legais com o RH.
+− R$ 0,00
 
-— / 5.0
-Avaliação da ferramenta: sua opinião é salva apenas neste navegador, sem pontuação agregada.
+Quer conferir esse valor? Use a Calculadora de Férias (https://calculadoradehorastrabalhadas.org/calculadora-de-ferias).
 
-Clique nas estrelas para avaliar
+FGTS — estimativa separada
+Resultado detalhado e fórmulas de cálculo Item Valor estimado
+Saldo informado Como foi calculado? Saldo atual deste vínculo, antes da nova multa. Nenhum depósito faltante é presumido.
+Não informado
+Multa rescisória Como foi calculado? Base total para fins rescisórios × 40%. Sem base informada, não estimamos a multa.
+Não informado
+Saldo potencialmente sacável Como foi calculado? Saldo informado × 100%, conforme modalidade e tipo de rescisão.
+Não informado
+Valor potencialmente disponível para saque Como foi calculado? Saldo potencialmente sacável + nova multa, antes de bloqueios e da análise da CAIXA.
+Não informado
 
-Outras Calculadoras Trabalhistas CLT Disponíveis Gratuitamente
-Horas Diárias (https://calculadoradehorastrabalhadas.org/)Semanal 44h (https://calculadoradehorastrabalhadas.org/calculadora-semanal)Horas Extras (https://calculadoradehorastrabalhadas.org/horas-extras)Simular Holerite (https://calculadoradehorastrabalhadas.org/simulador-de-holerite)
+No saque-aniversário, esta simulação considera apenas a multa rescisória. Saques excepcionais, garantias de empréstimos e bloqueios precisam ser conferidos no aplicativo FGTS. Estes valores não integram o total pago diretamente pela empresa.
 
-Perguntas Frequentes (FAQ CLT 2026) Atualizado 2026
-Tire suas dúvidas trabalhistas com respostas fundamentadas na CLT e Súmulas do TST.
+Seguro-desemprego depende dos requisitos e do histórico de solicitações; esta simulação não garante elegibilidade nem parcelas.
 
-Filtrar por tema: Recomendado para esta calculadora
-Todas as Dúvidas Jornada & Ponto Horas Extras & Noturno Holerite & Descontos Rescisão & FGTS Banco de Horas & DSR
+Como calcular a rescisão trabalhista?
+Informe a remuneração bruta com as médias, o motivo do desligamento e o aviso. O assistente conta o 13º por mês civil com pelo menos 15 dias e as férias por mês de serviço e fração final de 15 dias. No modo manual, inclua a projeção aplicável nos avos. Confira valores já pagos para evitar duplicidade.
 
-Jornada & Ponto Como calcular as horas trabalhadas em um dia de trabalho? Para calcular as horas trabalhadas no dia, subtraia a hora de entrada do horário de saída. Se houver intervalo intrajornada (almoço), desconte a duração total da pausa. Exemplo: Entrada 08:00, Almoço 12:00 às 13:00, Saída Final 18:00. Total do dia = (12h - 8h) + (18h - 13h) = 9 horas efetivas.
+O que entra no cálculo de rescisão?
+A simulação soma saldo de salário, aviso indenizado devido, 13º proporcional, férias integrais, vencidas e proporcionais, terço constitucional e outros créditos. Abate o 13º adiantado, o aviso não cumprido quando aplicável e os outros descontos informados. O total é anterior a INSS e IRRF. FGTS fica separado.
 
-Esta resposta foi útil?
+Cálculo de rescisão sem justa causa
+A dispensa sem justa causa pode gerar aviso prévio indenizado, além das demais verbas. Para mensalistas, o aviso proporcional considera 30 dias mais 3 dias por ano completo, limitado a 90. O período indenizado pode alterar os avos de férias e 13º. Seguro-desemprego exige requisitos próprios.
 
-Jornada & Ponto Qual é a tolerância legal do cartão de ponto no Brasil em 2026?
-Jornada & Ponto Como funciona a jornada de 44 horas semanais de segunda a sexta?
-Jornada & Ponto Qual é o tempo mínimo obrigatório de intervalo de almoço?
-Jornada & Ponto Qual é o divisor oficial da CLT para calcular o valor da hora de trabalho?
-Horas Extras & Noturno Qual é o valor mínimo do adicional de hora extra pela CLT?
-Horas Extras & Noturno O que é a hora ficta noturna e como funciona o adicional noturno urbano?
-Horas Extras & Noturno O adicional noturno integra a base de cálculo de horas extras e DSR?
-Holerite & Descontos Como é calculado o desconto de INSS no holerite em 2026?
-Holerite & Descontos Como calcular a retenção de IRRF no contracheque?
-Holerite & Descontos Qual o limite máximo de desconto de Vale Transporte (VT)?
-Rescisão & FGTS Qual é o prazo legal para pagamento do acerto trabalhista na rescisão?
-Rescisão & FGTS Como funciona o aviso prévio proporcional por tempo de serviço?
-Rescisão & FGTS Quem pede demissão tem direito ao saque do FGTS e à multa de 40%?
-Rescisão & FGTS Como funciona a demissão por acordo mútuo (Art. 484-A da CLT)?
-Banco de Horas & DSR Qual o prazo legal para compensar ou zerar o saldo do banco de horas?
-Banco de Horas & DSR Como calcular o reflexo das horas extras habituais no DSR?
-Banco de Horas & DSR O que acontece com o saldo do banco de horas no momento da rescisão?
+Cálculo de rescisão por pedido de demissão
+São devidos saldo de salário, 13º e férias pendentes com um terço. Não há multa do FGTS nem saque motivado por esse pedido. Diferencie aviso dispensado sem desconto de aviso não cumprido: neste último, informe apenas os dias sujeitos a desconto, até 30 para o mensalista.
+
+Rescisão por acordo: como funciona?
+No acordo do art. 484-A, somente o aviso indenizado é pago pela metade; as demais verbas são integrais. A multa do FGTS é de 20% e o saque-rescisão permite até 80% do saldo, conforme as condições aplicáveis. Não há seguro-desemprego. Os dias de projeção são informados conforme o documento do acordo, sem inferir a duração a partir do pagamento pela metade.
+
+Como são calculadas as férias na rescisão?
+Informe dias adquiridos ainda não gozados nem quitados: simples dentro do prazo concessivo, em dobro quando o prazo de concessão já venceu. O período incompleto é calculado por avos e ajustado pelas faltas injustificadas daquele período. O terço incide sobre as férias devidas, inclusive a dobra. Dias anteriores com faltas ou gozo parcial devem ser ajustados pelos registros, pois as datas sozinhas não identificam pagamentos.
+
+Como funciona o FGTS na rescisão?
+A multa usa a base total para fins rescisórios, que pode diferir do saldo atual e deve incluir os depósitos devidos na rescisão. A taxa é de 40% na dispensa sem justa causa, 20% no acordo e zero no pedido de demissão. O saque potencial depende da modalidade; no saque-aniversário, esta simulação considera somente a multa. Bloqueios, empréstimos, liberações excepcionais e depósitos faltantes exigem conferência na CAIXA.
+
+Exemplo de cálculo com premissas explícitas
+Modo manual, salário de R$ 3.000, sem médias, 15 dias de saldo, 2 anos completos, dispensa sem justa causa com 36 dias de aviso indenizado, 6/12 de 13º e de férias já incluindo a projeção, 30 dias de férias integrais pendentes e nenhum desconto: saldo R$ 1.500 + aviso R$ 3.600 + 13º R$ 1.500 + férias integrais R$ 3.000 + proporcionais R$ 1.500 + terço R$ 1.500 = R$ 12.600 antes de tributos. Com saldo FGTS de R$ 10.000 e base rescisória total de R$ 12.000, a multa é R$ 4.800, mostrada separadamente.
+
+Perguntas frequentes sobre rescisão
+Como calcular rescisão de trabalho com salário variável? Informe as médias remuneratórias de horas extras, adicionais e comissões nos campos separados. Confira com o RH o período de média e a convenção coletiva. Não repita a mesma verba nos dois campos.
+Como calcular rescisão trabalhista com aviso atravessando o ano? Use o assistente de datas: ele mantém os avos de 13º separados por ano. Informe o início do primeiro período não quitado, e somente adiantamentos ainda não descontados. A simulação usa a remuneração informada para todos esses avos; se as bases de anos anteriores diferirem, os valores precisam ser apurados separadamente.
+Qual data informar quando o aviso é trabalhado? Informe o último dia do contrato já incluindo o aviso trabalhado. A ferramenta não acrescenta uma nova projeção nem paga esse aviso novamente como indenização. Confira os dias de salário ainda não pagos com a folha.
+Férias vencidas são sempre pagas em dobro? A dobra depende de ter vencido o prazo de concessão. Um período adquirido ainda dentro desse prazo é pago de forma simples. Atraso apenas no pagamento não cria automaticamente o direito à dobra, conforme ADPF 501.
+A calculadora suporta justa causa e contratos especiais? Não. Esta versão cobre mensalistas CLT por prazo indeterminado, em dispensa sem justa causa, pedido de demissão e acordo. Justa causa, contrato de experiência, domésticos, estabilidade, afastamentos e regras coletivas específicas precisam de análise própria.
+Este resultado é o valor líquido a receber? Não. O total desconta somente adiantamentos, aviso não cumprido aplicável e abatimentos informados. Não estima INSS ou IRRF e não inclui o FGTS. Compensações legais dependem dos documentos e limites aplicáveis; um resultado negativo não representa dívida automática.
+
+Fontes oficiais e regras
+Regras atualizadas em: 14/10/2026 . Revisão editorial das fontes; não é certificação jurídica.
+CLT — arts. 130, 137, 142–147, 477, 484-A e 487 (https://www.planalto.gov.br/ccivil_03/decreto-lei/del5452compilado.htm)
+Lei 12.506/2011 — aviso prévio proporcional (https://www.planalto.gov.br/ccivil_03/_ato2011-2014/2011/lei/l12506.htm)
+Lei 4.090/1962 — 13º salário (https://www.planalto.gov.br/ccivil_03/leis/l4090.htm)
+MTE — direitos na rescisão (https://www.gov.br/trabalho-e-emprego/pt-br/acesso-a-informacao/acoes-e-programas/programas-projetos-acoes-obras-e-atividades/proteja/duvidas-frequentes)
+Lei 8.036/1990 — FGTS, arts. 18, 20 e 20-A (https://www.planalto.gov.br/ccivil_03/leis/l8036consol.htm)
+FGTS Digital — base total para fins rescisórios (https://www.gov.br/trabalho-e-emprego/pt-br/servicos/empregador/fgtsdigital/perguntas-frequentes)
+STF — ADPF 501: atraso no pagamento e férias em dobro (https://portal.stf.jus.br/noticias/verNoticiaDetalhe.asp?idConteudo=492245&ori=1)
+
+Estimativa informativa para regras gerais de mensalistas CLT. Não substitui o termo de rescisão, a folha, a convenção coletiva ou orientação profissional. Afastamentos, estabilidade, remuneração histórica variável e situações especiais podem alterar o cálculo. Confira documentos e eventuais divergências com o RH ou sindicato. Arredondamento por verba pode gerar diferenças de centavos.
+Calcular horas trabalhadas (https://calculadoradehorastrabalhadas.org/)Ver cálculo de férias (https://calculadoradehorastrabalhadas.org/calculadora-de-ferias)
 
 ### Calculadora de Valor da Hora Trabalhada - CLT
 

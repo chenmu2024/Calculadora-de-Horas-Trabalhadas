@@ -1,228 +1,114 @@
 import { terminationDates } from '../utils/termination';
-import { storage, copyText as writeClipboard, nonNegative, notify } from '../utils/browser';
-import { MINIMUM_WAGE_2026, calculateINSS, calculateIRRF, calculateSeguroDesemprego } from '../utils/taxCalculations';
+import { copyText as writeClipboard } from '../utils/browser';
 import React, { useState, useEffect } from 'react';
-import { DollarSign, FileText, Info, ShieldCheck, Download, Copy, Check, Printer, AlertTriangle, Calculator, Briefcase, Sparkles, ShieldAlert } from 'lucide-react';
+import { Copy, Check, Printer, AlertTriangle, Briefcase, Sparkles } from 'lucide-react';
 import InternalLinkCTA from './InternalLinkCTA';
-import CLTAlertBanner from './CLTAlertBanner';
+import LaborBreakdown, { formatLaborBRL as formatBRL, type LaborRow } from './LaborBreakdown';
+import { calculateRescisao, type TerminationType, type NoticeType } from '../lib/calculations/rescisao';
+import { LABOR_REVIEWED } from '../lib/legal-rules/2026';
 
-interface RescisaoCalculatorProps {
-  onSelectTab?: (tab: string) => void;
-}
-
-type TipoDesligamento = 'sem_justa_causa' | 'pedido_demissao' | 'com_justa_causa' | 'acordo_mutuo';
-type TipoAvisoPrevio = 'indenizado' | 'trabalhado' | 'nao_cumprido';
+interface RescisaoCalculatorProps { onSelectTab?: (tab: string) => void }
+type TipoDesligamento = TerminationType;
+type TipoAvisoPrevio = NoticeType;
 
 export default function RescisaoCalculator({ onSelectTab }: RescisaoCalculatorProps) {
-  const [grossSalary, setGrossSalary] = useState(() => storage.getItem('calc_rescisao_gross') || '3500.00');
-  const [tipoDesligamento, setTipoDesligamento] = useState<TipoDesligamento>(
-    () => (storage.getItem('calc_rescisao_tipo') as TipoDesligamento) || 'sem_justa_causa'
-  );
-  const [tipoAviso, setTipoAviso] = useState<TipoAvisoPrevio>(
-    () => (storage.getItem('calc_rescisao_aviso') as TipoAvisoPrevio) || 'indenizado'
-  );
-  const [yearsWorked, setYearsWorked] = useState(() => storage.getItem('calc_rescisao_years') || '2');
-  const [workedDaysMonth, setWorkedDaysMonth] = useState(() => storage.getItem('calc_rescisao_days') || '15');
-  const [months13th, setMonths13th] = useState(() => storage.getItem('calc_rescisao_m13') || '7');
-  const [monthsVacation, setMonthsVacation] = useState(() => storage.getItem('calc_rescisao_mvac') || '7');
-  const [hasExpiredVacation, setHasExpiredVacation] = useState(
-    () => storage.getItem('calc_rescisao_has_exp_vac') === 'true'
-  );
-  const [fgtsBalance, setFgtsBalance] = useState(() => storage.getItem('calc_rescisao_fgts') || '12000.00');
-  const [dependents, setDependents] = useState(() => storage.getItem('calc_rescisao_deps') || '0');
-  const [variableAverage, setVariableAverage] = useState(() => storage.getItem('calc_rescisao_vars') || '0');
-  const [dates, setDates] = useState(() => {
-    const empty = { admission: '', last: '', start13: '', vacation: '', projectDays: '' };
-    try { const saved = JSON.parse(storage.getItem('calc_rescisao_dates') ?? '{}'); for (const key of Object.keys(empty) as (keyof typeof empty)[]) if (typeof saved?.[key] === 'string') empty[key] = saved[key]; } catch { /* Use empty fields for malformed saved data. */ }
-    return empty;
-  });
-  const [projection, setProjection] = useState<ReturnType<typeof terminationDates> | null>(() => {
-    if (storage.getItem('calc_rescisao_dates_active') !== 'true') return null;
-    try { return terminationDates(dates.admission, dates.last, dates.start13, dates.vacation, tipoAviso !== 'indenizado' ? false : tipoDesligamento === 'acordo_mutuo' ? dates.projectDays.trim() === '' ? NaN : Number(dates.projectDays) : tipoDesligamento === 'sem_justa_causa'); } catch { return null; }
-  });
-  const [simplePeriods, setSimplePeriods] = useState(() => storage.getItem('calc_rescisao_simple_periods') ?? (storage.getItem('calc_rescisao_has_exp_vac') === 'true' ? '1' : '0'));
-  const [doublePeriods, setDoublePeriods] = useState(() => storage.getItem('calc_rescisao_double_periods') ?? '0');
+  const [grossSalary, setGrossSalary] = useState('3500.00');
+  const [tipoDesligamento, setTipoDesligamento] = useState<TipoDesligamento>('sem_justa_causa');
+  const [tipoAviso, setTipoAviso] = useState<TipoAvisoPrevio>('indenizado');
+  const [yearsWorked, setYearsWorked] = useState('2');
+  const [workedDaysMonth, setWorkedDaysMonth] = useState('15');
+  const [months13th, setMonths13th] = useState('7');
+  const [monthsVacation, setMonthsVacation] = useState('7');
+  const [fgtsBalance, setFgtsBalance] = useState('');
+  const [fgtsBase, setFgtsBase] = useState('');
+  const [withdrawal, setWithdrawal] = useState<'rescisao' | 'aniversario'>('rescisao');
+  const [variableAverage, setVariableAverage] = useState('0');
+  const [overtimeAverage, setOvertimeAverage] = useState('0');
+  const [advance13, setAdvance13] = useState('0');
+  const [credits, setCredits] = useState('0');
+  const [deductions, setDeductions] = useState('0');
+  const [absences, setAbsences] = useState('0');
+  const [unworkedDays, setUnworkedDays] = useState('30');
+  const [dates, setDates] = useState({ admission: '', last: '', start13: '', vacation: '', projectDays: '' });
+  const [dateMode, setDateMode] = useState(false);
+  const [simpleDays, setSimpleDays] = useState('0');
+  const [doubleDays, setDoubleDays] = useState('0');
   const [copied, setCopied] = useState(false);
+  const [calculated, setCalculated] = useState(false);
+  const [dateError, setDateError] = useState('');
+  const [appliedDates, setAppliedDates] = useState('');
+  const dateSignature = JSON.stringify([dates, tipoDesligamento, tipoAviso]);
 
-  useEffect(() => { storage.setItem('calc_rescisao_dates', JSON.stringify(dates)); storage.setItem('calc_rescisao_dates_active', String(projection !== null)); }, [dates, projection]);
-
-  // Persistence
+  // Remove only this calculator's legacy input keys; never load or save salary inputs.
   useEffect(() => {
-    storage.setItem('calc_rescisao_simple_periods', simplePeriods);
-    storage.setItem('calc_rescisao_double_periods', doublePeriods);
-    storage.setItem('calc_rescisao_gross', grossSalary);
-    storage.setItem('calc_rescisao_tipo', tipoDesligamento);
-    storage.setItem('calc_rescisao_aviso', tipoAviso);
-    storage.setItem('calc_rescisao_years', yearsWorked);
-    storage.setItem('calc_rescisao_days', workedDaysMonth);
-    storage.setItem('calc_rescisao_m13', months13th);
-    storage.setItem('calc_rescisao_mvac', monthsVacation);
-    storage.setItem('calc_rescisao_has_exp_vac', String(hasExpiredVacation));
-    storage.setItem('calc_rescisao_fgts', fgtsBalance);
-    storage.setItem('calc_rescisao_deps', dependents);
-    storage.setItem('calc_rescisao_vars', variableAverage);
-  }, [grossSalary, tipoDesligamento, tipoAviso, yearsWorked, workedDaysMonth, months13th, monthsVacation, hasExpiredVacation, fgtsBalance, dependents, variableAverage, simplePeriods, doublePeriods]);
+    try {
+      for (const key of Object.keys(localStorage)) if (key.startsWith('calc_rescisao_')) localStorage.removeItem(key);
+    } catch { /* Calculation also works when browser storage is unavailable. */ }
+  }, []);
 
-  const baseSalary = nonNegative(grossSalary, 0);
-  const varsAvg = nonNegative(variableAverage, 0);
-  const salary = baseSalary + varsAvg; // Total remuneratório para cálculo das verbas
-  const years = projection?.years ?? Math.floor(nonNegative(yearsWorked, 0));
-  const daysInMonth = Math.min(30, Math.max(0, nonNegative(workedDaysMonth, 0)));
-  const m13 = Math.min(12, Math.max(0, nonNegative(months13th, 0)));
-  const mVac = Math.min(12, Math.max(0, nonNegative(monthsVacation, 0)));
-  const fgts = nonNegative(fgtsBalance, 0);
-  const deps = nonNegative(dependents, 0);
-
-  // 1. Saldo de Salário
-  const saldoSalario = (salary / 30) * daysInMonth;
-
-  // 2. Aviso Prévio Proporcional (Lei 12.506/2011)
-  // 30 dias + 3 dias por ano completo de serviço (máximo 90 dias)
-  const avisoDays = tipoDesligamento === 'com_justa_causa' ? 0 : tipoDesligamento === 'pedido_demissao' ? 30 : Math.min(90, 30 + (years * 3));
-  let avisoPrevioValor = 0;
-  
-  if (tipoDesligamento === 'sem_justa_causa') {
-    if (tipoAviso === 'indenizado') {
-      avisoPrevioValor = (salary / 30) * avisoDays;
-    }
-  } else if (tipoDesligamento === 'acordo_mutuo') {
-    // No acordo mútuo, o aviso prévio se indenizado é pago pela metade (50%)
-    if (tipoAviso === 'indenizado') {
-      avisoPrevioValor = ((salary / 30) * avisoDays) * 0.5;
-    }
-  } else if (tipoDesligamento === 'pedido_demissao') {
-    // Se o empregado pede demissão e NÃO cumpre o aviso, a empresa pode descontar 30 dias de salário
-    if (tipoAviso === 'nao_cumprido') {
-      avisoPrevioValor = -salary;
-    }
-  }
-
-  // 3. 13º Salário Proporcional
-  // Informe os avos já considerando a projeção do aviso nas datas do contrato.
-  const m13Final = projection ? Object.values(projection.byYear).reduce((sum, avos) => sum + avos, 0) : m13;
-
-  
-  let décimoTerceiro = 0;
-  if (tipoDesligamento !== 'com_justa_causa') {
-    décimoTerceiro = (salary / 12) * m13Final;
-  }
-
-  // 4. Férias Proporcionais + 1/3
-  const mVacFinal = projection?.avos ?? mVac;
-
-
-  let feriasProporcionais = 0;
-  if (tipoDesligamento !== 'com_justa_causa') {
-    feriasProporcionais = (salary / 12) * mVacFinal;
-  }
-
-  // 5. Férias Vencidas + 1/3
-  const simpleCount = Math.min(100, Math.floor(nonNegative(simplePeriods)));
-  const doubleCount = Math.min(100, Math.floor(nonNegative(doublePeriods)));
-  const feriasVencidas = salary * (simpleCount + 2 * doubleCount);
-
-  // Terço Constitucional sobre Férias Proporcionais + Vencidas
-  const tercoFerias = (feriasProporcionais + feriasVencidas) / 3;
-  const totalFerias = feriasProporcionais + feriasVencidas + tercoFerias;
-
-  // 6. Multa do FGTS
-  let multaFGTS = 0;
-  if (tipoDesligamento === 'sem_justa_causa') {
-    multaFGTS = fgts * 0.40; // 40%
-  } else if (tipoDesligamento === 'acordo_mutuo') {
-    multaFGTS = fgts * 0.20; // 20%
-  }
-
-  const inssSaldoSalario = calculateINSS(saldoSalario);
-  const thirteenthAmounts = tipoDesligamento === 'com_justa_causa' ? [0] : projection ? Object.values(projection.byYear).map(avos => salary * avos / 12) : [décimoTerceiro];
-  const inss13o = thirteenthAmounts.reduce((sum, amount) => sum + calculateINSS(amount), 0);
-  const irrfSaldoSalario = calculateIRRF(saldoSalario, deps, inssSaldoSalario);
-  const irrf13o = thirteenthAmounts.reduce((sum, amount) => sum + calculateIRRF(amount, deps, calculateINSS(amount)), 0);
-
-  // Totais Brutos e Líquidos
-  const proventosRendimentos = saldoSalario + (avisoPrevioValor > 0 ? avisoPrevioValor : 0) + décimoTerceiro + totalFerias + multaFGTS;
-  const descontosTotais = inssSaldoSalario + inss13o + irrfSaldoSalario + irrf13o + (avisoPrevioValor < 0 ? Math.abs(avisoPrevioValor) : 0);
-  const totalLiquido = Math.max(0, proventosRendimentos - descontosTotais);
-
-  // Estimativa do Seguro-Desemprego (Tabela MTE 2026)
-  const calcSeguroDesemprego = () => {
-    if (tipoDesligamento !== 'sem_justa_causa') {
-      return { eligible: false, parcelAmount: 0, parcelCount: 0, totalPotential: 0 };
-    }
-    const parcelAmount = calculateSeguroDesemprego(salary);
-
-    let parcelCount = 3;
-    if (years >= 2) {
-      parcelCount = 5;
-    } else if (years >= 1) {
-      parcelCount = 4;
-    }
-    return { eligible: true, parcelAmount, parcelCount, totalPotential: parcelAmount * parcelCount };
-  };
-
-  const seguroInfo = calcSeguroDesemprego();
+  let result: ReturnType<typeof calculateRescisao> | null = null;
+  let error = '';
+  try {
+    if (dateMode && appliedDates !== dateSignature) throw new Error('Preencha e aplique as datas atualizadas ou selecione avos manuais.');
+    result = calculateRescisao({ salary: grossSalary, overtime: overtimeAverage, average: variableAverage, type: tipoDesligamento, notice: tipoAviso,
+      years: yearsWorked, salaryDays: workedDaysMonth, months13: months13th, monthsVacation,
+      simpleDays, doubleDays, absences, advance13, credits, deductions, unworkedNoticeDays: unworkedDays,
+      fgtsBalance, fgtsBase, withdrawal, dates: dateMode ? dates : undefined });
+  } catch (cause) { error = (cause as Error).message; }
+  const projection = result?.projection;
+  const avisoDays = result?.noticeDays ?? 0;
+  const m13Final = result?.months13 ?? 0;
+  const rows: LaborRow[] = result ? [
+    { label: 'Saldo de salário', value: result.salaryBalance, formula: 'Remuneração base ÷ 30 × ' + result.salaryDays + ' dias ainda não pagos.' },
+    { label: 'Aviso prévio indenizado', value: result.notice, formula: 'Base ÷ 30 × ' + result.noticeDays + ' dias × ' + (tipoDesligamento === 'acordo_mutuo' ? '50%' : '100%') + '. Aviso trabalhado ou dispensado não gera indenização nesta simulação.' },
+    { label: '13º proporcional', value: result.thirteenth, formula: 'Base × ' + result.months13 + '/12. Meses com pelo menos 15 dias; anos separados no assistente de datas.' },
+    { label: 'Férias integrais', value: result.simpleVacation, formula: 'Base ÷ 30 × ' + simpleDays + ' dias adquiridos, não gozados e não pagos, dentro do prazo concessivo.' },
+    { label: 'Férias vencidas', value: result.doubleVacation, formula: 'Base ÷ 30 × ' + doubleDays + ' dias fora do prazo concessivo × 2. Não basta atraso no pagamento.' },
+    { label: 'Férias proporcionais', value: result.vacation, formula: 'Base ÷ 30 × dias anuais após faltas × ' + result.vacationMonths + '/12.' },
+    { label: '1/3 constitucional', value: result.third, formula: '(Férias integrais + vencidas em dobro + proporcionais) ÷ 3.' },
+    { label: 'Outros créditos', value: result.credits, formula: 'Valor informado, sem reflexos automáticos nas demais verbas.' },
+    { label: '13º já adiantado', value: result.advance13, formula: 'Adiantamento informado, abatido uma única vez.', deduction: true },
+    { label: 'Aviso não cumprido', value: result.noticeDeduction, formula: 'No pedido de demissão: base ÷ 30 × dias não cumpridos (até 30), quando o desconto é aplicável.', deduction: true },
+    { label: 'Outros descontos', value: result.otherDeductions, formula: 'Descontos informados. Confira autorização e limites legais com o RH.', deduction: true },
+  ] : [];
 
   const fillExampleData = () => {
-    setGrossSalary('3800.00');
-    setTipoDesligamento('sem_justa_causa');
-    setTipoAviso('indenizado');
-    setYearsWorked('2');
-    setWorkedDaysMonth('18');
-    setMonths13th('7');
-    setMonthsVacation('7');
-    setHasExpiredVacation(false);
-    setSimplePeriods('0'); setDoublePeriods('0'); setProjection(null);
-    setFgtsBalance('14200.00');
-    setDependents('1');
+    setGrossSalary('3000'); setTipoDesligamento('sem_justa_causa'); setTipoAviso('indenizado');
+    setYearsWorked('2'); setWorkedDaysMonth('15'); setMonths13th('6'); setMonthsVacation('6');
+    setSimpleDays('30'); setDoubleDays('0'); setDateMode(false); setDates({ admission: '', last: '', start13: '', vacation: '', projectDays: '' });
+    setFgtsBalance('10000'); setFgtsBase('12000'); setWithdrawal('rescisao'); setVariableAverage('0'); setOvertimeAverage('0');
+    setAdvance13('0'); setCredits('0'); setDeductions('0'); setAbsences('0'); setUnworkedDays('30'); setDateError(''); setCalculated(false);
   };
-
-  const formatBRL = (val: number) => {
-    return val.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-  };
-
   const copySummary = async () => {
-    const summaryText = `--- SIMULAÇÃO DE RESCISÃO CONTRATUAL CLT ---
-Tipo de Desligamento: ${
-      tipoDesligamento === 'sem_justa_causa' ? 'Demissão sem justa causa' :
-      tipoDesligamento === 'pedido_demissao' ? 'Pedido de demissão' :
-      tipoDesligamento === 'com_justa_causa' ? 'Demissão com justa causa' : 'Acordo Consensual (Art. 484-A)'
-    }
-Salário Base: ${formatBRL(salary)}
-Tempo de Casa: ${years} anos
-
-PROVENTOS RESCISÓRIOS:
-• Saldo de Salário (${daysInMonth} dias): ${formatBRL(saldoSalario)}
-• Aviso Prévio (${avisoDays} dias): ${formatBRL(Math.max(0, avisoPrevioValor))}
-• 13º Salário Proporcional (${m13Final}/12): ${formatBRL(décimoTerceiro)}
-• Férias Proporcionais + Vencidas (+ 1/3): ${formatBRL(totalFerias)}
-• Multa do FGTS (${tipoDesligamento === 'sem_justa_causa' ? '40%' : tipoDesligamento === 'acordo_mutuo' ? '20%' : '0%'}): ${formatBRL(multaFGTS)}
-
-DESCONTOS PREVIDENCIÁRIOS E FISCAIS:
-• INSS Saldo de Salário: ${formatBRL(inssSaldoSalario)}
-• INSS 13º Salário: ${formatBRL(inss13o)}
-${irrfSaldoSalario > 0 ? `• IRRF Saldo de Salário: ${formatBRL(irrfSaldoSalario)}\n` : ''}${irrf13o > 0 ? `• IRRF 13º Salário: ${formatBRL(irrf13o)}\n` : ''}${avisoPrevioValor < 0 ? `• Desconto de Aviso Prévio Não Cumprido: ${formatBRL(Math.abs(avisoPrevioValor))}\n` : ''}
-VALOR LÍQUIDO RESCISÓRIO A RECEBER: ${formatBRL(totalLiquido)}
-(Calculado via CalculadoraDeHorasTrabalhadas.org - Padrão CLT 2026)`;
-
-    if (!await writeClipboard(summaryText)) return;
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2500);
+    if (!result) return;
+    const summary = ['Simulação de rescisão — valores antes de INSS e IRRF', ...rows.map(row => row.label + ': ' + (row.deduction ? '− ' : '') + formatBRL(row.value)),
+      'Total estimado das verbas rescisórias: ' + formatBRL(result.total),
+      'FGTS separado — saldo: ' + formatBRL(result.fgts.balance) + '; multa: ' + formatBRL(result.fgts.fine) + '; saque potencial: ' + formatBRL(result.fgts.available),
+      'Regras revisadas em 14/10/2026. Estimativa informativa, sujeita aos documentos e bloqueios.'].join('\n');
+    if (await writeClipboard(summary)) { setCopied(true); setTimeout(() => setCopied(false), 2000); }
   };
-
-  const handlePrint = () => {
-    window.print();
-  };
+  const handlePrint = () => { if (result) window.print(); };
 
   return (
     <div className="space-y-6">
       <p className="text-xs text-neutral-600 dark:text-neutral-300" role="note">No modo manual, informe os avos incluindo a projeção do aviso. O assistente usa apenas períodos não quitados que você informar; confira pagamentos anteriores, férias parciais e acordos antes de aplicar.</p>
-      <details className="border border-neutral-200 dark:border-neutral-700 rounded-xl p-4 text-xs space-y-3">
+      <details open className="border border-neutral-200 dark:border-neutral-700 rounded-xl p-4 text-xs space-y-3">
         <summary className="font-bold cursor-pointer">Assistente de datas e períodos não quitados</summary>
-        <div className="grid sm:grid-cols-2 gap-3 mt-3">{([['admission', 'Data de admissão'], ['last', 'Último dia do contrato sem projeção indenizada'], ['start13', 'Início do período de 13º ainda não quitado'], ['vacation', 'Início do primeiro período de férias não quitado nem gozado']] as const).map(([key, label]) => <label key={key} className="grid gap-1">{label}<input type="date" value={dates[key]} onChange={e => { setDates(current => ({ ...current, [key]: e.target.value })); setProjection(null); }} className="border rounded p-2 bg-white dark:bg-neutral-900" /></label>)}</div>
-        {tipoDesligamento === 'acordo_mutuo' && tipoAviso === 'indenizado' && <label className="grid gap-1 mt-3">Dias de projeção previstos no acordo<input type="number" min="0" max="90" step="1" value={dates.projectDays} onChange={e => { setDates(current => ({ ...current, projectDays: e.target.value })); setProjection(null); }} className="border rounded p-2 bg-white dark:bg-neutral-900" /></label>}
+        <div className="grid sm:grid-cols-2 gap-3 mt-3">{([['admission', 'Data de admissão'], ['last', 'Último dia do contrato sem projeção indenizada'], ['start13', 'Início do período de 13º ainda não quitado'], ['vacation', 'Início do primeiro período de férias não quitado nem gozado']] as const).map(([key, label]) => <label key={key} className="grid gap-1">{label}<input type="date" value={dates[key]} onChange={e => { setDates(current => ({ ...current, [key]: e.target.value })); setDateMode(true); setDateError(''); }} className="border rounded p-2 bg-white dark:bg-neutral-900" /></label>)}</div>
+        {tipoDesligamento === 'acordo_mutuo' && tipoAviso === 'indenizado' && <label className="grid gap-1 mt-3">Dias de projeção previstos no acordo<input type="number" min="0" max="90" step="1" value={dates.projectDays} onChange={e => { setDates(current => ({ ...current, projectDays: e.target.value })); setDateMode(true); setDateError(''); }} className="border rounded p-2 bg-white dark:bg-neutral-900" /></label>}
         <p className="mt-3">Projeta o aviso indenizado na dispensa sem justa causa. No acordo mútuo, informe os dias de projeção conforme os documentos, sem presumir que o pagamento pela metade define a duração. No aviso trabalhado, informe o último dia já incluindo esse período. Conta 13º por ano e férias por aniversário; não detecta valores já pagos nem férias parcialmente gozadas.</p>
-        <button type="button" className="mt-3 bg-blue-600 text-white rounded px-3 py-2" onClick={() => { try { const result = terminationDates(dates.admission, dates.last, dates.start13, dates.vacation, tipoAviso !== 'indenizado' ? false : tipoDesligamento === 'acordo_mutuo' ? dates.projectDays.trim() === '' ? NaN : Number(dates.projectDays) : tipoDesligamento === 'sem_justa_causa'); setProjection(result); setSimplePeriods(String(result.simple)); setDoublePeriods(String(result.doubled)); } catch (error) { setProjection(null); notify((error as Error).message); } }}>Aplicar datas aos cálculos</button>
-        {projection && <p role="status" className="mt-3">Data projetada: {projection.projected}. 13º: {Object.entries(projection.byYear).map(([year, avos]) => `${year}: ${avos}/12`).join('; ')}. Férias proporcionais: {projection.avos}/12; períodos simples: {simpleCount}; em dobro: {doubleCount}. <button className="underline" onClick={() => setProjection(null)}>Voltar aos avos manuais</button></p>}
+        <div className="flex flex-wrap gap-3 mt-3">
+          <button type="button" className="bg-blue-600 text-white rounded px-3 py-2" onClick={() => {
+            setDateMode(true);
+            try {
+              const period = terminationDates(dates.admission, dates.last, dates.start13, dates.vacation, tipoAviso !== 'indenizado' ? false : tipoDesligamento === 'acordo_mutuo' ? dates.projectDays.trim() === '' ? NaN : Number(dates.projectDays) : tipoDesligamento === 'sem_justa_causa');
+              setSimpleDays(String(period.simple * 30)); setDoubleDays(String(period.doubled * 30)); setWorkedDaysMonth(String(period.suggestedSalaryDays)); setAppliedDates(dateSignature); setDateError('');
+            } catch (cause) { setDateError((cause as Error).message); }
+          }}>Aplicar datas aos cálculos</button>
+          <button type="button" className="underline" onClick={() => { setDateMode(false); setDateError(''); }}>Usar avos manuais</button>
+        </div>
+        {dateError && <p role="alert" className="text-red-700 mt-3">{dateError}</p>}
+        {projection && <p className="mt-3">Data projetada: {projection.projected}. 13º: {Object.entries(projection.byYear).map(([year, avos]) => year + ': ' + avos + '/12').join('; ')}. Férias proporcionais: {projection.avos}/12. Ao aplicar, o assistente sugere dias de saldo de salário pelo último mês, considerando mês integral como 30 dias; ajuste pagamentos já feitos conforme a folha. Para férias, sugere 30 dias por período completo: ajuste faltas e gozo parcial.</p>}
       </details>
       {/* Header Title Banner */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-neutral-200 dark:border-neutral-700">
@@ -231,14 +117,14 @@ VALOR LÍQUIDO RESCISÓRIO A RECEBER: ${formatBRL(totalLiquido)}
             <span className="bg-red-100 text-red-800 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">
               Legislação CLT Art. 477
             </span>
-            <span className="text-xs text-neutral-500 font-medium">Tabela Previdenciária 2026</span>
+            <span className="text-xs text-neutral-500 font-medium">Estimativa bruta • 2026</span>
           </div>
           <h2 className="text-xl sm:text-2xl font-extrabold text-neutral-900 dark:text-neutral-100 flex items-center gap-2">
             <Briefcase className="w-6 h-6 text-blue-600" />
-            Calculadora de Rescisão Contratual CLT
+            Simulação da rescisão trabalhista
           </h2>
           <p className="text-xs sm:text-sm text-neutral-600 dark:text-neutral-400 mt-1">
-            Simule o valor exato a receber na demissão com cálculo de aviso prévio, saldo de salário, 13º, férias com 1/3 e multa do FGTS.
+            Confira as verbas por modalidade. FGTS é exibido separadamente; INSS e IRRF não são estimados.
           </p>
         </div>
 
@@ -252,7 +138,7 @@ VALOR LÍQUIDO RESCISÓRIO A RECEBER: ${formatBRL(totalLiquido)}
             <span>Preencher Exemplo</span>
           </button>
           <button
-            onClick={copySummary}
+            disabled={!result} onClick={copySummary}
             className="px-3 py-2 bg-neutral-100 hover:bg-neutral-200 text-neutral-800 dark:text-neutral-200 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer"
             title="Copiar Resumo"
           >
@@ -260,7 +146,7 @@ VALOR LÍQUIDO RESCISÓRIO A RECEBER: ${formatBRL(totalLiquido)}
             <span>{copied ? 'Copiado!' : 'Copiar'}</span>
           </button>
           <button
-            onClick={handlePrint}
+            disabled={!result} onClick={handlePrint}
             className="px-3 py-2 bg-blue-50 hover:bg-blue-100 text-blue-700 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer"
             title="Imprimir ou Salvar PDF"
           >
@@ -291,7 +177,7 @@ VALOR LÍQUIDO RESCISÓRIO A RECEBER: ${formatBRL(totalLiquido)}
               id="rescisao-gross-salary"
               aria-label="Último Salário Bruto Mensal em Reais"
               type="number" min="0" inputMode="decimal"
-              step="50"
+              step="0.01"
               value={grossSalary}
               onChange={(e) => setGrossSalary(e.target.value)}
               className="w-full pl-9 pr-3 py-2.5 bg-white dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-600 rounded-xl font-bold text-neutral-900 dark:text-neutral-100 focus:ring-2 focus:ring-blue-500 focus:outline-none"
@@ -301,7 +187,6 @@ VALOR LÍQUIDO RESCISÓRIO A RECEBER: ${formatBRL(totalLiquido)}
           <div className="flex flex-wrap gap-1 mt-2">
             <span className="text-[10px] text-neutral-400 self-center">Atalhos:</span>
             {[
-              { label: 'R$ 1.621 (SM)', val: String(MINIMUM_WAGE_2026) },
               { label: 'R$ 2.500', val: '2500.00' },
               { label: 'R$ 3.500', val: '3500.00' },
               { label: 'R$ 5.000', val: '5000.00' },
@@ -332,13 +217,12 @@ VALOR LÍQUIDO RESCISÓRIO A RECEBER: ${formatBRL(totalLiquido)}
             id="rescisao-tipo-desligamento"
             aria-label="Tipo de Desligamento ou Motivo"
             value={tipoDesligamento}
-            onChange={(e) => { setTipoDesligamento(e.target.value as TipoDesligamento); setProjection(null); }}
+            onChange={(e) => { setTipoDesligamento(e.target.value as TipoDesligamento); setTipoAviso(e.target.value === 'pedido_demissao' ? 'trabalhado' : 'indenizado'); }}
             className="w-full px-3 py-2.5 bg-white dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-600 rounded-xl font-bold text-neutral-900 dark:text-neutral-100 focus:ring-2 focus:ring-blue-500 focus:outline-none cursor-pointer"
           >
             <option value="sem_justa_causa">Demissão sem justa causa (Pelo empregador)</option>
             <option value="pedido_demissao">Pedido de demissão (Pelo empregado)</option>
             <option value="acordo_mutuo">Acordo Consensual entre as Partes (Art. 484-A)</option>
-            <option value="com_justa_causa">Demissão com justa causa</option>
           </select>
         </div>
 
@@ -352,9 +236,9 @@ VALOR LÍQUIDO RESCISÓRIO A RECEBER: ${formatBRL(totalLiquido)}
             aria-label="Anos Completos de Serviço"
             type="number" inputMode="decimal"
             min="0"
-            max="40"
-            disabled={projection !== null} value={projection?.years ?? yearsWorked}
-            onChange={(e) => { setYearsWorked(e.target.value); setProjection(null); }}
+            max="100"
+            disabled={Boolean(projection)} value={projection?.years ?? yearsWorked}
+            onChange={(e) => { setYearsWorked(e.target.value); }}
             className="w-full px-3 py-2.5 bg-white dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-600 rounded-xl font-bold text-neutral-900 dark:text-neutral-100 focus:ring-2 focus:ring-blue-500 focus:outline-none"
           />
           <span className="text-[11px] text-neutral-500 mt-1 block">
@@ -371,19 +255,20 @@ VALOR LÍQUIDO RESCISÓRIO A RECEBER: ${formatBRL(totalLiquido)}
             id="rescisao-tipo-aviso"
             aria-label="Tipo de Aviso Prévio"
             value={tipoAviso}
-            onChange={(e) => { setTipoAviso(e.target.value as TipoAvisoPrevio); setProjection(null); }}
+            onChange={(e) => { setTipoAviso(e.target.value as TipoAvisoPrevio); }}
             className="w-full px-3 py-2.5 bg-white dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-600 rounded-xl font-bold text-neutral-900 dark:text-neutral-100 focus:ring-2 focus:ring-blue-500 focus:outline-none cursor-pointer"
           >
-            <option value="indenizado">Indenizado (Pago em dinheiro sem trabalhar)</option>
+            {tipoDesligamento !== 'pedido_demissao' && <option value="indenizado">Indenizado (pago sem trabalhar)</option>}
             <option value="trabalhado">Trabalhado (Cumprido normalmente)</option>
-            <option value="nao_cumprido">Dispensado / Não cumprido pelo empregado</option>
+            {tipoDesligamento === 'pedido_demissao' && <option value="dispensado">Dispensado sem desconto (confirme com o RH)</option>}
+            {tipoDesligamento === 'pedido_demissao' && <option value="nao_cumprido">Não cumprido pelo empregado (com desconto)</option>}
           </select>
         </div>
 
         {/* Dias trabalhados no mês do desligamento */}
         <div>
           <label htmlFor="rescisao-worked-days" className="block text-xs font-bold text-neutral-800 dark:text-neutral-200 uppercase tracking-wider mb-1.5">
-            Dias Trabalhados no Último Mês (1 a 30)
+            Dias de saldo de salário ainda não pagos (0 a 30)
           </label>
           <input
             id="rescisao-worked-days"
@@ -400,7 +285,7 @@ VALOR LÍQUIDO RESCISÓRIO A RECEBER: ${formatBRL(totalLiquido)}
         {/* Meses trabalhados para 13º */}
         <div>
           <label htmlFor="rescisao-months-13th" className="block text-xs font-bold text-neutral-800 dark:text-neutral-200 uppercase tracking-wider mb-1.5">
-            Meses para 13º Salário no Ano (1 a 12)
+            Avos de 13º ainda não quitados (0 a 12 no modo manual)
           </label>
           <input
             id="rescisao-months-13th"
@@ -408,8 +293,8 @@ VALOR LÍQUIDO RESCISÓRIO A RECEBER: ${formatBRL(totalLiquido)}
             type="number" inputMode="decimal"
             min="0"
             max="12"
-            disabled={projection !== null} value={projection ? m13Final : months13th}
-            onChange={(e) => { setMonths13th(e.target.value); setProjection(null); }}
+            disabled={Boolean(projection)} value={projection ? m13Final : months13th}
+            onChange={(e) => { setMonths13th(e.target.value); }}
             className="w-full px-3 py-2.5 bg-white dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-600 rounded-xl font-bold text-neutral-900 dark:text-neutral-100 focus:ring-2 focus:ring-blue-500 focus:outline-none"
           />
           <span className="text-[11px] text-neutral-500 mt-1 block">
@@ -420,7 +305,7 @@ VALOR LÍQUIDO RESCISÓRIO A RECEBER: ${formatBRL(totalLiquido)}
         {/* Meses para Férias Proporcionais */}
         <div>
           <label htmlFor="rescisao-months-vacation" className="block text-xs font-bold text-neutral-800 dark:text-neutral-200 uppercase tracking-wider mb-1.5">
-            Meses do Período Aquisitivo de Férias (1 a 12)
+            Avos de férias proporcionais (0 a 12)
           </label>
           <input
             id="rescisao-months-vacation"
@@ -428,8 +313,8 @@ VALOR LÍQUIDO RESCISÓRIO A RECEBER: ${formatBRL(totalLiquido)}
             type="number" inputMode="decimal"
             min="0"
             max="12"
-            disabled={projection !== null} value={projection?.avos ?? monthsVacation}
-            onChange={(e) => { setMonthsVacation(e.target.value); setProjection(null); }}
+            disabled={Boolean(projection)} value={projection?.avos ?? monthsVacation}
+            onChange={(e) => { setMonthsVacation(e.target.value); }}
             className="w-full px-3 py-2.5 bg-white dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-600 rounded-xl font-bold text-neutral-900 dark:text-neutral-100 focus:ring-2 focus:ring-blue-500 focus:outline-none"
           />
         </div>
@@ -437,7 +322,7 @@ VALOR LÍQUIDO RESCISÓRIO A RECEBER: ${formatBRL(totalLiquido)}
         {/* Saldo de FGTS para Multa */}
         <div>
           <label htmlFor="rescisao-fgts-balance" className="block text-xs font-bold text-neutral-800 dark:text-neutral-200 uppercase tracking-wider mb-1.5">
-            Saldo Acumulado no Extrato do FGTS (R$)
+            Saldo atual deste vínculo no FGTS (R$, opcional)
           </label>
           <div className="relative">
             <span className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400 font-bold text-sm">R$</span>
@@ -445,21 +330,21 @@ VALOR LÍQUIDO RESCISÓRIO A RECEBER: ${formatBRL(totalLiquido)}
               id="rescisao-fgts-balance"
               aria-label="Saldo Acumulado no Extrato do FGTS em Reais"
               type="number" min="0" inputMode="decimal"
-              step="100"
+              step="0.01"
               value={fgtsBalance}
               onChange={(e) => setFgtsBalance(e.target.value)}
               className="w-full pl-9 pr-3 py-2.5 bg-white dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-600 rounded-xl font-bold text-neutral-900 dark:text-neutral-100 focus:ring-2 focus:ring-blue-500 focus:outline-none"
             />
           </div>
           <span className="text-[11px] text-neutral-500 mt-1 block">
-            Utilizado para apurar a multa rescisória de 40% (ou 20% no acordo).
+            Saldo atual antes da nova multa, para simular o saque. A multa usa outra base, informada abaixo.
           </span>
         </div>
 
         {/* Média Mensal de Horas Extras / Comissões */}
         <div>
           <label htmlFor="rescisao-variable-avg" className="block text-xs font-bold text-neutral-800 dark:text-neutral-200 uppercase tracking-wider mb-1.5">
-            Média Mensal de Horas Extras / Comissões (R$)
+            Média de adicionais e comissões (R$)
           </label>
           <div className="relative">
             <span className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400 font-bold text-sm">R$</span>
@@ -467,7 +352,7 @@ VALOR LÍQUIDO RESCISÓRIO A RECEBER: ${formatBRL(totalLiquido)}
               id="rescisao-variable-avg"
               aria-label="Média Mensal de Horas Extras e Comissões em Reais"
               type="number" min="0" inputMode="decimal"
-              step="50"
+              step="0.01"
               value={variableAverage}
               onChange={(e) => setVariableAverage(e.target.value)}
               className="w-full pl-9 pr-3 py-2.5 bg-white dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-600 rounded-xl font-bold text-neutral-900 dark:text-neutral-100 focus:ring-2 focus:ring-blue-500 focus:outline-none"
@@ -479,245 +364,50 @@ VALOR LÍQUIDO RESCISÓRIO A RECEBER: ${formatBRL(totalLiquido)}
           </span>
         </div>
 
-        {/* Número de Dependentes */}
-        <div>
-          <label className="block text-xs font-bold text-neutral-800 dark:text-neutral-200 uppercase tracking-wider mb-1.5">
-            Número de Dependentes (para Dedução IRRF)
-          </label>
-          <input aria-label="Número de Dependentes (para Dedução IRRF)"
-            type="number" inputMode="decimal"
-            min="0"
-            max="10"
-            value={dependents}
-            onChange={(e) => setDependents(e.target.value)}
-            className="w-full px-3 py-2.5 bg-white dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-600 rounded-xl font-bold text-neutral-900 dark:text-neutral-100 focus:ring-2 focus:ring-blue-500 focus:outline-none"
-          />
-          <span className="text-[11px] text-neutral-500 mt-1 block">
-            Abate R$ 189,59 por dependente na base de cálculo do IRRF.
-          </span>
-        </div>
-
-        <div className="md:col-span-2 grid sm:grid-cols-2 gap-3">
-          <label className="grid gap-1 text-xs font-bold">Períodos completos de férias simples não quitados<input type="number" min="0" max="100" step="1" value={simplePeriods} onChange={e => setSimplePeriods(e.target.value)} className="border rounded p-2 bg-white dark:bg-neutral-900" /></label>
-          <label className="grid gap-1 text-xs font-bold">Períodos completos de férias em dobro não quitados<input type="number" min="0" max="100" step="1" value={doublePeriods} onChange={e => setDoublePeriods(e.target.value)} className="border rounded p-2 bg-white dark:bg-neutral-900" /></label>
-          <p className="text-xs text-neutral-500 sm:col-span-2">Cada período representa 30 dias. Em dobro aplica-se ao período não concedido dentro do prazo concessivo, não apenas por atraso no pagamento. O terço constitucional é incluído; ajuste os períodos conforme os registros.</p>
-        </div>
+        {([
+          ['res-overtime', 'Média de horas extras (R$)', overtimeAverage, setOvertimeAverage, 1000000000, '0.01'],
+          ['res-advance', '13º já adiantado (R$)', advance13, setAdvance13, 1000000000, '0.01'],
+          ['res-credits', 'Outros créditos (R$)', credits, setCredits, 1000000000, '0.01'],
+          ['res-deductions', 'Outros descontos (R$)', deductions, setDeductions, 1000000000, '0.01'],
+          ['res-absences', 'Faltas injustificadas no período incompleto de férias', absences, setAbsences, 366, '1'],
+          ['res-simple', 'Dias de férias integrais pendentes (simples)', simpleDays, setSimpleDays, 3600, '0.01'],
+          ['res-double', 'Dias de férias vencidas pendentes (em dobro)', doubleDays, setDoubleDays, 3600, '0.01'],
+        ] as const).map(([id, label, value, setter, max, step]) => <div key={id}>
+          <label htmlFor={id} className="block text-xs font-bold mb-1.5">{label}</label>
+          <input id={id} type="number" min="0" max={max} step={step} value={value} onChange={event => setter(event.target.value)} className="w-full px-3 py-2.5 bg-white dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-600 rounded-xl" />
+        </div>)}
+        {tipoAviso === 'nao_cumprido' && <label className="grid gap-2 text-xs font-bold">Dias de aviso não cumpridos, sujeitos a desconto<input type="number" min="0" max="30" step="1" value={unworkedDays} onChange={e => setUnworkedDays(e.target.value)} className="border rounded-xl p-3 bg-white dark:bg-neutral-900" /></label>}
+        <label className="grid gap-2 text-xs font-bold">Base total do FGTS para fins rescisórios (R$, opcional)<input type="number" min="0" step="0.01" value={fgtsBase} onChange={e => setFgtsBase(e.target.value)} className="border rounded-xl p-3 bg-white dark:bg-neutral-900" /><span className="font-normal">Informe a base total atualizada, incluindo depósitos rescisórios devidos. Não é necessariamente o saldo atual; confira o FGTS Digital/RH.</span></label>
+        <label className="grid gap-2 text-xs font-bold">Modalidade de saque do FGTS<select aria-label="Modalidade de saque do FGTS" value={withdrawal} onChange={e => setWithdrawal(e.target.value as typeof withdrawal)} className="border rounded-xl p-3 bg-white dark:bg-neutral-900"><option value="rescisao">Saque-rescisão</option><option value="aniversario">Saque-aniversário</option></select></label>
+        <p className="text-xs text-neutral-600 dark:text-neutral-300 md:col-span-2">Férias pendentes: informe apenas dias ainda não gozados e não pagos, ajustados por faltas. A dobra se refere ao prazo de concessão vencido, não apenas à data de pagamento. Não duplique dias entre integrais, vencidas e proporcionais. Confirme o saldo de salário com a folha, especialmente em fevereiro e meses de 31 dias.</p>
       </div>
 
-      {/* Guia Rápido de Direitos no Tipo de Desligamento Selecionado */}
-      <div className="bg-blue-50/70 border border-blue-200 rounded-2xl p-4 text-xs">
-        <div className="font-bold text-blue-900 text-sm mb-2 flex items-center gap-2">
-          <Briefcase className="w-4 h-4 text-blue-600" />
-          <span>Resumo dos Direitos no modo: {
-            tipoDesligamento === 'sem_justa_causa' ? 'Demissão Sem Justa Causa' :
-            tipoDesligamento === 'pedido_demissao' ? 'Pedido de Demissão' :
-            tipoDesligamento === 'acordo_mutuo' ? 'Acordo Mútuo (Art. 484-A CLT)' : 'Demissão Com Justa Causa'
-          }</span>
+      <button type="button" onClick={() => setCalculated(true)} className="bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl px-5 py-3">Calcular rescisão</button>
+      <p className="text-xs text-neutral-600 dark:text-neutral-300">Os resultados válidos são atualizados ao editar. Regras atualizadas em: <time dateTime={LABOR_REVIEWED}>14/10/2026</time>. Dados processados apenas nesta página, sem salvar salário ou datas.</p>
+      {error && <p role="alert" className="border border-red-300 bg-red-50 text-red-800 p-4 rounded-xl">{error}</p>}
+      {result && <>
+        {calculated && <p role="status" className="text-sm">Cálculo atualizado. Confira o detalhamento abaixo.</p>}
+        <div className="bg-white dark:bg-neutral-900 rounded-2xl border border-neutral-200 dark:border-neutral-700 overflow-hidden shadow-sm">
+          <div className="bg-gradient-to-r from-neutral-900 to-neutral-800 text-white p-6 space-y-2">
+            <h3 className="text-sm font-bold">Total estimado das verbas rescisórias</h3>
+            <p className="text-2xl sm:text-3xl font-black text-emerald-400 break-words">{formatBRL(result.total)}</p>
+            <p className="text-xs text-neutral-300">Bruto: {formatBRL(result.gross)} • Abatimentos informados e aviso: {formatBRL(result.deductions)}. Antes de INSS e IRRF; FGTS separado.</p>
+          </div>
+          <div className="p-4 sm:p-6"><LaborBreakdown rows={rows} /><p className="text-sm mt-4">Quer conferir esse valor? Use a <a className="text-blue-600 underline" href="/calculadora-de-ferias">Calculadora de Férias</a>.</p></div>
         </div>
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 font-medium text-neutral-700 dark:text-neutral-300">
-          <div className="bg-white dark:bg-neutral-900 p-2.5 rounded-xl border border-blue-100 shadow-2xs">
-            <span className="text-[10px] text-neutral-400 block">Multa FGTS</span>
-            <span className={`font-bold text-xs ${multaFGTS > 0 ? 'text-emerald-700' : 'text-neutral-500'}`}>
-              {tipoDesligamento === 'sem_justa_causa' ? '40% do Saldo' :
-               tipoDesligamento === 'acordo_mutuo' ? '20% do Saldo' : 'Não se Aplica'}
-            </span>
-          </div>
-          <div className="bg-white dark:bg-neutral-900 p-2.5 rounded-xl border border-blue-100 shadow-2xs">
-            <span className="text-[10px] text-neutral-400 block">Saque do FGTS</span>
-            <span className={`font-bold text-xs ${tipoDesligamento === 'sem_justa_causa' || tipoDesligamento === 'acordo_mutuo' ? 'text-emerald-700' : 'text-rose-600'}`}>
-              {tipoDesligamento === 'sem_justa_causa' ? '100% Liberado' :
-               tipoDesligamento === 'acordo_mutuo' ? 'Até 80% Liberado' : 'Bloqueado'}
-            </span>
-          </div>
-          <div className="bg-white dark:bg-neutral-900 p-2.5 rounded-xl border border-blue-100 shadow-2xs">
-            <span className="text-[10px] text-neutral-400 block">Seguro-Desemprego</span>
-            <span className={`font-bold text-xs ${tipoDesligamento === 'sem_justa_causa' ? 'text-emerald-700' : 'text-rose-600'}`}>
-              {tipoDesligamento === 'sem_justa_causa' ? 'Direito às Parcelas' : 'Sem Direito'}
-            </span>
-          </div>
-          <div className="bg-white dark:bg-neutral-900 p-2.5 rounded-xl border border-blue-100 shadow-2xs">
-            <span className="text-[10px] text-neutral-400 block">Aviso Prévio ({avisoDays}d)</span>
-            <span className="font-bold text-xs text-neutral-800 dark:text-neutral-200">
-              {tipoAviso === 'indenizado' ? '100% Indenizado' : tipoAviso === 'trabalhado' ? 'Trabalhado' : 'Sem Indenização'}
-            </span>
-          </div>
-        </div>
-      </div>
-
-      {/* Results Section */}
-      <div className="bg-white dark:bg-neutral-900 rounded-2xl border border-neutral-200 dark:border-neutral-700 overflow-hidden shadow-sm">
-        <div className="bg-gradient-to-r from-neutral-900 to-neutral-800 text-white p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-          <div>
-            <span className="text-xs text-amber-300 font-bold uppercase tracking-wider">
-              Resultado Final do Cálculo
-            </span>
-            <h3 className="text-2xl font-black text-white">
-              Líquido Rescisório a Receber: <span className="text-emerald-400">{formatBRL(totalLiquido)}</span>
-            </h3>
-          </div>
-          <div className="text-right text-xs text-neutral-300">
-            <span>Rendimentos Brutos: <strong className="text-white">{formatBRL(proventosRendimentos)}</strong></span>
-            <span className="block">Descontos: <strong className="text-red-300">{formatBRL(descontosTotais)}</strong></span>
-          </div>
-        </div>
-
-        {/* Breakdown Table */}
-        <div className="p-6 overflow-x-auto">
-          <table className="w-full text-left text-xs sm:text-sm border-collapse">
-            <thead>
-              <tr className="border-b border-neutral-200 dark:border-neutral-700 text-neutral-500 font-bold uppercase tracking-wider text-[11px]">
-                <th className="pb-3">Verba Rescisória / Rubrica</th>
-                <th className="pb-3 text-right">Provento (R$)</th>
-                <th className="pb-3 text-right">Desconto (R$)</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-neutral-100 text-neutral-700 dark:text-neutral-300">
-              <tr>
-                <td className="py-2.5 font-medium">Saldo de Salário ({daysInMonth} dias)</td>
-                <td className="py-2.5 text-right font-mono font-bold text-emerald-700">{formatBRL(saldoSalario)}</td>
-                <td className="py-2.5 text-right font-mono text-neutral-400">-</td>
-              </tr>
-
-              {avisoPrevioValor !== 0 && (
-                <tr>
-                  <td className="py-2.5 font-medium">
-                    Aviso Prévio ({avisoDays} dias {tipoAviso === 'indenizado' ? 'Indenizado' : 'Desconto'})
-                  </td>
-                  <td className="py-2.5 text-right font-mono font-bold text-emerald-700">
-                    {avisoPrevioValor > 0 ? formatBRL(avisoPrevioValor) : '-'}
-                  </td>
-                  <td className="py-2.5 text-right font-mono font-bold text-red-600">
-                    {avisoPrevioValor < 0 ? formatBRL(Math.abs(avisoPrevioValor)) : '-'}
-                  </td>
-                </tr>
-              )}
-
-              {décimoTerceiro > 0 && (
-                <tr>
-                  <td className="py-2.5 font-medium">13º Salário Proporcional ({m13Final}/12 avos)</td>
-                  <td className="py-2.5 text-right font-mono font-bold text-emerald-700">{formatBRL(décimoTerceiro)}</td>
-                  <td className="py-2.5 text-right font-mono text-neutral-400">-</td>
-                </tr>
-              )}
-
-              {totalFerias > 0 && (
-                <tr>
-                  <td className="py-2.5 font-medium">
-                    Férias Proporcionais/Vencidas ({mVacFinal}/12 avos + Terço Constitucional 1/3)
-                  </td>
-                  <td className="py-2.5 text-right font-mono font-bold text-emerald-700">{formatBRL(totalFerias)}</td>
-                  <td className="py-2.5 text-right font-mono text-neutral-400">-</td>
-                </tr>
-              )}
-
-              {multaFGTS > 0 && (
-                <tr>
-                  <td className="py-2.5 font-medium">
-                    Multa do FGTS ({tipoDesligamento === 'sem_justa_causa' ? '40%' : '20%'})
-                  </td>
-                  <td className="py-2.5 text-right font-mono font-bold text-emerald-700">{formatBRL(multaFGTS)}</td>
-                  <td className="py-2.5 text-right font-mono text-neutral-400">-</td>
-                </tr>
-              )}
-
-              <tr>
-                <td className="py-2.5 font-medium">INSS sobre Saldo de Salário</td>
-                <td className="py-2.5 text-right font-mono text-neutral-400">-</td>
-                <td className="py-2.5 text-right font-mono font-bold text-red-600">{formatBRL(inssSaldoSalario)}</td>
-              </tr>
-
-              {inss13o > 0 && (
-                <tr>
-                  <td className="py-2.5 font-medium">INSS sobre 13º Salário Rescisório</td>
-                  <td className="py-2.5 text-right font-mono text-neutral-400">-</td>
-                  <td className="py-2.5 text-right font-mono font-bold text-red-600">{formatBRL(inss13o)}</td>
-                </tr>
-              )}
-
-              {irrfSaldoSalario > 0 && (
-                <tr>
-                  <td className="py-2.5 font-medium">IRRF sobre Saldo de Salário</td>
-                  <td className="py-2.5 text-right font-mono text-neutral-400">-</td>
-                  <td className="py-2.5 text-right font-mono font-bold text-red-600">{formatBRL(irrfSaldoSalario)}</td>
-                </tr>
-              )}
-
-              {irrf13o > 0 && (
-                <tr>
-                  <td className="py-2.5 font-medium">IRRF sobre 13º Salário Rescisório</td>
-                  <td className="py-2.5 text-right font-mono text-neutral-400">-</td>
-                  <td className="py-2.5 text-right font-mono font-bold text-red-600">{formatBRL(irrf13o)}</td>
-                </tr>
-              )}
-            </tbody>
-            <tfoot>
-              <tr className="border-t-2 border-neutral-300 dark:border-neutral-600 font-extrabold text-neutral-900 dark:text-neutral-100 bg-neutral-50 dark:bg-neutral-800">
-                <td className="py-3 pl-2">TOTAL LÍQUIDO A RECEBER</td>
-                <td colSpan={2} className="py-3 pr-2 text-right text-base font-mono text-emerald-600">
-                  {formatBRL(totalLiquido)}
-                </td>
-              </tr>
-            </tfoot>
-          </table>
-        </div>
-      </div>
-
-      {/* Seguro-Desemprego & FGTS Direct Release Box */}
-      {seguroInfo.eligible ? (
-        <div className="bg-gradient-to-r from-blue-900 to-indigo-900 text-white rounded-2xl p-5 shadow-sm">
-          <div className="flex items-center justify-between border-b border-blue-700/60 pb-3 mb-3">
-            <div className="flex items-center gap-2">
-              <ShieldCheck className="w-5 h-5 text-emerald-400" />
-              <h3 className="font-bold text-sm sm:text-base">Estimativa do Seguro-Desemprego (MTE 2026)</h3>
-            </div>
-            <span className="text-xs font-mono bg-blue-800 text-blue-200 px-2.5 py-1 rounded-full">
-              Direito Garantido
-            </span>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
-            <div className="bg-blue-950/60 p-3 rounded-xl border border-blue-700/50">
-              <span className="text-blue-300 block text-[11px] mb-1">Valor Estimado por Parcela</span>
-              <div className="text-lg font-bold font-mono text-emerald-400">
-                {formatBRL(seguroInfo.parcelAmount)}
-              </div>
-              <span className="text-[10px] text-blue-300/80 mt-0.5 block">Calculado sobre a média salarial</span>
-            </div>
-
-            <div className="bg-blue-950/60 p-3 rounded-xl border border-blue-700/50">
-              <span className="text-blue-300 block text-[11px] mb-1">Quantidade de Parcelas</span>
-              <div className="text-lg font-bold font-mono text-white">
-                {seguroInfo.parcelCount} Parcelas Mensais
-              </div>
-              <span className="text-[10px] text-blue-300/80 mt-0.5 block">Com base em {years} ano(s) de registro</span>
-            </div>
-
-            <div className="bg-blue-950/60 p-3 rounded-xl border border-blue-700/50">
-              <span className="text-blue-300 block text-[11px] mb-1">Total Potencial de Amparo</span>
-              <div className="text-lg font-bold font-mono text-emerald-300">
-                {formatBRL(seguroInfo.totalPotential)}
-              </div>
-              <span className="text-[10px] text-blue-300/80 mt-0.5 block">Soma de todas as parcelas</span>
-            </div>
-          </div>
-          <p className="text-[11px] text-blue-200/90 mt-3 font-medium leading-normal">
-            💡 <strong>Liberado também:</strong> Saque integral do seu saldo FGTS ({formatBRL(fgts)}) + Multa Rescisória de 40% ({formatBRL(multaFGTS)}).
-          </p>
-        </div>
-      ) : (
-        <div className="bg-neutral-100 border border-neutral-200 dark:border-neutral-700 rounded-2xl p-4 text-xs text-neutral-600 dark:text-neutral-400 flex items-center gap-3">
-          <ShieldAlert className="w-5 h-5 text-neutral-400 shrink-0" />
-          <span>
-            <strong>Seguro-Desemprego:</strong> {
-              tipoDesligamento === 'pedido_demissao'
-                ? 'Em casos de pedido de demissão, o trabalhador não tem direito ao Seguro-Desemprego nem ao saque do FGTS com multa.'
-                : tipoDesligamento === 'acordo_mutuo'
-                ? 'No acordo mútuo (Art. 484-A CLT), é liberado o saque de até 80% do FGTS e a multa de 20%, mas não há direito ao Seguro-Desemprego.'
-                : 'Demissão com justa causa perde o direito ao Seguro-Desemprego e verbas indenizatórias.'
-            }
-          </span>
-        </div>
-      )}
+        {result.total < 0 && <p role="note" className="text-sm text-amber-800 dark:text-amber-300">Os abatimentos superam as verbas estimadas. Não significa dívida automática: o art. 477, § 5º limita compensações; confirme o termo com o RH.</p>}
+        <section className="bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-800 rounded-2xl p-5 space-y-3" aria-label="FGTS separado das verbas rescisórias">
+          <h3 className="font-bold">FGTS — estimativa separada</h3>
+          <LaborBreakdown rows={[
+            { label: 'Saldo informado', value: result.fgts.balance, formula: 'Saldo atual deste vínculo, antes da nova multa. Nenhum depósito faltante é presumido.' },
+            { label: 'Multa rescisória', value: result.fgts.fine, formula: 'Base total para fins rescisórios × ' + (result.fgts.rate * 100) + '%. Sem base informada, não estimamos a multa.' },
+            { label: 'Saldo potencialmente sacável', value: result.fgts.availableBalance, formula: 'Saldo informado × ' + (result.fgts.withdrawalRate * 100) + '%, conforme modalidade e tipo de rescisão.' },
+            { label: 'Valor potencialmente disponível para saque', value: result.fgts.available, formula: 'Saldo potencialmente sacável + nova multa, antes de bloqueios e da análise da CAIXA.' },
+          ]} />
+          <p className="text-xs">No saque-aniversário, esta simulação considera apenas a multa rescisória. Saques excepcionais, garantias de empréstimos e bloqueios precisam ser conferidos no aplicativo FGTS. Estes valores não integram o total pago diretamente pela empresa.</p>
+        </section>
+        <p className="text-sm">{tipoDesligamento === 'sem_justa_causa' ? 'Seguro-desemprego depende dos requisitos e do histórico de solicitações; esta simulação não garante elegibilidade nem parcelas.' : 'Pedido de demissão e rescisão por acordo não dão direito ao seguro-desemprego.'}</p>
+      </>}
 
       {onSelectTab && (
         <InternalLinkCTA

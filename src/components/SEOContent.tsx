@@ -360,48 +360,6 @@ export default function SEOContent({ activeTab = 'daily', onSelectTab }: SEOCont
     </div>
   );
 
-  const renderRescisaoContent = () => (
-    <div className="space-y-8">
-      <div className="space-y-3 border-b border-neutral-200 dark:border-neutral-800 pb-6">
-        <div className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-red-50 dark:bg-red-950/40 text-red-700 dark:text-red-300 font-bold rounded-lg text-xs border border-red-200 dark:border-red-800">
-          <Scale className="w-3.5 h-3.5" />
-          <span>Rescisão Contratual - Art. 477 da CLT</span>
-        </div>
-        <h2 id="guia-rescisao" className="text-2xl sm:text-3xl font-extrabold text-neutral-900 dark:text-white tracking-tight">
-          Cálculo de Rescisão Contratual CLT 2026: Verbas, Multa FGTS e Prazos
-        </h2>
-        <p className="text-neutral-600 dark:text-neutral-300 text-sm sm:text-base leading-relaxed">
-          Guia completo de direitos rescisórios: Aviso Prévio Proporcional (Lei 12.506/11), 13º salário proporcional, férias com 1/3 constitucional, multa rescisória de 40% do FGTS e o prazo de pagamento legal de 10 dias corridos.
-        </p>
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div className="bg-neutral-50 dark:bg-neutral-800/60 p-4 rounded-xl border border-neutral-200 dark:border-neutral-700/80 space-y-2">
-          <span className="font-bold text-neutral-900 dark:text-white text-xs sm:text-sm flex items-center gap-1.5">
-            <CheckCircle2 className="w-4 h-4 text-red-500" /> Demissão Sem Justa Causa
-          </span>
-          <p className="text-xs text-neutral-600 dark:text-neutral-300 leading-relaxed">
-            Garante todos os direitos: Saldo de salário, aviso prévio indenizado/trabalhado, 13º proporcional, férias vencidas + proporcionais + 1/3, saque do FGTS com multa de 40% e guias do seguro-desemprego.
-          </p>
-        </div>
-
-        <div className="bg-neutral-50 dark:bg-neutral-800/60 p-4 rounded-xl border border-neutral-200 dark:border-neutral-700/80 space-y-2">
-          <span className="font-bold text-neutral-900 dark:text-white text-xs sm:text-sm flex items-center gap-1.5">
-            <CheckCircle2 className="w-4 h-4 text-amber-500" /> Acordo Mútuo (Art. 484-A CLT)
-          </span>
-          <p className="text-xs text-neutral-600 dark:text-neutral-300 leading-relaxed">
-            Criado pela Reforma Trabalhista: O trabalhador recebe 50% do aviso prévio indenizado, 20% de multa do FGTS e pode movimentar até 80% da sua conta vinculada do FGTS (sem direito a seguro-desemprego).
-          </p>
-        </div>
-      </div>
-
-      <section className="p-4 bg-neutral-900 text-white rounded-2xl font-mono text-xs sm:text-sm">
-        <p className="text-neutral-400 text-[10px] uppercase font-sans font-bold mb-1">Aviso Prévio Proporcional (Lei 12.506/2011):</p>
-        <code>Dias de Aviso = 30 dias + (3 dias × Anos Completos Trabalhados) [Máx: 90 dias]</code>
-      </section>
-    </div>
-  );
-
   const renderHourlyRateContent = () => (
     <div className="space-y-8">
       <div className="space-y-3 border-b border-neutral-200 dark:border-neutral-800 pb-6">
@@ -505,43 +463,6 @@ export default function SEOContent({ activeTab = 'daily', onSelectTab }: SEOCont
           </h3>
           <p className="text-neutral-600 dark:text-neutral-300 text-xs leading-relaxed">
             De acordo com o Art. 6º da Lei 605/1949, a falta sem justificativa legal durante a semana retira a assiduidade integral, autorizando a empresa a descontar 1 dia referente ao repouso semanal remunerado (domingo).
-          </p>
-        </div>
-      </div>
-    </div>
-  );
-
-  const renderFeriasContent = () => (
-    <div className="space-y-8">
-      <div className="space-y-3 border-b border-neutral-200 dark:border-neutral-800 pb-6">
-        <div className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-teal-50 dark:bg-teal-950/40 text-teal-700 dark:text-teal-300 font-bold rounded-lg text-xs border border-teal-200 dark:border-teal-800">
-          <BookOpen className="w-3.5 h-3.5" />
-          <span>Guia Oficial de Férias CLT 2026</span>
-        </div>
-        <h2 id="calculo-ferias-clt" className="text-2xl sm:text-3xl font-extrabold text-neutral-900 dark:text-white tracking-tight">
-          Como Calcular Férias CLT: 1/3 Constitucional, Venda e Prazo de Pagamento
-        </h2>
-        <p className="text-neutral-600 dark:text-neutral-300 text-sm leading-relaxed">
-          O cálculo de férias pela CLT garante a remuneração normal acrescida de no mínimo um terço constitucional (Art. 7º, XVII da CF/88). Além disso, o trabalhador pode optar pelo abono pecuniário, limitado a um terço do período devido (vender 10 dias pressupõe direito a 30 dias). Confira o tratamento tributário de cada verba e dos reflexos, sem presumir isenção de toda a remuneração de férias.
-        </p>
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="space-y-3">
-          <h3 className="text-base font-bold text-neutral-900 dark:text-white flex items-center gap-2">
-            <Percent className="w-4 h-4 text-teal-600" /> Abono Pecuniário (Venda de 10 Dias)
-          </h3>
-          <p className="text-neutral-600 dark:text-neutral-300 text-xs leading-relaxed">
-            Pelo Art. 143 da CLT, o empregado pode converter 1/3 do seu período de férias em abono pecuniário. Esse valor indenizatório, juntamente com o seu terço constitucional, é <strong>100% isento de INSS e IRRF</strong>.
-          </p>
-        </div>
-
-        <div className="space-y-3">
-          <h3 className="text-base font-bold text-neutral-900 dark:text-white flex items-center gap-2">
-            <Clock className="w-4 h-4 text-blue-600" /> Prazo Limite de Pagamento (Art. 145 CLT)
-          </h3>
-          <p className="text-neutral-600 dark:text-neutral-300 text-xs leading-relaxed">
-            O valor total líquido das férias deve ser depositado pelo empregador até <strong>2 dias antes do início do gozo</strong>. O atraso no pagamento pode gerar o direito à remuneração em dobro (Art. 137 CLT / Súmula 450 STF).
           </p>
         </div>
       </div>
@@ -726,8 +647,6 @@ export default function SEOContent({ activeTab = 'daily', onSelectTab }: SEOCont
         return renderEscala12x36Content();
       case 'faltas':
         return renderFaltasContent();
-      case 'ferias':
-        return renderFeriasContent();
       case 'decimo':
         return renderDecimoContent();
       case 'seguro':
@@ -744,8 +663,6 @@ export default function SEOContent({ activeTab = 'daily', onSelectTab }: SEOCont
         return renderBancoContent();
       case 'holerite':
         return renderHoleriteContent();
-      case 'rescisao':
-        return renderRescisaoContent();
       case 'rate':
         return renderHourlyRateContent();
       default:
@@ -753,7 +670,7 @@ export default function SEOContent({ activeTab = 'daily', onSelectTab }: SEOCont
     }
   };
 
-  if (['blog', 'about', 'contact', 'terms', 'privacy', 'sum', 'timesheet', 'monthly', 'excel', 'not-found'].includes(activeTab)) return null;
+  if (['ferias', 'rescisao', 'blog', 'about', 'contact', 'terms', 'privacy', 'sum', 'timesheet', 'monthly', 'excel', 'not-found'].includes(activeTab)) return null;
 
   return (
     <article className="bg-white dark:bg-neutral-900 p-6 md:p-8 rounded-2xl shadow-sm border border-neutral-200 dark:border-neutral-800 space-y-8 animate-in fade-in duration-300 transition-colors">

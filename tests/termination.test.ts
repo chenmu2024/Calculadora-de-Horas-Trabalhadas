@@ -29,3 +29,10 @@ test('mutual agreement uses explicitly confirmed projection days and rejects mis
   assert.equal(terminationDates('2020-01-01','2026-12-20','2026-01-01','2026-01-01',15).projected,'2027-01-04');
   assert.throws(() => terminationDates('2020-01-01','2026-12-20','2026-01-01','2026-01-01',NaN));
 });
+
+test('salary-day suggestions handle mid-month admission and full February, without projecting salary', () => {
+  assert.equal(terminationDates('2026-01-17', '2026-01-31', '2026-01-17', '2026-01-17', false).suggestedSalaryDays, 15);
+  assert.equal(terminationDates('2026-01-01', '2026-02-28', '2026-01-01', '2026-01-01', true).suggestedSalaryDays, 30);
+  assert.equal(terminationDates('2026-02-10', '2026-02-28', '2026-02-10', '2026-02-10', false).suggestedSalaryDays, 19);
+  assert.equal(terminationDates('2026-01-01', '2026-03-15', '2026-01-01', '2026-01-01', true).suggestedSalaryDays, 15);
+});

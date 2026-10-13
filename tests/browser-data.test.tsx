@@ -123,14 +123,16 @@ test('night extension is opt-in, deducts breaks after 05h, and short night never
   assert.throws(() => buildWorkbook([{ ...row, lunchStart: '08:00', lunchEnd: '09:00' }]));
 });
 
-test('saved date projection survives refresh and malformed date storage falls back safely', () => {
+test('termination never restores sensitive inputs from legacy browser storage', () => {
   data.clear();
   data.set('calc_rescisao_dates', JSON.stringify({ admission: '2020-01-01', last: '2026-12-20', start13: '2026-01-01', vacation: '2026-01-01' }));
   data.set('calc_rescisao_dates_active', 'true');
   data.set('calc_rescisao_simple_periods', '1');
+  data.set('calc_rescisao_gross', '987654.32');
   const html = renderToStaticMarkup(<RescisaoCalculator />);
-  assert.ok(html.includes('2027-02-06'));
-  assert.ok(html.includes('2026: 12/12; 2027: 1/12'));
+  assert.ok(!html.includes('2027-02-06'));
+  assert.ok(!html.includes('987654.32'));
+  assert.ok(html.includes('value="3500.00"'));
   data.set('calc_rescisao_dates', '{broken');
   assert.ok(!renderToStaticMarkup(<RescisaoCalculator />).includes('2027-02-06'));
   data.clear();

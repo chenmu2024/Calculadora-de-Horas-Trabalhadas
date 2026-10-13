@@ -1,4 +1,5 @@
 import { buildStructuredData } from '../utils/structuredData';
+import { LABOR_REVIEWED } from '../lib/legal-rules/2026';
 import { CONTENT_UPDATED } from '../utils/editorial';
 import { ARTICLE_META } from '../utils/articles';
 import { useEffect } from 'react';
@@ -40,8 +41,8 @@ export const PAGE_META: Record<string, { title: string; description: string; can
     canonical: 'https://calculadoradehorastrabalhadas.org/atrasos-e-faltas'
   },
   ferias: {
-    title: 'Calculadora de Férias CLT 2026 - 1/3 Constitucional, Venda e Impostos',
-    description: 'Calcule o valor exato a receber de férias com 1/3 constitucional, abono pecuniário (venda de 10 dias), adiantamento de 13º e descontos INSS/IRRF.',
+    title: 'Calculadora de Férias 2026: Calcule Férias + 1/3',
+    description: 'Calcule férias integrais ou proporcionais com 1/3, médias, faltas injustificadas e abono pecuniário. Resultado bruto detalhado, fórmulas e regras oficiais.',
     canonical: 'https://calculadoradehorastrabalhadas.org/calculadora-de-ferias'
   },
   decimo: {
@@ -80,8 +81,8 @@ export const PAGE_META: Record<string, { title: string; description: string; can
     canonical: 'https://calculadoradehorastrabalhadas.org/simulador-de-holerite'
   },
   rescisao: {
-    title: 'Calculadora de Rescisão Contratual CLT 2026',
-    description: 'Simule o cálculo exato de rescisão de trabalho: aviso prévio, saldo de salário, 13º proporcional, férias com 1/3 e multa do FGTS no padrão CLT.',
+    title: 'Calculadora de Rescisão Trabalhista 2026: Calcule sua Rescisão',
+    description: 'Use a calculadora de rescisão trabalhista para calcular saldo de salário, aviso prévio, 13º e férias. Estimativa bruta detalhada, com FGTS separado.',
     canonical: 'https://calculadoradehorastrabalhadas.org/calculadora-de-rescisao'
   },
   rate: {
@@ -174,7 +175,7 @@ export default function SEOHead({ activeTab, pathname }: SEOHeadProps) {
     setMetaTag('og:locale', 'pt_BR');
     setMetaTag('og:site_name', 'Calculadora de Horas Trabalhadas');
     setMetaTag('og:image', 'https://calculadoradehorastrabalhadas.org/og-image.png');
-    if (activeTab !== 'not-found') setMetaTag('og:updated_time', CONTENT_UPDATED);
+    if (activeTab !== 'not-found') setMetaTag('og:updated_time', activeTab === 'ferias' || activeTab === 'rescisao' ? LABOR_REVIEWED : CONTENT_UPDATED);
     else document.querySelector('meta[property="og:updated_time"]')?.remove();
     document.querySelector('meta[property="article:published_time"]')?.remove();
     if (article) setMetaTag('article:modified_time', CONTENT_UPDATED);
