@@ -1,3 +1,6 @@
+import RescisaoCalculator from '../src/components/RescisaoCalculator';
+import FeriasCalculator from '../src/components/FeriasCalculator';
+import { LABOR_REVIEWED } from '../src/lib/legal-rules/2026';
 import DailyCalculator from '../src/components/DailyCalculator';
 import TimeSumCalculator from '../src/components/TimeSumCalculator';
 import BancoDeHorasCalculator from '../src/components/BancoDeHorasCalculator';
@@ -23,7 +26,7 @@ import { TAB_ROUTES, PATH_TO_TAB } from '../src/utils/routes';
 import { ARTICLE_META } from '../src/utils/articles';
 import { WIDGET_META } from '../src/utils/widgets';
 
-const calculators: Record<string, React.ComponentType> = { daily: DailyCalculator, sum: TimeSumCalculator, banco: BancoDeHorasCalculator, rate: HourlyRateCalculator, overtime: OvertimeCalculator, counter: HourCounterCalculator, decimal: DecimalHoursCalculator, business: BusinessDaysCalculator, service: ServiceTimeCalculator, minutes: HoursMinutesCalculator };
+const calculators: Record<string, React.ComponentType> = { rescisao: RescisaoCalculator, ferias: FeriasCalculator, daily: DailyCalculator, sum: TimeSumCalculator, banco: BancoDeHorasCalculator, rate: HourlyRateCalculator, overtime: OvertimeCalculator, counter: HourCounterCalculator, decimal: DecimalHoursCalculator, business: BusinessDaysCalculator, service: ServiceTimeCalculator, minutes: HoursMinutesCalculator };
 const escape = (value: string) => value.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 const base = await readFile('dist/index.html', 'utf8');
 if (!base.includes('<!-- /prerender-root -->')) throw new Error('Missing pre-render root boundary');
@@ -31,6 +34,7 @@ const documents: { tab: string; meta: { title: string; description: string; cano
 const pages = [...Object.entries(TAB_ROUTES).map(([tab, path]) => ({ tab, path, meta: PAGE_META[tab], h1: PAGE_H1_TITLES[tab] })), ...ARTICLE_META.map(article => ({ tab: 'blog', path: `/guia-clt/${article.slug}`, meta: { ...article, canonical: `https://calculadoradehorastrabalhadas.org/guia-clt/${article.slug}` }, h1: article.title }))];
 pages.push({ tab: 'widgets', path: '/widgets', meta: WIDGET_META, h1: 'Widget de Horas para o Seu Site' });
 for (const page of [...pages, { tab: 'not-found', path: '/404', meta: PAGE_META['not-found'], h1: 'Página Não Encontrada' }]) {
+  const updated = page.tab === 'ferias' || page.tab === 'rescisao' ? LABOR_REVIEWED : CONTENT_UPDATED;
   let html = (page.tab === 'widgets' ? await readFile('dist/widgets/index.html', 'utf8') : base).replace(/<title>.*?<\/title>/s, `<title>${escape(page.meta.title)}</title>`);
   const attributes: Record<string, string> = { description: page.meta.description, 'og:title': page.meta.title, 'og:description': page.meta.description, 'og:url': page.meta.canonical, 'twitter:title': page.meta.title, 'twitter:description': page.meta.description, 'twitter:url': page.meta.canonical };
   for (const [name, value] of Object.entries(attributes)) {
@@ -44,11 +48,12 @@ for (const page of [...pages, { tab: 'not-found', path: '/404', meta: PAGE_META[
   const content = page.tab === 'widgets' ? html.match(/<main[\s\S]*?<\/main>/)![0] : renderToStaticMarkup(<>{Calculator && <div id="prerender-calculator"><Calculator /></div>}<StaticPageContent tab={page.tab} articleId={article?.id} /></>);
   if (page.tab !== 'not-found') documents.push({ tab: page.tab, meta: page.meta, text: htmlToText(content) });
   const navigation = Object.entries(TAB_ROUTES).filter(([tab]) => ['daily','counter','overtime','banco','sum','decimal','minutes','business','service','rate'].includes(tab)).map(([tab, path]) => `<li><a href="${path}">${escape(PAGE_H1_TITLES[tab])}</a></li>`).join('');
-  const fallback = `<main><h1>${escape(page.h1)}</h1><p>${escape(page.meta.description)}</p>${content}<nav aria-label="Calculadoras"><ul>${navigation}</ul></nav><noscript>Ative JavaScript para calcular e editar os valores.</noscript></main>`;
+  const breadcrumb = page.tab === 'ferias' || page.tab === 'rescisao' ? `<nav aria-label="Breadcrumb"><a href="/">Início</a> → ${escape(page.h1)}</nav>` : '';
+  const fallback = `<main>${breadcrumb}<h1>${escape(page.h1)}</h1><p>${escape(page.meta.description)}</p>${content}<nav aria-label="Calculadoras"><ul>${navigation}</ul></nav><noscript>Ative JavaScript para calcular e editar os valores.</noscript></main>`;
   html = html.replace(/(<div id="root">)[\s\S]*?(<\/div>\s*<!-- \/prerender-root -->)/, `$1${fallback}$2`);
   const schema = buildStructuredData(page.tab, page.meta);
   html = html.replace(/(<meta property="og:type" content=")[^"]*("\s*\/?>)/, `$1${article ? 'article' : 'website'}$2`);
-  if (page.tab !== 'not-found') html = html.replace('</head>', `<meta property="og:updated_time" content="${CONTENT_UPDATED}" />${article ? `<meta property="article:modified_time" content="${CONTENT_UPDATED}" />` : ''}</head>`);
+  if (page.tab !== 'not-found') html = html.replace('</head>', `<meta property="og:updated_time" content="${updated}" />${article ? `<meta property="article:modified_time" content="${CONTENT_UPDATED}" />` : ''}</head>`);
   html = html.replace('</head>', `<script id="jsonld-schema" type="application/ld+json">${JSON.stringify(schema).replace(/</g, '\\u003c')}</script></head>`);
   const filename = page.path === '/' ? 'dist/index.html' : page.path === '/404' ? 'dist/404.html' : `dist${page.path}/index.html`;
   await mkdir(join(filename, '..'), { recursive: true });
@@ -59,7 +64,7 @@ const redirects = aliases.map(row => `${row.source} ${row.destination} 301`).joi
 await writeFile('dist/_redirects', redirects + '\n/embed/horas /embed/horas/index.html 200\n/* /404.html 404\n');
 // Vercel supports a normal 404 file and these explicit rewrites; no broad SPA fallback.
 await writeFile('vercel.json', JSON.stringify({ redirects: aliases, rewrites: [...pages.filter(page => page.path !== '/').map(page => ({ source: page.path, destination: page.path + '/index.html' })), { source: '/embed/horas', destination: '/embed/horas/index.html' }] }, null, 2) + '\n');
-const sitemap = `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${pages.map(page => `<url><loc>${page.meta.canonical}</loc><lastmod>${CONTENT_UPDATED}</lastmod></url>`).join('')}</urlset>`;
+const sitemap = `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${pages.map(page => `<url><loc>${page.meta.canonical}</loc><lastmod>${page.tab === 'ferias' || page.tab === 'rescisao' ? LABOR_REVIEWED : CONTENT_UPDATED}</lastmod></url>`).join('')}</urlset>`;
 await writeFile('dist/sitemap.xml', sitemap);
 const context = buildAIContext(documents);
 await writeFile('dist/llms.txt', context.summary);

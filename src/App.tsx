@@ -71,13 +71,13 @@ export const PAGE_SUBTITLES: Record<string, string> = {
   banco: 'Descubra se você tem horas a compensar ou a receber como hora extra conforme a convenção CLT.',
   sum: 'Ferramenta rápida para somar e subtrair horas e minutos. Ideal para conferir cartões de ponto, atestados e relatórios de ponto.',
   holerite: 'Simule o seu holerite completo com cálculo de salário líquido, descontos de INSS, IRRF, vale transporte e adicionais.',
-  rescisao: 'Simule o cálculo exato de rescisão: aviso prévio, saldo de salário, 13º proporcional, férias com 1/3 e multa do FGTS.',
+  rescisao: 'Use a calculadora para calcular rescisão trabalhista e conferir saldo de salário, aviso prévio, 13º e férias. Veja o cálculo de rescisão bruto, com FGTS separado.',
   rate: 'Descubra exatamente quanto vale a sua hora de trabalho com base no salário bruto e divisor oficial CLT.',
   overtime: 'Calcule o valor exato das suas horas extras com adicional de 50% em dias úteis e 100% aos domingos e feriados.',
   night: 'Calcule o valor do adicional noturno de 20% e a redução da hora ficta (52min30s) para jornadas noturnas na CLT.',
   escala12x36: 'Plantões de 12 horas com cálculo de hora noturna, feriados trabalhados em dobro e estimativa de remuneração.',
   faltas: 'Calcule os descontos de atrasos por minuto, faltas injustificadas e reflexo na perda do DSR (Lei 605/49).',
-  ferias: 'Cálculo de férias CLT 2026 com 1/3 constitucional, abono pecuniário (venda de 10 dias) e deduções INSS/IRRF.',
+  ferias: 'Confira o cálculo de férias integrais ou férias proporcionais, com 1/3 constitucional, médias, faltas injustificadas e abono pecuniário. Estimativa bruta, sem salvar seus dados.',
   decimo: 'Simule a 1ª e 2ª parcelas do 13º salário com cálculo de meses trabalhados e deduções progressivas de 2026.',
   seguro: 'Calcule a quantidade de parcelas (3 a 5) e o valor de cada parcela do seguro-desemprego segundo a tabela oficial do MTE.',
   insalubridade: 'Calcule adicionais de insalubridade (10%, 20%, 40%) e periculosidade (30%) com reflexos em 13º, férias e FGTS.',
@@ -102,13 +102,13 @@ export const PAGE_H1_TITLES: Record<string, string> = {
   banco: 'Calculadora de Banco de Horas (Saldo Positivo e Negativo)',
   sum: 'Somador e Subtraidor de Horas Online',
   holerite: 'Simulador de Holerite e Salário Líquido (CLT)',
-  rescisao: 'Calculadora de Rescisão Contratual (CLT 2026)',
+  rescisao: 'Calculadora de Rescisão Trabalhista',
   rate: 'Calculadora de Valor da Hora de Trabalho',
   overtime: 'Calculadora de Horas Extras e DSR (50% e 100%)',
   night: 'Calculadora de Adicional Noturno e Hora Ficta',
   escala12x36: 'Calculadora de Escala 12x36 (Plantões e Noturno)',
   faltas: 'Calculadora de Faltas, Atrasos e Perda do DSR',
-  ferias: 'Calculadora de Férias CLT 2026 com 1/3 e Venda',
+  ferias: 'Calculadora de Férias',
   decimo: 'Calculadora de 13º Salário (1ª e 2ª Parcelas)',
   seguro: 'Calculadora de Seguro-Desemprego 2026',
   insalubridade: 'Calculadora de Insalubridade e Periculosidade',
@@ -205,6 +205,7 @@ export default function App() {
       {/* Hero Headline Section */}
       <section className="bg-white dark:bg-neutral-900 border-b border-neutral-200 dark:border-neutral-800 py-4 sm:py-8 px-4 transition-colors">
         <div className="max-w-4xl mx-auto text-center space-y-3">
+          {(activeTab === 'ferias' || activeTab === 'rescisao') && <Breadcrumb activeTab={activeTab} onSelectTab={setActiveTab} />}
           <h1 className="text-2xl sm:text-4xl font-extrabold text-neutral-900 dark:text-white tracking-tight leading-tight">
             {ARTICLE_META.find(row => pathname.replace(/\/$/, '') === `/guia-clt/${row.slug}`)?.title || PAGE_H1_TITLES[activeTab] || 'Calculadora de Horas Trabalhadas'}
           </h1>
@@ -219,7 +220,7 @@ export default function App() {
 
       {/* Main Content Area */}
       <main className="max-w-6xl mx-auto px-4 py-8 flex-1 w-full">
-        <Breadcrumb activeTab={activeTab} onSelectTab={setActiveTab} />
+        {activeTab !== 'ferias' && activeTab !== 'rescisao' && <Breadcrumb activeTab={activeTab} onSelectTab={setActiveTab} />}
 
         {isStandalonePage ? (
           <Suspense fallback={<div className="p-8 text-center text-xs text-neutral-500">Carregando conteúdo...</div>}>

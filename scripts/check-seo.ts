@@ -7,6 +7,7 @@ import { buildStructuredData } from '../src/utils/structuredData';
 import { CONTENT_UPDATED } from '../src/utils/editorial';
 import { HOURS_CONTENT } from '../src/utils/hoursContent';
 import { WIDGET_META } from '../src/utils/widgets';
+import { LABOR_REVIEWED } from '../src/lib/legal-rules/2026';
 
 const pages = [...Object.entries(TAB_ROUTES).map(([tab, path]) => ({ tab, path, meta: PAGE_META[tab] })), ...ARTICLE_META.map(row => ({ tab: 'blog', path: `/guia-clt/${row.slug}`, meta: { ...row, canonical: `https://calculadoradehorastrabalhadas.org/guia-clt/${row.slug}` } }))];
 pages.push({ tab: 'widgets', path: '/widgets', meta: WIDGET_META });
@@ -26,6 +27,15 @@ for (const page of pages) {
     assert.ok(html.includes('<input'), `${page.path}: initial calculator`);
     assert.ok(!html.includes('AggregateRating') && !html.includes('"@type":"Review"'));
   }
+  if (page.tab === 'ferias' || page.tab === 'rescisao') {
+    assert.ok(html.includes('<input'), `${page.path}: initial calculator`);
+    assert.ok(html.includes('Como foi calculado?'), `${page.path}: expandable formulas`);
+    assert.ok(html.includes('Perguntas frequentes sobre'), `${page.path}: relevant static FAQs`);
+    assert.ok(html.includes('14/10/2026'), `${page.path}: rule review date`);
+    assert.ok(html.includes('Fontes oficiais'), `${page.path}: official sources`);
+    assert.ok(html.indexOf('<input') < html.indexOf('Fontes oficiais'), `${page.path}: calculator comes first`);
+    assert.ok(!html.includes('Súmula 450 do STF') && !html.includes('Direito Garantido'));
+  }
   for (const match of html.matchAll(/href="(\/[^"#?]*)/g)) {
     const href = match[1].replace(/\/$/, '') || '/';
     if (/\.[a-z0-9]+$/i.test(href)) continue;
@@ -35,9 +45,9 @@ for (const page of pages) {
   if (article) assert.ok(html.includes(`id="art${article.id}-`), page.path);
 }
 const sitemap = await readFile('dist/sitemap.xml', 'utf8');
-for (const page of pages) assert.ok(sitemap.includes(`<loc>${page.meta.canonical}</loc>`), page.path);
+for (const page of pages) assert.ok(sitemap.includes(`<loc>${page.meta.canonical}</loc><lastmod>${page.tab === 'ferias' || page.tab === 'rescisao' ? LABOR_REVIEWED : CONTENT_UPDATED}</lastmod>`), page.path);
 assert.equal((sitemap.match(/<url>/g) ?? []).length, pages.length);
-assert.equal((sitemap.match(new RegExp(`<lastmod>${CONTENT_UPDATED}</lastmod>`, 'g')) ?? []).length, pages.length);
+assert.equal((sitemap.match(new RegExp(`<lastmod>${CONTENT_UPDATED}</lastmod>`, 'g')) ?? []).length, pages.length - 2);
 for (const filename of ['llms.txt', 'llms-full.txt']) assert.equal(await readFile(`dist/${filename}`, 'utf8'), await readFile(`public/${filename}`, 'utf8'), `Refresh public/${filename} from its generated dist counterpart after editorial changes`);
 assert.ok((await readFile('dist/404.html', 'utf8')).includes('noindex, follow'));
 const embed = await readFile('dist/embed/horas/index.html', 'utf8');

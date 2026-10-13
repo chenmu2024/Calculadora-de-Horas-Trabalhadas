@@ -1,8 +1,10 @@
+import LaborGuide from './LaborGuide';
 import { CONTENT_UPDATED, CONTENT_UPDATED_LABEL, SOURCES, TOOL_ANSWERS } from '../utils/editorial';
 import { ARTICLE_META } from '../utils/articles';
 import { getHrefForTab } from '../utils/routes';
 
 export default function CalculationReference({ activeTab }: { activeTab: string }) {
+  if (activeTab === 'ferias' || activeTab === 'rescisao') return <LaborGuide activeTab={activeTab} />;
   const entry = TOOL_ANSWERS[activeTab];
   if (!entry) return null;
   const sources = [SOURCES.clt, ...(entry.fiscal ? [SOURCES.irrf, SOURCES.inss] : []), ...(activeTab === 'seguro' ? [SOURCES.seguro] : [])];

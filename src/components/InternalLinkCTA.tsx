@@ -197,6 +197,11 @@ export default function InternalLinkCTA({ currentTab, onSelectTab }: InternalLin
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
         {links.map((link) => {
           const Icon = link.icon;
+          const description = currentTab === 'rescisao' && link.tab === 'ferias'
+            ? 'Confira férias integrais ou proporcionais, faltas, abono e 1/3. Estimativa bruta.'
+            : currentTab === 'ferias' && link.tab === 'rescisao'
+            ? 'Simule verbas rescisórias brutas, com FGTS separado e fórmulas detalhadas.'
+            : link.desc;
           return (
             <a
               href={getHrefForTab(link.tab)}
@@ -212,7 +217,7 @@ export default function InternalLinkCTA({ currentTab, onSelectTab }: InternalLin
                 <ArrowRight className="w-3.5 h-3.5 text-neutral-400 group-hover:translate-x-1 transition-transform" />
               </div>
               <p className="text-xs text-neutral-600 dark:text-neutral-300 leading-snug">
-                {link.desc}
+                {description}
               </p>
             </a>
           );
